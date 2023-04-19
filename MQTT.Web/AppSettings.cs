@@ -1,14 +1,13 @@
 ﻿using Microsoft.Extensions.Configuration;
 using System.IO;
-using DashboarJira.Services;
 
 namespace MQTT.Web
 {
     public sealed class AppSettings
     {
-        public JiraAccess jira;
         private static AppSettings instance = null;
         public IConfigurationRoot Configuration { get; set; }
+
         private AppSettings()
         {
             GetAppSettings();

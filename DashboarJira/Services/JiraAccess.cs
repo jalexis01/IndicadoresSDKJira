@@ -35,10 +35,19 @@ namespace DashboarJira.Services
             var issues = jira.Issues.GetIssuesFromJqlAsync(jql, max, start);
 
             
-            return ConvertIssusInTickets(issues );
+            return ConvertIssusInTickets(issues);
         }
 
+        public List<Ticket> GetTiketsIndicadores(string query)
+        {
+            //created >= 2023-04-04 AND created <= 2023-04-13 AND issuetype = "Solicitud de Mantenimiento" AND resolution = Unresolved AND "Clase de fallo" = AIO AND "Identificacion componente" ~ 9119-WA-OR-1 ORDER BY key DESC, "Time to resolution" ASC
+            var jql = query;
 
+            var issues = jira.Issues.GetIssuesFromJqlAsync(jql);
+
+
+            return ConvertIssusInTickets(issues);
+        }
 
 
 
@@ -52,7 +61,7 @@ namespace DashboarJira.Services
                 temp.id_estacion = (issue.CustomFields["Estacion"] != null ? issue.CustomFields["Estacion"].Values[0] : "null");
                 temp.id_vagon = (issue.CustomFields["Vagon"] != null ? issue.CustomFields["Vagon"].Values[0] : "null");
                 temp.tipoComponente = (issue.CustomFields["Tipo de componente"] != null ? issue.CustomFields["Tipo de componente"].Values[0] : "null");
-                temp.id_puerta = (temp.tipoComponente != null && temp.tipoComponente == "Puerta" && temp.tipoComponente != "null" ? issue.CustomFields["Identificacion componente"].Values[0] : "null");
+                temp.id_puerta = ( temp.tipoComponente == "Puerta" && temp.tipoComponente != "null" && issue.CustomFields["Identificacion componente"]!= null && issue.CustomFields["Identificacion componente"].Values[0] !=null   ? issue.CustomFields["Identificacion componente"].Values[0] : "null");
                 temp.id_componente = (issue.CustomFields["Identificacion componente"] != null ? issue.CustomFields["Identificacion componente"].Values[0] : "null");
                 temp.identificacion = (issue.CustomFields["Identificacion (serial)"] != null ? issue.CustomFields["Identificacion (serial)"].Values[0] : "null");
                 temp.tipo_mantenimiento = (issue.CustomFields["Tipo de servicio"] != null ? issue.CustomFields["Tipo de servicio"].Values[0] : "null");
@@ -70,10 +79,10 @@ namespace DashboarJira.Services
                 temp.tipo_ajuste_configuracion += (issue.CustomFields["Listado de ajustes RFID"] != null ? issue.CustomFields["Listado de ajustes RFID"].Values[0] + "\n" : "");
                 temp.tipo_ajuste_configuracion += (issue.CustomFields["Listado de configuracion RFID"] != null ? issue.CustomFields["Listado de configuracion RFID"].Values[0] + "\n" : "");
                 temp.descripcion_reparacion = (issue.CustomFields["Descripcion de la reparacion"] != null ? issue.CustomFields["Descripcion de la reparacion"].Values[0] : "null");
-                temp.diagnostico_causa = (issue.CustomFields["Diagnostico de la causa"] != null ? issue.CustomFields["Diagnostico de la causa"].Values[0] : "null");
+                temp.diagnostico_causa = (issue.CustomFields["Tipo de causa"] != null ? issue.CustomFields["Tipo de causa"].Values[0] : "null");
                 temp.tipo_causa = (issue.CustomFields["Tipo de causa"] != null ? issue.CustomFields["Tipo de causa"].Values[0] : "null");
                 temp.estado_ticket = (issue.Status != null ? issue.Status.Name : "null");
-                Console.WriteLine(temp.estado_ticket);
+                Console.WriteLine(issue.Key);
 
                 result.Add(temp);
             }
