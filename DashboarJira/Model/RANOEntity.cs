@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace DashboarJira.Model
 {
-    internal class RANOEntity
+    public class RANOEntity
     {
         //TAN: # total de tickets con nivel de falla igual ANIO, ya sean abiertos o cerrados del periodo.
         //TCN: # total de tickets con nivel de falla igual ANIO, cerrados en un intervalo menor o igual a 24 horas.
-        private List<Ticket> TicketTAN { get; set; }
+        public List<Ticket> TicketTAN { get; set; }
 
-        private List<Ticket> TicketTCN { get; set; }
+        public List<Ticket> TicketTCN { get; set; }
 
         public RANOEntity( List<Ticket> TicketTAN, List<Ticket> TicketTCN)
         {
