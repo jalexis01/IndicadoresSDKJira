@@ -33,7 +33,7 @@ namespace DashboarJira.Controller
             return new IANOEntity(ANIO_POR_PUERTA(total_tickets), TOTAL_PUERTAS);
         }
 
-        public IANOEntity IANONoContratista(string start, string end)
+        public IANOEntity IANOContratista(string start, string end)
         {
             string jql = string.Format(JQL_NO_CONTRATISTA, start, end);
             List<Ticket> total_tickets = jiraAccess.GetTiketsIndicadores(jql);
