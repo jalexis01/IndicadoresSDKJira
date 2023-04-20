@@ -29,8 +29,16 @@ namespace DashboarJira.Model
          */
         public double CalcularIndicadorIAIO()
         {
+            double suma_pano = pano();
+            double iaio = Convert.ToDouble(((total_puertas - (double)AIO_POR_PUERTA.Count) * 100 + (double)suma_pano) / total_puertas);
+            return iaio;
+        }
+
+        public double pano() 
+        {
             double suma_pano = 0.0;
-            foreach (var pano in AIO_POR_PUERTA) {
+            foreach (var pano in AIO_POR_PUERTA)
+            {
                 if (pano.Count == 0)
                 {
                     suma_pano += 100;
@@ -44,8 +52,8 @@ namespace DashboarJira.Model
                     suma_pano += 40;
                 }
             }
-            double iaio = Convert.ToDouble(((total_puertas - (double)AIO_POR_PUERTA.Count) * 100 + (double)suma_pano) / total_puertas);
-            return iaio;
+            return suma_pano;
+
         }
     }
 }

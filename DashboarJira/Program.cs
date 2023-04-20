@@ -7,4 +7,4 @@ JiraAccess jira = new JiraAccess();
 
 //jira.GetTikets(0,100,null,null,null);
 RAIOController RAIOController= new RAIOController();
-Console.WriteLine(RAIOController.RAIOContratista("2023-01-01","2023-03-02"));
+Console.WriteLine(RAIOController.RAIOContratista("2023-01-01","2023-04-20"));

@@ -52,7 +52,7 @@ namespace DashboarJira.Model
 
             return JsonConvert.SerializeObject(new
             {
-                RAIOGeneral = CacularIndicadorRAIO(),
+                RAIO = CacularIndicadorRAIO(),
                 TotalTai = TicketTAI.Count,
                 TotalTCI = TicketTCI.Count,
                 TicketTCI = ticketTCIJson,

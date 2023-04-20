@@ -12,7 +12,7 @@ namespace DashboarJira.Services
     {
         string jiraUrl = "https://manateecc.atlassian.net/";
         string username = "desarrollocc@manateeingenieria.com";
-        string password = "ATATT3xFfGF0meLZg2dA9y6z1JsweICabq0xvSEFtY-94FfLspiUasHjhMKGhwBic0RKiYwIvblFWHKsd78i1nn-szqfjTNHuHBKcPxJ2jTbTN6agBNLKWL1mYRSXBHD_PWPcbl4FhcHaEZPCDf78ColilFZ34d7VnixBKEz9TTYoyvDmvASJRA=A346FE70";
+        string password = "ATATT3xFfGF0nUCKclJ_3whtuzZOl-6MwEGV_rO6GrXTr_Zo4GiKZ_jJwH9QJ3235xX0JDezDx1SV1e1iIsRoWVdZ6fkgW7sysLtwTCq8IzVu0pPmMkZwJT59cnLkDDIFEM-NU2EJe5VSxHfSDwGwD3JJ8GKHnN0uch5josCxZk9uauhrV7drdw=26781782";
 
         Jira jira;
 
@@ -40,11 +40,10 @@ namespace DashboarJira.Services
 
         public List<Ticket> GetTiketsIndicadores(string query)
         {
-            //created >= 2023-04-04 AND created <= 2023-04-13 AND issuetype = "Solicitud de Mantenimiento" AND resolution = Unresolved AND "Clase de fallo" = AIO AND "Identificacion componente" ~ 9119-WA-OR-1 ORDER BY key DESC, "Time to resolution" ASC
             var jql = query;
-
-            var issues = jira.Issues.GetIssuesFromJqlAsync(jql);
-
+            Console.WriteLine(jql);
+            var issues =  jira.Issues.GetIssuesFromJqlAsync(jql);
+            
 
             return ConvertIssusInTickets(issues);
         }
