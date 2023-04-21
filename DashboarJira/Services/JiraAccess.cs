@@ -1,8 +1,10 @@
 ﻿using Atlassian.Jira;
 using DashboarJira.Model;
+using RestSharp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -12,7 +14,7 @@ namespace DashboarJira.Services
     {
         string jiraUrl = "https://manateecc.atlassian.net/";
         string username = "desarrollocc@manateeingenieria.com";
-        string password = "ATATT3xFfGF0nUCKclJ_3whtuzZOl-6MwEGV_rO6GrXTr_Zo4GiKZ_jJwH9QJ3235xX0JDezDx1SV1e1iIsRoWVdZ6fkgW7sysLtwTCq8IzVu0pPmMkZwJT59cnLkDDIFEM-NU2EJe5VSxHfSDwGwD3JJ8GKHnN0uch5josCxZk9uauhrV7drdw=26781782";
+        string password = "ATATT3xFfGF0ZRHIEZTEJVRnhNKviH0CGed6QXqCDMj5bCmKSEbO00UUjHUb3yDcaA4YD1SHohyDr4qnwRx2x4Tu_S_QW_xlGIcIUDvL7CFKEg47_Jcy4Dmq6YzO0dvqB3qeT-EVWfwJ2jJ-9vEUfsqXavD0IIGA7DAZHGCtIWhxgwKIbAWsmeA=038B810D";
 
         Jira jira;
 
@@ -48,11 +50,27 @@ namespace DashboarJira.Services
             return ConvertIssusInTickets(issues);
         }
 
+        public List<byte[]> getTicket() {
+            var ticket = jira.Issues.GetIssueAsync("TICKET-92");
+            var attachments = ticket.Result.GetAttachmentsAsync();
+            List<byte[]> imagenes = new List<byte[]>();
+            Console.WriteLine(attachments.Result.ToList().Count);
+            foreach (var attachment in attachments.Result)
+            {
+                attachment.Download(attachment.FileName);
+                Console.WriteLine(attachment.FileName);
+                var imagen = attachment.DownloadData;
+                imagenes.Add(imagen.Invoke());
+                Console.WriteLine(imagen.ToString);
+            }
+            return imagenes;
+        }
 
 
 
         public List<Ticket> ConvertIssusInTickets(Task<IPagedQueryResult<Issue>> issues) {
             List<Ticket> result = new List<Ticket>();
+
             foreach (var issue in issues.Result)
             {
                 Ticket temp = new Ticket();
