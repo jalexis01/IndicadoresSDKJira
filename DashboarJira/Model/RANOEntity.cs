@@ -14,6 +14,7 @@ namespace DashboarJira.Model
 
         public List<Ticket> TicketTCN { get; set; }
 
+
         public RANOEntity( List<Ticket> TicketTAN, List<Ticket> TicketTCN)
         {
             this.TicketTAN = TicketTAN;

@@ -10,7 +10,6 @@ namespace DashboarJira.Controller
 {
     public class IEPMController
     {
-        // AND 'Tipo de servicio' in ('Falla ITS', 'Falla Puerta', 'Falla RFID', 'Mantenimiento Preventivo')
         const string JQL_GENERAL = "created >= {0} AND created <= {1} AND issuetype = 'Solicitud de Mantenimiento' AND status = Cerrado AND 'Tipo de servicio' in ('Falla ITS', 'Falla Puerta', 'Falla RFID', 'Mantenimiento Preventivo') ORDER BY key DESC, 'Time to resolution' ASC";
         const string JQL_CONTRATISTA = "created >= {0} AND created <= {1} AND issuetype = 'Solicitud de Mantenimiento'AND status = Cerrado AND 'Tipo de servicio' in ('Falla ITS', 'Falla Puerta', 'Falla RFID', 'Mantenimiento Preventivo') AND 'Tipo de causa' = 'A cargo del contratista' ORDER BY key DESC, 'Time to resolution' ASC";
         const string JQL_NO_CONTRATISTA = "created >= {0} AND created <= {1} AND issuetype = 'Solicitud de Mantenimiento' AND status = Cerrado AND 'Tipo de servicio' in ('Falla ITS', 'Falla Puerta', 'Falla RFID', 'Mantenimiento Preventivo')  AND 'Tipo de causa' != 'A cargo del contratista' ORDER BY key DESC, 'Time to resolution' ASC";
