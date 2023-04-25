@@ -2,11 +2,9 @@
 using DashboarJira.Controller;
 using DashboarJira.Services;
 
-Console.WriteLine("Hello, World!");
 JiraAccess jira = new JiraAccess();
 
-//jira.GetTikets(0,100,null,null,null);
-RAIOController RAIOController= new RAIOController();
-Console.WriteLine(RAIOController.RAIOContratista("2023-01-01","2023-04-20"));
+RANOController RAIOController= new RANOController();
+Console.WriteLine(RAIOController.RAIOGeneral("2023-02-01","2023-02-28"));
 
 jira.getTicket();

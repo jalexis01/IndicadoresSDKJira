@@ -42,7 +42,6 @@ namespace DashboarJira.Model
             {
                 RAIOGeneral = 100;
             }
-            Console.WriteLine(RAIOGeneral);
             return RAIOGeneral;
         }
         public override string ToString()
@@ -55,8 +54,9 @@ namespace DashboarJira.Model
                 RAIO = CacularIndicadorRAIO(),
                 TotalTai = TicketTAI.Count,
                 TotalTCI = TicketTCI.Count,
-                TicketTCI = ticketTCIJson,
-                TicketTAI = ticketTAIJson,
+                TicketTCI = TicketTCI,
+                Espacio = "ESPACIO#######################",
+                TicketTAI = TicketTAI,
                 
             });
         }
