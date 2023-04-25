@@ -12,20 +12,13 @@ namespace DashboarJira.Model
 
         //TAI: # total de tickets con nivel de falla igual AIO.
         //TCI: # total de tickets con nivel de falla igual AIO, cerrados en un intervalo menor o igual a 6 horas.
-        private List<Ticket> TicketTCI { get; set; }
-        private List<Ticket> TicketTAI { get; set; }
+        public List<Ticket> TicketTCI { get; set; }
+        public List<Ticket> TicketTAI { get; set; }
 
         public RAIOEntity( List<Ticket> TicketTCI, List<Ticket> TicketTAI)
         {
             this.TicketTCI = TicketTCI;
             this.TicketTAI = TicketTAI;
-        }
-        public RAIOEntity(double tCI, double tAI, List<Ticket> TicketTCI, List<Ticket> TicketTAI)
-        {
-            
-            this.TicketTCI = TicketTCI;
-            this.TicketTAI = TicketTAI;
-            
         }
 
 
