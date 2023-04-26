@@ -15,11 +15,11 @@ namespace DashboarJiraTest
     public class IRFEntityTests
     {
         [Test]
-        public void CalculoIRF_WithEmptyList_ReturnsZero()
+        public void CalculoIRF_WithEmptyList_ReturnsOneHundred()
         {
             // Arrange
             List<ReporteFallasPorPuerta> fallasPorPuerta = new List<ReporteFallasPorPuerta>();
-            double total_puertas = 0.0;
+            double total_puertas = 1.0;
             List<Ticket> tickets = new List<Ticket>();
 
             IRFEntity irfEntity = new IRFEntity(fallasPorPuerta, total_puertas, tickets);
@@ -28,11 +28,11 @@ namespace DashboarJiraTest
             double result = irfEntity.calculoIRF();
 
             // Assert
-            Assert.That(result, Is.EqualTo(0.0));
+            Assert.That(result, Is.EqualTo(100.0));
         }
 
         [Test]
-        public void CalculoIRF_WithSingleReporteFallasPorPuertaWithNoFailures_ReturnsFifty()
+        public void CalculoIRF_WithSingleReporteFallasPorPuertaWithNoFailures_ReturnsZero()
         {
             // Arrange
             List<ReporteFallasPorPuerta> fallasPorPuerta = new List<ReporteFallasPorPuerta>()
@@ -52,7 +52,7 @@ namespace DashboarJiraTest
             double result = irfEntity.calculoIRF();
 
             // Assert
-            Assert.That(result, Is.EqualTo(50.0));
+            Assert.That(result, Is.EqualTo(0.0));
         }
     }
 

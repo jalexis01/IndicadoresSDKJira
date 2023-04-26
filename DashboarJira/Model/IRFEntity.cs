@@ -35,6 +35,7 @@ namespace DashboarJira.Model
                 totalPuertasIRF++;
                 double NTA = 0.0;
                 double NAR = 0.0;
+                double calculo = 0.0;
                 Console.WriteLine("Puerta: " + reporte.Puerta);
                 foreach (FallaPorPuerta falla in reporte.Fallas)
                 {
@@ -48,7 +49,11 @@ namespace DashboarJira.Model
 
                 }
                 Console.WriteLine("fuera del for \nNTA: " + NTA + "\nNAR: " + NAR);
-                double calculo = 1.0 - (NAR / NTA);
+                if(NTA != 0)
+                {
+                    calculo = 1.0 - (NAR / NTA);
+                }
+                
                 sumatoria += calculo;
                 Console.WriteLine("Sumatoria dentro del for: " + calculo);
             }
