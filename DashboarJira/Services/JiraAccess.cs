@@ -39,7 +39,7 @@ namespace DashboarJira.Services
                 issues = jira.Issues.GetIssuesFromJqlAsync(jql, max, start);
             }
             else if (max == 0) {
-                issues = jira.Issues.GetIssuesFromJqlAsync(jql);
+                issues = jira.Issues.GetIssuesFromJqlAsync(jql,int.MaxValue,0);
             }
 
                 return ConvertIssusInTickets(issues);
@@ -49,7 +49,7 @@ namespace DashboarJira.Services
         {
             var jql = query;
             Console.WriteLine(jql);
-            var issues =  jira.Issues.GetIssuesFromJqlAsync(jql);
+            var issues =  jira.Issues.GetIssuesFromJqlAsync(jql,int.MaxValue,0);
             
 
             return ConvertIssusInTickets(issues);
