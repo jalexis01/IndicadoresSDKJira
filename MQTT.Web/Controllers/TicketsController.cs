@@ -33,10 +33,11 @@ namespace MQTT.Web.Controllers
         int start = 0;
         int max = 10;
         string startDate = "2023-05-12";
-        string endDate = "2023-05-04";
+        string endDate = "2023-05-25";
         string idComponente = null;
         public List<Ticket> getTickets(string startDate, string endDate)
         {
+            //TODO Write some test
             try
             {
                 JiraAccess jiraAccess = new JiraAccess();
