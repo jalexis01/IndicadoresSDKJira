@@ -39,7 +39,7 @@ namespace DashboarJira.Services
                 issues = jira.Issues.GetIssuesFromJqlAsync(jql, max, start);
             }
             else if (max == 0) {
-                issues = jira.Issues.GetIssuesFromJqlAsync(jql);
+                issues = jira.Issues.GetIssuesFromJqlAsync(jql,int.MaxValue,0);
             }
 
                 return ConvertIssusInTickets(issues);
@@ -49,14 +49,14 @@ namespace DashboarJira.Services
         {
             var jql = query;
             Console.WriteLine(jql);
-            var issues =  jira.Issues.GetIssuesFromJqlAsync(jql);
+            var issues =  jira.Issues.GetIssuesFromJqlAsync(jql,int.MaxValue,0);
             
 
             return ConvertIssusInTickets(issues);
         }
 
-        public List<byte[]> getTicket() {
-            var ticket = jira.Issues.GetIssueAsync("TICKET-92");
+        public List<byte[]> getTicket(string id) {
+            var ticket = jira.Issues.GetIssueAsync(id);
             var attachments = ticket.Result.GetAttachmentsAsync();
             List<byte[]> imagenes = new List<byte[]>();
             Console.WriteLine(attachments.Result.ToList().Count);
