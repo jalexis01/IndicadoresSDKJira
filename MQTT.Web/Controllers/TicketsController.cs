@@ -9,6 +9,8 @@ using System.Linq;
 
 using DashboarJira.Model;
 using DashboarJira.Services;
+using System.Globalization;
+using System.Collections;
 
 namespace MQTT.Web.Controllers
 {
@@ -30,23 +32,39 @@ namespace MQTT.Web.Controllers
 
        
 
-        int start = 0;
-        int max = 10;
-        string startDate = "2023-05-01";
-        string endDate = "2023-05-04";
+        int startTime = 0;
+        int maxTime = 10;
+        string startDate = null;
+        string endDate = null;
         string idComponente = null;
         public List<Ticket> getTickets(string startDate, string endDate)
         {
             try
             {
+                string startDateFormatted = "";
+                string endDateFormatted= "";
+                if (startDate != null && endDate != null)
+                {
+                    DateTime start = DateTime.ParseExact(startDate, "yyyy-MM-ddTHH:mm:sszzz", CultureInfo.InvariantCulture);
+                    DateTime end = DateTime.ParseExact(endDate, "yyyy-MM-ddTHH:mm:sszzz", CultureInfo.InvariantCulture);
+                    startDateFormatted = start.ToString("yyyy-MM-dd hh:mm:ss tt");
+                    endDateFormatted = end.ToString("yyyy-MM-dd hh:mm:ss tt");
+
+                }
+                if(startDate == null && endDate == null)
+                {
+                    startDateFormatted = startDate;
+                    endDateFormatted = endDate;
+                }
                 JiraAccess jiraAccess = new JiraAccess();
-                return jiraAccess.GetTikets(start, max, startDate, endDate, idComponente);
+                return jiraAccess.GetTikets(startTime, maxTime, startDateFormatted, endDateFormatted, idComponente);
             }
             catch (Exception ex)
             {
                 throw ex;
             }
         }
+
 
 
         public IActionResult Search(DateTime startDate, DateTime endDate, MessageTypeFieldDTO messageField = null, string value = null)
