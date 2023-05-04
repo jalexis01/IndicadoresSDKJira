@@ -9,8 +9,6 @@ using System.Linq;
 
 using DashboarJira.Model;
 using DashboarJira.Services;
-using System.Globalization;
-using System.Collections;
 
 namespace MQTT.Web.Controllers
 {
@@ -20,51 +18,49 @@ namespace MQTT.Web.Controllers
         private General _objGeneral;
         private static List<MessageTypeFieldDTO> _validFields;
         private static List<MessageTypeFieldDTO> _columnsSearch;
-        private General DBAccess { get => _objGeneral; set => _objGeneral = value; }  
+        private General DBAccess { get => _objGeneral; set => _objGeneral = value; }
 
         public IActionResult Index()
         {
             //return View();
 
+            // Obtener la fecha actual
+            DateTime currentDateTime = DateTime.Now;
+
+            // Restar un mes a la fecha actual
+            DateTime startDateTime = currentDateTime.AddMonths(-1);
+
+            // Formatear las fechas en el formato deseado
+            string startDate = startDateTime.ToString("yyyy-MM-dd");
+            string endDate = currentDateTime.ToString("yyyy-MM-dd");
+
             List<Ticket> tickets = getTickets(startDate, endDate);
             return View(tickets);
         }
 
-       
 
-        int startTime = 0;
-        int maxTime = 10;
-        string startDate = null;
-        string endDate = null;
+        int start = 0;
+        int max = 10;
         string idComponente = null;
+                
         public List<Ticket> getTickets(string startDate, string endDate)
         {
             try
             {
-                string startDateFormatted = "";
-                string endDateFormatted= "";
-                if (startDate != null && endDate != null)
-                {
-                    DateTime start = DateTime.ParseExact(startDate, "yyyy-MM-ddTHH:mm:sszzz", CultureInfo.InvariantCulture);
-                    DateTime end = DateTime.ParseExact(endDate, "yyyy-MM-ddTHH:mm:sszzz", CultureInfo.InvariantCulture);
-                    startDateFormatted = start.ToString("yyyy-MM-dd hh:mm:ss tt");
-                    endDateFormatted = end.ToString("yyyy-MM-dd hh:mm:ss tt");
+                DateTime startDateTime = DateTime.Parse(startDate);
+                DateTime endDateTime = DateTime.Parse(endDate).AddDays(1).AddSeconds(-1); //agrega 1 día y resta 1 segundo para obtener el final del día
 
-                }
-                if(startDate == null && endDate == null)
-                {
-                    startDateFormatted = startDate;
-                    endDateFormatted = endDate;
-                }
+                string formattedStartDate = startDateTime.ToString("yyyy-MM-dd");
+                string formattedEndDate = endDateTime.ToString("yyyy-MM-dd");
+
                 JiraAccess jiraAccess = new JiraAccess();
-                return jiraAccess.GetTikets(startTime, maxTime, startDateFormatted, endDateFormatted, idComponente);
+                return jiraAccess.GetTikets(start, max, formattedStartDate, formattedEndDate, idComponente);
             }
             catch (Exception ex)
             {
                 throw ex;
             }
         }
-
 
 
         public IActionResult Search(DateTime startDate, DateTime endDate, MessageTypeFieldDTO messageField = null, string value = null)
