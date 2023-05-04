@@ -24,7 +24,7 @@ namespace DashboarJira.Services
         public List<Ticket> GetTikets(int start, int max, string startDate, string endDate, string idComponente)
         {
             //created >= 2023-04-04 AND created <= 2023-04-13 AND issuetype = "Solicitud de Mantenimiento" AND resolution = Unresolved AND "Clase de fallo" = AIO AND "Identificacion componente" ~ 9119-WA-OR-1 ORDER BY key DESC, "Time to resolution" ASC
-            var jql = "issuetype = 'Solicitud de Mantenimiento'";
+            var jql = "project = 'Centro de Control' and issuetype = 'Solicitud de Mantenimiento'";
             if (startDate != null && endDate != null) {
                 jql += " AND " +"created >= " + startDate + " AND " + "created <= " + endDate ;
             }
@@ -34,11 +34,11 @@ namespace DashboarJira.Services
             }
             jql += " ORDER BY key DESC, 'Time to resolution' ASC";
             Task<IPagedQueryResult<Issue>> issues = null;
-            if (max != 0 && start != 0)
+            if (max != 0 )
             {
                 issues = jira.Issues.GetIssuesFromJqlAsync(jql, max, start);
             }
-            else if (max == 0 && start == 0) {
+            else if (max == 0) {
                 issues = jira.Issues.GetIssuesFromJqlAsync(jql);
             }
 
