@@ -1,0 +1,67 @@
+﻿@{
+    ViewData["Title"] = "Historial de Tickets";
+}
+@using DashboarJira.Model
+@model List<Ticket>
+
+<link rel="stylesheet" href="~/css/views/Tickets.css">
+
+<div class="header-view">
+    <h1 class="text-2xl font-bold dark:text-white title-view-text">@ViewBag.Title</h1>
+</div>
+
+
+<div class="form-container">
+    <div class="inputs-container">
+        <label class="TextFecha">Fecha Inicial</label>
+        <div class="wrapperFI">
+            <input id="dtpStart"  required>
+        </div>
+    </div>
+    <div class="inputs-container">
+        <label class="TextFecha">Fecha Final</label>
+        <div class="wrapperFI">
+            <input id="dtpEnd" required>
+        </div>
+    </div>
+    <div class="inputs-container">
+        <button onclick="ServiceGetTickets()" type="button" id="button-primary"
+            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"">Buscar</button>
+    </div>
+
+</div>
+
+<div class="container-grid">
+    <table class="styled-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Asunto</th>
+                <th>Descripción</th>
+                <th>Fecha de Creación</th>
+                <th>Estado</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var ticket in Model)
+            {
+                <tr>
+                    <td>@ticket.codigo_falla</td>
+                    <td>@ticket.componente_Parte</td>
+                    <td>@ticket.descripcion_reparacion</td>
+                    <td>@ticket.fecha_apertura</td>
+                    <td>@ticket.estado_ticket</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+
+
+<script type="text/javascript">
+    var columnsSearch = @(Html.Raw(ViewBag.columnsSearch));
+    var columnsToHide = @(Html.Raw(ViewBag.columnsToHide));
+</script>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/js/Views/Tickets/tickets.js"></script>

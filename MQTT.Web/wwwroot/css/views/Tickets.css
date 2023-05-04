@@ -1,0 +1,48 @@
+﻿.container-grid {
+    justify-content: center;
+}
+
+
+.flex-add {
+    display: flex;
+}
+
+.container-inputs {
+    display: flex;
+}
+
+
+
+.organitation-menu {
+    position: absolute;
+    right: 10%;
+}
+
+.e-ddl.e-input-group {
+    display: flex;
+}
+
+
+.container-grid {
+    display: grid;
+    place-items: center;
+    border: 1px solid #ccc;
+    padding: 10px;
+}
+
+.styled-table {
+    border-collapse: collapse;
+    width: 100%;
+    max-width: 800px;
+}
+
+    .styled-table th,
+    .styled-table td {
+        border: 1px solid #ddd;
+        padding: 8px;
+    }
+
+    .styled-table th {
+        background-color: #f2f2f2;
+        text-align: left;
+    }
