@@ -24,29 +24,37 @@ namespace MQTT.Web.Controllers
         {
             //return View();
 
+            // Obtener la fecha actual
+            DateTime currentDateTime = DateTime.Now;
+
+            // Restar un mes a la fecha actual
+            DateTime startDateTime = currentDateTime.AddMonths(-1);
+
+            // Formatear las fechas en el formato deseado
+            string startDate = startDateTime.ToString("yyyy-MM-dd");
+            string endDate = currentDateTime.ToString("yyyy-MM-dd");
+
             List<Ticket> tickets = getTickets(startDate, endDate);
             return View(tickets);
         }
 
 
-
         int start = 0;
         int max = 10;
-        string startDate = "2023-05-12";
-        string endDate = "2023-05-25";
         string idComponente = null;
-
-        private void mockMethod()
-        {
-
-        }
+                
         public List<Ticket> getTickets(string startDate, string endDate)
         {
-            //TODO Write some test
             try
             {
+                DateTime startDateTime = DateTime.Parse(startDate);
+                DateTime endDateTime = DateTime.Parse(endDate).AddDays(1).AddSeconds(-1); //agrega 1 día y resta 1 segundo para obtener el final del día
+
+                string formattedStartDate = startDateTime.ToString("yyyy-MM-dd");
+                string formattedEndDate = endDateTime.ToString("yyyy-MM-dd");
+
                 JiraAccess jiraAccess = new JiraAccess();
-                return jiraAccess.GetTikets(start, max, startDate, endDate, idComponente);
+                return jiraAccess.GetTikets(start, max, formattedStartDate, formattedEndDate, idComponente);
             }
             catch (Exception ex)
             {
