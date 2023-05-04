@@ -20,7 +20,7 @@ namespace MQTT.Web.Controllers
         private static List<MessageTypeFieldDTO> _columnsSearch;
         private General DBAccess { get => _objGeneral; set => _objGeneral = value; }
 
-        public IActionResult Index()
+        public IActionResult Index(int max)
         {
             //return View();
 
@@ -34,7 +34,7 @@ namespace MQTT.Web.Controllers
             string startDate = startDateTime.ToString("yyyy-MM-dd");
             string endDate = currentDateTime.ToString("yyyy-MM-dd");
 
-            List<Ticket> tickets = getTickets(startDate, endDate);
+            List<Ticket> tickets = getTickets(startDate, endDate, max);
             return View(tickets);
         }
 
@@ -43,7 +43,7 @@ namespace MQTT.Web.Controllers
         int max = 10;
         string idComponente = null;
                 
-        public List<Ticket> getTickets(string startDate, string endDate)
+        public List<Ticket> getTickets(string startDate, string endDate, int max)
         {
             try
             {

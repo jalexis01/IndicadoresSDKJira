@@ -9,11 +9,12 @@ $(document).ready(function () {
 function ServiceGetTickets() {
     var startDate = $('#dtpStart').val();
     var endDate = $('#dtpEnd').val();
+    var max = document.getElementById("maxSelect").value;
 
     $.ajax({
         type: "GET",
         url: "/Tickets/GetTickets",
-        data: { startDate: startDate, endDate: endDate },
+        data: { startDate: startDate, endDate: endDate, max:max },
         success: function (response) {
             // Clear the current table body
             $('#table tbody').empty();
