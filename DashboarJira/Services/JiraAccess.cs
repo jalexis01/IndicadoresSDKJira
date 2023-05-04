@@ -55,8 +55,8 @@ namespace DashboarJira.Services
             return ConvertIssusInTickets(issues);
         }
 
-        public List<byte[]> getTicket() {
-            var ticket = jira.Issues.GetIssueAsync("TICKET-92");
+        public List<byte[]> getTicket(string id) {
+            var ticket = jira.Issues.GetIssueAsync(id);
             var attachments = ticket.Result.GetAttachmentsAsync();
             List<byte[]> imagenes = new List<byte[]>();
             Console.WriteLine(attachments.Result.ToList().Count);
