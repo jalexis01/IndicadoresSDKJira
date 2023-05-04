@@ -5,6 +5,6 @@ using DashboarJira.Services;
 using MQTT.Infrastructure.DAL;
 
 JiraAccess jira = new JiraAccess();
-jira.GetTikets(0,100,null,null,null);
+jira.GetTikets(0,120,null,null,null);
 Console.WriteLine("");
 
