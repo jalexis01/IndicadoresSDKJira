@@ -18,7 +18,7 @@ namespace MQTT.Web.Controllers
         private General _objGeneral;
         private static List<MessageTypeFieldDTO> _validFields;
         private static List<MessageTypeFieldDTO> _columnsSearch;
-        private General DBAccess { get => _objGeneral; set => _objGeneral = value; }  
+        private General DBAccess { get => _objGeneral; set => _objGeneral = value; }
 
         public IActionResult Index()
         {
@@ -28,13 +28,18 @@ namespace MQTT.Web.Controllers
             return View(tickets);
         }
 
-       
+
 
         int start = 0;
         int max = 10;
         string startDate = "2023-05-12";
         string endDate = "2023-05-25";
         string idComponente = null;
+
+        private void mockMethod()
+        {
+
+        }
         public List<Ticket> getTickets(string startDate, string endDate)
         {
             //TODO Write some test
