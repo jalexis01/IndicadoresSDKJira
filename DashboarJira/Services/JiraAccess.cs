@@ -34,11 +34,11 @@ namespace DashboarJira.Services
             }
             jql += " ORDER BY key DESC, 'Time to resolution' ASC";
             Task<IPagedQueryResult<Issue>> issues = null;
-            if (max != null && start != null)
+            if (max != 0 && start != 0)
             {
                 issues = jira.Issues.GetIssuesFromJqlAsync(jql, max, start);
             }
-            else if (max == null && start == null) {
+            else if (max == 0 && start == 0) {
                 issues = jira.Issues.GetIssuesFromJqlAsync(jql);
             }
 
