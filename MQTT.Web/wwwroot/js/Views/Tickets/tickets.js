@@ -7,7 +7,6 @@ $(document).ready(function () {
 });
 
 function ServiceGetTickets() {
-    alert("I am here");
     var startDate = $('#dtpStart').val();
     var endDate = $('#dtpEnd').val();
 
