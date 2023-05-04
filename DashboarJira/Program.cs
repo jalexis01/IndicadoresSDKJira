@@ -2,10 +2,9 @@
 using DashboarJira.Controller;
 using DashboarJira.Model;
 using DashboarJira.Services;
+using MQTT.Infrastructure.DAL;
 
 JiraAccess jira = new JiraAccess();
+jira.GetTikets(0,500,"2023-05-01","2023-05-04",null);
+Console.WriteLine("");
 
-IRFEntity RAIOController= new IRFEntity();
-Console.WriteLine(RAIOController.calculoIRF("2023-02-01","2023-02-28"));
-
-jira.getTicket();

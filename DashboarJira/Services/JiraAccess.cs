@@ -26,11 +26,11 @@ namespace DashboarJira.Services
             //created >= 2023-04-04 AND created <= 2023-04-13 AND issuetype = "Solicitud de Mantenimiento" AND resolution = Unresolved AND "Clase de fallo" = AIO AND "Identificacion componente" ~ 9119-WA-OR-1 ORDER BY key DESC, "Time to resolution" ASC
             var jql = "issuetype = 'Solicitud de Mantenimiento'";
             if (startDate != null && endDate != null) {
-                jql += " AND " +"created >= " + startDate + " AND " + "created <= " + endDate + " AND ";
+                jql += " AND " +"created >= " + startDate + " AND " + "created <= " + endDate ;
             }
             if (idComponente != null) {
 
-                jql += "'Identificacion componente' ~ " + idComponente;
+                jql += " AND " + "'Identificacion componente' ~ " + idComponente;
             }
             jql += " ORDER BY key DESC, 'Time to resolution' ASC";
 

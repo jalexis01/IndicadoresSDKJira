@@ -21,6 +21,10 @@ namespace DashboarJira.Model
             this.tickets = tickets;
         }
 
+        public IRFEntity()
+        {
+        }
+
         public double getTotalPuertas()
         {
             return total_puertas;

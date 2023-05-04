@@ -544,7 +544,7 @@ namespace MQTT.Infrastructure.DAL
             {
                 using (var DBContext = objContext.DBConnection())
                 {
-                    var result = DBContext.TbMessages.Where(f=> f.Id > -9223372036853705160).ToList();
+                    var result = DBContext.TbMessages.Where(f=> f.Id == -9223372036853705160).ToList();
 
                     int i = 0;
                     foreach (var item in result)
@@ -583,6 +583,7 @@ namespace MQTT.Infrastructure.DAL
             }
             catch (Exception ex)
             {
+                Console.Write(ex.Message);
                 throw ex;
             }
         }
