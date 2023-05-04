@@ -33,11 +33,16 @@ namespace DashboarJira.Services
                 jql += " AND " + "'Identificacion componente' ~ " + idComponente;
             }
             jql += " ORDER BY key DESC, 'Time to resolution' ASC";
+            Task<IPagedQueryResult<Issue>> issues = null;
+            if (max != null && start != null)
+            {
+                issues = jira.Issues.GetIssuesFromJqlAsync(jql, max, start);
+            }
+            else if (max == null && start == null) {
+                issues = jira.Issues.GetIssuesFromJqlAsync(jql);
+            }
 
-            var issues = jira.Issues.GetIssuesFromJqlAsync(jql, max, start);
-
-            
-            return ConvertIssusInTickets(issues);
+                return ConvertIssusInTickets(issues);
         }
 
         public List<Ticket> GetTiketsIndicadores(string query)
