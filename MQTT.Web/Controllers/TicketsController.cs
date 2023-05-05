@@ -44,7 +44,7 @@ namespace MQTT.Web.Controllers
 
                 if(startDate!=null|| endDate != null)
                 {
-                    max = 10;
+                    //max = 10;
                     DateTime startDateTime = DateTime.Parse(startDate);
                     DateTime endDateTime = DateTime.Parse(endDate).AddDays(1).AddSeconds(-1); //agrega 1 día y resta 1 segundo para obtener el final del día
 
