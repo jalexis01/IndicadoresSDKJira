@@ -16,8 +16,10 @@ function ServiceGetTickets() {
     Swal.fire({
         title: 'Cargando...',
         allowOutsideClick: false,
-        onBeforeOpen: () => {
-            Swal.showLoading();
+        showConfirmButton: false, // Oculta el botón de confirmación
+        onBeforeOpen: (modal) => {
+            modal.showLoading();
+            modal.disableCloseButton(); // Desactiva el botón de cancelación
         }
     });
 
