@@ -20,7 +20,7 @@ namespace MQTT.Web.Controllers
         private static List<MessageTypeFieldDTO> _columnsSearch;
         private General DBAccess { get => _objGeneral; set => _objGeneral = value; }
 
-        public IActionResult Index(int max)
+        public IActionResult Index(int max, string componente)
         {
             //return View();
 
@@ -32,18 +32,16 @@ namespace MQTT.Web.Controllers
 
             // Formatear las fechas en el formato deseado
             string startDate = startDateTime.ToString("yyyy-MM-dd");
-            string endDate = currentDateTime.ToString("yyyy-MM-dd");
+            string endDate = currentDateTime.ToString("yyyy-MM-dd");             
 
-            List<Ticket> tickets = getTickets(startDate, endDate, max);
+            List<Ticket> tickets = getTickets(startDate, endDate, max, componente);
             return View(tickets);
         }
 
 
         int start = 0;
-        int max = 10;
-        string idComponente = null;
                 
-        public List<Ticket> getTickets(string startDate, string endDate, int max)
+        public List<Ticket> getTickets(string startDate, string endDate, int max, string componente)
         {
             try
             {
@@ -52,7 +50,8 @@ namespace MQTT.Web.Controllers
 
                 if(startDate!=null|| endDate != null)
                 {
-
+                    max = 10;
+                    componente = null;
                     DateTime startDateTime = DateTime.Parse(startDate);
                     DateTime endDateTime = DateTime.Parse(endDate).AddDays(1).AddSeconds(-1); //agrega 1 día y resta 1 segundo para obtener el final del día
 
@@ -67,7 +66,7 @@ namespace MQTT.Web.Controllers
 
 
                 JiraAccess jiraAccess = new JiraAccess();
-                return jiraAccess.GetTikets(start, max, formattedStartDate, formattedEndDate, idComponente);
+                return jiraAccess.GetTikets(start, max, formattedStartDate, formattedEndDate, componente);
             }
             catch (Exception ex)
             {

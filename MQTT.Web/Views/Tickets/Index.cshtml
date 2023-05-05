@@ -11,23 +11,8 @@
 </div>
 
 
-<div class="form-container">
-    <div class="inputs-container">
-        <label for="items-per-page">Items per page:</label>
-        <select id="maxSelect" name="items-per-page">
-            <option value="10">10</option>
-            <option value="20">20</option>
-            <option value="30">30</option>
-            <option value="50">50</option>
-            <option value="100">100</option>
-            <option value="200">200</option>
-        </select>
-    </div>
-    <div class="inputs-container">
-        <label for="ticket">Id Ticket:</label>
-        
-        <input type="text" id="ticket" name="ticket">
-    </div>
+<div class="form-container">    
+    
     <div class="inputs-container">
         <label class="TextFecha">Fecha Inicial</label>
         <div class="wrapperFI">
@@ -41,6 +26,29 @@
         </div>
     </div>
     <div class="inputs-container">
+        <label class="TextComponente">ID Componente</label>
+        <div class="wrapperFI">
+           <input type="text" id="componente">
+        </div>
+        
+        
+    </div>
+    <div class="inputs-container">
+        <label class="TextCantidad">Cant.</label>
+        <div class="wrapperFI">
+            <select id="maxSelect" >
+            <option value="10">10</option>
+            <option value="20">20</option>
+            <option value="30">30</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+            <option value="200">200</option>
+        </select>
+        </div>
+        
+        
+    </div>
+    <div class="inputs-container">
         <button onclick="ServiceGetTickets()" type="button" id="button-primary"
             class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"">Buscar</button>
     </div>
@@ -51,11 +59,21 @@
     <table id="table" class="styled-table">
         <thead>
             <tr>
-                <th>ID</th>
-                <th>Asunto</th>
-                <th>Descripción</th>
-                <th>Fecha de Creación</th>
-                <th>Estado</th>
+                <th>Código falla</th>
+                <th>Parte componente</th>
+                <th>Descripción reparación</th>
+                <th>Diagnóstico causa</th>                
+                <th>Estado ticket</th>
+                <th>Fecha apertura</th>
+                <th>Fecha arribo locación</th>
+                <th>Fecha cierre</th>
+                <th>Id compomente</th>
+                <th>Id estación</th>
+                <th>Id puerta</th>
+                <th>Id ticket</th>
+                <th>Id vagón</th>
+                <th>Identificación</th>
+                <th>Nivel falla</th>
             </tr>
         </thead>
         <tbody>
@@ -65,8 +83,18 @@
                     <td>@ticket.codigo_falla</td>
                     <td>@ticket.componente_Parte</td>
                     <td>@ticket.descripcion_reparacion</td>
-                    <td>@ticket.fecha_apertura</td>
+                    <td>@ticket.diagnostico_causa</td>
                     <td>@ticket.estado_ticket</td>
+                    <td>@ticket.fecha_apertura</td>
+                    <td>@ticket.fecha_arribo_locacion</td>
+                    <td>@ticket.fecha_cierre</td>
+                    <td>@ticket.id_componente</td>
+                    <td>@ticket.id_estacion</td>
+                    <td>@ticket.id_puerta</td>
+                    <td>@ticket.id_ticket</td>
+                    <td>@ticket.id_vagon</td>
+                    <td>@ticket.identificacion</td>
+                    <td>@ticket.nivel_falla</td>
                 </tr>
             }
         </tbody>

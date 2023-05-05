@@ -10,11 +10,12 @@ function ServiceGetTickets() {
     var startDate = $('#dtpStart').val();
     var endDate = $('#dtpEnd').val();
     var max = document.getElementById("maxSelect").value;
+    var componente = $('#componente').val();
 
     $.ajax({
         type: "GET",
         url: "/Tickets/GetTickets",
-        data: { startDate: startDate, endDate: endDate, max:max },
+        data: { startDate: startDate, endDate: endDate, max:max, componente: componente },
         success: function (response) {
             // Clear the current table body
             $('#table tbody').empty();
@@ -26,8 +27,18 @@ function ServiceGetTickets() {
                     '<td>' + ticket.codigo_falla + '</td>' +
                     '<td>' + ticket.componente_Parte + '</td>' +
                     '<td>' + ticket.descripcion_reparacion + '</td>' +
-                    '<td>' + ticket.fecha_apertura + '</td>' +
+                    '<td>' + ticket.diagnostico_falla + '</td>' +
                     '<td>' + ticket.estado_ticket + '</td>' +
+                    '<td>' + ticket.fecha_apertura + '</td>' +
+                    '<td>' + ticket.fecha_arribo_locacion + '</td>' +
+                    '<td>' + ticket.fecha_cierre + '</td>' +
+                    '<td>' + ticket.id_componente + '</td>' +
+                    '<td>' + ticket.id_estacion + '</td>' +
+                    '<td>' + ticket.id_puerta + '</td>' +
+                    '<td>' + ticket.id_ticket + '</td>' +
+                    '<td>' + ticket.id_vagon + '</td>' +
+                    '<td>' + ticket.identificacion + '</td>' +
+                    '<td>' + ticket.nivel_falla + '</td>' +
                     '</tr>'
                 );
             });
