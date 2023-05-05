@@ -12,11 +12,23 @@ function ServiceGetTickets() {
     var max = document.getElementById("maxSelect").value;
     var componente = $('#componente').val();
 
+    // Display loading modal
+    Swal.fire({
+        title: 'Cargando...',
+        allowOutsideClick: false,
+        onBeforeOpen: () => {
+            Swal.showLoading();
+        }
+    });
+
     $.ajax({
         type: "GET",
         url: "/Tickets/GetTickets",
-        data: { startDate: startDate, endDate: endDate, max:max, componente: componente },
+        data: { startDate: startDate, endDate: endDate, max: max, componente: componente },
         success: function (response) {
+            // Hide loading modal
+            Swal.close();
+
             // Clear the current table body
             $('#table tbody').empty();
 
@@ -44,8 +56,14 @@ function ServiceGetTickets() {
             });
         },
         error: function (xhr, status, error) {
-            // Handle the error
+            // Hide loading modal
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: error
+            });
         }
     });
 }
+
 

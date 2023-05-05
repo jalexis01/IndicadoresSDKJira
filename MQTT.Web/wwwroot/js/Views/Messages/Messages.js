@@ -10,22 +10,33 @@ $(document).ready(function(){
 
 
 function ServiceGetMessages(){
-    $(".container-loader").css({'display':'flex'})
+    // Display loading modal
+    Swal.fire({
+        title: 'Loading...',
+        allowOutsideClick: false,
+        onBeforeOpen: () => {
+            Swal.showLoading();
+        }
+    });
+    
     var data = {
       startDate: $("#dtpStart").val(),
       endDate: $("#dtpEnd").val(),
-      }
-      $.ajax({
+    };
+    
+    $.ajax({
         data: data,
         type: "POST",
         dataType: "json",
         url: '/Messages/Search',
-      }).then(response => JSON.parse(JSON.stringify(response)))
-      .then(data => {
-        $(".container-loader").css({'display':'none'})
+    }).then(response => JSON.parse(JSON.stringify(response)))
+    .then(data => {
+        // Hide loading modal
+        Swal.close();
+        
         if(data.dataMessages.length == 0){
-          noData();
-          return;
+            noData();
+            return;
         }
         filtersData = data.filters;
         dropdowns.value = null;
@@ -40,14 +51,19 @@ function ServiceGetMessages(){
         dataColumns = addCommandsGridDetails(dataColumns);
         dropdowns.enabled = true;
         dataGridSave = data.dataMessages;
-        setGrid(data.dataMessages, dataColumns, exportFunctions)
-      })
-      .catch(error => {
-        $(".container-loader").css({'display':'none'})
-        errorsCase(error.name + ': ' + error.message)
-      })
-      .then(response => console.log('Success:', response));
+        setGrid(data.dataMessages, dataColumns, exportFunctions);
+    })
+    .catch(error => {
+        // Hide loading modal
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: error.name + ': ' + error.message
+        });
+    })
+    .then(response => console.log('Success:', response));
 }
+
 
 const targetEl = document.getElementById('dropdownInformation');
 
