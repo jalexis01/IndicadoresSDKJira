@@ -11,6 +11,7 @@ function ServiceGetTickets() {
     var endDate = $('#dtpEnd').val();
     var max = document.getElementById("maxSelect").value;
     var componente = $('#componente').val();
+    console.log("idComponente: "+componente);
 
     $.ajax({
         type: "GET",
