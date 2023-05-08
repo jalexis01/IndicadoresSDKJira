@@ -13,15 +13,17 @@ function ServiceGetTickets() {
     var componente = $('#componente').val();
     console.log("idComponente: " + componente);
 
+
     // Display loading modal
     Swal.fire({
         title: 'Cargando...',
         allowOutsideClick: false,
-        onBeforeOpen: () => {
-            Swal.showLoading();
+        showConfirmButton: false, // Oculta el botón de confirmación
+        onBeforeOpen: (modal) => {
+            modal.showLoading();
+            modal.disableCloseButton(); // Desactiva el botón de cancelación
         }
     });
-
     $.ajax({
         type: "GET",
         url: "/Tickets/GetTickets",
