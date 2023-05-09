@@ -7,6 +7,7 @@ using (var context = new PuertasTransmilenioDbassaabloyContext(contex))
 {
     var latestMessages = context
         .TbMessages
+        .Where(m => m.FechaHoraEnvioDato >= new DateTime())
         .OrderByDescending(m => m.FechaHoraEnvioDato)            
         .Take(30000)
         .ToList();
