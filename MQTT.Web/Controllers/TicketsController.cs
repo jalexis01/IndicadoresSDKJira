@@ -1,11 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System;
-using MQTT.Infrastructure.DAL;
-using MQTT.Infrastructure.Models.DTO;
-using MQTT.Web.Models;
-using System.Data;
-using System.Linq;
 
 using DashboarJira.Model;
 using DashboarJira.Services;
@@ -16,6 +11,19 @@ namespace MQTT.Web.Controllers
     {
         public IActionResult Index(int max, string componente)
         {
+            // Obtiene la identidad del usuario actual
+            var identity = User.Identity as System.Security.Claims.ClaimsIdentity;
+
+            // Verifica si el usuario tiene el rol de "Administrador"
+            if (identity != null && identity.HasClaim(System.Security.Claims.ClaimTypes.Name, "admin@admin.com"))
+            {
+                ViewBag.Menu = "admin";
+            }
+            else
+            {
+                ViewBag.Menu = "user";
+            }
+
             //return View();
 
             // Obtener la fecha actual
@@ -65,35 +73,6 @@ namespace MQTT.Web.Controllers
                 throw ex;
             }
         }        
-    }
-
-   
-    /*{
-        [Authorize]
-        public IActionResult Index()
-        {
-            //return View();
-            List<Ticket> tickets = getTickets();
-            return View(tickets);
-        }
-
-        int start = 0;
-        int max = 100;
-        string startDate = null;
-        string endDate = null;
-        string idComponente = null;
-        public List<Ticket> getTickets()
-        {
-            try
-            {
-                JiraAccess jiraAccess = new JiraAccess();
-                return jiraAccess.GetTikets(start, max, startDate, endDate, idComponente);
-
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-    }*/
+    }   
+    
 }

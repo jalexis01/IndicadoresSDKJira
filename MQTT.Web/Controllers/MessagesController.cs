@@ -29,6 +29,18 @@ namespace MQTT.Web.Controllers
 
         public IActionResult Index()
         {
+            // Obtiene la identidad del usuario actual
+            var identity = User.Identity as System.Security.Claims.ClaimsIdentity;
+
+            // Verifica si el usuario tiene el rol de "Administrador"
+            if (identity != null && identity.HasClaim(System.Security.Claims.ClaimTypes.Name, "admin@admin.com"))
+            {
+                ViewBag.Menu = "admin";
+            }
+            else
+            {
+                ViewBag.Menu = "user";
+            }
             _validFields = ValidFieldsDAL.GetListValidFields(DBAccess, "Messages");
             _settings = General.GetSettings(DBAccess);
 

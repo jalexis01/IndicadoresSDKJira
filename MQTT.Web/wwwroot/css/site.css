@@ -31,6 +31,11 @@ body{
 
 }
 
+.footer-prueba, .navbar-prueba {
+    background-color: #FF0000;
+    background-image: linear-gradient(160deg, #FF0000 0%, #FF0000 100%);
+}
+
 .title-view-text{
   width: 50%;
 }

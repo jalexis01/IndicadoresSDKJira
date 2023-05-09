@@ -1,5 +1,11 @@
 ﻿.container-grid {
-    justify-content: center;
+    overflow: auto;
+    /*justify-content: center;*/
+    max-height: 500px; /* Ajusta la altura máxima según tus necesidades */
+}
+
+.table-row {
+    padding: 10px;
 }
 
 
@@ -23,12 +29,12 @@
 }
 
 
-.container-grid {
+/*.container-grid {
     display: grid;
     place-items: center;
     border: 1px solid #ccc;
     padding: 10px;
-}
+}*/
 
 .styled-table {
     border-collapse: collapse;
