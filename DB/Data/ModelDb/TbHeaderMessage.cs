@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace DB.Data.ModelDb;
+namespace DB.Data.ModelDB;
 
 public partial class TbHeaderMessage
 {
@@ -25,9 +25,9 @@ public partial class TbHeaderMessage
 
     public long? Id { get; set; }
 
-    public virtual TbMessageType IdMessageTypeNavigation { get; set; } = null!;
-
     public virtual ICollection<TbCommand> TbCommands { get; set; } = new List<TbCommand>();
+
+    public virtual ICollection<TbLogHistoryMessageIn> TbLogHistoryMessageIns { get; set; } = new List<TbLogHistoryMessageIn>();
 
     public virtual ICollection<TbMessage> TbMessages { get; set; } = new List<TbMessage>();
 }

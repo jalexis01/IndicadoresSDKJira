@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace DB.Data.ModelDB;
 
-public partial class TbLogMessageIn
+public partial class TbLogHistoryMessageIn
 {
     public long Id { get; set; }
 
@@ -20,4 +20,6 @@ public partial class TbLogMessageIn
     public DateTime? DateProcessed { get; set; }
 
     public long? IdHeaderMessage { get; set; }
+
+    public virtual TbHeaderMessage? IdHeaderMessageNavigation { get; set; }
 }

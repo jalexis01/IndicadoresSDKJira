@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace DB.Data.ModelDb;
+namespace DB.Data.ModelDB;
 
 public partial class TbLogExecutionProcessor
 {

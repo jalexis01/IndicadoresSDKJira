@@ -2,13 +2,18 @@
 using DB.Data;
 
 Console.WriteLine("Hello, World!");
-
-using (var context = new MqttservicesbdContext()) 
+string contex = "Server=manatee.database.windows.net;Database=PuertasTransmilenioDBAssaabloy;User Id=administrador;Password=2022/M4n4t334zur3;";
+using (var context = new PuertasTransmilenioDbassaabloyContext(contex)) 
 {
-    Console.WriteLine(context.TbMessages.ToList().Count);
-    foreach(var comands in context.TbMessages.ToList())
-    {
-        Console.WriteLine(comands.FechaHoraEnvioDato );
+    var latestMessages = context
+        .TbMessages
+        .OrderByDescending(m => m.FechaHoraEnvioDato)            
+        .Take(30000)
+        .ToList();
 
+    Console.WriteLine(latestMessages.Count);
+    foreach (var message in latestMessages)
+    {
+        Console.WriteLine(message.CodigoEvento);
     }
 }

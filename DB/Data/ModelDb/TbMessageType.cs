@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace DB.Data.ModelDb;
+namespace DB.Data.ModelDB;
 
 public partial class TbMessageType
 {
@@ -26,8 +26,6 @@ public partial class TbMessageType
     public string FieldWeft { get; set; } = null!;
 
     public string? FieldIdentifierMessage { get; set; }
-
-    public virtual ICollection<TbHeaderMessage> TbHeaderMessages { get; set; } = new List<TbHeaderMessage>();
 
     public virtual ICollection<TbMessageTypeField> TbMessageTypeFields { get; set; } = new List<TbMessageTypeField>();
 }

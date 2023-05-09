@@ -1,17 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using DB.Data.ModelDb;
+using DB.Data.ModelDB;
 using Microsoft.EntityFrameworkCore;
 
 namespace DB.Data;
 
-public partial class MqttservicesbdContext : DbContext
+public partial class PuertasTransmilenioDbassaabloyContext : DbContext
 {
-    public MqttservicesbdContext()
+    string contex;
+    public PuertasTransmilenioDbassaabloyContext(string contex)
     {
+        this.contex = contex;
     }
 
-    public MqttservicesbdContext(DbContextOptions<MqttservicesbdContext> options)
+    public PuertasTransmilenioDbassaabloyContext(DbContextOptions<PuertasTransmilenioDbassaabloyContext> options)
         : base(options)
     {
     }
@@ -50,6 +52,8 @@ public partial class MqttservicesbdContext : DbContext
 
     public virtual DbSet<TbLogExecutionProcessor> TbLogExecutionProcessors { get; set; }
 
+    public virtual DbSet<TbLogHistoryMessageIn> TbLogHistoryMessageIns { get; set; }
+
     public virtual DbSet<TbLogMessageIn> TbLogMessageIns { get; set; }
 
     public virtual DbSet<TbLogMessageInSummaryDay> TbLogMessageInSummaryDays { get; set; }
@@ -72,7 +76,7 @@ public partial class MqttservicesbdContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server=manatee.database.windows.net;Database=mqttservicesbd;User Id=administrador;Password=2022/M4n4t334zur3;");
+        => optionsBuilder.UseSqlServer(contex);
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -302,9 +306,7 @@ public partial class MqttservicesbdContext : DbContext
 
             entity.ToTable("tbHeaderMessage", "Operation");
 
-            entity.HasIndex(e => e.CreationDate, "IX_tbHeaderMessage_CreationDate");
-
-            entity.HasIndex(e => e.IdMessageType, "IX_tbHeaderMessage_IdMessageType");
+            entity.HasIndex(e => e.Idmanatee, "IX_tbHeaderMessage_Unique").IsUnique();
 
             entity.Property(e => e.CreationDate)
                 .HasDefaultValueSql("(getdate())")
@@ -323,11 +325,6 @@ public partial class MqttservicesbdContext : DbContext
                 .IsUnicode(false)
                 .HasColumnName("IDManatee");
             entity.Property(e => e.Trama).HasColumnName("trama");
-
-            entity.HasOne(d => d.IdMessageTypeNavigation).WithMany(p => p.TbHeaderMessages)
-                .HasForeignKey(d => d.IdMessageType)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_tbMessageTypes_tbHeaderMessage");
         });
 
         modelBuilder.Entity<TbLogElement>(entity =>
@@ -369,6 +366,23 @@ public partial class MqttservicesbdContext : DbContext
             entity.Property(e => e.InitDate).HasColumnType("datetime");
         });
 
+        modelBuilder.Entity<TbLogHistoryMessageIn>(entity =>
+        {
+            entity.ToTable("tbLogHistoryMessageIn", "Log");
+
+            entity.HasIndex(e => e.CreationDate, "IX_tbLogHistoryMessageIn_CreationDate").IsDescending();
+
+            entity.HasIndex(e => e.IdHeaderMessage, "IX_tbLogHistoryMessageIn_IdHeaderMessage");
+
+            entity.Property(e => e.CreationDate).HasColumnType("datetime");
+            entity.Property(e => e.DateProcessed).HasColumnType("datetime");
+            entity.Property(e => e.IdProcessed).HasDefaultValueSql("((1))");
+
+            entity.HasOne(d => d.IdHeaderMessageNavigation).WithMany(p => p.TbLogHistoryMessageIns)
+                .HasForeignKey(d => d.IdHeaderMessage)
+                .HasConstraintName("FK_tbLogHistoryMessageIn_tbHeaderMessage");
+        });
+
         modelBuilder.Entity<TbLogMessageIn>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK_tbLogMessageIn_New");
@@ -381,7 +395,6 @@ public partial class MqttservicesbdContext : DbContext
 
             entity.HasIndex(e => e.Processed, "IX_tbLogMessageIn_New_Processed");
 
-            entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.CreationDate).HasColumnType("datetime");
             entity.Property(e => e.DateProcessed).HasColumnType("datetime");
             entity.Property(e => e.IdProcessed).HasDefaultValueSql("((1))");
@@ -436,6 +449,10 @@ public partial class MqttservicesbdContext : DbContext
 
             entity.ToTable("tbMessages", "Operation");
 
+            entity.HasIndex(e => e.FechaHoraEnvioDato, "IX_Operation_tbMessages_fechaHoraEnvioDato");
+
+            entity.HasIndex(e => e.FechaHoraLecturaDato, "IX_Operation_tbMessages_fechaHoraLecturaDato");
+
             entity.Property(e => e.CiclosApertura).HasColumnName("ciclosApertura");
             entity.Property(e => e.CodigoAlarma)
                 .HasMaxLength(50)
@@ -460,12 +477,10 @@ public partial class MqttservicesbdContext : DbContext
             entity.Property(e => e.EstadoBotonManual).HasColumnName("estadoBotonManual");
             entity.Property(e => e.EstadoErrorCritico).HasColumnName("estadoErrorCritico");
             entity.Property(e => e.FechaHoraEnvioDato)
-                .HasMaxLength(50)
-                .IsUnicode(false)
+                .HasColumnType("datetime")
                 .HasColumnName("fechaHoraEnvioDato");
             entity.Property(e => e.FechaHoraLecturaDato)
-                .HasMaxLength(50)
-                .IsUnicode(false)
+                .HasColumnType("datetime")
                 .HasColumnName("fechaHoraLecturaDato");
             entity.Property(e => e.FuerzaMotor).HasColumnName("fuerzaMotor");
             entity.Property(e => e.HorasServicio).HasColumnName("horasServicio");

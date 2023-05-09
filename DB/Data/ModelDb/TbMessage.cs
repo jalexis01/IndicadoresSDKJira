@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace DB.Data.ModelDb;
+namespace DB.Data.ModelDB;
 
 public partial class TbMessage
 {
@@ -23,9 +23,9 @@ public partial class TbMessage
 
     public string? CodigoPuerta { get; set; }
 
-    public string? FechaHoraLecturaDato { get; set; }
+    public DateTime? FechaHoraLecturaDato { get; set; }
 
-    public string? FechaHoraEnvioDato { get; set; }
+    public DateTime? FechaHoraEnvioDato { get; set; }
 
     public int? TipoTrama { get; set; }
 
