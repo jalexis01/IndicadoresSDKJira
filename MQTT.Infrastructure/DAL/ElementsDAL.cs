@@ -17,7 +17,6 @@ namespace MQTT.Infrastructure.DAL
                 {
                     TbElements tbElement = new TbElements
                     {
-                        Code= dataElement.Code,
                         IdElementType = dataElement.IdElementType,
                         Name = dataElement.Name,
                         Value = dataElement.Value,
@@ -107,8 +106,6 @@ namespace MQTT.Infrastructure.DAL
                         {
                             Id = e.Id,
                             IdElementFather = e.IdElementFather,
-                            IdElementType= e.IdElementType,
-                            Code = e.Code,
                             Name = e.Name,
                             Value = e.Value,
                             SubElements = new List<ElementDTO>(),
@@ -130,36 +127,31 @@ namespace MQTT.Infrastructure.DAL
                             {
                                 lstElements.Add(item);
                             }
-						}
-					}
+                        }
+                    }
 
-					result = lstElements
-					.Select(e => new ElementDTO()
-					{
-						Id = e.Id,
-                        IdElementType= e.IdElementType,
-						IdElementFather = e.IdElementFather,
-						Code = e.Code,
-						Name = e.Name,
-						Value = e.Value,
-						SubElements = GetSubElements(lstElements, e.Id),
-						CreationUser = e.CreationUser,
-						CreationDate = e.CreationDate,
-                        Enable = e.Enable
-					})
-					.Where(e => e.IdElementFather is null)
-					.OrderBy(e => e.CreationDate).ToList();
+                    result = lstElements
+                    .Select(e => new ElementDTO()
+                    {
+                        Id = e.Id,
+                        IdElementFather = e.IdElementFather,
+                        Name = e.Name,
+                        Value = e.Value,
+                        SubElements = GetSubElements(lstElements, e.Id),
+                        CreationUser = e.CreationUser,
+                        CreationDate = e.CreationDate
+                    }).Where(e => e.IdElementFather is null).OrderBy(e => e.CreationDate).ToList();
 
-					return result;
-				}
-			}
-			catch (Exception ex)
-			{
-				throw ex;
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
         }
 
-        private static List<ElementDTO> GetSubElements(List<ElementDTO> lstElements, long idElementFather)
+        public static List<ElementDTO> GetSubElements(List<ElementDTO> lstElements, long idElementFather)
         {
             try
             {
@@ -169,71 +161,14 @@ namespace MQTT.Infrastructure.DAL
                     .Select(e => new ElementDTO()
                     {
                         Id = e.Id,
-                        IdElementType= e.IdElementType,
                         IdElementFather = e.IdElementFather,
-                        Code= e.Code,
                         Name = e.Name,
                         Value = e.Value,
                         SubElements = GetSubElements(lstElements, e.Id),
                         CreationUser = e.CreationUser,
-                        CreationDate = e.CreationDate,
-                        Enable = e.Enable
+                        CreationDate = e.CreationDate
                     }).OrderBy(e => e.CreationDate).ToList();
                 return result;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
-        public static List<ElementTypeDTO> GetElementTypes(General objContext)
-        {
-            try
-            {
-                using (var DBContext = objContext.DBConnection())
-                {
-                    var result = DBContext.TbElementTypes
-                        .Select(e=> new ElementTypeDTO
-                        { 
-                            Id = e.Id,
-                            Name = e.Name
-                        }).ToList();
-
-                    return result;
-				}
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
-        public static ElementDTO GetElementByCode(General objContext, string code)
-        {
-            try
-            {
-                using (var DBContext = objContext.DBConnection())
-                {
-                    var result = (from et in DBContext.TbElementTypes
-                                 join e in DBContext.TbElements
-                                    on et.Id equals e.IdElementType
-                                 where e.Code == code
-                                 select new ElementDTO {
-                                     Id = e.Id,
-                                     IdElementFather = e.IdElementFather,
-                                     IdElementType = e.IdElementType,
-                                     NameElementType = et.Name,
-                                     Code = e.Code,
-                                     Name = e.Name,
-                                     Value = e.Value,
-                                     CreationUser = e.CreationUser,
-                                     CreationDate = DateTime.UtcNow,
-                                     Enable = e.Enable.Value
-                                 }).FirstOrDefault();
-
-                    return result;
-                }
             }
             catch (Exception ex)
             {

@@ -8,6 +8,8 @@ namespace MQTT.Infrastructure.Models.DTO
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public string Description { get; set; }
+        public string TitleController { get; set; }
+        public string NameController { get; set; }
+        public string MenuController { get; set; }
     }
 }

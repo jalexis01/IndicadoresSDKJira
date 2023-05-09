@@ -2,6 +2,10 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
+// Code scaffolded by EF Core assumes nullable reference types (NRTs) are not used or disabled.
+// If you have enabled NRTs for your project, then un-comment the following line:
+// #nullable disable
+
 namespace MQTT.Infrastructure.Models
 {
     public partial class EYSIntegrationContext : DbContext
@@ -30,7 +34,6 @@ namespace MQTT.Infrastructure.Models
         public virtual DbSet<TbCommands> TbCommands { get; set; }
         public virtual DbSet<TbElementTypes> TbElementTypes { get; set; }
         public virtual DbSet<TbElements> TbElements { get; set; }
-        public virtual DbSet<TbEndPoints> TbEndPoints { get; set; }
         public virtual DbSet<TbEquivalenceTypes> TbEquivalenceTypes { get; set; }
         public virtual DbSet<TbEquivalences> TbEquivalences { get; set; }
         public virtual DbSet<TbHeaderFields> TbHeaderFields { get; set; }
@@ -41,7 +44,6 @@ namespace MQTT.Infrastructure.Models
         public virtual DbSet<TbLogMessageIn> TbLogMessageIn { get; set; }
         public virtual DbSet<TbLogMessageInSummaryDay> TbLogMessageInSummaryDay { get; set; }
         public virtual DbSet<TbLogProcessedTypes> TbLogProcessedTypes { get; set; }
-        public virtual DbSet<TbLogRequestsIn> TbLogRequestsIn { get; set; }
         public virtual DbSet<TbMessageTypeFields> TbMessageTypeFields { get; set; }
         public virtual DbSet<TbMessageTypes> TbMessageTypes { get; set; }
         public virtual DbSet<TbMessages> TbMessages { get; set; }
@@ -251,8 +253,6 @@ namespace MQTT.Infrastructure.Models
                 entity.HasIndex(e => e.Name)
                     .HasName("IX_tbElementName");
 
-                entity.Property(e => e.Code).HasMaxLength(250);
-
                 entity.Property(e => e.CreationDate)
                     .HasColumnType("datetime")
                     .HasDefaultValueSql("(getdate())");
@@ -275,36 +275,29 @@ namespace MQTT.Infrastructure.Models
                     .HasConstraintName("FK_tbElements_tbElementsParents");
             });
 
-            modelBuilder.Entity<TbEndPoints>(entity =>
-            {
-                entity.ToTable("tbEndPoints", "Configuration");
-
-                entity.Property(e => e.AzureLocation).HasMaxLength(500);
-
-                entity.Property(e => e.CreationDate)
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("(getdate())");
-
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(250);
-
-                entity.Property(e => e.Version)
-                    .IsRequired()
-                    .HasMaxLength(8);
-            });
-
             modelBuilder.Entity<TbEquivalenceTypes>(entity =>
             {
                 entity.ToTable("tbEquivalenceTypes", "Configuration");
 
-                entity.Property(e => e.CreationDate)
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("(getdate())");
+                entity.Property(e => e.Enable)
+                    .IsRequired()
+                    .HasDefaultValueSql("((1))");
+
+                entity.Property(e => e.MenuController)
+                    .IsRequired()
+                    .HasMaxLength(50);
 
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasMaxLength(250);
+
+                entity.Property(e => e.NameController)
+                    .IsRequired()
+                    .HasMaxLength(250);
+
+                entity.Property(e => e.TitleController)
+                    .IsRequired()
+                    .HasMaxLength(50);
             });
 
             modelBuilder.Entity<TbEquivalences>(entity =>
@@ -367,10 +360,6 @@ namespace MQTT.Infrastructure.Models
                     .HasName("PK_tbMessagesIn");
 
                 entity.ToTable("tbHeaderMessage", "Operation");
-
-                entity.HasIndex(e => e.CreationDate);
-
-                entity.HasIndex(e => e.IdMessageType);
 
                 entity.Property(e => e.CreationDate)
                     .HasColumnType("datetime")
@@ -456,17 +445,6 @@ namespace MQTT.Infrastructure.Models
             {
                 entity.ToTable("tbLogMessageIn", "Log");
 
-                entity.HasIndex(e => e.CreationDate)
-                    .HasName("IX_tbLogMessageIn_New_CreationDate");
-
-                entity.HasIndex(e => e.IdHeaderMessage)
-                    .HasName("IX_tbLogMessageIn_New_IdHeaderMessage");
-
-                entity.HasIndex(e => e.Processed)
-                    .HasName("IX_tbLogMessageIn_New_Processed");
-
-                entity.Property(e => e.Id).ValueGeneratedNever();
-
                 entity.Property(e => e.CreationDate).HasColumnType("datetime");
 
                 entity.Property(e => e.DateProcessed).HasColumnType("datetime");
@@ -496,32 +474,6 @@ namespace MQTT.Infrastructure.Models
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasMaxLength(250);
-            });
-
-            modelBuilder.Entity<TbLogRequestsIn>(entity =>
-            {
-                entity.ToTable("tbLogRequestsIn", "Log");
-
-                entity.HasIndex(e => e.CreationDate)
-                    .HasName("IX_tbLogRequestsIn_CreationDate_Desc");
-
-                entity.HasIndex(e => e.IdEndPoint);
-
-                entity.HasIndex(e => e.Processed);
-
-                entity.Property(e => e.CreationDate)
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("(getdate())");
-
-                entity.Property(e => e.Processed)
-                    .IsRequired()
-                    .HasDefaultValueSql("((1))");
-
-                entity.HasOne(d => d.IdEndPointNavigation)
-                    .WithMany(p => p.TbLogRequestsIn)
-                    .HasForeignKey(d => d.IdEndPoint)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_tbLogRequestsIn_tbEndPoints");
             });
 
             modelBuilder.Entity<TbMessageTypeFields>(entity =>

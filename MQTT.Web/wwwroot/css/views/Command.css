@@ -1,6 +1,14 @@
 .container-grid{
     justify-content: center;
 }
+
+.form-container{
+    width: 100%;
+    color: #222930;
+    font-weight: bold;
+    padding: 2% 10%;
+}
+
 .flex-add{
     display: flex;
 }
@@ -9,59 +17,9 @@
  display: flex;
 }
 
-.input-search {
-    width: 100%;
-    margin-top: 23px;
-    height: 33px;
-}
 
 
 .organitation-menu{
     position: absolute;
     right: 10%;
 }
-
-.e-ddl.e-input-group{
-    display: flex;
-}
-
-.e-dashboardlayout {
-    padding: 20px;
-    z-index: 0;
-  }
-  .e-panel {
-    cursor: auto !important;
-  }
-  .e-panel-header{
-    border: none !important;
-    height: 50px !important;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  } 
-  .template{
-    height: 100%;
-    width: 100%;
-  }
-  
-  #control-container {
-      padding: 0px !important;
-  }
-  #gradient-chart stop {
-      stop-color: #2485FA;        
-  }
-  #gradient-chart1 stop{
-      stop-color: #FEC200;
-  } 
-  .ellipse[id*=_Trackball_1] {
-    stroke-width: 1 !important;
-  }
-  .e-chart-focused:focus {
-    outline: none !important;
-  }
-  .title{
-    font-size: 15px;
-    font-weight: bold;
-    color: #737373;
-  }
-  

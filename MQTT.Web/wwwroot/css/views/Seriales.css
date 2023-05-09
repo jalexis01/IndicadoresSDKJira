@@ -7,7 +7,6 @@
     color: #222930;
     font-weight: bold;
     padding: 2% 10%;
-    display: flex;
 }
 
 
@@ -26,4 +25,3 @@
     position: absolute;
     right: 10%;
 }
-

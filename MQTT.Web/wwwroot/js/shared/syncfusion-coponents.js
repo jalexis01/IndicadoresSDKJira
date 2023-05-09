@@ -1,7 +1,6 @@
-var grid = null, multiSelectInput,columns, dataArgs, treeGridObj = null, dropdowns = null, idDrag, dropdownsModal = null, isDrag =false, datepicker=null, datepickerEnd=null, datepickerModal=null, 
-datepickerEndModal=null, dateDocuments =  new Date(Date.now()).toUTCString(), valueFild,beginUpdate, beginCreate;
+var grid = null, columns, treeGridObj = null, dropdowns = null, idDrag, dropdownsModal = null, isDrag =false, datepicker=null, datepickerEnd=null, datepickerModal=null, 
+datepickerEndModal=null, dateDocuments =  new Date(Date.now()).toUTCString(), beginUpdate, beginCreate;
 var listFunctionalitiesExportGrid = ['ExcelExport','PdfExport', 'CsvExport'];
-
 
 
 
@@ -52,7 +51,7 @@ function ActionBeginSet(varUpdate, varCreate){
     beginCreate = varCreate;
 }
 
-function setGrid(data, dataColumns, exportFunctions = null, nameGrid = "Grid"){
+function setGrid(data, dataColumns, exportFunctions = null, commandClickF = null,nameGrid = "Grid"){
     if (grid != null) {
         grid.dataSource = data;
         return;
@@ -68,7 +67,7 @@ function setGrid(data, dataColumns, exportFunctions = null, nameGrid = "Grid"){
         allowExcelExport: true,
         allowPdfExport: true,
         allowCsvExport: true,
-        editSettings: { allowEditing: true, allowEditOnDblClick: false  },
+        editSettings: { allowEditing: true },
         loadingIndicator: { indicatorType: 'Shimmer' },
         toolbar: exportFunctions,
         locale: 'es-CO',
@@ -101,9 +100,21 @@ function setGrid(data, dataColumns, exportFunctions = null, nameGrid = "Grid"){
         }
     };
 
+    if(commandClickF != null){
+        grid.commandClick = commandClickF;
+    }
+}
 
-    grid.commandClick = detailsData;
-    
+function commandEditingColumn(columsList){
+    columsList.unshift(
+        {
+            headerText: 'Editar elementos',
+            commands: [{ type: 'Edit', buttonOption: { iconCss: ' e-icons e-edit', cssClass: 'e-flat' } },
+                { type: 'Save', buttonOption: { iconCss: 'e-icons e-update', cssClass: 'e-flat' } },
+                { type: 'Cancel', buttonOption: { iconCss: 'e-icons e-cancel-icon', cssClass: 'e-flat' } }]
+        }
+    )
+    return columsList;
 }
 
 function createColumnsEditing(dataColumns, columnsHide = null, columnInEdit = null){
@@ -191,18 +202,12 @@ function customiseCell(args) {
             if (args.column.field == key) {
                 if(args.data[key]){
                     args.cell.classList.add('active');
-                    args.cell.textContent = "Activo";
                 }else{
                     args.cell.classList.add('inactive');
-                    args.cell.textContent = "Inactivo";
                 }
             }
         }
     }
-    if (args.column.field === "idElementType") { 
-        let value = typeElements.find(x => x.Id == args.data["idElementType"]); 
-        args.cell.textContent = value.Name; 
-    } 
 }
 
 function createElemntsTimes() {
@@ -221,6 +226,7 @@ function createElemntsTimes() {
         placeholder: 'Ingrese fecha fin',
         enabled:false,
         format: 'yyyy-MM-dd HH:mm',
+        close: simulatedClick,
     });
     datepickerEnd.appendTo('#dtpEnd');
 }
@@ -241,7 +247,7 @@ function createElemntsTimesBackup() {
         placeholder: 'Ingrese fecha fin',
         enabled:false,
         format: 'yyyy-MM-dd HH:mm',
-
+        close: simulatedClick,
     });
     datepickerEndModal.appendTo('#dtpEndModal');
 }
@@ -260,6 +266,7 @@ function selectDateStar() {
         datepickerEnd.enabled = false;
         
     }
+    simulatedClick();
 }
 
 function selectDateStarB() {
@@ -294,29 +301,15 @@ function drodownDataSearch(searchData, searchTitlesText,nameDiv){
         return;
     }
      dropdowns = new ej.dropdowns.DropDownList({
+        width: '100%',
         dataSource: searchData,
         fields: { text: searchTitlesText },
         placeholder: 'Seleccione un campo',
-        enabled:false,
         popupHeight: '200px',
-        change: valueChange
+        change: simulatedClick
     });
     dropdowns.appendTo('#' +nameDiv);
 }
-
-function valueChange(args){
-    multiSelectInput.value = null
-    grid.dataSource =dataGridSave;
-    if(filtersData.filter(x => x.nameField == args.itemData.Name)[0]['value'] == null){
-        multiSelectInput.dataSource = [];
-    }else{
-        multiSelectInput.dataSource = filtersData.filter(x => x.nameField == args.itemData.Name);
-    }
-    multiSelectInput.enabled = true;
-    valueFild = args.itemData.Name;
-}
-
-
 
 function drodownDataSearchBackup(searchData, searchTitlesText){
     if(dropdownsModal != null){
@@ -370,17 +363,17 @@ function getExcelExportProperties(fileName) {
         header: {
             headerRows: 7,
             rows: [
-                { index: 1, cells: [{ index: 1, colSpan: 5, value: dataExcel.titulo, style: { fontColor: dataExcel.fontColor2, fontSize: 25, hAlign: 'Center', bold: true } }] },
+                { index: 1, cells: [{ index: 1, colSpan: 5, value: 'EYS', style: { fontColor: '#0066D1', fontSize: 25, hAlign: 'Center', bold: true } }] },
                 {
                     index: 3,
                     cells: [
-                        { index: 1, colSpan: 2, value: "Contacto", style: { fontColor: dataExcel.fontColor, fontSize: 15, bold: true } },
-                        { index: 5, value: "DATE", style: { fontColor: dataExcel.fontColor, bold: true }, width: 150 }
+                        { index: 1, colSpan: 2, value: "Contacto", style: { fontColor: '#00A0EF', fontSize: 15, bold: true } },
+                        { index: 5, value: "DATE", style: { fontColor: '#00A0EF', bold: true }, width: 150 }
                     ]
                 },
                 {
                     index: 4,
-                    cells: [{ index: 1, colSpan: 2, value: dataExcel.location },
+                    cells: [{ index: 1, colSpan: 2, value: "Av. 7Nte. # 26N - 35, Sta. Mónica Residencial. Cali, Colombia" },
                     { index: 5, value: dateDocuments, width: 150 }
 
                     ]
@@ -389,8 +382,8 @@ function getExcelExportProperties(fileName) {
                 {
                     index: 5,
                     cells: [
-                        { index: 1, colSpan: 2, value: dataExcel.info },
-                        { index: 5, value: "TERMS", width: 150, style: { fontColor: dataExcel.fontColor, bold: true } }
+                        { index: 1, colSpan: 2, value: "Tel +57 (602) 435 0777 Email servicioalcliente@eysingenieria.com" },
+                        { index: 5, value: "TERMS", width: 150, style: { fontColor: '#00A0EF', bold: true } }
 
                     ]
                 },
@@ -406,8 +399,8 @@ function getExcelExportProperties(fileName) {
         footer: {
             footerRows: 8,
             rows: [
-                { cells: [{ colSpan: 6, value: "Thank you for your business!", style: { fontColor: dataExcel.fontColor, hAlign: 'Center', bold: true } }] },
-                { cells: [{ colSpan: 6, value: "!Visit Again!", style: { fontColor: dataExcel.fontColor, hAlign: 'Center', bold: true } }] }
+                { cells: [{ colSpan: 6, value: "Thank you for your business!", style: { fontColor: '#00A0EF', hAlign: 'Center', bold: true } }] },
+                { cells: [{ colSpan: 6, value: "!Visit Again!", style: { fontColor: '#00A0EF', hAlign: 'Center', bold: true } }] }
             ]
         },
         
@@ -423,15 +416,15 @@ function getPdfExportProperties() {
             contents: [
                 {
                     type: 'Text',
-                    value: dataExcel.titulo,
+                    value: 'EYS',
                     position: { x: 280, y: 0 },
-                    style: { textBrushColor: dataExcel.fontColor2, fontSize: 25 },
+                    style: { textBrushColor: '#0066D1', fontSize: 25 },
                 },
                 {
                     type: 'Text',
                     value: 'Date',
                     position: { x: 600, y: 30 },
-                    style: { textBrushColor: dataExcel.fontColor, fontSize: 10 },
+                    style: { textBrushColor: '#00A0EF', fontSize: 10 },
                 },
                 {
                     type: 'Text',
@@ -443,7 +436,7 @@ function getPdfExportProperties() {
                     type: 'Text',
                     value: 'TERMS',
                     position: { x: 600, y: 70 },
-                    style: { textBrushColor: dataExcel.fontColor, fontSize: 10 },
+                    style: { textBrushColor: '#00A0EF', fontSize: 10 },
                 },
                 {
                     type: 'Text',
@@ -455,17 +448,17 @@ function getPdfExportProperties() {
                     type: 'Text',
                     value: 'Contacto',
                     position: { x: 20, y: 30 },
-                    style: { textBrushColor: dataExcel.fontColor, fontSize: 20 }
+                    style: { textBrushColor: '#00A0EF', fontSize: 20 }
                 },
                 {
                     type: 'Text',
-                    value: dataExcel.location,
+                    value: 'Av. 7Nte. # 26N - 35, Sta. Mónica Residencial. Cali, Colombia',
                     position: { x: 20, y: 65 },
                     style: { textBrushColor: '#000000', fontSize: 11 }
                 },
                 {
                     type: 'Text',
-                    value: dataExcel.info,
+                    value: 'Tel +57 (602) 435 0777 Email servicioalcliente@eysingenieria.com',
                     position: { x: 20, y: 80 },
                     style: { textBrushColor: '#000000', fontSize: 11 }
                 },
@@ -479,13 +472,13 @@ function getPdfExportProperties() {
                     type: 'Text',
                     value: 'Thank you for your business !',
                     position: { x: 250, y: 20 },
-                    style: { textBrushColor: dataExcel.fontColor, fontSize: 14 }
+                    style: { textBrushColor: '#00A0EF', fontSize: 14 }
                 },
                 {
                     type: 'Text',
                     value: '! Visit Again !',
                     position: { x: 300, y: 45 },
-                    style: { textBrushColor: dataExcel.fontColor, fontSize: 14 }
+                    style: { textBrushColor: '#00A0EF', fontSize: 14 }
                 }
             ]
         },
@@ -494,8 +487,33 @@ function getPdfExportProperties() {
     };
 }
 
-function setTreeGrid(data, dataColumns, exportFunctions = null, add = false, nameKeyChildGrid, nameGrid = "Grid") {
+function simulatedClick(){
+    document.getElementById('dropdownInformationButton').click();
+}
 
+
+function setListBox(listUnSelected, listSelected, value, text) {
+
+
+    listUnSelected = new ej.dropdowns.ListBox({
+        fields: { value: value, text: text },
+        height: '330px',
+        scope: listSelected,
+        toolbarSettings: { items: ['moveTo', 'moveFrom', 'moveAllTo', 'moveAllFrom'] },
+        noRecordsTemplate: '<div class= "e-list-nrt"><span>No hay datos</span></div>'
+    });
+    listObjUserAsignation1.appendTo(listUnSelected);
+
+
+    listSelected = new ej.dropdowns.ListBox({
+        fields: { value: value, text: text },
+        height: '330px',
+        noRecordsTemplate: '<div class= "e-list-nrt"><span>No hay datos</span></div>'
+    });
+    listObjUserAsignation2.appendTo(listSelected);
+}
+
+function setTreeGrid(data, dataColumns, exportFunctions = null, add = false, nameKeyChildGrid, nameGrid = "Grid"){
     if (treeGridObj != null) {
         treeGridObj.dataSource = data;
         return;
@@ -507,25 +525,27 @@ function setTreeGrid(data, dataColumns, exportFunctions = null, add = false, nam
     }
 
     if(add == true){
-        var dataEdit =  ['Add', 'Edit', 'Update', 'Cancel'];
-        exportFunctions = exportFunctions.concat(dataEdit)
-
+        exportFunctions.push('Add')
     }
     
     treeGridObj = new ej.treegrid.TreeGrid({
-        editSettings: {
-            allowAdding: true,
-            allowEditing: true,
-            mode: 'Row'
-        },
+        dataSource: data,
         allowRowDragAndDrop: true,
         childMapping: nameKeyChildGrid,
-        treeColumnIndex: 1,
+        treeColumnIndex: 3,
         allowPaging: true,
         toolbar: exportFunctions,
         allowSorting: true,
         allowFiltering: true,
         filterSettings: { type: 'Menu' },
+        loadingIndicator: { indicatorType: 'Shimmer' },
+        columns: dataColumns,
+        editSettings: {
+            allowAdding: true,
+            allowEditing: true,
+            allowDeleting: true,
+            mode: 'Row'
+        },
         pageSettings: { pageCount: 3 },
         width: '100%',
         height: '100%',
@@ -534,7 +554,7 @@ function setTreeGrid(data, dataColumns, exportFunctions = null, add = false, nam
         rowDragStart: rowDragStart,
         rowDataBound: function (args) {
             if (args.data.childRecords.length == 0) {
-                args.row.style.backgroundColor = "#FFFFFF";
+                args.row.style.backgroundColor = "#ECECEC";
             }else if (args.data.childRecords.length > 0 && args.data.idElementFather != null) {
                 args.row.style.backgroundColor = "#A7E1FD";
             } else{
@@ -543,8 +563,6 @@ function setTreeGrid(data, dataColumns, exportFunctions = null, add = false, nam
         },
         actionBegin: ActionBegin,
         actionComplete: ActionComplete,
-        columns: dataColumns,
-        dataSource: data
     });
     treeGridObj.appendTo('#'+ nameGrid);
     treeGridObj.dataBound = () => {
@@ -586,44 +604,3 @@ function ActionComplete(args){
     }
 }
 
-function multiSelect(){
-    multiSelectInput = new ej.dropdowns.MultiSelect({
-        placeholder: 'Seleccionar',
-        query: new ej.data.Query().take(10),
-        enabled:false,
-        fields: { text: 'value', value: 'value' },
-        change: valueChangeMulti,
-    });
-    multiSelectInput.appendTo('#multiSelect');
-}
-
-function valueChangeMulti(args){
-    dataArgs = args.value;
-}
-
-function aplicFilter(){
-    var dataSet = [];
-    if(dataArgs.length == 0){
-        grid.dataSource = dataGridSave;
-        return;
-    }
-    dataArgs.forEach(element => {
-        var dataFil = dataGridSave.filter(datares => datares[valueFild] == element);
-        dataSet = dataSet.concat(dataFil);
-    })
-    grid.dataSource = dataSet;
-}
-
-var detailsData = function(args){
-    var dataHtmlList = "";
-    for (var key in args.rowData) {
-        dataHtmlList += "<li style='padding: 1% 0%;'><div class='flex items-center space-x-4'><div class='flex-1 min-w-0' style='text-align: initial;'><p class='text-sm font-medium text-gray-900 truncate dark:text-white' style=''>"+key+"</p></div><div class='inline-flex items-center text-base font-semibold text-gray-900 dark:text-white'>"+ args.rowData[key]+"</div></div></li>"
-    }
-    //alert(JSON.stringify(args.rowData));
-    Swal.fire({
-        title: '<strong><u>Informacion</u></strong>',
-        html: '<ul class="max-w-md divide-y divide-gray-200 dark:divide-gray-700">' + dataHtmlList + '</ul>',
-        showConfirmButton: false,
-        showCloseButton: true,
-      })
-  }

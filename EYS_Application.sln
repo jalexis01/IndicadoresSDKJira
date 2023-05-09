@@ -13,11 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MQTT.Web", "MQTT.Web\MQTT.W
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MQTT.AdditionalProcess", "MQTT.AdditionalProcess\MQTT.AdditionalProcess.csproj", "{8D093D23-38CA-41A9-BF3A-93DBE1B62B3A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MQTT.FunctionApp", "MQTT.FunctionApp\MQTT.FunctionApp.csproj", "{FE56EA6D-FD5B-48E9-BF34-4675EB4BA214}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DashboarJira", "DashboarJira\DashboarJira.csproj", "{980AE422-B6B6-43FF-965C-F3B2BA4C324C}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DashboarJiraTest", "DashboarJiraTest\DashboarJiraTest.csproj", "{4E6ECC04-E781-455D-B4F4-6E299A59F785}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MQTT.FunctionApp", "MQTT.FunctionApp\MQTT.FunctionApp.csproj", "{FE56EA6D-FD5B-48E9-BF34-4675EB4BA214}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -49,14 +45,6 @@ Global
 		{FE56EA6D-FD5B-48E9-BF34-4675EB4BA214}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FE56EA6D-FD5B-48E9-BF34-4675EB4BA214}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FE56EA6D-FD5B-48E9-BF34-4675EB4BA214}.Release|Any CPU.Build.0 = Release|Any CPU
-		{980AE422-B6B6-43FF-965C-F3B2BA4C324C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{980AE422-B6B6-43FF-965C-F3B2BA4C324C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{980AE422-B6B6-43FF-965C-F3B2BA4C324C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{980AE422-B6B6-43FF-965C-F3B2BA4C324C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4E6ECC04-E781-455D-B4F4-6E299A59F785}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4E6ECC04-E781-455D-B4F4-6E299A59F785}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4E6ECC04-E781-455D-B4F4-6E299A59F785}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4E6ECC04-E781-455D-B4F4-6E299A59F785}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

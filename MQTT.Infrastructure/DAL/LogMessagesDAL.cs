@@ -104,30 +104,31 @@ namespace MQTT.Infrastructure.DAL
             {
                 throw ex;
             }
-		}
-		public static List<LogMessageDTO> GetLogMessagePending(General objContext)
-		{
-			try
-			{
-				using (var dbContext = objContext.DBConnection())
-				{
-					var result = (from msg in dbContext.TbLogMessageIn
-								  where !msg.Processed
-								  select new LogMessageDTO()
-								  {
-									  Id = msg.Id,
-									  Message = msg.Message
-								  }).ToList();
+        }
+        public static List<LogMessageDTO> GetLogMessagePending(General objContext)
+        {
+            try
+            {
+                using (var dbContext = objContext.DBConnection())
+                {
+                    var result = (from msg in dbContext.TbLogMessageIn
+                                  where !msg.Processed
+                                  select new LogMessageDTO()
+                                  {
+                                      Id = msg.Id,
+                                      Message = msg.Message
+                                  }).ToList();
 
-					return result;
-				}
-			}
-			catch (Exception ex)
-			{
-				throw ex;
-			}
-		}
-		public static LogMessageDTO GetLogMessageById(General objContext, long id)
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public static LogMessageDTO GetLogMessageById(General objContext, long id)
         {
             try
             {

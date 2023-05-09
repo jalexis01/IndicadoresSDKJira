@@ -387,7 +387,7 @@ namespace MQTT.Infrastructure.DAL
                     "M.estadoBotonManual, M.porcentajeCargaBaterias, M.ciclosApertura, M.horasServicio, M.tipoEnergizacion, M.velocidaMotor, M.fuerzaMotor, " +
                     "M.modoOperacion, M.codigoAlarma, M.codigoNivelAlarma, M.tiempoApertura, M.IdHeaderMessage, HM.IdMessageType, M.idRegistro, M.idOperador, M.Id " +
                     "FROM [Operation].[tbMessages] M INNER JOIN [Operation].tbHeaderMessage HM ON M.IdHeaderMessage = HM.IdHeaderMessage WHERE ";
-                string where = $"M.fechaHoraLecturaDato BETWEEN '{dtInit}' AND '{dtEnd}' ";
+                string where = $"HM.CreationDate BETWEEN '{dtInit}' AND '{dtEnd}' ";
 
                 //if(messageField.Name != null && !string.IsNullOrEmpty(value)){
                 //    where += $"AND {messageField.Name} = {General.GetValueFromFields(messageField.DataType, value, _formateDate)}";
@@ -395,7 +395,7 @@ namespace MQTT.Infrastructure.DAL
 
                 sentence += where;
                 sentence = sentence.Remove(sentence.Length - 1);
-                sentence += "ORDER BY M.fechaHoraLecturaDato DESC";
+                sentence += "ORDER BY 1";
                 DataTable dt = new DataTable();
                 using (var DBContext = objContext.DBConnection())
                 {
@@ -544,7 +544,7 @@ namespace MQTT.Infrastructure.DAL
             {
                 using (var DBContext = objContext.DBConnection())
                 {
-                    var result = DBContext.TbMessages.Where(f=> f.Id == -9223372036853705160).ToList();
+                    var result = DBContext.TbMessages.Where(f=> f.Id > -9223372036854543427 && f.Id < -9223372036854497083).ToList();
 
                     int i = 0;
                     foreach (var item in result)
@@ -562,7 +562,7 @@ namespace MQTT.Infrastructure.DAL
                         }
                         else
                         {
-                            item.FechaHoraEnvioDato = General.GetValueFromFields("DATETIME", item.FechaHoraEnvioDato, _formateDate, true);
+                            item.FechaHoraEnvioDato = General.GetValueFromFields("DATETIME", item.FechaHoraEnvioDato, _formateDate);
                         }
 
                         if (string.IsNullOrEmpty(item.FechaHoraLecturaDato))
@@ -571,7 +571,7 @@ namespace MQTT.Infrastructure.DAL
                         }
                         else
                         {
-                            item.FechaHoraLecturaDato = General.GetValueFromFields("DATETIME", item.FechaHoraLecturaDato, _formateDate, true);
+                            item.FechaHoraLecturaDato = General.GetValueFromFields("DATETIME", item.FechaHoraLecturaDato, _formateDate);
                         }
 
                         ids.Add(item.Id);
@@ -583,7 +583,6 @@ namespace MQTT.Infrastructure.DAL
             }
             catch (Exception ex)
             {
-                Console.Write(ex.Message);
                 throw ex;
             }
         }
