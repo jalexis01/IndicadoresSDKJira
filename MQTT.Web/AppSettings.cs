@@ -7,6 +7,7 @@ namespace MQTT.Web
     {
         private static AppSettings instance = null;
         public IConfigurationRoot Configuration { get; set; }
+
         private AppSettings()
         {
             GetAppSettings();

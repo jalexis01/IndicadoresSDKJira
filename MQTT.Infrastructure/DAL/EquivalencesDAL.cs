@@ -8,51 +8,76 @@ using MQTT.Infrastructure.Models;
 namespace MQTT.Infrastructure.DAL
 {
     public class EquivalencesDAL
-    {
-        public static List<EquivalenceDTO> GetEquivalences(General objContext, int IdTypeEquivalence)
-        {
-            try
-            {
-                using (var DBContext = objContext.DBConnection())
-                {
-                    var result = DBContext.TbEquivalences
-                        .Where(e => e.IdEquivalenceType == IdTypeEquivalence)
-                        .Select(e => new EquivalenceDTO
-                        {
-                            Id = e.Id,
-                            IdEquivalenceType = e.IdEquivalenceType,
-                            Name = e.Name,
-                            Value = e.Value,
-                            CrerationDate = e.CrerationDate,
-                            UserId = e.UserId,
-                            LastUpdate = e.LastUpdate,
-                            UserIdUpdate = e.UserIdUpdate
-                        })
-                        .ToList();
+	{
+		public static List<EquivalenceDTO> GetEquivalences(General objContext, int IdTypeEquivalence)
+		{
+			try
+			{
+				using (var DBContext = objContext.DBConnection())
+				{
+					var result = DBContext.TbEquivalences
+						.Where(e => e.IdEquivalenceType == IdTypeEquivalence)
+						.Select(e => new EquivalenceDTO
+						{
+							Id = e.Id,
+							IdEquivalenceType = e.IdEquivalenceType,
+							Name = e.Name,
+							Value = e.Value,
+							CrerationDate = e.CrerationDate,
+							UserId = e.UserId,
+							LastUpdate = e.LastUpdate,
+							UserIdUpdate = e.UserIdUpdate
+						})
+						.ToList();
 
-                    return result;
-                }
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-        public static List<EquivalenceTypeDTO> GetEquivalenceTypes(General objContext)
+					return result;
+				}
+			}
+			catch (Exception ex)
+			{
+				throw ex;
+			}
+		}
+		public static List<EquivalenceDTO> GetAllEquivalences(General objContext)
+		{
+			try
+			{
+				using (var DBContext = objContext.DBConnection())
+				{
+					var result = DBContext.TbEquivalences
+						.Select(e => new EquivalenceDTO
+						{
+							Id = e.Id,
+							IdEquivalenceType = e.IdEquivalenceType,
+							Name = e.Name,
+							Value = e.Value,
+							CrerationDate = e.CrerationDate,
+							UserId = e.UserId,
+							LastUpdate = e.LastUpdate,
+							UserIdUpdate = e.UserIdUpdate
+						})
+						.ToList();
+
+					return result;
+				}
+			}
+			catch (Exception ex)
+			{
+				throw ex;
+			}
+		}
+		public static List<EquivalenceTypeDTO> GetEquivalenceTypes(General objContext)
         {
             try
             {
                 using (var DBContext = objContext.DBConnection())
                 {
                     var result = DBContext.TbEquivalenceTypes
-                        .Where(e => e.Enable == true)
                         .Select(e => new EquivalenceTypeDTO
                         {
                             Id = e.Id,
                             Name = e.Name,
-                            MenuController = e.MenuController, 
-                            NameController = e.NameController,
-                            TitleController = e.TitleController
+                            Description = e.Description
                         })
                         .ToList();
 

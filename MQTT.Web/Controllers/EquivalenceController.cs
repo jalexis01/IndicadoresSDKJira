@@ -16,10 +16,9 @@ namespace MQTT.Web.Controllers
             DBAccess = new General(_connectionString);
         }
 
-        public IActionResult Index(int id, int title)
+        public IActionResult Index()
         {
-            ViewBag.Title = title;
-            ViewBag.IdEquivalenteType = id;
+
             return View();
         }
 

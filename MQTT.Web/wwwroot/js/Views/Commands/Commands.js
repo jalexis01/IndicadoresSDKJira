@@ -2,6 +2,7 @@
 
 $(document).ready(function(){
   createElemntsTimes();
+  multiSelect();
   drodownDataSearch(columnsSearch, 'CustomName', 'searchParam');
 });
 
@@ -9,15 +10,9 @@ $(document).ready(function(){
 
 function ServiceGetCommands() {
     $(".container-loader").css({ 'display': 'flex' })
-    let paramSearch = null;
-    if ($("#searchParam").val() != undefined) {
-        paramSearch = columnsSearch.find(x => x.CustomName == $("#searchParam").val());
-    }
     var data = {
         startDate: $("#dtpStart").val(),
         endDate: $("#dtpEnd").val(),
-        messageField: paramSearch,
-        value: $("#searchValue").val() ? $("#searchValue").val() : null
     }
     $.ajax({
         data: data,
@@ -31,9 +26,18 @@ function ServiceGetCommands() {
                 noData();
                 return;
             }
+            filtersData = data.filters;
+            dropdowns.value = null;
+            multiSelectInput.value = null;
+            dropdowns.enabled = false;
+            multiSelectInput.enabled = false;
+            const btn = document.getElementById('button-filter');
+            btn.disabled = false;
             dateDocuments = $("#dtpStart").val() + " " + $("#dtpEnd").val();
             let dataColumns = setColums(data.dataMessages, columnsToHide);
             let exportFunctions = addFnctionsGrid('Excel');
+            dropdowns.enabled = true;
+            dataGridSave = data.dataMessages;
             setGrid(data.dataMessages, dataColumns, exportFunctions)
         })
         .catch(error => {

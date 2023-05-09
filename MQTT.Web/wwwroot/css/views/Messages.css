@@ -2,12 +2,7 @@
     justify-content: center;
 }
 
-.form-container{
-    width: 100%;
-    color: #222930;
-    font-weight: bold;
-    padding: 2% 10%;
-}
+
 
 
 
@@ -24,4 +19,8 @@
 .organitation-menu{
     position: absolute;
     right: 10%;
+}
+
+.e-ddl.e-input-group{
+    display: flex;
 }

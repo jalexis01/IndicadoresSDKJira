@@ -71,7 +71,6 @@ namespace MQTT.Web.Controllers
                     }).ToList();
                     fields.AddRange(grouped);
                 }
-
                 var json = Json(
                     new
                     {

@@ -63,7 +63,6 @@ namespace MQTT.Web.Controllers
                         dataMessages = result,
                         filters = fields
                     }
-
                 );
                 return json;
             }

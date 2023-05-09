@@ -47,8 +47,7 @@ body{
 }
 
 .inputs-container{
-  margin-top: .8em;
-  margin-right: 1em;
+  margin-right: 10px;
 }
 
 .title-view{
@@ -79,10 +78,6 @@ body{
     background: #00A92D;
     border-radius: 5px;
     color: white !important;
-}
-
-.wrapperFI{
-  width: 18em;
 }
 
 .flex-div{
@@ -170,4 +165,37 @@ body{
 
 .widt-nav{
   max-width: 82% !important;
+}
+
+.form-container{
+  width: 100%;
+  color: #222930;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#button-primary, #button-filter{
+  margin: 0%;
+  margin-top: 1.5em;
+  margin-bottom: 0%;
+}
+
+#data-filter{
+  margin: 0%;
+  margin-top: 1.5em;
+  margin-bottom: 0%;
+}
+
+.wrapperFI{
+  width: 100%;
+}
+
+.container-grid{
+  margin-top: 1em;
+}
+
+.control-styles{
+  margin-top: 24px;
 }

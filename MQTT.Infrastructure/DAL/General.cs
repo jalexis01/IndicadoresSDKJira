@@ -70,7 +70,7 @@ namespace MQTT.Infrastructure.DAL
             }
         }
 
-        public static string GetValueFromFields(string dataType, string value, string formatDate)
+        public static string GetValueFromFields(string dataType, string value, string formatDate, bool simple = false)
         {
             try
             {
@@ -127,47 +127,20 @@ namespace MQTT.Infrastructure.DAL
                         }
                         dt = new DateTime(year, month, day, hour, minute, second, millisecond);
                     }
-                    catch (Exception)
+                    catch (Exception ex)
                     {
-                        List<string> parts = GetPartsFromDate(value);
-                        List<string> formatParts = GetPartsFromDate(formatDate);
-                        int year = 0; int month = 0; int day = 0; int hour = 0; int minute = 0; int second = 0; int millisecond = 0;
-
-                        for (int i = 0; i < formatParts.Count; i++)
-                        {
-                            string item = formatParts[i];
-                            if (item.Contains("yyyy"))
-                            {
-                                year = Convert.ToInt16(parts[i]);
-                            }
-                            else if (item.Contains("MM"))
-                            {
-                                month = Convert.ToInt16(parts[i]);
-                            }
-                            else if (item.Contains("dd"))
-                            {
-                                day = Convert.ToInt16(parts[i]);
-                            }
-                            else if (item.Contains("HH"))
-                            {
-                                hour = Convert.ToInt16(parts[i]);
-                            }
-                            else if (item.Contains("mm"))
-                            {
-                                minute = Convert.ToInt16(parts[i]);
-                            }
-                            else if (item.Contains("ss"))
-                            {
-                                second = Convert.ToInt16(parts[i]);
-                            }
-                            else if (item.Contains("fff"))
-                            {
-                                millisecond = Convert.ToInt16(parts[i]);
-                            }
-                        }
-                        dt = new DateTime(year, month, day, hour, minute, second, millisecond);
+                        dt = new DateTime(1753, 1, 1, 0, 0, 0, 0);
                     }
-                    result += $"{dt.ToString("yyyy/MM/dd HH:mm:ss.fff")}";
+                    if (simple)
+                    {
+
+                        result += $"{dt.ToString("yyyy/MM/dd HH:mm:ss.fff")}";
+                    }
+                    else
+                    {
+
+                    result += $"'{dt.ToString("yyyy/MM/dd HH:mm:ss.fff")}',";
+                    }
                 }
 
                 return result;
