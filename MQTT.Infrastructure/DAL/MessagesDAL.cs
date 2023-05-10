@@ -623,7 +623,7 @@ namespace MQTT.Infrastructure.DAL
                         }
                         else
                         {
-                            item.FechaHoraEnvioDato =Convert.ToDateTime(General.GetValueFromFields("DATETIME", item.FechaHoraEnvioDato.ToString(), _formateDate, true));
+                            //item.FechaHoraEnvioDato =Convert.ToDateTime(General.GetValueFromFields("DATETIME", item.FechaHoraEnvioDato.ToString(), _formateDate, true));
                         }
 
                         if (string.IsNullOrEmpty(item.FechaHoraLecturaDato.ToString()))
@@ -632,7 +632,7 @@ namespace MQTT.Infrastructure.DAL
                         }
                         else
                         {
-                            item.FechaHoraLecturaDato = Convert.ToDateTime(General.GetValueFromFields("DATETIME", item.FechaHoraLecturaDato.ToString(), _formateDate, true));
+                            //item.FechaHoraLecturaDato = Convert.ToDateTime(General.GetValueFromFields("DATETIME", item.FechaHoraLecturaDato.ToString(), _formateDate, true));
                         }
 
                         ids.Add(item.Id);

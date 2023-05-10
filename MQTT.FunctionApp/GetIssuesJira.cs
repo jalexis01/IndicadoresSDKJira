@@ -29,12 +29,12 @@ namespace MQTT.FunctionApp
 			var logRequestIn = new Infrastructure.Models.DTO.LogRequestInDTO();
 			logRequestIn.IdEndPoint = (int)EndPointEnum.GetIssueJira;
 
-			var connectionString = Environment.GetEnvironmentVariable("ConnectionStringDB", EnvironmentVariableTarget.Process);
-			string token = Environment.GetEnvironmentVariable("TokenJira", EnvironmentVariableTarget.Process).ToString();
-			string timeZone = Environment.GetEnvironmentVariable("TimeZone", EnvironmentVariableTarget.Process).ToString();
-			//var connectionString = "Server=manatee.database.windows.net;Database=PuertasTransmilenioDB;User Id=administrador;Password=2022/M4n4t334zur3;";
-			//string token = "ZGVzYXJyb2xsb2NjQG1hbmF0ZWVpbmdlbmllcmlhLmNvbTpoZlV0Z1o5UkZHb1F5MlNmSDdzQ0Y5QTY=";
-			//string timeZone = "SA Pacific Standard Time";
+			//var connectionString = Environment.GetEnvironmentVariable("ConnectionStringDB", EnvironmentVariableTarget.Process);
+			//string token = Environment.GetEnvironmentVariable("TokenJira", EnvironmentVariableTarget.Process).ToString();
+			//string timeZone = Environment.GetEnvironmentVariable("TimeZone", EnvironmentVariableTarget.Process).ToString();
+			var connectionString = "Server=manatee.database.windows.net;Database=PuertasTransmilenioDB;User Id=administrador;Password=2022/M4n4t334zur3;";
+			string token = "ZGVzYXJyb2xsb2NjQG1hbmF0ZWVpbmdlbmllcmlhLmNvbTpoZlV0Z1o5UkZHb1F5MlNmSDdzQ0Y5QTY=";
+			string timeZone = "SA Pacific Standard Time";
 			General DBAccess = new General(connectionString);
 			 
 			try
@@ -109,35 +109,35 @@ namespace MQTT.FunctionApp
 
 					Models.IssueDTO issueDTO = new Models.IssueDTO
 					{
-						id_ticket = item.Key,
-						id_estacion = fields.customfield_10057 == null ? null : fields.customfield_10057.Value,
-						id_vagon = fields.customfield_10058 == null ? null : fields.customfield_10058.Value,
-						id_puerta = fields.customfield_10060 != null ? fields.customfield_10060 : null,
-						tipo_componente = fields.customfield_10088 == null ? null : fields.customfield_10088.Value,
-                        id_componente = fields.customfield_10060 != null ? fields.customfield_10060 : null,
+						idTicket = item.Key,
+						idEstacion = fields.customfield_10057 == null ? null : fields.customfield_10057.Value,
+						idVagon = fields.customfield_10058 == null ? null : fields.customfield_10058.Value,
+						idPuerta = fields.customfield_10060 != null ? fields.customfield_10060 : null,
+						tipoComponente = fields.customfield_10088 == null ? null : fields.customfield_10088.Value,
+                        idComponente = fields.customfield_10060 != null ? fields.customfield_10060 : null,
                         identificacion = fields.customfield_10059 != null ? fields.customfield_10059 : null,
-						tipo_mantenimiento = fields.customfield_10061 == null ? null : fields.customfield_10061.Value,
-						nivel_falla = fields.customfield_10064 == null ? null : fields.customfield_10064.Value,
-						codigo_falla = (fields.customfield_10069 == null || fields.customfield_10069[0] == null) ? null : fields.customfield_10069[0].Value,
-						fecha_apertura = fields.created != null ? TimeZoneInfo.ConvertTime(Convert.ToDateTime(fields.created), TimeZoneInfo.FindSystemTimeZoneById(timeZone)) : (DateTime?)null,
-						fecha_cierre = fields.customfield_10101 != null ? TimeZoneInfo.ConvertTime(Convert.ToDateTime(fields.customfield_10101), TimeZoneInfo.FindSystemTimeZoneById(timeZone)) : (DateTime?)null,
-						fecha_arribo_locacion = fields.customfield_10071 != null ? TimeZoneInfo.ConvertTime(Convert.ToDateTime(fields.customfield_10071), TimeZoneInfo.FindSystemTimeZoneById(timeZone)) : (DateTime?)null,
-						componente_parte = (fields.customfield_10072 == null || fields.customfield_10072[0] == null) ? null : fields.customfield_10072[0].Value,
-						tipo_reparacion = (fields.customfield_10081 == null || fields.customfield_10081[0] == null) ? null : fields.customfield_10081[0].Value,
-						tipo_ajuste_configuracion = $"{typeSettingConfiguration}{typeSettingConfiguration2}{typeSettingConfiguration3}{typeSettingConfiguration4}{typeSettingConfiguration5}",
-						descripcion_reparacion = fields.customfield_10105 != null ? fields.customfield_10105 : null,
-						tipo_causa = fields.customfield_10067 != null ? fields.customfield_10067.Value : null,
-						diagnostico_causa = fields.customfield_10104 != null ? fields.customfield_10104 : null,
-						estado_ticket = fields.status == null ? string.Empty : fields.status.name
+						tipoMantenimiento = fields.customfield_10061 == null ? null : fields.customfield_10061.Value,
+						nivelFalla = fields.customfield_10064 == null ? null : fields.customfield_10064.Value,
+						codigoFalla = (fields.customfield_10069 == null || fields.customfield_10069[0] == null) ? null : fields.customfield_10069[0].Value,
+						fechaApertura = fields.created != null ? TimeZoneInfo.ConvertTime(Convert.ToDateTime(fields.created), TimeZoneInfo.FindSystemTimeZoneById(timeZone)) : (DateTime?)null,
+						fechaCierre = fields.customfield_10101 != null ? TimeZoneInfo.ConvertTime(Convert.ToDateTime(fields.customfield_10101), TimeZoneInfo.FindSystemTimeZoneById(timeZone)) : (DateTime?)null,
+						fechaArriboLocacion = fields.customfield_10071 != null ? TimeZoneInfo.ConvertTime(Convert.ToDateTime(fields.customfield_10071), TimeZoneInfo.FindSystemTimeZoneById(timeZone)) : (DateTime?)null,
+						componenteParte = (fields.customfield_10072 == null || fields.customfield_10072[0] == null) ? null : fields.customfield_10072[0].Value,
+						tipoReparacion = (fields.customfield_10081 == null || fields.customfield_10081[0] == null) ? null : fields.customfield_10081[0].Value,
+						tipoAjusteConfiguracion = $"{typeSettingConfiguration}{typeSettingConfiguration2}{typeSettingConfiguration3}{typeSettingConfiguration4}{typeSettingConfiguration5}",
+						descripcionReparacion = fields.customfield_10105 != null ? fields.customfield_10105 : null,
+						tipoCausa = fields.customfield_10067 != null ? fields.customfield_10067.Value : null,
+						diagnosticoCausa = fields.customfield_10104 != null ? fields.customfield_10104 : null,
+						estadoTicket = fields.status == null ? string.Empty : fields.status.name
 					};
 
-					var equivalence = equivalenceServiceType.Where(e => e.Name == issueDTO.tipo_mantenimiento).Select(e => e.Value).FirstOrDefault();
-					issueDTO.tipo_mantenimiento = string.IsNullOrEmpty(equivalence) ? issueDTO.tipo_mantenimiento : equivalence;
+					var equivalence = equivalenceServiceType.Where(e => e.Name == issueDTO.tipoMantenimiento).Select(e => e.Value).FirstOrDefault();
+					issueDTO.tipoMantenimiento = string.IsNullOrEmpty(equivalence) ? issueDTO.tipoMantenimiento : equivalence;
 
 					equivalence = string.Empty;
-					equivalence = equivalenceServiceType.Where(e => e.Name == issueDTO.estado_ticket).Select(e => e.Value).FirstOrDefault();
-					issueDTO.estado_ticket = string.IsNullOrEmpty(equivalence) ? "Abierta" : equivalence;
-
+					equivalence = equivalenceServiceType.Where(e => e.Name == issueDTO.estadoTicket).Select(e => e.Value).FirstOrDefault();
+					issueDTO.estadoTicket = string.IsNullOrEmpty(equivalence) ? "Abierta" : equivalence;
+					if (issueDTO.tipoCausa!=null) 
 					result.Add(issueDTO);
 				}
 

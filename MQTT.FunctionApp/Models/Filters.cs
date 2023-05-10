@@ -71,7 +71,7 @@ namespace MQTT.FunctionApp.Models
 
             if (!string.IsNullOrEmpty(this.issueType))
             {
-                resultQuery = $"jql=issuetype in ('{this.issueType}')";
+                resultQuery = $"jql=issuetype in ('{this.issueType}') AND status not in ('Descartado')";
             }
 
             if (!string.IsNullOrEmpty(this.tipo_fecha))
