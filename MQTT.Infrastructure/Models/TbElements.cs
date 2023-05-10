@@ -22,7 +22,6 @@ namespace MQTT.Infrastructure.Models
         public DateTime? LastUpdate { get; set; }
         public int? UpdateUser { get; set; }
         public bool? Enable { get; set; }
-
         public virtual TbElements IdElementFatherNavigation { get; set; }
         public virtual ICollection<TbElements> InverseIdElementFatherNavigation { get; set; }
         public virtual ICollection<TbLogElements> TbLogElements { get; set; }

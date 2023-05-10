@@ -9,18 +9,21 @@ namespace MQTT.FunctionApp.Models
         public string id_ticket { get; set; }
 
         [JsonPropertyName("idEstacion")]
-        public string idEstacion { get; set; }
+        public string id_estacion { get; set; }
         [JsonPropertyName("idVagon")]
-        public string idVagon { get; set; }
+        public string id_vagon { get; set; }
 
         [JsonPropertyName("Puerta")]
-        public string Puerta { get; set; }
+        public string id_puerta { get; set; }
 
         [JsonPropertyName("Componente")]
-        public string Componente { get; set; }
+        public string tipo_componente { get; set; }
+
+        [JsonPropertyName("Componente")]
+        public string id_componente { get; set; }
 
         [JsonPropertyName("Identificacion")]
-        public string Identificacion { get; set; }
+        public string identificacion { get; set; }
 
         //[JsonPropertyName("ubicacion")]
         //public string Location { get; set; }
@@ -35,7 +38,7 @@ namespace MQTT.FunctionApp.Models
         public string codigo_falla { get; set; }
 
         [JsonPropertyName("fecha_apertura")]
-        public DateTime? Fecha_apertura { get; set; }
+        public DateTime? fecha_apertura { get; set; }
 
         [JsonPropertyName("fecha_cierre")]
         public DateTime? fecha_cierre { get; set; }
@@ -44,25 +47,28 @@ namespace MQTT.FunctionApp.Models
         public DateTime? fecha_arribo_locacion { get; set; }
 
         [JsonPropertyName("Componente_Parte")]
-        public string Componente_Parte { get; set; }
+        public string componente_parte { get; set; }
 
         [JsonPropertyName("Tipo_reparacion")]
-        public string Tipo_reparacion { get; set; }
+        public string tipo_reparacion { get; set; }
 
         [JsonPropertyName("Tipo_ajuste_configuracion")]
-        public string Tipo_ajuste_configuracion { get; set; }
+        public string tipo_ajuste_configuracion { get; set; }
 
         [JsonPropertyName("Descripcion_reparacion")]
-        public string Descripcion_reparacion { get; set; }
+        public string descripcion_reparacion { get; set; }
 
         [JsonPropertyName("Diagnostico_causa")]
-        public string Diagnostico_causa { get; set; }
+        public string diagnostico_causa { get; set; }
+
+        [JsonPropertyName("tipoCausa")]
+        public string tipo_causa { get; set; }
 
         //[JsonPropertyName("fecha_inclusion_registro")]
         //public DateTime RecordInclusionDate { get; set; }
 
         [JsonPropertyName("Estado_ticket")]
-        public string Estado_ticket { get; set; }
+        public string estado_ticket { get; set; }
 
 
     }

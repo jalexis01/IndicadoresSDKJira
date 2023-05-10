@@ -46,14 +46,6 @@ namespace MQTT.AdditionalProcess.BL
             try
             {
                 var lstLogs = LogMessagesDAL.GetLogMessageGreaterThanId(DBAccess, id);
-
-                var x = lstLogs
-                    .GroupBy(l => l.DateIn.Date)
-                    .Select(l => new
-                    {
-                        idLog = l.Max(d => d.Id),
-                        date = l.Key
-                    });
             }
             catch (Exception ex)
             {
