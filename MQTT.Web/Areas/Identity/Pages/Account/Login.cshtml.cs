@@ -74,7 +74,9 @@ namespace MQTT.Web.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
-            returnUrl = Url.Content("~/Messages/Index");
+            //returnUrl = Url.Content("~/Tickets/Index");
+            //returnUrl = User.IsInRole("Administrador") ? Url.Content("~/Tickets/Index") : Url.Content("~/Messages/Index");
+            returnUrl = Input.Email.Equals("admin@admin.com", StringComparison.OrdinalIgnoreCase)? Url.Content("~/Tickets/Index") : Url.Content("~/Messages/Index");
 
             if (ModelState.IsValid)
             {

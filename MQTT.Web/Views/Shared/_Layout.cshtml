@@ -1,6 +1,7 @@
 ﻿@{
     //ViewData["Empresa"] = "Manatee";
     ViewData["Empresa"] = "Eys";
+    //ViewData["Empresa"] = "Prueba";
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -37,6 +38,18 @@
             titulo: "Eys",
             fontColor: '#00A0EF',
             fontColor2: '#0066D1',
+            location: "Av. 7Nte. # 26N - 35, Sta. Mónica Residencial. Cali, Colombia",
+            info: "Tel +57 (602) 435 0777 Email servicioalcliente@eysingenieria.com",
+        }
+    </script>
+    }
+
+    @if(@ViewBag.Empresa == "Prueba"){
+    <script>
+        var dataExcel = {
+            titulo: "Prueba",
+            fontColor: '#FF0000',
+            fontColor2: '#FF0000',
             location: "Av. 7Nte. # 26N - 35, Sta. Mónica Residencial. Cali, Colombia",
             info: "Tel +57 (602) 435 0777 Email servicioalcliente@eysingenieria.com",
         }
@@ -83,6 +96,8 @@
                 <aside class="w-64" aria-label="Sidebar">
                     <div class="overflow-y-auto py-4 px-3 rounded ">
                         <ul class="space-y-2">
+                            @if (ViewBag.Menu != "admin")
+                            {
                             <li>
                                 <a class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
                                     asp-area="" asp-controller="Messages" asp-action="Index">
@@ -152,21 +167,6 @@
                                 </button>
                             </li>
 
-                            <!--Prueba adicionar tickets al menu-->
-                            <li>
-                                <a class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
-                                    asp-area="" asp-controller="Tickets" asp-action="Index">
-                                    
-                                    <svg aria-hidden="true" class="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" 
-                                    fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                    <path fill-rule="evenodd" d="M5 4a3 3 0 00-3 3v6a3 3 0 003 3h10a3 3 0 003-3V7a3 3 0 00-3-3H5zm-1 9v-1h5v2H5a1 1 0 01-1-1zm7 1h4a1 1 0 001-1v-1h-5v2zm0-4h5V8h-5v2zM9 8H4v2h5V8z" clip-rule="evenodd">
-
-                                    </path></svg>
-                                    <span class="flex-1 ml-3 whitespace-nowrap">Tickets</span>
-                                </a>
-                            </li>
-                            <!--Fin prueba-->
-
                             <li>
                                 <button type="button"
                                     class="flex items-center p-2 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
@@ -193,6 +193,27 @@
                                     </li>
                                 </ul>
                             </li>
+                            }
+
+                            <!--Prueba adicionar tickets al menu-->
+                            
+                            <li>
+                                <a class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+                                    asp-area="" asp-controller="Tickets" asp-action="Index">
+                                    
+                                    <svg aria-hidden="true" class="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" 
+                                    fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd" d="M5 4a3 3 0 00-3 3v6a3 3 0 003 3h10a3 3 0 003-3V7a3 3 0 00-3-3H5zm-1 9v-1h5v2H5a1 1 0 01-1-1zm7 1h4a1 1 0 001-1v-1h-5v2zm0-4h5V8h-5v2zM9 8H4v2h5V8z" clip-rule="evenodd">
+
+                                    </path></svg>
+                                    <span class="flex-1 ml-3 whitespace-nowrap">Tickets</span>
+                                </a>
+                            </li>
+                            
+                            
+                            <!--Fin prueba-->
+
+                            
                         </ul>
                         <ul class="pt-4 mt-4 space-y-2 border-t border-gray-200 dark:border-gray-700">
                             <li>
