@@ -19,6 +19,29 @@ function exportToExcel() {
     // Descarga el archivo
     saveAs(new Blob([wbout], { type: 'application/octet-stream' }), 'tickets.xlsx');
 }
+function adjustColumnWidths(sheet) {
+    var colWidths = [];
+
+    // Obtener las dimensiones de las celdas
+    for (var cell in sheet) {
+        if (cell[0] === '!') continue;
+        var col = cell.replace(/[^A-Z]/g, '');
+        var row = parseInt(cell.replace(/[^0-9]/g, ''));
+        var value = sheet[cell].v;
+
+        // Calcular el ancho máximo de cada columna
+        var width = value.toString().length * 1.3; // Ajusta el factor de ancho según tus necesidades
+
+        if (colWidths[col] === undefined || width > colWidths[col]) {
+            colWidths[col] = width;
+        }
+    }
+
+    // Establecer el ancho de las columnas en la hoja de cálculo
+    for (var col in colWidths) {
+        sheet[col + '1'].s = { width: colWidths[col] };
+    }
+}
 
 function ServiceGetTickets() {
     var startDate = $('#dtpStart').val();

@@ -107,23 +107,9 @@
     var columnsSearch = @(Html.Raw(ViewBag.columnsSearch));
     var columnsToHide = @(Html.Raw(ViewBag.columnsToHide));
 </script>
+
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/js/Views/Tickets/tickets.js"></script>
 <script src="~/js/Views/Tickets/FileSaver.js"></script>
 <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
-
-<script>
-    function exportToExcel() {
-        // Obtén la tabla por su ID
-    var table = document.getElementById("table");
-
-    // Crea un objeto de trabajo de Excel
-    var wb = XLSX.utils.table_to_book(table, { sheet: "Sheet 1" });
-
-    // Genera el archivo de Excel
-    var wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
-
-    // Descarga el archivo
-    saveAs(new Blob([wbout], { type: 'application/octet-stream' }), 'tickets.xlsx');
-    }
-</script>
+<script src="https://unpkg.com/xlsx-populate/dist/xlsx-populate.min.js"></script>
