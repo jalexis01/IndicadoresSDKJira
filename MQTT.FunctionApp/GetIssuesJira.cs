@@ -137,7 +137,7 @@ namespace MQTT.FunctionApp
 					equivalence = string.Empty;
 					equivalence = equivalenceServiceType.Where(e => e.Name == issueDTO.estadoTicket).Select(e => e.Value).FirstOrDefault();
 					issueDTO.estadoTicket = string.IsNullOrEmpty(equivalence) ? "Abierta" : equivalence;
-					if (issueDTO.tipoCausa!=null) 
+					if (issueDTO.descripcionReparacion!=null) 
 					result.Add(issueDTO);
 				}
 
