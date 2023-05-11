@@ -106,5 +106,23 @@ function ServiceGetTickets() {
     });
 }
 
+function showMoreInformation(ticketId) {
+    Swal.fire({
+        title: 'Informacion del Ticket',
+        html: `<p><strong>Ticket ID:</strong> ${ticketId}</p>
+           <p><strong>Fecha apertura:</strong> @ticket.fecha_apertura</p>
+           <p><strong>Id componente:</strong> @ticket.id_componente</p>
+           <p><strong>Estado ticket:</strong> @ticket.estado_ticket</p>
+           <!-- Include other ticket properties as needed -->
+          `,
+        confirmButtonText: 'Cerrar',
+        width: 600,
+        padding: '1.5rem',
+        backdrop: true,
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+    });
+}
+
 
 
