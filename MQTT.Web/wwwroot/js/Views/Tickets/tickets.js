@@ -6,6 +6,20 @@ $(document).ready(function () {
     drodownDataSearch(columnsSearch, 'CustomName', 'searchParam');
 });
 
+function exportToExcel() {
+    // Obtén la tabla por su ID
+    var table = document.getElementById("table");
+
+    // Crea un objeto de trabajo de Excel
+    var wb = XLSX.utils.table_to_book(table, { sheet: "Sheet 1" });
+
+    // Genera el archivo de Excel
+    var wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+
+    // Descarga el archivo
+    saveAs(new Blob([wbout], { type: 'application/octet-stream' }), 'tickets.xlsx');
+}
+
 function ServiceGetTickets() {
     var startDate = $('#dtpStart').val();
     var endDate = $('#dtpEnd').val();
@@ -39,21 +53,21 @@ function ServiceGetTickets() {
             $.each(response, function (index, ticket) {
                 $('#table tbody').append(
                     '<tr>' +
-                    '<td>' + ticket.codigo_falla + '</td>' +
-                    '<td>' + ticket.componente_Parte + '</td>' +
-                    '<td>' + ticket.descripcion_reparacion + '</td>' +
-                    '<td>' + ticket.diagnostico_falla + '</td>' +
-                    '<td>' + ticket.estado_ticket + '</td>' +
+                    '<td>' + ticket.id_ticket + '</td>' +
                     '<td>' + ticket.fecha_apertura + '</td>' +
+                    '<td>' + ticket.id_componente + '</td>' +
+                    '<td>' + ticket.estado_ticket + '</td>' +
+                    '<td>' + ticket.nivel_falla + '</td>' +
+                    '<td>' + ticket.codigo_falla + '</td>' +
+                    '<td>' + ticket.diagnostico_falla + '</td>' +
                     '<td>' + ticket.fecha_arribo_locacion + '</td>' +
                     '<td>' + ticket.fecha_cierre + '</td>' +
-                    '<td>' + ticket.id_componente + '</td>' +
+                    '<td>' + ticket.componente_Parte + '</td>' +
+                    '<td>' + ticket.descripcion_reparacion + '</td>' +
                     '<td>' + ticket.id_estacion + '</td>' +
-                    '<td>' + ticket.id_puerta + '</td>' +
-                    '<td>' + ticket.id_ticket + '</td>' +
                     '<td>' + ticket.id_vagon + '</td>' +
+                    '<td>' + ticket.id_puerta + '</td>' +
                     '<td>' + ticket.identificacion + '</td>' +
-                    '<td>' + ticket.nivel_falla + '</td>' +
                     '</tr>'
                 );
             });
@@ -68,4 +82,6 @@ function ServiceGetTickets() {
         }
     });
 }
+
+
 
