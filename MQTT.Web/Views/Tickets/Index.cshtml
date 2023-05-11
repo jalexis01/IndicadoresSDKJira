@@ -61,7 +61,7 @@
     <table id="table" class="styled-table">
         <thead>
             <tr>
-                <th style="width: auto">Id ticket</th>
+                <th style='width: auto'>Id ticket</th>
                 <th>Fecha apertura</th>
                 <th>Id compomente</th>
                 <th>Estado ticket</th>
@@ -82,7 +82,7 @@
             @foreach (var ticket in Model)
             {
                 <tr>
-                    <td>@ticket.id_ticket</td>
+                    <td onclick='showMoreInformation("@ticket.id_ticket")' style='cursor: pointer; background: none; border: none;'>@ticket.id_ticket</td>
                     <td>@ticket.fecha_apertura</td>
                     <td>@ticket.id_componente</td>
                     <td>@ticket.estado_ticket</td>
@@ -112,18 +112,3 @@
 <script src="~/js/Views/Tickets/FileSaver.js"></script>
 <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
 
-<script>
-    function exportToExcel() {
-        // Obtén la tabla por su ID
-    var table = document.getElementById("table");
-
-    // Crea un objeto de trabajo de Excel
-    var wb = XLSX.utils.table_to_book(table, { sheet: "Sheet 1" });
-
-    // Genera el archivo de Excel
-    var wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
-
-    // Descarga el archivo
-    saveAs(new Blob([wbout], { type: 'application/octet-stream' }), 'tickets.xlsx');
-    }
-</script>
