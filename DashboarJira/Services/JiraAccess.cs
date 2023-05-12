@@ -18,7 +18,8 @@ namespace DashboarJira.Services
 
         Jira jira;
 
-        public JiraAccess() {
+        public JiraAccess()
+        {
             jira = Jira.CreateRestClient(jiraUrl, username, password);
         }
         public List<Ticket> GetTikets(int start, int max, string startDate, string endDate, string idComponente)
@@ -48,9 +49,45 @@ namespace DashboarJira.Services
                 }
 
                 return ConvertIssusInTickets(issues);
-            }catch (Exception ex)
+            }
+            catch (Exception ex)
             {
-                Console.WriteLine(ex.ToString());   
+                Console.WriteLine(ex.ToString());
+
+            }
+            return null;
+        }
+        public List<IssueJira> GetIssuesJira(int start, int max, string startDate, string endDate, string idComponente)
+        {
+            try
+            {
+                //created >= 2023-04-04 AND created <= 2023-04-13 AND issuetype = "Solicitud de Mantenimiento" AND resolution = Unresolved AND "Clase de fallo" = AIO AND "Identificacion componente" ~ 9119-WA-OR-1 ORDER BY key DESC, "Time to resolution" ASC
+                var jql = "project = 'Centro de Control' and issuetype = 'Solicitud de Mantenimiento'";
+                if (startDate != null && endDate != null)
+                {
+                    jql += " AND " + "created >= " + startDate + " AND " + "created <= " + endDate;
+                }
+                if (idComponente != null)
+                {
+
+                    jql += " AND " + "'Identificacion componente' ~ " + idComponente;
+                }
+                jql += " ORDER BY key DESC, 'Time to resolution' ASC";
+                Task<IPagedQueryResult<Issue>> issues = null;
+                if (max != 0)
+                {
+                    issues = jira.Issues.GetIssuesFromJqlAsync(jql, max, start);
+                }
+                else if (max == 0)
+                {
+                    issues = jira.Issues.GetIssuesFromJqlAsync(jql, int.MaxValue, 0);
+                }
+
+                return ConvertIssusInIssuesJira(issues);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
 
             }
             return null;
@@ -60,28 +97,40 @@ namespace DashboarJira.Services
         {
             var jql = query;
             Console.WriteLine(jql);
-            var issues =  jira.Issues.GetIssuesFromJqlAsync(jql,int.MaxValue,0);
-            
+            var issues = jira.Issues.GetIssuesFromJqlAsync(jql, int.MaxValue, 0);
+
 
             return ConvertIssusInTickets(issues);
         }
 
-        public Ticket getTicket(string id) {
+        public Ticket getTicket(string id)
+        {
             var ticket = jira.Issues.GetIssueAsync(id).Result;
-            
+
             return converIssueInTicket(ticket);
         }
 
+        public List<IssueJira> ConvertIssusInIssuesJira(Task<IPagedQueryResult<Issue>> issues)
+        {
+            List<IssueJira> result = new List<IssueJira>();
+
+            foreach (var issue in issues.Result)
+            {
+                Console.WriteLine(issue.Key);
+
+                result.Add(convertIssueInIssueJira(issue));
+            }
+            return result;
+
+        }
 
 
-        public List<Ticket> ConvertIssusInTickets(Task<IPagedQueryResult<Issue>> issues) {
+        public List<Ticket> ConvertIssusInTickets(Task<IPagedQueryResult<Issue>> issues)
+        {
             List<Ticket> result = new List<Ticket>();
 
             foreach (var issue in issues.Result)
             {
-
-                
-                
                 Console.WriteLine(issue.Key);
 
                 result.Add(converIssueInTicket(issue));
@@ -90,7 +139,7 @@ namespace DashboarJira.Services
 
         }
 
-        public Ticket converIssueInTicket(Issue issue) 
+        public Ticket converIssueInTicket(Issue issue)
         {
             Ticket temp = new Ticket();
             temp.id_ticket = issue.Key.Value;
@@ -170,7 +219,8 @@ namespace DashboarJira.Services
 
         }
 
-        public IssueJira getIssueJira(string id) {
+        public IssueJira getIssueJira(string id)
+        {
             var issue = jira.Issues.GetIssueAsync(id).Result;
 
             return convertIssueInIssueJira(issue);
@@ -204,7 +254,8 @@ namespace DashboarJira.Services
             temp.Vagon = issue.CustomFields["Vagon"] != null ? issue.CustomFields["Vagon"].Values[0] : null;
             temp.TiempoResolucionAnio = issue.CustomFields["Tiempo a resolucion ANIO"] != null ? issue.CustomFields["Tiempo a resolucion ANIO"].Values[0] : null;
             temp.TiempoResolucionAIO = issue.CustomFields["Tiempo a resolución AIO"] != null ? issue.CustomFields["Tiempo a resolución AIO"].Values[0] : null;
-            if (issue.CustomFields["Listado de ajustes puerta"] != null) {
+            if (issue.CustomFields["Listado de ajustes puerta"] != null)
+            {
                 foreach (var lista in issue.CustomFields["Listado de ajustes puerta"].Values.ToList())
                 {
                     temp.AjustesPuerta += lista + "\n";
