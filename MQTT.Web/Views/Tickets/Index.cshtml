@@ -82,7 +82,7 @@
             @foreach (var ticket in Model)
             {
                 <tr>
-                    <td>@ticket.id_ticket</td>
+                    <td onclick='showMoreInformation("@ticket.id_ticket")' style='cursor: pointer; background: none; border: none;'>@ticket.id_ticket</td>
                     <td>@ticket.fecha_apertura</td>
                     <td>@ticket.id_componente</td>
                     <td>@ticket.estado_ticket</td>

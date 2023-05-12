@@ -72,7 +72,22 @@ namespace MQTT.Web.Controllers
             {
                 throw ex;
             }
-        }        
+        }
+
+        public IActionResult consultarTicket(string idTicket)
+        {
+            try
+            {
+                JiraAccess jira = new JiraAccess();
+                IssueJira ticket = jira.getIssueJira(idTicket);
+                return Ok(ticket);
+            }
+            catch (Exception ex)
+            {
+                // Manejar el error de alguna forma si lo deseas
+                throw ex;
+            }
+        }
     }   
     
 }

@@ -19,29 +19,6 @@ function exportToExcel() {
     // Descarga el archivo
     saveAs(new Blob([wbout], { type: 'application/octet-stream' }), 'tickets.xlsx');
 }
-function adjustColumnWidths(sheet) {
-    var colWidths = [];
-
-    // Obtener las dimensiones de las celdas
-    for (var cell in sheet) {
-        if (cell[0] === '!') continue;
-        var col = cell.replace(/[^A-Z]/g, '');
-        var row = parseInt(cell.replace(/[^0-9]/g, ''));
-        var value = sheet[cell].v;
-
-        // Calcular el ancho máximo de cada columna
-        var width = value.toString().length * 1.3; // Ajusta el factor de ancho según tus necesidades
-
-        if (colWidths[col] === undefined || width > colWidths[col]) {
-            colWidths[col] = width;
-        }
-    }
-
-    // Establecer el ancho de las columnas en la hoja de cálculo
-    for (var col in colWidths) {
-        sheet[col + '1'].s = { width: colWidths[col] };
-    }
-}
 
 function ServiceGetTickets() {
     var startDate = $('#dtpStart').val();
@@ -106,23 +83,33 @@ function ServiceGetTickets() {
     });
 }
 
-function showMoreInformation(ticketId) {
-    Swal.fire({
-        title: 'Informacion del Ticket',
-        html: `<p><strong>Ticket ID:</strong> ${ticketId}</p>
-           <p><strong>Fecha apertura:</strong> @ticket.fecha_apertura</p>
-           <p><strong>Id componente:</strong> @ticket.id_componente</p>
-           <p><strong>Estado ticket:</strong> @ticket.estado_ticket</p>
-           <!-- Include other ticket properties as needed -->
-          `,
-        confirmButtonText: 'Cerrar',
-        width: 600,
-        padding: '1.5rem',
-        backdrop: true,
-        allowOutsideClick: false,
-        allowEscapeKey: false,
+function showMoreInformation(idTicket) {
+    // Realizar una solicitud AJAX para obtener los detalles del ticket
+    $.ajax({
+        url: '/Tickets/consultarTicket', // Especifica la URL correcta para invocar el método consultarTicket en el servidor
+        data: { idTicket: idTicket },
+        success: function (ticket) {
+            // Utilizar los datos del ticket para mostrar la información en el diálogo emergente
+            Swal.fire({
+                title: 'Información del Ticket',
+                html: `<p><strong>Ticket ID:</strong> ${ticket.id_ticket}</p>
+                       <p><strong>Fecha apertura:</strong> ${ticket.fecha_apertura}</p>
+                       <p><strong>Id componente:</strong> ${ticket.id_componente}</p>
+                       <p><strong>Estado ticket:</strong> ${ticket.estado_ticket}</p>
+                       <!-- Include other ticket properties as needed -->`,
+                confirmButtonText: 'Cerrar',
+                width: 600,
+                padding: '1.5rem',
+                backdrop: true,
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+            });
+        },
+        error: function () {
+            // Manejar el error si la solicitud AJAX falla
+            Swal.fire('Error', 'No se pudo obtener la información del ticket', 'error');
+        }
     });
 }
-
 
 
