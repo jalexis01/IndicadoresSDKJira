@@ -10,12 +10,12 @@
     <h1 class="text-2xl font-bold dark:text-white title-view-text">@ViewBag.Title</h1>
 </div>
 
-<div class="form-container">    
-    
+<div class="form-container">
+
     <div class="inputs-container">
         <label class="TextFecha">Fecha Inicial</label>
         <div class="wrapperFI">
-            <input id="dtpStart"  required>
+            <input id="dtpStart" required>
         </div>
     </div>
     <div class="inputs-container">
@@ -27,87 +27,87 @@
     <div class="inputs-container">
         <label class="TextComponente">ID Componente</label>
         <div class="wrapperFI">
-           <input type="text" id="componente">
+            <input type="text" id="componente">
         </div>
     </div>
     <div class="inputs-container">
         <label class="TextCantidad">Cant.</label>
         <div class="wrapperFI">
-            <select id="maxSelect" >
-            <option value="10">10</option>
-            <option value="20">20</option>
-            <option value="30">30</option>
-            <option value="50">50</option>
-            <option value="100">100</option>
-            <option value="200">200</option>
-        </select>
+            <select id="maxSelect">
+                <option value="10">10</option>
+                <option value="20">20</option>
+                <option value="30">30</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+                <option value="200">200</option>
+            </select>
         </div>
     </div>
     <div class="inputs-container">
         <button onclick="ServiceGetTickets()" type="button" id="button-primary"
-            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"">Buscar</button>
+                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+            Buscar
+        </button>
     </div>
 </div>
-
-
 <div class="container-grid">
-
     <div class="inputs-container">
     <button onclick="exportToExcel()" type="button" id="button-primary"
         class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
-        Descargar Excel</button>
-    </div>
-    
-    <table id="table" class="styled-table">
-        <thead>
+        Descargar Excel
+    </button>
+</div>
+
+<table id="table" class="styled-table">
+    <thead>
+        <tr>
+            <th>Ver más</th>
+            <th style="width: auto">Id ticket</th>
+            <th>Fecha apertura</th>
+            <th>Id compomente</th>
+            <th>Estado ticket</th>
+            <th>Nivel falla</th>
+            <th>Código falla</th>
+            <th>Diagnóstico causa</th>
+            <th>Fecha arribo locación</th> 
+            <th>Fecha cierre</th>
+            <th>Parte componente</th>
+            <th>Descripción reparación</th>
+            <th>Id estación</th>
+            <th>Id vagón</th>
+            <th>Id puerta</th>
+            <th>Serial</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var ticket in Model)
+        {
             <tr>
-                <th style="width: auto">Id ticket</th>
-                <th>Fecha apertura</th>
-                <th>Id compomente</th>
-                <th>Estado ticket</th>
-                <th>Nivel falla</th>
-                <th>Código falla</th>
-                <th>Diagnóstico causa</th>
-                <th>Fecha arribo locación</th> 
-                <th>Fecha cierre</th>
-                <th>Parte componente</th>
-                <th>Descripción reparación</th>
-                <th>Id estación</th>
-                <th>Id vagón</th>
-                <th>Id puerta</th>
-                <th>Serial</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var ticket in Model)
-            {
-                <tr>
-                    <td onclick='showMoreInformation("@ticket.id_ticket")' style='cursor: pointer; background: none; border: none;'>@ticket.id_ticket</td>
-                    <td>@ticket.fecha_apertura</td>
-                    <td>@ticket.id_componente</td>
-                    <td>@ticket.estado_ticket</td>
-                    <td>@ticket.nivel_falla</td>
-                    <td>@ticket.codigo_falla</td>
-                    <td>@ticket.diagnostico_causa</td>                    
-                    <td>@ticket.fecha_arribo_locacion</td> 
-                    <td>@ticket.fecha_cierre</td>
-                    <td>@ticket.componente_Parte</td>
-                    <td>@ticket.descripcion_reparacion</td>
+                <td onclick='showMoreInformation("@ticket.id_ticket")' style='cursor: pointer; background: none;'>Ver Mas</td>
+                <td>@ticket.id_ticket</td>
+                <td>@ticket.fecha_apertura</td>
+                <td>@ticket.id_componente</td>
+                <td>@ticket.estado_ticket</td>
+                <td>@ticket.nivel_falla</td>
+                <td>@ticket.codigo_falla</td>
+                <td>@ticket.diagnostico_causa</td>                    
+                <td>@ticket.fecha_arribo_locacion</td> 
+                <td>@ticket.fecha_cierre</td>
+                <td>@ticket.componente_Parte</td>
+                <td>@ticket.descripcion_reparacion</td>
                     <td>@ticket.id_estacion</td>
                     <td>@ticket.id_vagon</td>
-                    <td>@ticket.id_puerta</td> 
+                    <td>@ticket.id_puerta</td>
                     <td>@ticket.identificacion</td>
                 </tr>
             }
         </tbody>
     </table>
 </div>
-
 <script type="text/javascript">
     var columnsSearch = @(Html.Raw(ViewBag.columnsSearch));
     var columnsToHide = @(Html.Raw(ViewBag.columnsToHide));
 </script>
-
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/js/Views/Tickets/tickets.js"></script>
 <script src="~/js/Views/Tickets/FileSaver.js"></script>
