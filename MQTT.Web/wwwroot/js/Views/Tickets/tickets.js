@@ -89,13 +89,26 @@ function showMoreInformation(idTicket) {
         url: '/Tickets/consultarTicket', // Especifica la URL correcta para invocar el método consultarTicket en el servidor
         data: { idTicket: idTicket },
         success: function (ticket) {
+            console.log(ticket);
             // Utilizar los datos del ticket para mostrar la información en el diálogo emergente
             Swal.fire({
                 title: 'Información del Ticket',
-                html: `<p><strong>Ticket ID:</strong> ${ticket.id_ticket}</p>
-                       <p><strong>Fecha apertura:</strong> ${ticket.fecha_apertura}</p>
-                       <p><strong>Id componente:</strong> ${ticket.id_componente}</p>
-                       <p><strong>Estado ticket:</strong> ${ticket.estado_ticket}</p>
+                html: `<p style="text-align: left;"><strong>Id ticket:</strong> ${ticket.id}</p>
+                       <p style="text-align: left;"><strong>Ajustes ITS:</strong> ${ticket.ajustesITS}</p>
+                       <p style="text-align: left;"><strong>AjustesPuerta:</strong> ${ticket.ajustesPuerta}</p>
+                       <p style="text-align: left;"><strong>AjusteRFID:</strong> ${ticket.ajustesRFID}</p>
+                       <p style="text-align: left;"><strong>CanalComunicación:</strong> ${ticket.canalComunicacion}</p>
+                       <p style="text-align: left;"><strong>CantidadRepuestosUtilizados:</strong> ${ticket.cantidadRepuestosUtilizados}</p>
+                       <p style="text-align: left;"><strong>ClaseFallo:</strong> ${ticket.claseFallo}</p>
+                       <p style="text-align: left;"><strong>Código plan mantenimiento:</strong> ${ticket.codigoPlanMantenimiento}</p>
+                       <p style="text-align: left;"><strong>ConfiguracionITS:</strong> ${ticket.configuracionITS}</p>
+                       <p style="text-align: left;"><strong>ConfiguracionPuerta:</strong> ${ticket.configuracionPuerta}</p>
+                       <p style="text-align: left;"><strong>ConfiguracionRFID:</strong> ${ticket.configuracionRFID}</p>
+                       <p style="text-align: left;"><strong>DescripionActividadMantenimiento:</strong> ${ticket.descripcionActividadMantenimiento}</p>
+                       <p style="text-align: left;"><strong>DescripcionFallo:</strong> ${ticket.descripcionFallo}</p>
+                       <p style="text-align: left;"><strong>DescripciónReparacion:</strong> ${ticket.descripcionReparacion}</p>
+                       <p style="text-align: left;"><strong>DescripcionRepuesto:</strong> ${ticket.descripcionRepuesto}</p>
+                       <p style="text-align: left;"><strong>DiagnosticoCausa:</strong> ${ticket.diagnosticoCausa}</p>
                        <!-- Include other ticket properties as needed -->`,
                 confirmButtonText: 'Cerrar',
                 width: 600,
@@ -111,5 +124,6 @@ function showMoreInformation(idTicket) {
         }
     });
 }
+
 
 
