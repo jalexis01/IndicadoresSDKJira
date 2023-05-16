@@ -58,7 +58,7 @@
     </button>
 </div>
 
-<table id="table" class="styled-table">
+    <table id="table" class="styled-table">
     <thead>
         <tr>
             <th>Ver más</th>
@@ -83,7 +83,7 @@
         @foreach (var ticket in Model)
         {
             <tr>
-                <td onclick='showMoreInformation("@ticket.id_ticket")' style='cursor: pointer; background: none;'>Ver Mas</td>
+                <td onclick='showMoreInformation("@ticket.id_ticket")' style='cursor: pointer; background: none;'>Ver más</td>
                 <td>@ticket.id_ticket</td>
                 <td>@ticket.fecha_apertura</td>
                 <td>@ticket.id_componente</td>
@@ -95,13 +95,13 @@
                 <td>@ticket.fecha_cierre</td>
                 <td>@ticket.componente_Parte</td>
                 <td>@ticket.descripcion_reparacion</td>
-                    <td>@ticket.id_estacion</td>
-                    <td>@ticket.id_vagon</td>
-                    <td>@ticket.id_puerta</td>
-                    <td>@ticket.identificacion</td>
-                </tr>
-            }
-        </tbody>
+                <td>@ticket.id_estacion</td>
+                <td>@ticket.id_vagon</td>
+                <td>@ticket.id_puerta</td>
+                <td>@ticket.identificacion</td>
+            </tr>
+        }
+      </tbody>
     </table>
 </div>
 <script type="text/javascript">

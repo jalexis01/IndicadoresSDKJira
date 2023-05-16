@@ -39,7 +39,7 @@ function ServiceGetTickets() {
             $.each(response, function (index, ticket) {
                 var row = $('<tr>');
                 console.log(ticket.id_ticket)
-                row.append($('<td onclick="showMoreInformation(\'' + ticket.id_ticket + '\')" style="cursor: pointer; background: none;">').text('Ver Mas'));
+                row.append($('<td onclick="showMoreInformation(\'' + ticket.id_ticket + '\')" style="cursor: pointer; background: none;">').text('Ver más'));
                 row.append($('<td>').text(ticket.id_ticket));
                 row.append($('<td>').text(ticket.fecha_apertura));
                 row.append($('<td>').text(ticket.id_componente));
