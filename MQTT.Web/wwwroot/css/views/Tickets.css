@@ -28,6 +28,30 @@
     display: flex;
 }
 
+.styled-table {
+    border-collapse: collapse;
+    width: 100%;
+    max-width: 800px;
+}
+
+    .styled-table th,
+    .styled-table td {
+        border: 1px solid #ddd;
+        padding: 8px;
+    }
+
+    .styled-table th {
+        background-color: #f2f2f2;
+        text-align: left;
+    }
+
+    .styled-table td {
+        padding: 30px;
+        text-align: left;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
 
 /*.container-grid {
     display: grid;
