@@ -7,7 +7,7 @@ using DashboarJira.Services;
 
 namespace MQTT.Web.Controllers
 {
-    public class TicketsController : Controller
+    public class IndicadoresController : Controller
     {
         public IActionResult Index(int max, string componente)
         {
@@ -42,7 +42,7 @@ namespace MQTT.Web.Controllers
 
 
         int start = 0;
-                
+
         public List<Ticket> getTickets(string startDate, string endDate, int max, string componente)
         {
             try
@@ -50,7 +50,7 @@ namespace MQTT.Web.Controllers
                 string formattedStartDate;
                 string formattedEndDate;
 
-                if(startDate!=null|| endDate != null)
+                if (startDate != null || endDate != null)
                 {
                     //max = 10;
                     DateTime startDateTime = DateTime.Parse(startDate);
@@ -89,6 +89,5 @@ namespace MQTT.Web.Controllers
                 throw ex;
             }
         }
-    }   
-    
+    }
 }

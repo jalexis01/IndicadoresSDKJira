@@ -1,10 +1,10 @@
 ﻿@{
-    ViewData["Title"] = "Historial de Tickets";
+    ViewData["Title"] = "Historial de Indicadores";
 }
 @using DashboarJira.Model
 @model List<Ticket>
 
-<link rel="stylesheet" href="~/css/views/Tickets.css">
+<link rel="stylesheet" href="~/css/views/Indicadores.css">
 
 <div class="header-view">
     <h1 class="text-2xl font-bold dark:text-white title-view-text">@ViewBag.Title</h1>
@@ -25,24 +25,29 @@
         </div>
     </div>
     <div class="inputs-container">
-        <label class="TextComponente">ID Componente</label>
-        <div class="wrapperFI">
-            <input type="text" id="componente">
-        </div>
-    </div>
-    <div class="inputs-container">
-        <label class="TextCantidad">Cant.</label>
+        <label class="TextComponente">Indicador</label>
         <div class="wrapperFI">
             <select id="maxSelect">
-                <option value="10">10</option>
-                <option value="20">20</option>
-                <option value="30">30</option>
-                <option value="50">50</option>
-                <option value="100">100</option>
-                <option value="200">200</option>
+                <option value="IAIO">IAIO</option>
+                <option value="IANO">IANO</option>
+                <option value="IRF">IRF</option>
+                <option value="RAIO">RAIO</option>
+                <option value="RANO">RANO</option>
+                <option value="ICPM">ICPM</option>
+                <option value="IEPM">IEPM</option>
             </select>
         </div>
+    </div>  
+
+    <div class="inputs-container">
+        <label class="TextComponente">Indicador</label>
+         <div>
+        <span class="e-input-group e-control-wrapper  e-ddl e-lib e-keyboard" tabindex="-1" aria-disabled="true" aria-owns="searchParam_options" role="listbox" aria-haspopup="true" aria-expanded="false" aria-activedescendant="null" aria-live="polite" aria-labelledby="searchParam_hidden" style="width: 100%;"><select aria-hidden="true" tabindex="-1" class="e-ddl-hidden" name="searchParam" id="searchParam_hidden" required=""></select><input type="text" id="searchParam" required="" class="e-control e-dropdownlist e-lib e-input e-disabled" role="textbox" readonly="" placeholder="Seleccione un campo" aria-placeholder="Seleccione un campo" disabled="disabled" aria-disabled="true" style="" tabindex="-1"><span class="e-input-group-icon e-ddl-icon e-search-icon"></span></span>
     </div>
+    </div> 
+    
+   
+    
     <div class="inputs-container">
         <button onclick="ServiceGetTickets()" type="button" id="button-primary"
                 class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
@@ -65,21 +70,9 @@
     <thead>
         <tr>
             <th>Ver más</th>
-            <th style="width: auto">Id ticket</th>
-            <th>Fecha apertura</th>
-            <th>Id compomente</th>
-            <th>Estado ticket</th>
-            <th>Nivel falla</th>
-            <th>Código falla</th>
-            <th>Diagnóstico causa</th>
-            <th>Fecha arribo locación</th> 
-            <th>Fecha cierre</th>
-            <th>Parte componente</th>
-            <th>Descripción reparación</th>
-            <th>Id estación</th>
-            <th>Id vagón</th>
-            <th>Id puerta</th>
-            <th>Serial</th>
+            <th style="width: auto">Id indicador</th>
+            <th>Indicador</th>
+            <th>Cantidad</th>            
         </tr>
     </thead>
     <tbody>
@@ -90,18 +83,6 @@
                 <td>@ticket.id_ticket</td>
                 <td>@ticket.fecha_apertura</td>
                 <td>@ticket.id_componente</td>
-                <td>@ticket.estado_ticket</td>
-                <td>@ticket.nivel_falla</td>
-                <td>@ticket.codigo_falla</td>
-                <td>@ticket.diagnostico_causa</td>                    
-                <td>@ticket.fecha_arribo_locacion</td> 
-                <td>@ticket.fecha_cierre</td>
-                <td>@ticket.componente_Parte</td>
-                <td>@ticket.descripcion_reparacion</td>
-                <td>@ticket.id_estacion</td>
-                <td>@ticket.id_vagon</td>
-                <td>@ticket.id_puerta</td>
-                <td>@ticket.identificacion</td>
             </tr>
         }
       </tbody>

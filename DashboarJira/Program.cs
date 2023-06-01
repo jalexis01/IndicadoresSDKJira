@@ -8,3 +8,6 @@ JiraAccess jira = new JiraAccess();
 jira.getIssueJira("PRUEBAS-117");
 Console.WriteLine("");
 
+IAIOController iaio = new IAIOController();
+Console.WriteLine(iaio.IAIOContratista("2023-01-01","2023-06-01").CalcularIndicadorIAIO());
+
