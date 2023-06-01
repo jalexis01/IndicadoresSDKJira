@@ -21,7 +21,7 @@ namespace DashboarJira.Model
             TicketAPE = ticketAPE;
         }
 
-        public double CalcularIndicadorIEPM()
+        public double CalcularIndicadorICPM()
         {
             double icpmCalculado = 0;
             if (TicketTAP.Count > 0)

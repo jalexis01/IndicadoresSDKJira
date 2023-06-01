@@ -96,7 +96,7 @@ namespace DashboarJira.Services
         public List<Ticket> GetTiketsIndicadores(string query)
         {
             var jql = query;
-            Console.WriteLine(jql);
+            //Console.WriteLine(jql);
             var issues = jira.Issues.GetIssuesFromJqlAsync(jql, int.MaxValue, 0);
 
 
@@ -131,7 +131,7 @@ namespace DashboarJira.Services
 
             foreach (var issue in issues.Result)
             {
-                Console.WriteLine(issue.Key);
+                //Console.WriteLine(issue.Key);
 
                 result.Add(converIssueInTicket(issue));
             }

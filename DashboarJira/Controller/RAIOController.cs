@@ -24,7 +24,7 @@ namespace DashboarJira.Controller
             string jql = string.Format(JQL_CONTRATISTA, start, end);
             List<Ticket> total_tickets = jiraAccess.GetTiketsIndicadores(jql);
             List<Ticket> tickets_cerrados = ANIO_CERRADO_A_TIEMPO(total_tickets);
-            Console.WriteLine(jql);
+            //Console.WriteLine(jql);
             return new RAIOEntity(tickets_cerrados, total_tickets);
         
         }
@@ -35,7 +35,7 @@ namespace DashboarJira.Controller
             string jql = string.Format(JQL_NO_CONTRATISTA, start, end);
             List<Ticket> total_tickets = jiraAccess.GetTiketsIndicadores(jql);
             List<Ticket> tickets_cerrados = ANIO_CERRADO_A_TIEMPO(total_tickets);
-            Console.WriteLine(jql);
+            //Console.WriteLine(jql);
             return new RAIOEntity(tickets_cerrados, total_tickets);
 
         }

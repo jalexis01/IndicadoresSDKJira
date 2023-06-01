@@ -12,9 +12,9 @@ namespace DashboarJira.Controller
     public class IAIOController
     {
         private readonly double TOTAL_PUERTAS = 146.0;
-        const string JQL_GENERAL = "created >= {0} AND created <= {1} AND issuetype = 'Solicitud de Mantenimiento' AND status = Cerrado AND 'Clase de fallo' in AIO AND 'Tipo de componente' = Puerta ORDER BY key DESC, 'Time to resolution' ASC";
-        const string JQL_CONTRATISTA = "created >= {0} AND created <= {1} AND issuetype = 'Solicitud de Mantenimiento' AND 'Tipo de causa' = 'A cargo del contratista' AND status = Cerrado AND 'Clase de fallo' in AIO AND 'Tipo de componente' = Puerta ORDER BY key DESC, 'Time to resolution' ASC";
-        const string JQL_NO_CONTRATISTA = "created >= {0} AND created <= {1} AND issuetype = 'Solicitud de Mantenimiento' AND 'Tipo de causa' != 'A cargo del contratista' AND status = Cerrado AND 'Clase de fallo' AIO AND 'Tipo de componente' = Puerta ORDER BY key DESC, 'Time to resolution' ASC";
+        const string JQL_GENERAL = "created >= {0} AND created <= {1} AND issuetype = 'Solicitud de Mantenimiento' AND status = Cerrado AND 'Clase de fallo' = AIO AND 'Tipo de componente' = Puerta ORDER BY key DESC, 'Time to resolution' ASC";
+        const string JQL_CONTRATISTA = "created >= {0} AND created <= {1} AND issuetype = 'Solicitud de Mantenimiento' AND 'Tipo de causa' = 'A cargo del contratista' AND status = Cerrado AND 'Clase de fallo' = AIO AND 'Tipo de componente' = Puerta ORDER BY key DESC, 'Time to resolution' ASC";
+        const string JQL_NO_CONTRATISTA = "created >= {0} AND created <= {1} AND issuetype = 'Solicitud de Mantenimiento' AND 'Tipo de causa' != 'A cargo del contratista' AND status = Cerrado AND 'Clase de fallo' = AIO AND 'Tipo de componente' = Puerta ORDER BY key DESC, 'Time to resolution' ASC";
         JiraAccess jiraAccess;
         public IAIOController()
         {
