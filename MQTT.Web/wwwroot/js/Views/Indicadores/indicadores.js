@@ -19,7 +19,7 @@ function ServiceGetTickets() {
     console.log("idComponente: " + componente);
 
     Swal.fire({
-        title: 'Cargando...',
+        title: 'Cargando indicadores...',
         allowOutsideClick: false,
         showConfirmButton: false,
         onBeforeOpen: (modal) => {
@@ -39,22 +39,10 @@ function ServiceGetTickets() {
             $.each(response, function (index, ticket) {
                 var row = $('<tr>');
                 console.log(ticket.id_ticket)
-                row.append($('<td onclick="showMoreInformation(\'' + ticket.id_ticket + '\')" style="cursor: pointer; background: none;">').text('Ver más'));
                 row.append($('<td>').text(ticket.id_ticket));
                 row.append($('<td>').text(ticket.fecha_apertura));
                 row.append($('<td>').text(ticket.id_componente));
-                row.append($('<td>').text(ticket.estado_ticket));
-                row.append($('<td>').text(ticket.nivel_falla));
-                row.append($('<td>').text(ticket.codigo_falla));
-                row.append($('<td>').text(ticket.diagnostico_causa));
-                row.append($('<td>').text(ticket.fecha_arribo_locacion));
-                row.append($('<td>').text(ticket.fecha_cierre));
-                row.append($('<td>').text(ticket.componente_Parte));
-                row.append($('<td>').text(ticket.descripcion_reparacion));
-                row.append($('<td>').text(ticket.id_estacion));
-                row.append($('<td>').text(ticket.id_vagon));
-                row.append($('<td>').text(ticket.id_puerta));
-                row.append($('<td>').text(ticket.identificacion));
+                
 
                 tbody.append(row);
             });

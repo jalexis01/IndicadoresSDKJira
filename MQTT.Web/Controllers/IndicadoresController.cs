@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System;
-
 using DashboarJira.Model;
 using DashboarJira.Services;
+using DashboarJira.Controller;
 
 namespace MQTT.Web.Controllers
 {
@@ -11,33 +11,8 @@ namespace MQTT.Web.Controllers
     {
         public IActionResult Index(int max, string componente)
         {
-            // Obtiene la identidad del usuario actual
-            var identity = User.Identity as System.Security.Claims.ClaimsIdentity;
-
-            // Verifica si el usuario tiene el rol de "Administrador"
-            if (identity != null && identity.HasClaim(System.Security.Claims.ClaimTypes.Name, "admin@admin.com"))
-            {
-                ViewBag.Menu = "admin";
-            }
-            else
-            {
-                ViewBag.Menu = "user";
-            }
-
-            //return View();
-
-            // Obtener la fecha actual
-            DateTime currentDateTime = DateTime.Now;
-
-            // Restar un mes a la fecha actual
-            DateTime startDateTime = currentDateTime.AddMonths(-1);
-
-            // Formatear las fechas en el formato deseado
-            string startDate = startDateTime.ToString("yyyy-MM-dd");
-            string endDate = currentDateTime.ToString("yyyy-MM-dd");
-
-            List<Ticket> tickets = getTickets(startDate, endDate, max, componente);
-            return View(tickets);
+            Indicadores indicadores = ObtenerIndicadores(); // Llama al método que obtiene los indicadores
+            return View(indicadores);
         }
 
 
@@ -64,9 +39,10 @@ namespace MQTT.Web.Controllers
                     formattedStartDate = startDate;
                     formattedEndDate = endDate;
                 }
-
                 JiraAccess jiraAccess = new JiraAccess();
                 return jiraAccess.GetTikets(start, max, formattedStartDate, formattedEndDate, componente);
+                Indicadores indicadores = new Indicadores();
+                return indicadores.indicadores("2023-01-01", "2023-06-01");
             }
             catch (Exception ex)
             {
@@ -75,13 +51,20 @@ namespace MQTT.Web.Controllers
 
         }
 
-        public IActionResult consultarTicket(string idTicket)
+        public Indicadores ObtenerIndicadores()
+        {
+            Indicadores indicadores = new Indicadores();
+            return indicadores.indicadores("2023-01-01", "2023-06-01");
+        }
+
+        public IActionResult consultarIndicadores()
         {
             try
             {
-                JiraAccess jira = new JiraAccess();
-                IssueJira ticket = jira.getIssueJira(idTicket);
-                return Ok(ticket);
+                Indicadores indicadores = new Indicadores();
+                Console.WriteLine(indicadores.indicadores("2023-01-01", "2023-06-01"));
+
+                return Ok(indicadores);
             }
             catch (Exception ex)
             {

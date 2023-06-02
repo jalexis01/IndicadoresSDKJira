@@ -2,12 +2,18 @@
     ViewData["Title"] = "Historial de Indicadores";
 }
 @using DashboarJira.Model
-@model List<Ticket>
+@using DashboarJira.Services
+
+@model Indicadores
 
 <link rel="stylesheet" href="~/css/views/Indicadores.css">
 
 <div class="header-view">
     <h1 class="text-2xl font-bold dark:text-white title-view-text">@ViewBag.Title</h1>
+</div>
+<div>
+    <h1>Indicadores</h1>
+<p>Valor: @Model.ToString()</p>
 </div>
 
 <div class="form-container">
@@ -55,37 +61,24 @@
         </button>
     </div>
 </div>
-<div class="container-grid">
-    <div class="inputs-container">
-    <button onclick="exportToExcel()" type="button" id="button-primary"
-        class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
-        Descargar Excel
-    </button>
-    </div>
-</div>
+
 <div class="container-grid">
     
 
     <table id="table" class="styled-table">
     <thead>
         <tr>
-            <th>Ver más</th>
             <th style="width: auto">Id indicador</th>
             <th>Indicador</th>
             <th>Cantidad</th>            
         </tr>
     </thead>
     <tbody>
-        @foreach (var ticket in Model)
-        {
-            <tr>
-                <td onclick='showMoreInformation("@ticket.id_ticket")' style='cursor: pointer; background: none;'>Ver más</td>
-                <td>@ticket.id_ticket</td>
-                <td>@ticket.fecha_apertura</td>
-                <td>@ticket.id_componente</td>
+        <tr>                
+                <td>A</td>
+                <td>B</td>
+                <td>C</td>
             </tr>
-        }
-      </tbody>
     </table>
 </div>
 <script type="text/javascript">
@@ -93,7 +86,7 @@
     var columnsToHide = @(Html.Raw(ViewBag.columnsToHide));
 </script>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script src="~/js/Views/Tickets/tickets.js"></script>
-<script src="~/js/Views/Tickets/FileSaver.js"></script>
+<script src="~/js/Views/Indicadores/indicadores.js"></script>
+<script src="~/js/Views/Indicadores/FileSaver.js"></script>
 <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
 <script src="https://unpkg.com/xlsx-populate/dist/xlsx-populate.min.js"></script>
