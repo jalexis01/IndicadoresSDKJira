@@ -16,8 +16,8 @@ namespace DashboarJira.Controller
         const string JQL_NO_CONTRATISTA = "created >= {0} AND created <= {1} AND issuetype = 'Solicitud de Mantenimiento' AND 'Clase de fallo' = AIO AND 'Tipo de causa' != 'A cargo del contratista' ORDER BY key DESC, 'Time to resolution' ASC";
         public const int HORAS_MAXIMAS_A_TIEMPO = 6;
         JiraAccess jiraAccess;
-        public RAIOController() {
-            jiraAccess = new JiraAccess();
+        public RAIOController(JiraAccess jira) {
+            jiraAccess = jira;
         }
         public RAIOEntity RAIOContratista(string start, string end) {
 
