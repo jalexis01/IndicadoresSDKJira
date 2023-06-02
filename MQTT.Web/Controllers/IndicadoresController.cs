@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using System;
 using DashboarJira.Model;
 using DashboarJira.Services;
-using DashboarJira.Controller;
 
 namespace MQTT.Web.Controllers
 {
     public class IndicadoresController : Controller
     {
-        public IActionResult Index()
+        public IActionResult Index(int max, string componente)
         {
             // Obtiene la identidad del usuario actual
             var identity = User.Identity as System.Security.Claims.ClaimsIdentity;
@@ -36,20 +35,14 @@ namespace MQTT.Web.Controllers
             string startDate = startDateTime.ToString("yyyy-MM-dd");
             string endDate = currentDateTime.ToString("yyyy-MM-dd");
 
-           //List<Ticket> tickets = getTickets(startDate, endDate, max, componente);
-
-            Indicadores indicadores = new Indicadores();
-            //Indicadores resultado = indicadores.indicadores("2023-01-01", "2023-06-01");            
-            
-            //dynamic resultados = indicadores.indicadores("2023-01-01", "2023-06-01");
-            return View();
-            //return View();
+            List<IndicadoresEntity> indicadores = getIndicadores(startDate, endDate);
+            return View(indicadores);
         }
 
 
         int start = 0;
 
-        public List<Ticket> getTickets(string startDate, string endDate, int max, string componente)
+        public List<IndicadoresEntity> getIndicadores(string startDate, string endDate)
         {
             try
             {
@@ -70,16 +63,15 @@ namespace MQTT.Web.Controllers
                     formattedStartDate = startDate;
                     formattedEndDate = endDate;
                 }
-                JiraAccess jiraAccess = new JiraAccess();
-                return jiraAccess.GetTikets(start, max, formattedStartDate, formattedEndDate, componente);
-                //Indicadores indicadores = new Indicadores();
-                //return indicadores.indicadores("2023-01-01", "2023-06-01");
+
+                Indicadores indicadores = new Indicadores();
+                return indicadores.indicadores("2023-01-05","2023-06-02");
             }
             catch (Exception ex)
             {
                 throw ex;
             }
 
-        }       
+        }
     }
 }

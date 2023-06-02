@@ -8,9 +8,8 @@
 function ServiceGetIndicadores() {
     var startDate = $('#dtpStart').val();
     var endDate = $('#dtpEnd').val();
-    var max = document.getElementById("maxSelect").value;
-    var componente = $('#componente').val();
-    console.log("idComponente: " + componente);
+    console.log("Fecha inicial: " + startDate);
+    console.log("Fecha final: " + endDate);
 
     Swal.fire({
         title: 'Cargando indicadores...',
@@ -23,19 +22,19 @@ function ServiceGetIndicadores() {
     });
     $.ajax({
         type: "GET",
-        url: "/Tickets/GetTickets",
-        data: { startDate: startDate, endDate: endDate, max: max, componente: componente },
+        url: "/Indicadores/GetIndicadores",
+        data: { startDate: startDate, endDate: endDate},
         success: function (response) {
             Swal.close();
             var tbody = $('#table tbody');
             tbody.empty();
 
-            $.each(response, function (index, ticket) {
+            $.each(response, function (index, indicador) {
                 var row = $('<tr>');
-                console.log(ticket.id_ticket)
-                row.append($('<td>').text(ticket.id_ticket));
-                row.append($('<td>').text(ticket.fecha_apertura));
-                
+                console.log(indicador.nombre)
+                row.append($('<td>').text(indicador.nombre));
+                row.append($('<td>').text(indicador.calculo));
+                row.append($('<td>').text(indicador.descripcion));                
 
                 tbody.append(row);
             });
