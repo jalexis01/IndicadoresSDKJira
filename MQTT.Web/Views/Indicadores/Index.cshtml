@@ -11,10 +11,6 @@
 <div class="header-view">
     <h1 class="text-2xl font-bold dark:text-white title-view-text">@ViewBag.Title</h1>
 </div>
-<div>
-    <h1>Indicadores</h1>
-<p>Valor: @Model.ToString()</p>
-</div>
 
 <div class="form-container">
 
@@ -50,12 +46,10 @@
          <div>
         <span class="e-input-group e-control-wrapper  e-ddl e-lib e-keyboard" tabindex="-1" aria-disabled="true" aria-owns="searchParam_options" role="listbox" aria-haspopup="true" aria-expanded="false" aria-activedescendant="null" aria-live="polite" aria-labelledby="searchParam_hidden" style="width: 100%;"><select aria-hidden="true" tabindex="-1" class="e-ddl-hidden" name="searchParam" id="searchParam_hidden" required=""></select><input type="text" id="searchParam" required="" class="e-control e-dropdownlist e-lib e-input e-disabled" role="textbox" readonly="" placeholder="Seleccione un campo" aria-placeholder="Seleccione un campo" disabled="disabled" aria-disabled="true" style="" tabindex="-1"><span class="e-input-group-icon e-ddl-icon e-search-icon"></span></span>
     </div>
-    </div> 
-    
-   
+    </div>   
     
     <div class="inputs-container">
-        <button onclick="ServiceGetTickets()" type="button" id="button-primary"
+        <button onclick="ServiceGetIndicadores()" type="button" id="button-primary"
                 class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
             Buscar
         </button>
@@ -63,24 +57,23 @@
 </div>
 
 <div class="container-grid">
-    
-
     <table id="table" class="styled-table">
     <thead>
         <tr>
-            <th style="width: auto">Id indicador</th>
             <th>Indicador</th>
-            <th>Cantidad</th>            
+            <th>Valor</th>
+            <th>Descripción</th>
         </tr>
     </thead>
     <tbody>
-        <tr>                
-                <td>A</td>
-                <td>B</td>
-                <td>C</td>
-            </tr>
+        <tr>
+            <td>IAIO</td>
+            <td>90</td>
+            <td></td>
+        </tr>
     </table>
 </div>
+
 <script type="text/javascript">
     var columnsSearch = @(Html.Raw(ViewBag.columnsSearch));
     var columnsToHide = @(Html.Raw(ViewBag.columnsToHide));

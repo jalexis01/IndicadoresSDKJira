@@ -85,7 +85,6 @@ namespace MQTT.Web.Controllers
             }
             catch (Exception ex)
             {
-                // Manejar el error de alguna forma si lo deseas
                 throw ex;
             }
         }

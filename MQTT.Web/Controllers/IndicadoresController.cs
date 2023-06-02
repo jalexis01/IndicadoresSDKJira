@@ -9,10 +9,41 @@ namespace MQTT.Web.Controllers
 {
     public class IndicadoresController : Controller
     {
-        public IActionResult Index(int max, string componente)
+        public IActionResult Index()
         {
-            Indicadores indicadores = ObtenerIndicadores(); // Llama al método que obtiene los indicadores
-            return View(indicadores);
+            // Obtiene la identidad del usuario actual
+            var identity = User.Identity as System.Security.Claims.ClaimsIdentity;
+
+            // Verifica si el usuario tiene el rol de "Administrador"
+            if (identity != null && identity.HasClaim(System.Security.Claims.ClaimTypes.Name, "admin@admin.com"))
+            {
+                ViewBag.Menu = "admin";
+            }
+            else
+            {
+                ViewBag.Menu = "user";
+            }
+
+            //return View();
+
+            // Obtener la fecha actual
+            DateTime currentDateTime = DateTime.Now;
+
+            // Restar un mes a la fecha actual
+            DateTime startDateTime = currentDateTime.AddMonths(-1);
+
+            // Formatear las fechas en el formato deseado
+            string startDate = startDateTime.ToString("yyyy-MM-dd");
+            string endDate = currentDateTime.ToString("yyyy-MM-dd");
+
+           //List<Ticket> tickets = getTickets(startDate, endDate, max, componente);
+
+            Indicadores indicadores = new Indicadores();
+            //Indicadores resultado = indicadores.indicadores("2023-01-01", "2023-06-01");            
+            
+            //dynamic resultados = indicadores.indicadores("2023-01-01", "2023-06-01");
+            return View();
+            //return View();
         }
 
 
@@ -41,36 +72,14 @@ namespace MQTT.Web.Controllers
                 }
                 JiraAccess jiraAccess = new JiraAccess();
                 return jiraAccess.GetTikets(start, max, formattedStartDate, formattedEndDate, componente);
-                Indicadores indicadores = new Indicadores();
-                return indicadores.indicadores("2023-01-01", "2023-06-01");
+                //Indicadores indicadores = new Indicadores();
+                //return indicadores.indicadores("2023-01-01", "2023-06-01");
             }
             catch (Exception ex)
             {
                 throw ex;
             }
 
-        }
-
-        public Indicadores ObtenerIndicadores()
-        {
-            Indicadores indicadores = new Indicadores();
-            return indicadores.indicadores("2023-01-01", "2023-06-01");
-        }
-
-        public IActionResult consultarIndicadores()
-        {
-            try
-            {
-                Indicadores indicadores = new Indicadores();
-                Console.WriteLine(indicadores.indicadores("2023-01-01", "2023-06-01"));
-
-                return Ok(indicadores);
-            }
-            catch (Exception ex)
-            {
-                // Manejar el error de alguna forma si lo deseas
-                throw ex;
-            }
-        }
+        }       
     }
 }
