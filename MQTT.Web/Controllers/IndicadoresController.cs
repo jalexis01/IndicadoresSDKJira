@@ -65,7 +65,7 @@ namespace MQTT.Web.Controllers
                 }
 
                 Indicadores indicadores = new Indicadores();
-                return indicadores.indicadores("2023-01-05","2023-06-02");
+                return indicadores.indicadores(formattedStartDate, formattedEndDate);
             }
             catch (Exception ex)
             {

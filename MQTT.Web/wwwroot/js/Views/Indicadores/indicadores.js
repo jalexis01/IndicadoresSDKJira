@@ -31,10 +31,11 @@ function ServiceGetIndicadores() {
 
             $.each(response, function (index, indicador) {
                 var row = $('<tr>');
-                console.log(indicador.nombre)
+                console.log('Nombre indicador: '+ indicador.nombre)
+                console.log('Valor: ' + indicador.calculo)
                 row.append($('<td>').text(indicador.nombre));
                 row.append($('<td>').text(indicador.calculo));
-                row.append($('<td>').text(indicador.descripcion));                
+                //row.append($('<td>').text(indicador.descripcion));                
 
                 tbody.append(row);
             });
