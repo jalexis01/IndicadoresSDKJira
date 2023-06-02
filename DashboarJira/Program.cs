@@ -36,3 +36,4 @@ JiraAccess jira = new JiraAccess();
 
 Indicadores indicadores= new Indicadores();
 Console.WriteLine(indicadores.indicadores("2023-01-01", "2023-06-01"));
+

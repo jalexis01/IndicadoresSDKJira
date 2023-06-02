@@ -1,12 +1,5 @@
 ﻿using Atlassian.Jira;
 using DashboarJira.Model;
-using RestSharp;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Mail;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DashboarJira.Services
 {
