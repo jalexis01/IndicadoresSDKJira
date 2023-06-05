@@ -25,13 +25,13 @@ namespace DashboarJira.Model
             double RANOGeneral;
             if (TicketTAN.Count != 0)
             {
-                RANOGeneral = ((double)TicketTCN.Count / (double)TicketTAN.Count) * 100;
+                RANOGeneral = ((double)TicketTAN.Count / (double)TicketTCN.Count) * 100;
             }
             else
             {
                 RANOGeneral = 100;
             }
-            return Math.Round(RANOGeneral, 1);
+            return RANOGeneral;
         }
         public override string ToString()
         {

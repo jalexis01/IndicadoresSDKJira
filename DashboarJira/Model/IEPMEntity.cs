@@ -27,7 +27,7 @@ namespace DashboarJira.Model
 
             if (ticketsAME.Count > 0)
             {
-                iepm = ((double)ticketsAME.Count-(double)ticketsANP.Count)/(double)ticketsAME.Count;
+                iepm = (((double)ticketsAME.Count-(double)ticketsANP.Count)/(double)ticketsAME.Count)*100.0;
 
             }
             else

@@ -43,13 +43,13 @@ namespace DashboarJira.Controller
         public List<List<Ticket>> AIO_POR_PUERTA(List<Ticket> Ticket)
         {
             List<List<Ticket>> gruposPuertasAIO = new List<List<Ticket>>();
-            List<Ticket> auxiliar = new List<Ticket>();
+            
             var ticketANIOPuertaGroup = Ticket.GroupBy(ticket => ticket.id_puerta);
 
 
             foreach (var group in ticketANIOPuertaGroup)
             {
-
+                List<Ticket> auxiliar = new List<Ticket>();
                 foreach (var ticket in group)
                 {
                     auxiliar.Add(ticket);

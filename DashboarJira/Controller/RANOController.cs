@@ -11,9 +11,9 @@ namespace DashboarJira.Controller
 {
     public class RAIOController
     {
-        const string JQL_GENERAL = "created >= {0} AND created <= {1} AND issuetype = 'Solicitud de Mantenimiento' AND 'Clase de fallo' = AIO ORDER BY key DESC, 'Time to resolution' ASC";
-        const string JQL_CONTRATISTA = "created >= {0} AND created <= {1} AND issuetype = 'Solicitud de Mantenimiento' AND 'Clase de fallo' = AIO AND 'Tipo de causa' = 'A cargo del contratista' ORDER BY key DESC, 'Time to resolution' ASC";
-        const string JQL_NO_CONTRATISTA = "created >= {0} AND created <= {1} AND issuetype = 'Solicitud de Mantenimiento' AND 'Clase de fallo' = AIO AND 'Tipo de causa' != 'A cargo del contratista' ORDER BY key DESC, 'Time to resolution' ASC";
+        const string JQL_GENERAL = "created >= {0} AND created <= {1} AND issuetype = 'Solicitud de Mantenimiento' AND 'Clase de fallo' = ANIO ORDER BY key DESC, 'Time to resolution' ASC";
+        const string JQL_CONTRATISTA = "created >= {0} AND created <= {1} AND issuetype = 'Solicitud de Mantenimiento' AND 'Clase de fallo' = ANIO AND 'Tipo de causa' = 'A cargo del contratista' ORDER BY key DESC, 'Time to resolution' ASC";
+        const string JQL_NO_CONTRATISTA = "created >= {0} AND created <= {1} AND issuetype = 'Solicitud de Mantenimiento' AND 'Clase de fallo' = ANIO AND 'Tipo de causa' != 'A cargo del contratista' ORDER BY key DESC, 'Time to resolution' ASC";
         public const int HORAS_MAXIMAS_A_TIEMPO = 6;
         JiraAccess jiraAccess;
         public RAIOController(JiraAccess jira) {

@@ -18,8 +18,9 @@ namespace DashboarJira.Controller
         private const double TOTAL_PUERTAS = 146.0;
         private const string COMPONENTE = "Puerta";
         JiraAccess jiraAccess;
-        public IRFController() {
-            jiraAccess = new JiraAccess();
+        public IRFController(JiraAccess jira)
+        {
+            jiraAccess = jira;
         }
         public IRFEntity IRFContratista(string start, string end) {
 
@@ -43,7 +44,7 @@ namespace DashboarJira.Controller
             return irf;
 
         }
-        public IRFEntity IRFOGeneral(string start, string end)
+        public IRFEntity IRFGeneral(string start, string end)
         {
 
             string jql = string.Format(JQL_GENERAL, start, end);
