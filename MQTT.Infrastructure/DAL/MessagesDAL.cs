@@ -386,15 +386,15 @@ namespace MQTT.Infrastructure.DAL
                     "HM.estadoEnvio, HM.estadoEnvioManatee, HM.fechaHoraEnvio, M.versionTrama, M.tipoTrama, M.tramaRetransmitida, HM.trama, M.usoBotonManual, " +
                     "M.estadoBotonManual, M.porcentajeCargaBaterias, M.ciclosApertura, M.horasServicio, M.tipoEnergizacion, M.velocidaMotor, M.fuerzaMotor, " +
                     "M.modoOperacion, M.codigoAlarma, M.codigoNivelAlarma, M.tiempoApertura, M.IdHeaderMessage, HM.IdMessageType, M.idRegistro, M.idOperador, M.Id " +
-                    "FROM [Operation].[tbMessages] M INNER JOIN [Operation].tbHeaderMessage HM ON M.IdHeaderMessage = HM.IdHeaderMessage WHERE ";
-                string where = $"M.fechaHoraLecturaDato BETWEEN '{dtInit}' AND '{dtEnd}' ";
+                    "FROM [Operation].[tbMessages] M INNER JOIN [Operation].tbHeaderMessage HM ON M.IdHeaderMessage = HM.IdHeaderMessage ";
+                string where = $" WHERE M.fechaHoraLecturaDato BETWEEN '{dtInit:yyyy-MM-dd}' AND '{dtEnd:yyyy-MM-dd}' ";
 
-                //if(messageField.Name != null && !string.IsNullOrEmpty(value)){
-                //    where += $"AND {messageField.Name} = {General.GetValueFromFields(messageField.DataType, value, _formateDate)}";
-                //}
+                if (dtInit == dtEnd)
+                {
+                    where = " ";
+                }
 
                 sentence += where;
-                sentence = sentence.Remove(sentence.Length - 1);
                 sentence += "ORDER BY M.fechaHoraLecturaDato DESC";
                 DataTable dt = new DataTable();
                 using (var DBContext = objContext.DBConnection())
@@ -420,6 +420,7 @@ namespace MQTT.Infrastructure.DAL
                 throw ex;
             }
         }
+
 
         public static DataTable GetLogMessageByIdHeader(General objContext, string idHeaderMessage)
         {
