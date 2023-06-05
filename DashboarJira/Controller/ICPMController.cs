@@ -16,9 +16,9 @@ namespace DashboarJira.Controller
         const string JQL_ITTS = "created >= {0} AND created <= {1} AND issuetype = 'Solicitud de Mantenimiento' AND 'Tipo de servicio' = 'Mantenimiento Preventivo' AND 'Tipo de componente' = 'Componente ITS' AND 'Tipo de servicio' = 'Mantenimiento Preventivo' ORDER BY key DESC, 'Time to resolution' ASC";
         const string JQL_RFID = "created >= {0} AND created <= {1} AND issuetype = 'Solicitud de Mantenimiento' AND 'Tipo de servicio' = 'Mantenimiento Preventivo' AND 'Tipo de componente' = 'Componente RFID' AND 'Tipo de servicio' = 'Mantenimiento Preventivo' ORDER BY key DESC, 'Time to resolution' ASC";
         JiraAccess jiraAccess;
-        public ICPMController()
+        public ICPMController(JiraAccess jira)
         {
-            jiraAccess = new JiraAccess();
+            jiraAccess = jira;
         }
         
         public ICPMEntity ICPM_MTTO(string start, string end) {

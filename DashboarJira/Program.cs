@@ -35,4 +35,12 @@ JiraAccess jira = new JiraAccess();
 //Console.WriteLine("RANO no contratista" + rano.RAIONoContratista("2023-01-01", "2023-06-01").CacularIndicadorRAIO());
 
 Indicadores indicadores= new Indicadores();
-Console.WriteLine(indicadores.indicadores("2023-01-01", "2023-06-01"));
+foreach (IndicadoresEntity indicador in indicadores.indicadores("2023-01-01", "2023-06-01"))
+{
+    Console.WriteLine($"Nombre: {indicador.nombre}");
+    Console.WriteLine($"Cálculo: {indicador.calculo}");
+    Console.WriteLine($"Descripción: {indicador.descripcion}");
+    Console.WriteLine();
+}
+Console.WriteLine();
+
