@@ -4,11 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DashboarJira.Services
+namespace DashboarJira.Model
 {
-    public class IndicadoresDesdePI
+    internal class Evento
     {
-
-        public string ID { get; set; }
     }
 }
