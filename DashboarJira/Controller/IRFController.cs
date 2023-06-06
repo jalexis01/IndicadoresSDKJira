@@ -57,13 +57,9 @@ namespace DashboarJira.Controller
 
         public List<ReporteFallasPorPuerta> ContarFallasPorPuerta(List<Ticket> tickets)
         {
+            
             // Separar los tickets por puerta
             var ticketsPorPuerta = tickets
-                .Where(ticket => ticket.estado_ticket != null && ticket.estado_ticket.Equals(ESTADO)
-                && ticket.id_componente != null && ticket.id_componente.Equals(COMPONENTE)&& ticket.codigo_falla!=null &&
-                    ticket.id_componente.Equals(COMPONENTE) && ticket.estado_ticket != null && ticket.estado_ticket.Equals(ESTADO) 
-                    && ticket.nivel_falla!=null
-                )
                 .GroupBy(ticket => ticket.id_puerta);
 
             // Contar las fallas repetidas por cada una de las fallas en cada puerta cerrada
