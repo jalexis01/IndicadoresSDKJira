@@ -21,6 +21,7 @@ namespace DashboarJira.Services
             IEPMController iepm = new IEPMController(jira);
             RAIOController raio = new RAIOController(jira);
             RANOController rano = new RANOController(jira);
+            IRFController IRF = new IRFController(jira);
             IndicadoresEntity indicadorAux = new IndicadoresEntity();
 
             // Realizar operaciones y guardar resultados en un objeto
@@ -28,7 +29,7 @@ namespace DashboarJira.Services
 
             //IAIO GENERAL
             IAIOEntity IAIOGeneral = iaio.IAIOGeneral(fechaInicio, fechaFin);
-            
+
             indicadorAux.nombre = "IAIO GENERAL";
             indicadorAux.calculo = IAIOGeneral.CalcularIndicadorIAIO();
             indicadorAux.descripcion = IAIOGeneral.ToString();
@@ -36,7 +37,7 @@ namespace DashboarJira.Services
 
             //IAIO CONTRATISTA
             indicadorAux = new IndicadoresEntity();
-            IAIOEntity IAIOContratista = iaio.IAIOGeneral(fechaInicio, fechaFin);
+            IAIOEntity IAIOContratista = iaio.IAIOContratista(fechaInicio, fechaFin);
             indicadorAux.nombre = "IAIO CONTRATISTA";
             indicadorAux.calculo = IAIOContratista.CalcularIndicadorIAIO();
             indicadorAux.descripcion = IAIOContratista.ToString();
@@ -44,8 +45,8 @@ namespace DashboarJira.Services
 
             //IAIO NO CONTRATISTA
             indicadorAux = new IndicadoresEntity();
-            IAIOEntity IAIONoContratista = iaio.IAIOGeneral(fechaInicio, fechaFin);
-            indicadorAux.nombre = "IAIO CONTRATISTA";
+            IAIOEntity IAIONoContratista = iaio.IAIONoContratista(fechaInicio, fechaFin);
+            indicadorAux.nombre = "IAIO NO CONTRATISTA";
             indicadorAux.calculo = IAIOContratista.CalcularIndicadorIAIO();
             indicadorAux.descripcion = IAIOContratista.ToString();
             indicadores.Add(indicadorAux);
@@ -177,9 +178,32 @@ namespace DashboarJira.Services
             indicadorAux.calculo = RANO_NO_CONTRATISTA.CalcularIndicadorRANO();
             indicadorAux.descripcion = RANO_NO_CONTRATISTA.ToString();
             indicadores.Add(indicadorAux);
-            
 
-            
+            //IRF GENERAL
+            indicadorAux = new IndicadoresEntity();
+            IRFEntity IRF_GENERAL = IRF.IRFGeneral(fechaInicio, fechaFin);
+            indicadorAux.nombre = "IRF GENERAL";
+            indicadorAux.calculo = IRF_GENERAL.calculoIRF();
+            indicadorAux.descripcion = IRF_GENERAL.ToString();
+            indicadores.Add(indicadorAux);
+
+            //IRF CONTRATISTA
+            indicadorAux = new IndicadoresEntity();
+            IRFEntity IRF_CONTRATISTA = IRF.IRFContratista(fechaInicio, fechaFin);
+            indicadorAux.nombre = "IRF CONTRATISTA";
+            indicadorAux.calculo = IRF_CONTRATISTA.calculoIRF();
+            indicadorAux.descripcion = IRF_CONTRATISTA.ToString();
+            indicadores.Add(indicadorAux);
+
+            //IRF NO CONTRATISTA
+            indicadorAux = new IndicadoresEntity();
+            IRFEntity IRF_NO_CONTRATISTA = IRF.IRFNoContratista(fechaInicio, fechaFin);
+            indicadorAux.nombre = "IRF NO CONTRATISTA";
+            indicadorAux.calculo = IRF_NO_CONTRATISTA.calculoIRF();
+            indicadorAux.descripcion = IRF_NO_CONTRATISTA.ToString();
+            indicadores.Add(indicadorAux);
+
+
             return indicadores;
 
 
