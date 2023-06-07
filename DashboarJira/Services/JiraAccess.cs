@@ -124,7 +124,6 @@ namespace DashboarJira.Services
 
             foreach (var issue in issues.Result)
             {
-                //Console.WriteLine(issue.Key);
 
                 result.Add(converIssueInTicket(issue));
             }

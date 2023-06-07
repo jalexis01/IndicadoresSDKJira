@@ -71,7 +71,7 @@ namespace MQTT.Web.Controllers
                 List<FilterViewModel> fields = new List<FilterViewModel>();
 
                 foreach (var item in _columnsSearch)
-                {
+                    {
                     var data = result.AsEnumerable()
                         .Select(f => new { value = f.Field<string>(item.Name) }).ToList();
 

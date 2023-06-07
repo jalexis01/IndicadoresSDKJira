@@ -20,7 +20,7 @@ namespace DashboarJiraTest
             // Arrange
             var ticketTAP = new List<Ticket>();
             var ticketAPE = new List<Ticket> { new Ticket(), new Ticket() };
-            var entity = new ICPMEntity(ticketTAP, ticketAPE);
+            var entity = new IEPMEntity(ticketTAP, ticketAPE);
 
             // Act
             var result = entity.CalcularIndicadorIEPM();
@@ -35,7 +35,7 @@ namespace DashboarJiraTest
             // Arrange
             var ticketTAP = new List<Ticket> { new Ticket(), new Ticket() };
             var ticketAPE = new List<Ticket> { new Ticket(), new Ticket() };
-            var entity = new ICPMEntity(ticketTAP, ticketAPE);
+            var entity = new IEPMEntity(ticketTAP, ticketAPE);
 
             // Act
             var result = entity.CalcularIndicadorIEPM();

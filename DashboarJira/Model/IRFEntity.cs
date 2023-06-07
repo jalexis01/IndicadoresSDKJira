@@ -62,7 +62,7 @@ namespace DashboarJira.Model
                 Console.WriteLine("Sumatoria dentro del for: " + calculo);
             }
             Console.WriteLine("Total Puertas: " + total_puertas + "\nPuertas IRF: " + totalPuertasIRF + "\nSumatoria: " + sumatoria);
-            double indicadorIRF = (((total_puertas - totalPuertasIRF) + sumatoria) / total_puertas) * 100;
+            double indicadorIRF = (((total_puertas - totalPuertasIRF) + sumatoria) / total_puertas);
             return indicadorIRF;
         }
         public void pintar()
