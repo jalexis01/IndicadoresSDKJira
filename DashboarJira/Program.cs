@@ -5,6 +5,16 @@ using DashboarJira.Services;
 using MQTT.Infrastructure.DAL;
 
 JiraAccess jira = new JiraAccess();
+DbConnector dbConnector = new DbConnector();
+
+// Retrieve messages as JSON
+//string messagesJson = dbConnector.GetMessagesAsJson();
+//Console.WriteLine(messagesJson);
+
+// Retrieve messages as string representation
+string messagesString = dbConnector.GetMessagesAsString();
+Console.WriteLine(messagesString);
+
 //jira.getIssueJira("PRUEBAS-117");
 //Console.WriteLine("");
 

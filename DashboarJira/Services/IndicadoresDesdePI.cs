@@ -8,7 +8,7 @@ namespace DashboarJira.Services
     public class IndicadoresDesdePI
     {
 
-        public dymanica SearchMessages(General objContext, DateTime dtInit, DateTime dtEnd)
+        public void SearchMessages(General objContext, DateTime dtInit, DateTime dtEnd)
         {
             try
             {
@@ -55,7 +55,6 @@ namespace DashboarJira.Services
                     }
                 }
 
-                return dt;
             }
             catch (Exception ex)
             {

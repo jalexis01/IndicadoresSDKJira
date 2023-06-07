@@ -11,10 +11,6 @@ namespace DashboarJira.Controller
 {
     internal class EventosController
     {
-        public MessagesDAL Eventos(string start, string end)
-        {
 
-
-        }
     }
 }
