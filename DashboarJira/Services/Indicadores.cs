@@ -47,8 +47,8 @@ namespace DashboarJira.Services
             indicadorAux = new IndicadoresEntity();
             IAIOEntity IAIONoContratista = iaio.IAIONoContratista(fechaInicio, fechaFin);
             indicadorAux.nombre = "IAIO NO CONTRATISTA";
-            indicadorAux.calculo = IAIOContratista.CalcularIndicadorIAIO();
-            indicadorAux.descripcion = IAIOContratista.ToString();
+            indicadorAux.calculo = IAIONoContratista.CalcularIndicadorIAIO();
+            indicadorAux.descripcion = IAIONoContratista.ToString();
             indicadores.Add(indicadorAux);
 
             //IANO GENERAL

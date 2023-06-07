@@ -33,8 +33,8 @@ JiraAccess jira = new JiraAccess();
 //Console.WriteLine("RANO " + rano.RANOGeneral("2023-05-01", "2023-06-01").CalcularIndicadorRANO());
 //Console.WriteLine("RANO contratista " + rano.RAIOContratista("2023-01-01", "2023-06-01").CacularIndicadorRAIO());
 //Console.WriteLine("RANO no contratista" + rano.RAIONoContratista("2023-01-01", "2023-06-01").CacularIndicadorRAIO());
-IRFController IRF = new IRFController(jira);
-Console.WriteLine("IRF " + IRF.IRFGeneral("2023-05-01", "2023-06-01").calculoIRF());
+//IRFController IRF = new IRFController(jira);
+//Console.WriteLine("IRF " + IRF.IRFGeneral("2023-05-01", "2023-06-01").calculoIRF());
 //Indicadores indicadores= new Indicadores();
 //foreach (IndicadoresEntity indicador in indicadores.indicadores("2023-06-01", "2023-06-02"))
 //{
@@ -44,4 +44,5 @@ Console.WriteLine("IRF " + IRF.IRFGeneral("2023-05-01", "2023-06-01").calculoIRF
 //    Console.WriteLine();
 //}
 //Console.WriteLine();
+
 
