@@ -1,11 +1,6 @@
 ﻿using Microsoft.Data.SqlClient;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DashboarJira.Services
 {
@@ -50,6 +45,43 @@ namespace DashboarJira.Services
             return messagesTable;
         }
 
+        public DataTable GetMessagesIOR()
+        {
+            DataTable messagesTable = new DataTable();
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                try
+                {
+                    connection.Open();
+
+                    // SQL query to retrieve the tb.Messages table
+                    string query = "SELECT [Id]\r\n, [idEstacion]\r\n, [codigoEvento]\r\n FROM [Operation].[tbMessages]\r\n WHERE codigoEvento = 'EVP8' ANd fechaHoraEnvioDato BETWEEN '2023-01-01' AND '2023-02-01' ORDER BY fechaHoraEnvioDato ASC";
+
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        using (SqlDataAdapter adapter = new SqlDataAdapter(command))
+                        {
+                            // Fill the DataTable with the data from the query
+                            adapter.Fill(messagesTable);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("An error occurred: " + ex.Message);
+                }
+            }
+
+            return messagesTable;
+        }
+
+
+
+
+
+
+
         public string GetMessagesAsJson()
         {
             DataTable messagesTable = GetMessages();
@@ -80,4 +112,10 @@ namespace DashboarJira.Services
             return tableString;
         }
     }
+
+
+
+
+
+
 }

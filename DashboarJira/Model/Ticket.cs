@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DashboarJira.Model
+﻿namespace DashboarJira.Model
 {
     public class Ticket
     {
@@ -35,4 +29,3 @@ namespace DashboarJira.Model
 
     }
 }
- 

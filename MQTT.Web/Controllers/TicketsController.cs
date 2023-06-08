@@ -1,9 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System;
-
-using DashboarJira.Model;
+﻿using DashboarJira.Model;
 using DashboarJira.Services;
+using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
 
 namespace MQTT.Web.Controllers
 {
@@ -42,7 +41,7 @@ namespace MQTT.Web.Controllers
 
 
         int start = 0;
-                
+
         public List<Ticket> getTickets(string startDate, string endDate, int max, string componente)
         {
             try
@@ -50,7 +49,7 @@ namespace MQTT.Web.Controllers
                 string formattedStartDate;
                 string formattedEndDate;
 
-                if(startDate!=null|| endDate != null)
+                if (startDate != null || endDate != null)
                 {
                     //max = 10;
                     DateTime startDateTime = DateTime.Parse(startDate);
@@ -88,6 +87,6 @@ namespace MQTT.Web.Controllers
                 throw ex;
             }
         }
-    }   
-    
+    }
+
 }

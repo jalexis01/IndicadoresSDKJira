@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using MQTT.Infrastructure.DAL;
 using MQTT.Infrastructure.Models.DTO;
 using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
 
 namespace MQTT.Web.Controllers
 {
@@ -20,7 +20,7 @@ namespace MQTT.Web.Controllers
         public IActionResult Index()
         {
             ViewBag.ElementTypes = JsonConvert.SerializeObject(ElementsDAL.GetElementTypes(DBAccess));
-			return View();
+            return View();
         }
         public IActionResult GetElements()
         {
@@ -54,16 +54,16 @@ namespace MQTT.Web.Controllers
             }
         }
 
-        private void GetDataElementViewModel(List<ElementDTO> dataElements, List<ElementTypeDTO> dataElementTypes) 
+        private void GetDataElementViewModel(List<ElementDTO> dataElements, List<ElementTypeDTO> dataElementTypes)
         {
             try
             {
 
-				foreach (var item in dataElements)
-				{
+                foreach (var item in dataElements)
+                {
 
-				}
-			}
+                }
+            }
             catch (Exception ex)
             {
                 throw ex;

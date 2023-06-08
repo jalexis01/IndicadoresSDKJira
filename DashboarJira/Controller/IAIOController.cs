@@ -1,11 +1,5 @@
 ﻿using DashboarJira.Model;
 using DashboarJira.Services;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DashboarJira.Controller
 {
@@ -20,11 +14,12 @@ namespace DashboarJira.Controller
         {
             jiraAccess = jira;
         }
-        
-        public IAIOEntity IAIOGeneral(string start, string end) {
+
+        public IAIOEntity IAIOGeneral(string start, string end)
+        {
             string jql = string.Format(JQL_GENERAL, start, end);
             List<Ticket> total_tickets = jiraAccess.GetTiketsIndicadores(jql);
-            return new IAIOEntity(AIO_POR_PUERTA(total_tickets),TOTAL_PUERTAS);
+            return new IAIOEntity(AIO_POR_PUERTA(total_tickets), TOTAL_PUERTAS);
         }
         public IAIOEntity IAIOContratista(string start, string end)
         {
@@ -43,7 +38,7 @@ namespace DashboarJira.Controller
         public List<List<Ticket>> AIO_POR_PUERTA(List<Ticket> Ticket)
         {
             List<List<Ticket>> gruposPuertasAIO = new List<List<Ticket>>();
-            
+
             var ticketANIOPuertaGroup = Ticket.GroupBy(ticket => ticket.id_puerta);
 
 

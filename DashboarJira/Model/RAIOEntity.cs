@@ -1,9 +1,4 @@
 ﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DashboarJira.Model
 {
@@ -15,7 +10,7 @@ namespace DashboarJira.Model
         public List<Ticket> TicketTCI { get; set; }
         public List<Ticket> TicketTAI { get; set; }
 
-        public RAIOEntity( List<Ticket> TicketTCI, List<Ticket> TicketTAI)
+        public RAIOEntity(List<Ticket> TicketTCI, List<Ticket> TicketTAI)
         {
             this.TicketTCI = TicketTCI;
             this.TicketTAI = TicketTAI;
@@ -28,14 +23,14 @@ namespace DashboarJira.Model
             double RAIOGeneral = 0.0;
             if (TicketTAI.Count != 0)
             {
-                RAIOGeneral = ((double)TicketTCI.Count / (double)TicketTAI.Count)*100 ;
+                RAIOGeneral = ((double)TicketTCI.Count / (double)TicketTAI.Count) * 100;
 
             }
             else
             {
                 RAIOGeneral = 100;
             }
-            return Math.Round(RAIOGeneral,1);
+            return Math.Round(RAIOGeneral, 1);
         }
         public override string ToString()
         {
@@ -50,7 +45,7 @@ namespace DashboarJira.Model
                 TicketTCI = TicketTCI,
                 Espacio = "ESPACIO#######################",
                 TicketTAI = TicketTAI,
-                
+
             });
         }
     }

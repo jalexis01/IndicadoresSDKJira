@@ -1,13 +1,11 @@
-﻿using MQTTnet;
+﻿using MQTT.Subscriber.BL;
+using MQTTnet;
 using MQTTnet.Client;
 using MQTTnet.Client.Options;
 using System;
 using System.Text;
-using System.Threading.Tasks;
-
-using Newtonsoft.Json;
 using System.Threading;
-using MQTT.Subscriber.BL;
+using System.Threading.Tasks;
 
 namespace MQTT.Subscriber
 {
