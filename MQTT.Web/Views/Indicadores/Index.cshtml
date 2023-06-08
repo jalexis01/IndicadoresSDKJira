@@ -25,27 +25,6 @@
             <input id="dtpEnd" required>
         </div>
     </div>
-    @*<div class="inputs-container">
-        <label class="TextComponente">Indicador</label>
-        <div class="wrapperFI">
-            <select id="maxSelect">
-                <option value="IAIO">IAIO</option>
-                <option value="IANO">IANO</option>
-                <option value="IRF">IRF</option>
-                <option value="RAIO">RAIO</option>
-                <option value="RANO">RANO</option>
-                <option value="ICPM">ICPM</option>
-                <option value="IEPM">IEPM</option>
-            </select>
-        </div>
-    </div>  
-
-    <div class="inputs-container">
-        <label class="TextComponente">Indicador</label>
-         <div>
-        <span class="e-input-group e-control-wrapper  e-ddl e-lib e-keyboard" tabindex="-1" aria-disabled="true" aria-owns="searchParam_options" role="listbox" aria-haspopup="true" aria-expanded="false" aria-activedescendant="null" aria-live="polite" aria-labelledby="searchParam_hidden" style="width: 100%;"><select aria-hidden="true" tabindex="-1" class="e-ddl-hidden" name="searchParam" id="searchParam_hidden" required=""></select><input type="text" id="searchParam" required="" class="e-control e-dropdownlist e-lib e-input e-disabled" role="textbox" readonly="" placeholder="Seleccione un campo" aria-placeholder="Seleccione un campo" disabled="disabled" aria-disabled="true" style="" tabindex="-1"><span class="e-input-group-icon e-ddl-icon e-search-icon"></span></span>
-    </div>
-    </div>  *@ 
     
     <div class="inputs-container">
         <button onclick="ServiceGetIndicadores()" type="button" id="button-primary"
@@ -70,11 +49,7 @@
             <tr>
                 <td>@indicador.nombre</td>
                 <td>@indicador.calculo</td>
-<<<<<<< Updated upstream
-                @*<td>@indicador.descripcion</td>*@
-=======
                 <td></td>
->>>>>>> Stashed changes
             </tr>
         }
     </table>
