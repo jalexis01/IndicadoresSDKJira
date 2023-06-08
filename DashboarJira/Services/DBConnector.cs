@@ -60,6 +60,7 @@ namespace DashboarJira.Services
             return json;
         }
 
+
         public string GetMessagesAsString()
         {
             DataTable messagesTable = GetMessages();
