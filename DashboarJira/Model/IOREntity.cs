@@ -24,7 +24,6 @@ namespace DashboarJira.Model
             double resultado = (double) CEI/ (double) CEF;
             return resultado;
         }
-        override
         public JsonObject convertToJson() {
             JsonObject msg = new JsonObject();
             msg.Add("CEI", CEI);
