@@ -45,7 +45,7 @@ namespace DashboarJira.Services
             return messagesTable;
         }
 
-        public DataTable GetMessagesIOR()
+        public DataTable GetMessagesIORevp8()
         {
             DataTable messagesTable = new DataTable();
 
@@ -75,6 +75,36 @@ namespace DashboarJira.Services
 
             return messagesTable;
         }
+        public DataTable GetMessagesIORevp9()
+        {
+            DataTable messagesTable = new DataTable();
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                try
+                {
+                    connection.Open();
+
+                    // SQL query to retrieve the tb.Messages table
+                    string query = "SELECT [Id]\r\n, [idEstacion]\r\n, [codigoEvento]\r\n FROM [Operation].[tbMessages]\r\n WHERE codigoEvento = 'EVP9' ANd fechaHoraEnvioDato BETWEEN '2023-01-01' AND '2023-02-01' ORDER BY fechaHoraEnvioDato ASC";
+
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        using (SqlDataAdapter adapter = new SqlDataAdapter(command))
+                        {
+                            // Fill the DataTable with the data from the query
+                            adapter.Fill(messagesTable);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("An error occurred: " + ex.Message);
+                }
+            }
+
+            return messagesTable;
+        }
 
 
 
@@ -84,10 +114,10 @@ namespace DashboarJira.Services
 
         public string GetMessagesAsJson()
         {
-            DataTable messagesTable = GetMessages();
-
+            
+            DataTable messagesTableEVP8 = GetMessagesIORevp8();
             // Convert DataTable to JSON
-            string json = JsonConvert.SerializeObject(messagesTable, Formatting.Indented);
+            string json = JsonConvert.SerializeObject(messagesTableEVP8, Formatting.Indented);
 
             return json;
         }
