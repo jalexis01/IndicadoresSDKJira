@@ -1,19 +1,12 @@
 ﻿using DashboarJira.Controller;
 using DashboarJira.Model;
-using MQTT.Infrastructure.DAL;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Json.Nodes;
-using System.Threading.Tasks;
 
 namespace DashboarJira.Services
 {
     public class Indicadores
     {
-        public List<IndicadoresEntity> indicadores(string fechaInicio, string fechaFin) {
+        public List<IndicadoresEntity> indicadores(string fechaInicio, string fechaFin)
+        {
             JiraAccess jira = new JiraAccess();
             IAIOController iaio = new IAIOController(jira);
             IANOController iano = new IANOController(jira);
@@ -179,6 +172,7 @@ namespace DashboarJira.Services
             indicadorAux.descripcion = RANO_NO_CONTRATISTA.ToString();
             indicadores.Add(indicadorAux);
 
+<<<<<<< Updated upstream
             //IRF GENERAL
             indicadorAux = new IndicadoresEntity();
             IRFEntity IRF_GENERAL = IRF.IRFGeneral(fechaInicio, fechaFin);
@@ -204,6 +198,10 @@ namespace DashboarJira.Services
             indicadores.Add(indicadorAux);
 
 
+=======
+            Console.WriteLine("indicadores. " + indicadores);
+            
+>>>>>>> Stashed changes
             return indicadores;
 
 

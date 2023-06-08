@@ -1,17 +1,14 @@
-using System;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using MQTT.Infrastructure.DAL;
-using System.IO;
-using Newtonsoft.Json.Linq;
-using System.Net;
-using MQTT.FunctionApp.Models;
 using MQTT.Infrastructure.Models.Enums;
+using Newtonsoft.Json.Linq;
+using System;
+using System.IO;
+using System.Threading.Tasks;
 
 namespace MQTT.FunctionApp
 {
@@ -39,7 +36,7 @@ namespace MQTT.FunctionApp
                 string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
 
                 log.LogInformation($"{guid}=== Log request in...");
-                logRequestIn.DataQuery = string.IsNullOrEmpty(req.QueryString.ToString())? null: req.QueryString.ToString();
+                logRequestIn.DataQuery = string.IsNullOrEmpty(req.QueryString.ToString()) ? null : req.QueryString.ToString();
                 logRequestIn.DataBody = string.IsNullOrEmpty(requestBody) ? null : requestBody;
                 LogRequestInDAL.Add(DBAccess, ref logRequestIn);
                 log.LogInformation($"{guid}=== IdRequestIn: {logRequestIn.Id}");
@@ -63,13 +60,15 @@ namespace MQTT.FunctionApp
                     msgError = $"Element *{door}* not found in database.";
                     throw new Exception(msgError);
                 }
-                var dataIssue = new 
-                { 
-                    fields =new {
+                var dataIssue = new
+                {
+                    fields = new
+                    {
                         customfield_10059 = dataElement.Value,
-                        customfield_10088 = new { 
-                            value= dataElement.NameElementType,
-                        } ,
+                        customfield_10088 = new
+                        {
+                            value = dataElement.NameElementType,
+                        },
                     }
                 };
 

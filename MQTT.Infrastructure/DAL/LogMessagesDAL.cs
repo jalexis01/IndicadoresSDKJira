@@ -87,11 +87,12 @@ namespace MQTT.Infrastructure.DAL
                 {
                     var result = (from l in dbContext.TbLogMessageIn
                                   where l.Id > idLog
-                                  select new LogMessageDTO { 
+                                  select new LogMessageDTO
+                                  {
                                       Id = l.Id,
                                       DateIn = l.CreationDate,
                                       IdHeaderMessage = l.IdHeaderMessage,
-                                      IdProcessed = l.IdProcessed, 
+                                      IdProcessed = l.IdProcessed,
                                       Message = l.Message,
                                       Observations = l.Observations,
                                       Processed = l.Processed
@@ -104,30 +105,30 @@ namespace MQTT.Infrastructure.DAL
             {
                 throw ex;
             }
-		}
-		public static List<LogMessageDTO> GetLogMessagePending(General objContext)
-		{
-			try
-			{
-				using (var dbContext = objContext.DBConnection())
-				{
-					var result = (from msg in dbContext.TbLogMessageIn
-								  where !msg.Processed
-								  select new LogMessageDTO()
-								  {
-									  Id = msg.Id,
-									  Message = msg.Message
-								  }).ToList();
+        }
+        public static List<LogMessageDTO> GetLogMessagePending(General objContext)
+        {
+            try
+            {
+                using (var dbContext = objContext.DBConnection())
+                {
+                    var result = (from msg in dbContext.TbLogMessageIn
+                                  where !msg.Processed
+                                  select new LogMessageDTO()
+                                  {
+                                      Id = msg.Id,
+                                      Message = msg.Message
+                                  }).ToList();
 
-					return result;
-				}
-			}
-			catch (Exception ex)
-			{
-				throw ex;
-			}
-		}
-		public static LogMessageDTO GetLogMessageById(General objContext, long id)
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public static LogMessageDTO GetLogMessageById(General objContext, long id)
         {
             try
             {

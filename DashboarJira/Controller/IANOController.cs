@@ -1,11 +1,5 @@
 ﻿using DashboarJira.Model;
 using DashboarJira.Services;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DashboarJira.Controller
 {
@@ -20,11 +14,12 @@ namespace DashboarJira.Controller
         {
             jiraAccess = jira;
         }
-        
-        public IANOEntity IANOGeneral(string start, string end) {
+
+        public IANOEntity IANOGeneral(string start, string end)
+        {
             string jql = string.Format(JQL_GENERAL, start, end);
             List<Ticket> total_tickets = jiraAccess.GetTiketsIndicadores(jql);
-            return new IANOEntity(ANIO_POR_PUERTA(total_tickets),TOTAL_PUERTAS);
+            return new IANOEntity(ANIO_POR_PUERTA(total_tickets), TOTAL_PUERTAS);
         }
         public IANOEntity IANOContratista(string start, string end)
         {
@@ -43,20 +38,20 @@ namespace DashboarJira.Controller
         public List<List<Ticket>> ANIO_POR_PUERTA(List<Ticket> Ticket)
         {
             List<List<Ticket>> gruposPuertasAIO = new List<List<Ticket>>();
-            
+
             var ticketANIOPuertaGroup = Ticket.GroupBy(ticket => ticket.id_puerta);
 
 
             foreach (var group in ticketANIOPuertaGroup)
             {
                 Console.WriteLine("id: " + group.Key);
-                List <Ticket> auxiliar = new List<Ticket>();
+                List<Ticket> auxiliar = new List<Ticket>();
                 foreach (var ticket in group)
                 {
                     auxiliar.Add(ticket);
 
                 }
-                Console.WriteLine(" cantidad: " + auxiliar.Count + " id indicador "+ group.First().id_ticket);
+                Console.WriteLine(" cantidad: " + auxiliar.Count + " id indicador " + group.First().id_ticket);
                 gruposPuertasAIO.Add(auxiliar);
             }
             return gruposPuertasAIO;

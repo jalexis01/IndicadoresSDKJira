@@ -2,13 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using MQTT.Infrastructure.DAL;
-using MQTT.Infrastructure.Models.DTO;
 using MQTT.Web.Models;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace MQTT.Web.Controllers
 {

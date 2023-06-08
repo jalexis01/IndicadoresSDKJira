@@ -1,13 +1,11 @@
-﻿using MQTT.Infrastructure.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
+using MQTT.Infrastructure.Models;
 using MQTT.Infrastructure.Models.DTO;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using Microsoft.EntityFrameworkCore;
 using System.Data;
-using Microsoft.Data.SqlClient;
-using Microsoft.EntityFrameworkCore.Internal;
-using Microsoft.EntityFrameworkCore.Storage;
+using System.Linq;
 
 namespace MQTT.Infrastructure.DAL
 {

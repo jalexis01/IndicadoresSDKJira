@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DashboarJira.Model
+﻿namespace DashboarJira.Model
 {
     public class IRFEntity
     {
@@ -53,11 +47,11 @@ namespace DashboarJira.Model
 
                 }
                 Console.WriteLine("fuera del for \nNTA: " + NTA + "\nNAR: " + NAR);
-                if(NTA != 0)
+                if (NTA != 0)
                 {
                     calculo = 1.0 - (NAR / NTA);
                 }
-                
+
                 sumatoria += calculo;
                 Console.WriteLine("Sumatoria dentro del for: " + calculo);
             }

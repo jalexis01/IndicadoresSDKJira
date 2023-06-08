@@ -1,19 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DashboarJira.Model
+﻿namespace DashboarJira.Model
 {
     public class IEPMEntity
     {
-        public IEPMEntity( List<Ticket> ticketsANP, List<Ticket> ticketsAME)
+        public IEPMEntity(List<Ticket> ticketsANP, List<Ticket> ticketsAME)
         {
             this.ticketsANP = ticketsANP;
             this.ticketsAME = ticketsAME;
         }
-       
+
 
         private List<Ticket> ticketsANP { get; set; }
 
@@ -27,7 +21,7 @@ namespace DashboarJira.Model
 
             if (ticketsAME.Count > 0)
             {
-                iepm = (((double)ticketsAME.Count-(double)ticketsANP.Count)/(double)ticketsAME.Count)*100.0;
+                iepm = (((double)ticketsAME.Count - (double)ticketsANP.Count) / (double)ticketsAME.Count) * 100.0;
 
             }
             else

@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System;
-using DashboarJira.Model;
+﻿using DashboarJira.Model;
 using DashboarJira.Services;
+using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
 
 namespace MQTT.Web.Controllers
 {
@@ -65,7 +65,11 @@ namespace MQTT.Web.Controllers
                 }
 
                 Indicadores indicadores = new Indicadores();
+<<<<<<< Updated upstream
                 return indicadores.indicadores(formattedStartDate, formattedEndDate);
+=======
+                return indicadores.indicadores("2023-01-05","2023-06-02");
+>>>>>>> Stashed changes
             }
             catch (Exception ex)
             {

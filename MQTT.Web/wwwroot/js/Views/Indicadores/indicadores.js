@@ -31,11 +31,18 @@ function ServiceGetIndicadores() {
 
             $.each(response, function (index, indicador) {
                 var row = $('<tr>');
+<<<<<<< Updated upstream
                 console.log('Nombre indicador: '+ indicador.nombre)
                 console.log('Valor: ' + indicador.calculo)
                 row.append($('<td>').text(indicador.nombre));
                 row.append($('<td>').text(indicador.calculo));
                 //row.append($('<td>').text(indicador.descripcion));                
+=======
+                console.log(indicador.nombre)
+                row.append($('<td>').text(indicador.nombre));
+                row.append($('<td>').text(indicador.calculo));
+                row.append($('<td>').text(indicador.descripcion));                
+>>>>>>> Stashed changes
 
                 tbody.append(row);
             });
