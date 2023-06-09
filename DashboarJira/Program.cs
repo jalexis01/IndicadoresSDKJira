@@ -1,30 +1,10 @@
 ﻿// See https://aka.ms/new-console-template for more information
-using DashboarJira.Controller;
-<<<<<<< Updated upstream
-using DashboarJira.Model;
-=======
->>>>>>> Stashed changes
 using DashboarJira.Services;
-using MQTT.Infrastructure.DAL;
 
-JiraAccess jira = new JiraAccess();
-<<<<<<< Updated upstream
-jira.GetTikets(0,120,null,null,null);
-Console.WriteLine("");
-=======
+//JiraAccess jira = new JiraAccess();
 DbConnector dbConnector = new DbConnector();
-
-//-------------------------------------------------------
-ITTSController itts = new ITTSController(jira);
-Console.WriteLine(itts.tiempoTickets("2023-05-01", "2023-06-01"));
-
-
-
-
-
-
-
-
+string peticion = "WHERE fechaHoraEnvioDato >= '2023-01-01' AND fechaHoraEnvioDato <= '2023-02-01' AND codigoEvento = 'EVP8' ORDER BY fechaHoraEnvioDato ASC";
+dbConnector.GetEventos(peticion);
 // Retrieve messages as JSON
 //string messagesJson = dbConnector.GetMessagesAsJson();
 //Console.WriteLine(messagesJson);
@@ -32,7 +12,6 @@ Console.WriteLine(itts.tiempoTickets("2023-05-01", "2023-06-01"));
 // Retrieve messages as string representation
 //string messagesString = dbConnector.GetMessagesAsString();
 //Console.WriteLine(messagesString);
-
 
 //jira.getIssueJira("PRUEBAS-117");
 //Console.WriteLine("");
@@ -74,5 +53,4 @@ Console.WriteLine(itts.tiempoTickets("2023-05-01", "2023-06-01"));
 //}
 //Console.WriteLine();
 
->>>>>>> Stashed changes
 

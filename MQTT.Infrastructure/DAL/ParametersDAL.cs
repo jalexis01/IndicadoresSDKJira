@@ -1,6 +1,4 @@
-﻿using MQTT.Infrastructure.Models.DTO;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Linq;
 
 namespace MQTT.Infrastructure.DAL
@@ -8,7 +6,7 @@ namespace MQTT.Infrastructure.DAL
     public class ParametersDAL
     {
 
-        public static string GetValue(General objContext, string parameterName) 
+        public static string GetValue(General objContext, string parameterName)
         {
             try
             {

@@ -1,11 +1,5 @@
-﻿using Atlassian.Jira.Linq;
-using DashboarJira.Model;
+﻿using DashboarJira.Model;
 using DashboarJira.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DashboarJira.Controller
 {
@@ -18,14 +12,16 @@ namespace DashboarJira.Controller
         private const double TOTAL_PUERTAS = 146.0;
         private const string COMPONENTE = "Puerta";
         JiraAccess jiraAccess;
-        public IRFController() {
-            jiraAccess = new JiraAccess();
+        public IRFController(JiraAccess jira)
+        {
+            jiraAccess = jira;
         }
-        public IRFEntity IRFContratista(string start, string end) {
+        public IRFEntity IRFContratista(string start, string end)
+        {
 
             string jql = string.Format(JQL_CONTRATISTA, start, end);
             List<Ticket> total_tickets = jiraAccess.GetTiketsIndicadores(jql);
-            
+
             Console.WriteLine(jql);
             IRFEntity irf = new IRFEntity(ContarFallasPorPuerta(total_tickets), TOTAL_PUERTAS, total_tickets);
             return irf;
@@ -43,7 +39,7 @@ namespace DashboarJira.Controller
             return irf;
 
         }
-        public IRFEntity IRFOGeneral(string start, string end)
+        public IRFEntity IRFGeneral(string start, string end)
         {
 
             string jql = string.Format(JQL_GENERAL, start, end);
@@ -57,13 +53,9 @@ namespace DashboarJira.Controller
 
         public List<ReporteFallasPorPuerta> ContarFallasPorPuerta(List<Ticket> tickets)
         {
+
             // Separar los tickets por puerta
             var ticketsPorPuerta = tickets
-                .Where(ticket => ticket.estado_ticket != null && ticket.estado_ticket.Equals(ESTADO)
-                && ticket.id_componente != null && ticket.id_componente.Equals(COMPONENTE)&& ticket.codigo_falla!=null &&
-                    ticket.id_componente.Equals(COMPONENTE) && ticket.estado_ticket != null && ticket.estado_ticket.Equals(ESTADO) 
-                    && ticket.nivel_falla!=null
-                )
                 .GroupBy(ticket => ticket.id_puerta);
 
             // Contar las fallas repetidas por cada una de las fallas en cada puerta cerrada
@@ -71,7 +63,7 @@ namespace DashboarJira.Controller
             foreach (var grupo in ticketsPorPuerta)
             {
                 var fallasPorPuertaEnGrupo = grupo
-                    .Where(ticket => ticket.codigo_falla != null 
+                    .Where(ticket => ticket.codigo_falla != null
                     )
                     .GroupBy(ticket => ticket.codigo_falla)
                     .Select(grupoFallas => new FallaPorPuerta

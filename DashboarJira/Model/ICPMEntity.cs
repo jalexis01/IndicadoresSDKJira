@@ -1,27 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DashboarJira.Model
+﻿namespace DashboarJira.Model
 {
     public class ICPMEntity
     {
-        
+
 
         private List<Ticket> TicketTAP { get; set; }
 
         private List<Ticket> TicketAPE { get; set; }
 
-        public ICPMEntity( List<Ticket> ticketTAP, List<Ticket> ticketAPE)
+        public ICPMEntity(List<Ticket> ticketTAP, List<Ticket> ticketAPE)
         {
-           
+
             TicketTAP = ticketTAP;
             TicketAPE = ticketAPE;
         }
 
-        public double CalcularIndicadorIEPM()
+        public double CalcularIndicadorICPM()
         {
             double icpmCalculado = 0;
             if (TicketTAP.Count > 0)

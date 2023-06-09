@@ -1,16 +1,17 @@
-﻿using Microsoft.Data.SqlClient;
+﻿using DashboarJira.Model;
+using Microsoft.Data.SqlClient;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DashboarJira.Services
 {
+
+
+
     public class DbConnector
     {
+        const string PETICIONEVENTOS = "SELECT [Id], [versionTrama], [idRegistro], [idOperador], [idEstacion], [idVagon], [idPuerta], [codigoPuerta], [fechaHoraLecturaDato], [fechaHoraEnvioDato], [tipoTrama], [tramaRetransmitida], [codigoEvento], [estadoAperturaCierrePuertas], [usoBotonManual],[estadoBotonManual], [estadoErrorCritico], [porcentajeCargaBaterias], [ciclosApertura], [horasServicio], [tipoEnergizacion], [velocidaMotor], [fuerzaMotor], [modoOperacion], [numeroEventoBusEstacion], [idVehiculo], [placaVehiculo], [tipologiaVehiculo], [numeroParada], [nombreEstacion], [nombreVagon], [tipoTramaBusEstacion], [codigoAlarma], [codigoNivelAlarma], [tiempoApertura] FROM [Operation].[tbMessages] ";
+
         private string connectionString;
 
         public DbConnector()
@@ -50,15 +51,142 @@ namespace DashboarJira.Services
             return messagesTable;
         }
 
+        public List<Evento> GetEventos(string peticion)
+        {
+
+            string query;
+
+            query = PETICIONEVENTOS + peticion;
+            List<Evento> eventos = new List<Evento>();
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                try
+                {
+                    connection.Open();
+
+ 
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+
+
+                            while (reader.Read())
+                            {
+                                Evento evento = new Evento();
+
+                                evento.versionTrama = (reader.IsDBNull(1) ? "null" : reader.GetString(1));
+                                evento.idRegistro = (reader.IsDBNull(2) ? "null" : reader.GetString(2));
+                                evento.idOperador = (reader.IsDBNull(3) ? "null" : reader.GetString(3));
+                                evento.idEstacion = (reader.IsDBNull(4) ? "null" : reader.GetString(4));
+                                evento.idVagon = (reader.IsDBNull(5) ? "null" : reader.GetString(5));
+                                evento.idPuerta = (reader.IsDBNull(6) ? "null" : reader.GetString(6));
+                                evento.codigoPuerta = (reader.IsDBNull(7) ? "null" : reader.GetString(7));
+                                evento.fechaHoraLecturaDato = reader.IsDBNull(8) ? null : DateTime.Parse(reader.GetString(8));
+                                evento.fechaHoraEnvioDato = reader.IsDBNull(9) ? null : DateTime.Parse(reader.GetString(9));
+                                evento.tipoTrama = reader.IsDBNull(10) ? null : (int?)reader.GetInt32(10);
+                                evento.tramaRetransmitida = (reader.IsDBNull(11) ? "null" : reader.GetString(11));
+                                evento.codigoEvento = (reader.IsDBNull(12) ? "null" : reader.GetString(12));
+                                evento.estadoAperturaCierrePuertas = (reader.IsDBNull(13) ? "null" : reader.GetString(13)));
+                                Console.WriteLine("usoBotonManual:              " + (reader.IsDBNull(14) ? "null" : reader.GetInt32(14).ToString()));
+                                Console.WriteLine("estadoBotonManual:           " + (reader.IsDBNull(15) ? "null" : reader.GetBoolean(15).ToString()));
+                                Console.WriteLine("estadoErrorCritico:          " + (reader.IsDBNull(16) ? "null" : reader.GetBoolean(16).ToString()));
+                                Console.WriteLine("porcentajeCargaBaterias:     " + (reader.IsDBNull(17) ? "null" : reader.GetString(17)));
+                                Console.WriteLine("ciclosApertura:              " + (reader.IsDBNull(18) ? "null" : reader.GetInt32(18).ToString()));
+                                Console.WriteLine("horasServicio:               " + (reader.IsDBNull(19) ? "null" : reader.GetInt32(19).ToString()));
+                                Console.WriteLine("tipoEnergizacion:            " + (reader.IsDBNull(20) ? "null" : reader.GetInt32(20).ToString()));
+                                Console.WriteLine("velocidaMotor:               " + (reader.IsDBNull(21) ? "null" : reader.GetFloat(21).ToString()));
+                                Console.WriteLine("fuerzaMotor:                 " + (reader.IsDBNull(22) ? "null" : reader.GetFloat(22).ToString()));
+                                Console.WriteLine("modoOperacion:               " + (reader.IsDBNull(23) ? "null" : reader.GetInt32(23).ToString()));
+                                Console.WriteLine("numeroEventoBusEstacion:     " + (reader.IsDBNull(24) ? "null" : reader.GetInt32(24).ToString()));
+                                Console.WriteLine("idVehiculo:                  " + (reader.IsDBNull(25) ? "null" : reader.GetString(25)));
+                                Console.WriteLine("placaVehiculo:               " + (reader.IsDBNull(26) ? "null" : reader.GetString(26)));
+                                Console.WriteLine("tipologiaVehiculo:           " + (reader.IsDBNull(27) ? "null" : reader.GetString(27)));
+                                Console.WriteLine("numeroParada:                " + (reader.IsDBNull(28) ? "null" : reader.GetString(28)));
+                                Console.WriteLine("nombreEstacion:              " + (reader.IsDBNull(29) ? "null" : reader.GetString(29)));
+                                Console.WriteLine("nombreVagon:                 " + (reader.IsDBNull(30) ? "null" : reader.GetString(30)));
+                                Console.WriteLine("tipoTramaBusEstacion:        " + (reader.IsDBNull(31) ? "null" : reader.GetString(31)));
+                                Console.WriteLine("codigoAlarma:                " + (reader.IsDBNull(32) ? "null" : reader.GetString(32)));
+                                Console.WriteLine("codigoNivelAlarma:           " + (reader.IsDBNull(33) ? "null" : reader.GetString(33)));
+                                Console.WriteLine("tiempoApertura:              " + (reader.IsDBNull(34) ? "null" : reader.GetInt32(34).ToString()));
+                                Console.WriteLine("****************************************************************");
+                                eventos.Add(evento);
+                            }
+
+
+
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("An error occurred: " + ex.Message);
+                }
+            }
+
+            return eventos;
+        }
+
+
+        
+
+
+
+        public DataTable GetMessagesIORevp9()
+        {
+            DataTable messagesTable = new DataTable();
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                try
+                {
+                    connection.Open();
+
+                    // SQL query to retrieve the tb.Messages table
+                    string query = "SELECT [Id]\r\n, [idEstacion]\r\n, [codigoEvento]\r\n FROM [Operation].[tbMessages]\r\n WHERE codigoEvento = 'EVP9' ANd fechaHoraEnvioDato BETWEEN '2023-01-01' AND '2023-02-01' ORDER BY fechaHoraEnvioDato ASC";
+
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        using (SqlDataAdapter adapter = new SqlDataAdapter(command))
+                        {
+                            // Fill the DataTable with the data from the query
+                            adapter.Fill(messagesTable);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("An error occurred: " + ex.Message);
+                }
+            }
+
+            return messagesTable;
+        }
+
+
+
+
+
+        public List<Evento> setEvento(DateTime fechaInicio, DateTime fechaFin, string codigoEvento)
+        {
+            List<Evento> eventos = new List<Evento>();
+
+
+            return eventos;
+        }
+
+
         public string GetMessagesAsJson()
         {
-            DataTable messagesTable = GetMessages();
 
+            DataTable messagesTable = GetMessages();
             // Convert DataTable to JSON
             string json = JsonConvert.SerializeObject(messagesTable, Formatting.Indented);
 
             return json;
         }
+
 
         public string GetMessagesAsString()
         {
@@ -80,4 +208,10 @@ namespace DashboarJira.Services
             return tableString;
         }
     }
+
+
+
+
+
+
 }

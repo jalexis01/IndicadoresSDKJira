@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Json.Nodes;
-using System.Threading.Tasks;
-
-namespace DashboarJira.Model
+﻿namespace DashboarJira.Model
 {
     public class IAIOEntity
     {
@@ -34,7 +27,7 @@ namespace DashboarJira.Model
             return iaio;
         }
 
-        public double pano() 
+        public double pano()
         {
             double suma_pano = 0.0;
             foreach (var pano in AIO_POR_PUERTA)

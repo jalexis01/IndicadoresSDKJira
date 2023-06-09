@@ -1,8 +1,6 @@
 ﻿using MQTT.Infrastructure.Models;
 using MQTT.Infrastructure.Models.DTO;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace MQTT.Infrastructure.DAL
 {

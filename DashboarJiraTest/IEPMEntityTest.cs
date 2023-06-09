@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DashboarJira.Model;
-using NUnit.Framework;
-using System.Collections.Generic;
+﻿using DashboarJira.Model;
 
 namespace DashboarJiraTest
 {
@@ -20,7 +13,7 @@ namespace DashboarJiraTest
             // Arrange
             var ticketTAP = new List<Ticket>();
             var ticketAPE = new List<Ticket> { new Ticket(), new Ticket() };
-            var entity = new ICPMEntity(ticketTAP, ticketAPE);
+            var entity = new IEPMEntity(ticketTAP, ticketAPE);
 
             // Act
             var result = entity.CalcularIndicadorIEPM();
@@ -35,7 +28,7 @@ namespace DashboarJiraTest
             // Arrange
             var ticketTAP = new List<Ticket> { new Ticket(), new Ticket() };
             var ticketAPE = new List<Ticket> { new Ticket(), new Ticket() };
-            var entity = new ICPMEntity(ticketTAP, ticketAPE);
+            var entity = new IEPMEntity(ticketTAP, ticketAPE);
 
             // Act
             var result = entity.CalcularIndicadorIEPM();

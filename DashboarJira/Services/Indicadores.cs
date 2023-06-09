@@ -172,7 +172,6 @@ namespace DashboarJira.Services
             indicadorAux.descripcion = RANO_NO_CONTRATISTA.ToString();
             indicadores.Add(indicadorAux);
 
-
             //IRF GENERAL
             indicadorAux = new IndicadoresEntity();
             IRFEntity IRF_GENERAL = IRF.IRFGeneral(fechaInicio, fechaFin);
@@ -198,7 +197,9 @@ namespace DashboarJira.Services
             indicadores.Add(indicadorAux);
 
 
+
             Console.WriteLine("indicadores. " + indicadores);
+
 
             return indicadores;
 
