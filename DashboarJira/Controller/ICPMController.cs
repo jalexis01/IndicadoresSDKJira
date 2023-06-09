@@ -1,11 +1,5 @@
 ﻿using DashboarJira.Model;
 using DashboarJira.Services;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DashboarJira.Controller
 {
@@ -20,8 +14,9 @@ namespace DashboarJira.Controller
         {
             jiraAccess = jira;
         }
-        
-        public ICPMEntity ICPM_MTTO(string start, string end) {
+
+        public ICPMEntity ICPM_MTTO(string start, string end)
+        {
             string jql = string.Format(JQL_MTTO, start, end);
             List<Ticket> total_tickets = jiraAccess.GetTiketsIndicadores(jql);
             return new ICPMEntity(total_tickets, ObtenerTICKETSCerrados(total_tickets));
@@ -47,7 +42,7 @@ namespace DashboarJira.Controller
 
         public List<Ticket> ObtenerTICKETSCerrados(List<Ticket> Ticket)
         {
-            var ticketAPEGroup = Ticket.Where(ticket => ticket.estado_ticket!= null && ticket.estado_ticket != "null" && ticket.estado_ticket == "Cerrado"
+            var ticketAPEGroup = Ticket.Where(ticket => ticket.estado_ticket != null && ticket.estado_ticket != "null" && ticket.estado_ticket == "Cerrado"
              ).GroupBy(ticket => ticket);
             List<Ticket> Ticketc = new List<Ticket>();
             foreach (var group in ticketAPEGroup)

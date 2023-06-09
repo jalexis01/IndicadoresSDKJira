@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System;
-using DashboarJira.Model;
+﻿using DashboarJira.Model;
 using DashboarJira.Services;
+using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
 
 namespace MQTT.Web.Controllers
 {
