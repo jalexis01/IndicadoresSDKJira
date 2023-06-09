@@ -100,7 +100,7 @@ namespace DashboarJira.Services
                                 evento.velocidadMotor = reader.IsDBNull(21) ? null : reader.GetFloat(21);
                                 evento.fuerzaMotor = reader.IsDBNull(22) ? null : reader.GetFloat(22);
                                 evento.modoOperacion = reader.IsDBNull(23) ? null : reader.GetInt32(23);
-                                evento.numeroEventoBusEstaci = reader.IsDBNull(24) ? null : reader.GetInt32(24);
+                                evento.numeroEventoBusEstacion = reader.IsDBNull(24) ? null : reader.GetInt32(24);
                                 evento.idVehiculo = reader.IsDBNull(25) ? null : reader.GetString(25);
                                 evento.placaVehiculo = reader.IsDBNull(26) ? null : reader.GetString(26);
                                 evento.tipologiaVehiculo = reader.IsDBNull(27) ? null : reader.GetString(27);

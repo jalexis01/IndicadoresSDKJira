@@ -39,6 +39,8 @@ namespace DashboarJira.Model
         public float? fuerzaMotor { get; set; }
 
         public int? modoOperacion { get; set; }
+
+        public int? numeroEventoBusEstacion  { get; set; }
         public string? idVehiculo { get; set; }
 
         public String? placaVehiculo { get; set; }
