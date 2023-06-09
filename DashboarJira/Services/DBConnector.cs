@@ -83,8 +83,8 @@ namespace DashboarJira.Services
                                 evento.idVagon = reader.IsDBNull(5) ? null : reader.GetString(5);
                                 evento.idPuerta = reader.IsDBNull(6) ? null : reader.GetString(6);
                                 evento.codigoPuerta = reader.IsDBNull(7) ? null : reader.GetString(7);
-                                evento.fechaHoraLecturaDato = reader.IsDBNull(8) ? null : DateTime.Parse(reader.GetString(8));
-                                evento.fechaHoraEnvioDato = reader.IsDBNull(9) ? null : DateTime.Parse(reader.GetString(9));
+                                evento.fechaHoraLecturaDato = reader.IsDBNull(8) ? null : reader.GetDateTime(8);
+                                evento.fechaHoraEnvioDato = reader.IsDBNull(9) ? null : reader.GetDateTime(9);
                                 evento.tipoTrama = reader.IsDBNull(10) ? null : (int?)reader.GetInt32(10);
                                 evento.tramaRetransmitida = reader.IsDBNull(11) ? null : reader.GetString(11);
                                 evento.codigoEvento = reader.IsDBNull(12) ? null : reader.GetString(12);
@@ -112,7 +112,7 @@ namespace DashboarJira.Services
                                 evento.codigoNivelAlarma = reader.IsDBNull(33) ? null : reader.GetString(33);
                                 evento.tiempoApertura = reader.IsDBNull(34) ? null : reader.GetInt32(34);
 
-                                Console.WriteLine("****************************************************************");
+                                //Console.WriteLine("****************************************************************");
                                 eventos.Add(evento);
                             }
 

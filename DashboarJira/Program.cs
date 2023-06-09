@@ -1,10 +1,29 @@
 ﻿// See https://aka.ms/new-console-template for more information
+using DashboarJira.Controller;
+using DashboarJira.Model;
 using DashboarJira.Services;
+using System.Text.Json.Nodes;
 
-//JiraAccess jira = new JiraAccess();
+JiraAccess jira = new JiraAccess();
 DbConnector dbConnector = new DbConnector();
-string peticion = "WHERE fechaHoraEnvioDato >= '2023-01-01' AND fechaHoraEnvioDato <= '2023-02-01' AND codigoEvento = 'EVP8' ORDER BY fechaHoraEnvioDato ASC";
-dbConnector.GetEventos(peticion);
+//string peticion = "WHERE fechaHoraEnvioDato >= '2023-01-01' AND fechaHoraEnvioDato <= '2023-02-01' AND codigoEvento = 'EVP8' ORDER BY fechaHoraEnvioDato ASC";
+//dbConnector.GetEventos(peticion);
+//-------------------------------------------------
+
+
+ITTSController itts = new ITTSController(jira,dbConnector);
+List<JsonObject> estaciones = new List<JsonObject>();
+JsonObject E9115 = new JsonObject();
+E9115.Add("idEstacion", "9115");
+E9115.Add("puertas", 26);
+estaciones.Add(E9115);
+foreach (TiempoTotalOperacion itt in itts.calcularTTOP(estaciones, "2023-05-01", "2023-05-31")) { 
+    Console.WriteLine(itt.ConvertirAJson());
+}
+
+
+
+
 // Retrieve messages as JSON
 //string messagesJson = dbConnector.GetMessagesAsJson();
 //Console.WriteLine(messagesJson);
