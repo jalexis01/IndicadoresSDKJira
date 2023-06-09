@@ -47,9 +47,6 @@ namespace DashboarJira.Model
                 RAIO = CacularIndicadorRAIO(),
                 TotalTai = TicketTAI.Count,
                 TotalTCI = TicketTCI.Count,
-                TicketTCI = TicketTCI,
-                Espacio = "ESPACIO#######################",
-                TicketTAI = TicketTAI,
                 
             });
         }

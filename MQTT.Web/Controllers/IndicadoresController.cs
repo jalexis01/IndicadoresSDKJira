@@ -65,7 +65,7 @@ namespace MQTT.Web.Controllers
                 }
 
                 Indicadores indicadores = new Indicadores();
-               
+               Console.WriteLine(indicadores.indicadores(formattedStartDate, formattedEndDate));
                 return indicadores.indicadores(formattedStartDate, formattedEndDate);
 
             }

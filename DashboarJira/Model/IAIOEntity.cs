@@ -31,7 +31,7 @@ namespace DashboarJira.Model
         {
             double suma_pano = pano();
             double iaio = Convert.ToDouble(((total_puertas - (double)AIO_POR_PUERTA.Count) * 100 + (double)suma_pano) / total_puertas);
-            return iaio;
+            return Math.Round(iaio,1);
         }
 
         public double pano() 

@@ -77,6 +77,7 @@ namespace DashboarJira.Services
 
             //ICPM ITTS
             indicadorAux = new IndicadoresEntity();
+            
             ICPMEntity ICPMITTS = icpm.ICPM_ITTS(fechaInicio, fechaFin);
             indicadorAux.nombre = "ICPM ITTS";
             indicadorAux.calculo = ICPMITTS.CalcularIndicadorICPM();
@@ -202,8 +203,6 @@ namespace DashboarJira.Services
             indicadorAux.calculo = IRF_NO_CONTRATISTA.calculoIRF();
             indicadorAux.descripcion = IRF_NO_CONTRATISTA.ToString();
             indicadores.Add(indicadorAux);
-
-            Console.WriteLine("indicadores. " + indicadores);
 
             return indicadores;
 

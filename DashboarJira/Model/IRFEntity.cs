@@ -40,30 +40,22 @@ namespace DashboarJira.Model
                 double NTA = 0.0;
                 double NAR = 0.0;
                 double calculo = 0.0;
-                Console.WriteLine("Puerta: " + reporte.Puerta);
                 foreach (FallaPorPuerta falla in reporte.Fallas)
                 {
-
-                    Console.WriteLine("Fallas Por puerta: " + falla.CodigoFalla);
                     NTA += Convert.ToDouble(falla.Cantidad);
                     double aux = Convert.ToDouble(falla.Cantidad) - 1.0;
                     NAR += aux;
-                    Console.WriteLine("NTA: " + NTA + "\nNAR: " + NAR);
-
 
                 }
-                Console.WriteLine("fuera del for \nNTA: " + NTA + "\nNAR: " + NAR);
-                if(NTA != 0)
+                if (NTA != 0)
                 {
                     calculo = 1.0 - (NAR / NTA);
                 }
-                
+
                 sumatoria += calculo;
-                Console.WriteLine("Sumatoria dentro del for: " + calculo);
             }
-            Console.WriteLine("Total Puertas: " + total_puertas + "\nPuertas IRF: " + totalPuertasIRF + "\nSumatoria: " + sumatoria);
             double indicadorIRF = (((total_puertas - totalPuertasIRF) + sumatoria) / total_puertas);
-            return indicadorIRF;
+            return Math.Round(indicadorIRF*100, 1);
         }
         public void pintar()
         {

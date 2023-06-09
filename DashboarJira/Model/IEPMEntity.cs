@@ -35,7 +35,7 @@ namespace DashboarJira.Model
                 iepm = 100;
             }
 
-            return iepm;
+            return Math.Round(iepm, 1);
         }
     }
 }

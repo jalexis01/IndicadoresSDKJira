@@ -30,7 +30,7 @@ namespace DashboarJira.Model
             }
             if (icpmCalculado != 0)
             {
-                return icpmCalculado * 100;
+                return Math.Round(icpmCalculado * 100,1);
             }
             else
             {
