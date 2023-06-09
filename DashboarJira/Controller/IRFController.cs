@@ -1,11 +1,5 @@
-﻿using Atlassian.Jira.Linq;
-using DashboarJira.Model;
+﻿using DashboarJira.Model;
 using DashboarJira.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DashboarJira.Controller
 {
@@ -22,11 +16,12 @@ namespace DashboarJira.Controller
         {
             jiraAccess = jira;
         }
-        public IRFEntity IRFContratista(string start, string end) {
+        public IRFEntity IRFContratista(string start, string end)
+        {
 
             string jql = string.Format(JQL_CONTRATISTA, start, end);
             List<Ticket> total_tickets = jiraAccess.GetTiketsIndicadores(jql);
-            
+
             Console.WriteLine(jql);
             IRFEntity irf = new IRFEntity(ContarFallasPorPuerta(total_tickets), TOTAL_PUERTAS, total_tickets);
             return irf;
@@ -58,7 +53,7 @@ namespace DashboarJira.Controller
 
         public List<ReporteFallasPorPuerta> ContarFallasPorPuerta(List<Ticket> tickets)
         {
-            
+
             // Separar los tickets por puerta
             var ticketsPorPuerta = tickets
                 .GroupBy(ticket => ticket.id_puerta);
@@ -68,7 +63,7 @@ namespace DashboarJira.Controller
             foreach (var grupo in ticketsPorPuerta)
             {
                 var fallasPorPuertaEnGrupo = grupo
-                    .Where(ticket => ticket.codigo_falla != null 
+                    .Where(ticket => ticket.codigo_falla != null
                     )
                     .GroupBy(ticket => ticket.codigo_falla)
                     .Select(grupoFallas => new FallaPorPuerta

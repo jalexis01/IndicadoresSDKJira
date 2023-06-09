@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text;
 
 namespace DashboarJira.Model
 {
@@ -15,7 +11,7 @@ namespace DashboarJira.Model
         public List<Ticket> TicketTCN { get; set; }
 
 
-        public RANOEntity( List<Ticket> TicketTAN, List<Ticket> TicketTCN)
+        public RANOEntity(List<Ticket> TicketTAN, List<Ticket> TicketTCN)
         {
             this.TicketTAN = TicketTAN;
             this.TicketTCN = TicketTCN;

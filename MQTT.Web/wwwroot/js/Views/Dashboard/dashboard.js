@@ -10,17 +10,9 @@ var indicadoresJson;
 var transformedData
 
 
-$(document).ready(function () {
-    //ExtractData(dataTest);
-    //treeGridDashBoard(dataTest)
-    SelectorMonth();
-});
-
-
-
-function ServiceGetIndicadoresDashboard() {
+function ServiceGetIndicadores() {
     var startDate = '2023-05-01';
-    var endDate = '2023-06-01';
+    var endDate = '2023-05-25';
     console.log("Fecha inicial: " + startDate);
     console.log("Fecha final: " + endDate);
 
@@ -41,9 +33,8 @@ function ServiceGetIndicadoresDashboard() {
         success: function (response) {
             Swal.close();
             var indicadores = [];
+
             $.each(response, function (index, indicador) {
-                console.log('Nombre indicador: ' + indicador.nombre)
-                console.log('Valor: ' + indicador.calculo)
                 indicadorJson = {
                     nombre: indicador.nombre,
                     calculo: indicador.calculo,
@@ -51,8 +42,11 @@ function ServiceGetIndicadoresDashboard() {
                 indicadores.push(indicadorJson);
                 transformedData = transformData(indicadores);
             });
+            console.log(indicadoresJson)
             indicadoresJson = JSON.stringify(indicadores);
-
+            console.log(indicadoresJson)
+            // Aquï¿½ puedes hacer lo que necesites con el objeto indicadoresJson
+            console.log(transformedData);
             ExtractData(transformedData)
             treeGridDashBoard(transformedData)
         },
@@ -68,6 +62,14 @@ function ServiceGetIndicadoresDashboard() {
 
 
 function transformData(data) {
+    var result = [
+        {
+            id: 1,
+            title: "Indicadores",
+            description: "Aquï¿½ estï¿½n todos los indicadores",
+            childs: []
+        }
+    ];
 
     var generalChilds = [];
     var IAIOChilds = [];
@@ -80,7 +82,7 @@ function transformData(data) {
     for (var i = 0; i < data.length; i++) {
         var indicador = data[i];
 
-        if (indicador.nombre.includes("IAIO GENERAL")) {
+        if (indicador.nombre.includes("IAIO")) {
             generalChilds.push({
                 id: i + 2,
                 idFather: 1,
@@ -89,16 +91,7 @@ function transformData(data) {
                 value: indicador.calculo,
                 childs: []
             });
-        } else if (indicador.nombre.includes("IANO GENERAL")) {
-            generalChilds.push({
-                id: i + 2,
-                idFather: 1,
-                title: indicador.nombre,
-                description: "child data primary",
-                value: indicador.calculo,
-                childs: []
-            });
-        } else if (indicador.nombre.includes("RAIO GENERAL")) {
+        } else if (indicador.nombre.includes("IANO")) {
             generalChilds.push({
                 id: i + 2,
                 idFather: 1,
@@ -108,6 +101,7 @@ function transformData(data) {
                 childs: []
             });
         } else if (indicador.nombre.includes("RAIO GENERAL")) {
+        } else if (indicador.nombre.includes("RAIO")) {
             generalChilds.push({
                 id: i + 2,
                 idFather: 1,
@@ -116,7 +110,8 @@ function transformData(data) {
                 value: indicador.calculo,
                 childs: []
             });
-        } else if (indicador.nombre.includes("IEPM GENERAL")) {
+        } else if (indicador.nombre.includes("RAIO GENERAL")) {
+        } else if (indicador.nombre.includes("RAIO")) {
             generalChilds.push({
                 id: i + 2,
                 idFather: 1,
@@ -125,7 +120,7 @@ function transformData(data) {
                 value: indicador.calculo,
                 childs: []
             });
-        }else if (indicador.nombre.includes("IRF GENERAL")) {
+        } else {
             generalChilds.push({
                 id: i + 2,
                 idFather: 1,
@@ -135,28 +130,18 @@ function transformData(data) {
                 childs: []
             });
         }
-        else if (indicador.nombre.includes("ICPM")) {
-            generalChilds.push({
-                id: i + 2,
-                idFather: 1,
-                title: indicador.nombre,
-                description: "child data primary",
-                value: indicador.calculo,
-                childs: []
-            });
-        }
-       
     }
-    var result = [
+
+    result[0].childs.push(
         {
-            id: 1,
-            title: "Indicadores",
-            description: "Aquí están todos los indicadores",
+            id: 2,
+            idFather: 1,
+            title: "General",
+            description: "child data primary",
+            value: "",
             childs: generalChilds
         }
-    ];
-
-   
+    );
 
     return result;
 }
@@ -267,8 +252,15 @@ var dataTest = [
 ]
 
 
+$(document).ready(function () {
+    console.log(transformedData)
+    //ExtractData(dataTest);
+    //treeGridDashBoard(dataTest)
+    SelectorMonth();
+});
 
 function ExtractData(data) {
+    console.log(data)
     var numberData = {
         header: "header" + data[0].id,
         head: "head" + data[0].id,
@@ -277,7 +269,6 @@ function ExtractData(data) {
     }
     var rows = 2;
     panels = [
-       
     ]
 
     data[0]['childs'].forEach(x => {
@@ -344,7 +335,7 @@ function GaugeChartDiagram(data) {
             }],
             startAngle: 210, endAngle: 150, minimum: 0, maximum: 100, radius: '80%',
             ranges: [{ start: 0, end: 59, color: '#d11010' }, { start: 60, end: 69, color: '#FFDD00' },
-                { start: 70, end: 79, color: '#ea7e12' }, { start: 80, end: 89, color: '#00b300' }, { start: 90, end: 100, color: '#00ff00' }],
+            { start: 70, end: 79, color: '#ea7e12' }, { start: 80, end: 89, color: '#00b300' }, { start: 90, end: 100, color: '#00ff00' }],
             pointers: [{
                 value: data.value, radius: 100 + '%', pointerWidth: 8,
                 cap: { radius: 7 }, needleTail: { length: '18%' }

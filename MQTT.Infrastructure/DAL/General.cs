@@ -139,7 +139,7 @@ namespace MQTT.Infrastructure.DAL
                     else
                     {
 
-                    result += $"'{dt.ToString("yyyy/MM/dd HH:mm:ss.fff")}',";
+                        result += $"'{dt.ToString("yyyy/MM/dd HH:mm:ss.fff")}',";
                     }
                 }
 

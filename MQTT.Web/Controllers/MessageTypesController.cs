@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using MQTT.Infrastructure.DAL;
-using MQTT.Infrastructure.Models;
 using MQTT.Infrastructure.Models.DTO;
 using Newtonsoft.Json;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace MQTT.Web.Controllers
 {
@@ -41,7 +36,7 @@ namespace MQTT.Web.Controllers
 
         public IActionResult Edit(int id)
         {
-            var model =MessagesDAL.GetMessageType(DBAccess, id);
+            var model = MessagesDAL.GetMessageType(DBAccess, id);
             var allFields = ValidFieldsDAL.GetAllValidFields(DBAccess);
             var selectedFields = MessagesDAL.GetValidFieldsByMessageTypeId(DBAccess, id);
             var unselectedFields = allFields.Where(f => !selectedFields.Contains(f)).ToList();
@@ -71,7 +66,8 @@ namespace MQTT.Web.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    MessageTypeDTO messageTypeDTO = new MessageTypeDTO { 
+                    MessageTypeDTO messageTypeDTO = new MessageTypeDTO
+                    {
                         Code = model.Code,
                         Description = model.Description,
                         FieldCode = model.FieldCode,
@@ -83,7 +79,7 @@ namespace MQTT.Web.Controllers
                     MessagesDAL.AddMessageType(DBAccess, messageTypeDTO);
                     model.Id = messageTypeDTO.Id;
                 }
-                return RedirectToAction("Edit", new { id = model.Id});
+                return RedirectToAction("Edit", new { id = model.Id });
 
             }
             catch (Exception)

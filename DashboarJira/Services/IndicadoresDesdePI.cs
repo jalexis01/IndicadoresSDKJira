@@ -1,7 +1,6 @@
-﻿using MQTT.Infrastructure.DAL;
+﻿using Microsoft.EntityFrameworkCore;
+using MQTT.Infrastructure.DAL;
 using System.Data;
-using Microsoft.EntityFrameworkCore;
-using MQTT.Infrastructure.Models;
 
 namespace DashboarJira.Services
 {
