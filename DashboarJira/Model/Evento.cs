@@ -1,12 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.Runtime.ConstrainedExecution;
-using System.Text.Json.Nodes;
+﻿using System.Text.Json.Nodes;
 
 namespace DashboarJira.Model
 {
     public class Evento
     {
-        
+
+
 
         public String? versionTrama { get; set; }
 
@@ -35,7 +34,7 @@ namespace DashboarJira.Model
         public float? porcentajeCargaBaterias { get; set; }
         public int? ciclosApertura { get; set; }
         public int? horasServicios { get; set; }
-        public int? tipoenergizacion { get; set; }
+        public int? tipoEnergizacion { get; set; }
         public float? velocidadMotor { get; set; }
         public float? fuerzaMotor { get; set; }
 
@@ -55,9 +54,14 @@ namespace DashboarJira.Model
         public String? codigoNivelAlarma { get; set; }
         public int? tiempoApertura { get; set; }
 
+
+
+
+
+
         public override string ToString()
         {
-            return 
+            return
                    $"versionTrama: {versionTrama}\n" +
                    $"idRegistro: {idRegistro}\n" +
                    $"idOperador: {idOperador}\n" +
@@ -77,7 +81,7 @@ namespace DashboarJira.Model
                    $"porcentajeCargaBaterias: {porcentajeCargaBaterias}\n" +
                    $"ciclosApertura: {ciclosApertura}\n" +
                    $"horasServicios: {horasServicios}\n" +
-                   $"tipoenergizacion: {tipoenergizacion}\n" +
+                   $"tipoenergizacion: {tipoEnergizacion}\n" +
                    $"velocidadMotor: {velocidadMotor}\n" +
                    $"fuerzaMotor: {fuerzaMotor}\n" +
                    $"modoOperacion: {modoOperacion}\n" +
@@ -115,7 +119,7 @@ namespace DashboarJira.Model
             msg.Add("porcentajeCargaBaterias", porcentajeCargaBaterias);
             msg.Add("ciclosApertura", ciclosApertura);
             msg.Add("horasServicios", horasServicios);
-            msg.Add("tipoenergizacion", tipoenergizacion);
+            msg.Add("tipoenergizacion", tipoEnergizacion);
             msg.Add("velocidadMotor", velocidadMotor);
             msg.Add("fuerzaMotor", fuerzaMotor);
             msg.Add("modoOperacion", modoOperacion);

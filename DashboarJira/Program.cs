@@ -1,16 +1,17 @@
 ﻿// See https://aka.ms/new-console-template for more information
 using DashboarJira.Services;
 
-JiraAccess jira = new JiraAccess();
+//JiraAccess jira = new JiraAccess();
 DbConnector dbConnector = new DbConnector();
-
+string peticion = "WHERE fechaHoraEnvioDato >= '2023-01-01' AND fechaHoraEnvioDato <= '2023-02-01' AND codigoEvento = 'EVP8' ORDER BY fechaHoraEnvioDato ASC";
+dbConnector.GetEventos(peticion);
 // Retrieve messages as JSON
 //string messagesJson = dbConnector.GetMessagesAsJson();
 //Console.WriteLine(messagesJson);
 
 // Retrieve messages as string representation
-string messagesString = dbConnector.GetMessagesAsString();
-Console.WriteLine(messagesString);
+//string messagesString = dbConnector.GetMessagesAsString();
+//Console.WriteLine(messagesString);
 
 //jira.getIssueJira("PRUEBAS-117");
 //Console.WriteLine("");
