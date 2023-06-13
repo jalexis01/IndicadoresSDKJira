@@ -70,6 +70,7 @@ namespace DashboarJira.Services
                     {
                         using (SqlDataReader reader = command.ExecuteReader())
                         {
+                            command.CommandTimeout = 200;
 
 
                             while (reader.Read())
