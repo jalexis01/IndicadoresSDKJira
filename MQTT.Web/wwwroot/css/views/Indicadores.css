@@ -1,6 +1,6 @@
 ﻿.container-grid {
     overflow: auto;
-    justify-content: center;
+    /*justify-content: center;*/
     max-height: auto;
 }
 

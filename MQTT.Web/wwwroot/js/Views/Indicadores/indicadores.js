@@ -8,6 +8,8 @@
 function ServiceGetIndicadores() {
     var startDate = $('#dtpStart').val();
     var endDate = $('#dtpEnd').val();
+    //var max = document.getElementById("maxSelect").value;
+    //var componente = $('#componente').val();
     console.log("Fecha inicial: " + startDate);
     console.log("Fecha final: " + endDate);
 
@@ -31,18 +33,14 @@ function ServiceGetIndicadores() {
 
             $.each(response, function (index, indicador) {
                 var row = $('<tr>');
-<<<<<<< Updated upstream
                 console.log('Nombre indicador: '+ indicador.nombre)
                 console.log('Valor: ' + indicador.calculo)
                 row.append($('<td>').text(indicador.nombre));
                 row.append($('<td>').text(indicador.calculo));
-                //row.append($('<td>').text(indicador.descripcion));                
-=======
-                console.log(indicador.nombre)
-                row.append($('<td>').text(indicador.nombre));
-                row.append($('<td>').text(indicador.calculo));
-                row.append($('<td>').text(indicador.descripcion));                
->>>>>>> Stashed changes
+                //console.log(indicador.nombre)
+                //row.append($('<td>').text(indicador.nombre));
+                //row.append($('<td>').text(indicador.calculo));
+                //row.append($('<td>').text(indicador.descripcion));
 
                 tbody.append(row);
             });

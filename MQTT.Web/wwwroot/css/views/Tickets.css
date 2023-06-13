@@ -17,8 +17,6 @@
     display: flex;
 }
 
-
-
 .organitation-menu {
     position: absolute;
     right: 10%;
@@ -52,10 +50,3 @@
         overflow: hidden;
         text-overflow: ellipsis;
     }
-
-/*.container-grid {
-    display: grid;
-    place-items: center;
-    border: 1px solid #ccc;
-    padding: 10px;
-}*/

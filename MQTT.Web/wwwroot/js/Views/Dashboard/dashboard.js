@@ -12,7 +12,7 @@ var transformedData
 
 function ServiceGetIndicadores() {
     var startDate = '2023-05-01';
-    var endDate = '2023-05-25';
+    var endDate = '2023-05-31';
     console.log("Fecha inicial: " + startDate);
     console.log("Fecha final: " + endDate);
 
