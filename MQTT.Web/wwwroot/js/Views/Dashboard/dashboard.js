@@ -10,7 +10,7 @@ var indicadoresJson;
 var transformedData
 
 
-function ServiceGetIndicadores() {
+function ServiceGetIndicadoresDashboard () {
     var startDate = '2023-05-01';
     var endDate = '2023-05-31';
     console.log("Fecha inicial: " + startDate);
