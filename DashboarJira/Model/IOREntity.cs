@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Json.Nodes;
-using System.Threading.Tasks;
+﻿using System.Text.Json.Nodes;
 
 namespace DashboarJira.Model
 {
@@ -20,14 +14,16 @@ namespace DashboarJira.Model
         private List<Evento> CEFist { get; set; }
 
 
-        public double calcularIOR() { 
-            double resultado = (double) CEI/ (double) CEF;
+        public double calcularIOR()
+        {
+            double resultado = (double)CEI / (double)CEF;
             return resultado;
         }
-        public JsonObject convertToJson() {
+        public JsonObject convertToJson()
+        {
             JsonObject msg = new JsonObject();
             msg.Add("CEI", CEI);
-            msg.Add("CEF", CEF );
+            msg.Add("CEF", CEF);
             //JsonArray ceiJsonArray = new JsonArray(CEIList);
             //msg.Add("CEI LIST",  );
 
