@@ -37,7 +37,6 @@ namespace DashboarJira.Model
             {
                 suma_pano+=1-((double)pano.Count/30.0);
             }
-            Console.WriteLine("suma pano " + suma_pano);
             return suma_pano;
 
         }

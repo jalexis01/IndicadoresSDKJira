@@ -12,7 +12,7 @@ var transformedData
 
 function ServiceGetIndicadoresDashboard() {
     var startDate = '2023-05-01';
-    var endDate = '2023-05-25';
+    var endDate = '2023-06-01';
     console.log("Fecha inicial: " + startDate);
     console.log("Fecha final: " + endDate);
 
@@ -42,10 +42,7 @@ function ServiceGetIndicadoresDashboard() {
                 indicadores.push(indicadorJson);
                 transformedData = transformData(indicadores);
             });
-            console.log(indicadoresJson)
             indicadoresJson = JSON.stringify(indicadores);
-            console.log(indicadoresJson)
-            // Aqu� puedes hacer lo que necesites con el objeto indicadoresJson
             console.log(transformedData);
             ExtractData(transformedData)
             treeGridDashBoard(transformedData)

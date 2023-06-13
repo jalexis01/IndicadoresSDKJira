@@ -44,14 +44,12 @@ namespace DashboarJira.Controller
 
             foreach (var group in ticketANIOPuertaGroup)
             {
-                Console.WriteLine("id: " + group.Key);
                 List<Ticket> auxiliar = new List<Ticket>();
                 foreach (var ticket in group)
                 {
                     auxiliar.Add(ticket);
 
                 }
-                Console.WriteLine(" cantidad: " + auxiliar.Count + " id indicador " + group.First().id_ticket);
                 gruposPuertasAIO.Add(auxiliar);
             }
             return gruposPuertasAIO;
