@@ -10,7 +10,7 @@ var indicadoresJson;
 var transformedData
 
 
-function ServiceGetIndicadores() {
+function ServiceGetIndicadoresDashboard() {
     var startDate = '2023-05-01';
     var endDate = '2023-05-25';
     console.log("Fecha inicial: " + startDate);
@@ -62,87 +62,107 @@ function ServiceGetIndicadores() {
 
 
 function transformData(data) {
-    var result = [
-        {
-            id: 1,
-            title: "Indicadores",
-            description: "Aqu� est�n todos los indicadores",
-            childs: []
-        }
-    ];
+
 
     var generalChilds = [];
     var IAIOChilds = [];
     var IANOChilds = [];
     var RAIOChilds = [];
     var RANOChilds = [];
-    var RANOChilds = [];
-    var RANOChilds = [];
-
+    var IEPMChilds = [];
+    for (var i = 0; i < data.length; i++) {
+        var indicador = data[i];
+        if (indicador.nombre.includes("IAIO Contratista")) {
+            IAIOChilds.push({
+                id: i + 2,
+                idFather: 1,
+                title: indicador.nombre,
+                value: indicador.calculo,
+            });
+    }
     for (var i = 0; i < data.length; i++) {
         var indicador = data[i];
 
-        if (indicador.nombre.includes("IAIO")) {
+        if (indicador.nombre.includes("IAIO GENERAL")) {
             generalChilds.push({
                 id: i + 2,
                 idFather: 1,
                 title: indicador.nombre,
-                description: "child data primary",
                 value: indicador.calculo,
-                childs: []
+                childs: IAIOChilds
             });
-        } else if (indicador.nombre.includes("IANO")) {
+        } else if (indicador.nombre.includes("IANO GENERAL")) {
             generalChilds.push({
                 id: i + 2,
                 idFather: 1,
                 title: indicador.nombre,
-                description: "child data primary",
                 value: indicador.calculo,
-                childs: []
+                childs: IANOChilds
             });
         } else if (indicador.nombre.includes("RAIO GENERAL")) {
-        } else if (indicador.nombre.includes("RAIO")) {
             generalChilds.push({
                 id: i + 2,
                 idFather: 1,
                 title: indicador.nombre,
-                description: "child data primary",
                 value: indicador.calculo,
-                childs: []
+                childs: RAIOChilds
             });
         } else if (indicador.nombre.includes("RAIO GENERAL")) {
-        } else if (indicador.nombre.includes("RAIO")) {
             generalChilds.push({
                 id: i + 2,
                 idFather: 1,
                 title: indicador.nombre,
-                description: "child data primary",
                 value: indicador.calculo,
-                childs: []
+                childs: RANOChilds
             });
-        } else {
+        } else if (indicador.nombre.includes("IEPM GENERAL")) {
             generalChilds.push({
                 id: i + 2,
                 idFather: 1,
                 title: indicador.nombre,
-                description: "child data primary",
+                value: indicador.calculo,
+                childs: IEPMChilds
+            });
+        } else if (indicador.nombre.includes("ICPM")) {
+            generalChilds.push({
+                id: i + 2,
+                idFather: 1,
+                title: indicador.nombre,
                 value: indicador.calculo,
                 childs: []
             });
         }
     }
-
-    result[0].childs.push(
+    for (var i = 0; i < data.length; i++) {
+        var indicador = data[i];
+        if (indicador.nombre.includes("Contratista")) {
+            generalChilds.push({
+                id: i + 2,
+                idFather: 1,
+                title: indicador.nombre,
+                value: indicador.calculo,
+                childs: []
+            });
+        }
+         else if (indicador.nombre.includes("ICPM")) {
+                generalChilds.push({
+                    id: i + 2,
+                    idFather: 1,
+                    title: indicador.nombre,
+                    value: indicador.calculo,
+                    childs: []
+                });
+            }
+        }
+    }
+    var result = [
         {
-            id: 2,
-            idFather: 1,
-            title: "General",
-            description: "child data primary",
-            value: "",
+            id: 1,
+            title: "Indicadores",
+            description: "Aqu� est�n todos los indicadores",
             childs: generalChilds
         }
-    );
-
+    ];
     return result;
 }
 
