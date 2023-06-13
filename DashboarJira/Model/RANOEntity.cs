@@ -27,23 +27,26 @@ namespace DashboarJira.Model
             {
                 RANOGeneral = 100;
             }
-            return RANOGeneral;
+            return Math.Round(RANOGeneral,1);
         }
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();
             sb.Append("TicketTAN: ");
+            sb.Append(TicketTAN.Count);
+            /*
             foreach (var ticket in TicketTAN)
             {
                 sb.Append(ticket.id_ticket);
                 sb.Append(", ");
-            }
+            }*/
             sb.Append("TicketTCN: ");
-            foreach (var ticket in TicketTCN)
+            sb.Append(TicketTCN.Count);
+            /*foreach (var ticket in TicketTCN)
             {
                 sb.Append(ticket.id_ticket);
                 sb.Append(", ");
-            }
+            }*/
             return sb.ToString();
         }
     }

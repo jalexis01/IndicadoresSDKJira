@@ -1,15 +1,15 @@
 @{
-    ViewData["Title"] = "DashBoard";
+    ViewData["Title"] = "Tablero de Control";
 }
 <link rel="stylesheet" href="~/css/views/Dashboard.css">
 
 <div class="header-view">
     <h1 class="text-2xl font-bold dark:text-white title-view-text">@ViewBag.Title</h1>
     <div id="wrapper" class="container-picker">
-        <input id="datepicker" type="text" />
-        <button onclick="ServiceGetIndicadores()" type="button" id="button-primary"
+        <input id="datepicker" type="date"  style="cursor: pointer; background-color: white; opacity: 1;" />
+        <button onclick="ServiceGetIndicadoresDashboard()" type="button" id="button-primary"
                 class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
-            Calcular
+            Hacer funcionar
         </button>
     </div>
     
@@ -18,7 +18,7 @@
 <div class="mb-4 border-b border-gray-200 dark:border-gray-700">
     <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="myTab" data-tabs-toggle="#myTabContent" role="tablist">
         <li class="mr-2" role="dashboard">
-            <button class="inline-block p-4 border-b-2 rounded-t-lg" id="dashboard-tab" data-tabs-target="#dashboard" type="button" role="tab" aria-controls="dashboard" aria-selected="false">Dashboard</button>
+            <button class="inline-block p-4 border-b-2 rounded-t-lg" id="dashboard-tab" data-tabs-target="#dashboard" type="button" role="tab" aria-controls="dashboard" aria-selected="false">Tablero de Control</button>
         </li>
         <li class="mr-2" role="informacion">
             <button class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="informacion-tab" data-tabs-target="#informacion" type="button" role="tab" aria-controls="informacion" aria-selected="false">Informacion</button>
@@ -60,6 +60,7 @@
         <!-- <span class="e-template-icon menu default"></span> -->
     </div>
 </script>
+
 
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/js/Views/Dashboard/dashboard.js"></script>

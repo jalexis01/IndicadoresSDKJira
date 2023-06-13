@@ -45,7 +45,7 @@ function ServiceGetIndicadores() {
             console.log(indicadoresJson)
             indicadoresJson = JSON.stringify(indicadores);
             console.log(indicadoresJson)
-            // Aquí puedes hacer lo que necesites con el objeto indicadoresJson
+            // Aquï¿½ puedes hacer lo que necesites con el objeto indicadoresJson
             console.log(transformedData);
             ExtractData(transformedData)
             treeGridDashBoard(transformedData)
@@ -66,7 +66,7 @@ function transformData(data) {
         {
             id: 1,
             title: "Indicadores",
-            description: "Aquí están todos los indicadores",
+            description: "Aquï¿½ estï¿½n todos los indicadores",
             childs: []
         }
     ];
@@ -100,6 +100,7 @@ function transformData(data) {
                 value: indicador.calculo,
                 childs: []
             });
+        } else if (indicador.nombre.includes("RAIO GENERAL")) {
         } else if (indicador.nombre.includes("RAIO")) {
             generalChilds.push({
                 id: i + 2,
@@ -109,6 +110,7 @@ function transformData(data) {
                 value: indicador.calculo,
                 childs: []
             });
+        } else if (indicador.nombre.includes("RAIO GENERAL")) {
         } else if (indicador.nombre.includes("RAIO")) {
             generalChilds.push({
                 id: i + 2,
@@ -267,7 +269,6 @@ function ExtractData(data) {
     }
     var rows = 2;
     panels = [
-
     ]
 
     data[0]['childs'].forEach(x => {
