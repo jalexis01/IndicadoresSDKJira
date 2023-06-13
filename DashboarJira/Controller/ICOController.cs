@@ -23,11 +23,11 @@ namespace DashboarJira.Controller
             this.connector = connector;
         }
 
-        public List<TiempoTotalOperacion> calcularTTOP(List<JsonObject> estaciones, string startDate, string endDate)
+        public List<EstacionEntity> calcularTTOP(List<JsonObject> estaciones, string startDate, string endDate)
         {
             string peticionEVP8 = string.Format(PETICIONEVP8, startDate, endDate);
             string peticionEVP9 = string.Format(PETICIONEVP9, startDate, endDate);
-            List<TiempoTotalOperacion> ITTS_todas_estaciones = new List<TiempoTotalOperacion>();
+            List<EstacionEntity> ITTS_todas_estaciones = new List<EstacionEntity>();
             List<Evento> EVP8 = connector.GetEventos(peticionEVP8);
             List<Evento> EVP9 = connector.GetEventos(peticionEVP9);
             foreach (JsonObject estacion in estaciones)
@@ -41,9 +41,9 @@ namespace DashboarJira.Controller
             return ITTS_todas_estaciones;
         }
 
-        public List<TiempoTotalOperacion> calcularTTOPPorEstacion(List<Evento> evp8Estacion, List<Evento> evp9Estacion, int cantidadPuertas, string startDate, string endDate)
+        public List<EstacionEntity> calcularTTOPPorEstacion(List<Evento> evp8Estacion, List<Evento> evp9Estacion, int cantidadPuertas, string startDate, string endDate)
         {
-            List<TiempoTotalOperacion> ITTS_todas_estaciones = new List<TiempoTotalOperacion>();
+            List<EstacionEntity> ITTS_todas_estaciones = new List<EstacionEntity>();
             DateTime start = DateTime.Parse(startDate); // Fecha de inicio
             DateTime end = DateTime.Parse(endDate); // Fecha de fin
 
@@ -58,7 +58,7 @@ namespace DashboarJira.Controller
             {
                 List<Evento> evp8PorDia = evp8Estacion.Where(e => e.fechaHoraLecturaDato.Value.Date == date.Date).ToList();
                 List<Evento> evp9PorDia = evp9Estacion.Where(e => e.fechaHoraLecturaDato.Value.Date == date.AddDays(1).Date).ToList();
-                TiempoTotalOperacion iTTSPorDia = new TiempoTotalOperacion(evp8PorDia, evp9PorDia, date, date.AddDays(1), cantidadPuertas);
+                EstacionEntity iTTSPorDia = new EstacionEntity(evp8PorDia, evp9PorDia, date, date.AddDays(1), cantidadPuertas);
                 ITTS_todas_estaciones.Add(iTTSPorDia);
             }
             return ITTS_todas_estaciones;

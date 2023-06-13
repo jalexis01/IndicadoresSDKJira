@@ -8,8 +8,9 @@ using System.Threading.Tasks;
 
 namespace DashboarJira.Model
 {
-    public class TiempoTotalOperacion
+    public class EstacionEntity
     {
+
         public List<Evento> evp8PorDia { get; set; }
         public List<Evento> evp9PorDia { get; set; }
         public DateTime startDate { get; set; }
@@ -21,7 +22,33 @@ namespace DashboarJira.Model
         public double cantidadEVP9 { get; set; }
         public double IOR { get; set; }
 
-        public TiempoTotalOperacion(List<Evento> evp8PorDia, List<Evento> evp9PorDia, DateTime startDate, DateTime endDate, int cantidadPuertas)
+
+        public List<Evento> evp14PorDia { get; set; }
+        public List<Evento> evp11PorDia { get; set; }
+        public List<Evento> evp10PorDia { get; set; }
+
+        public double IDM { get; set; }
+
+        public EstacionEntity(List<Evento> evp10PorDia, List<Evento> evp11PorDia, List<Evento> evp14PorDia, DateTime startDate, DateTime endDate)
+        {
+            this.endDate = endDate;
+            this.startDate  = startDate;
+            this.evp14PorDia = evp14PorDia;
+            this.evp11PorDia = evp11PorDia;
+            this.evp10PorDia = evp10PorDia;
+            calcularIDM();
+        }
+
+        private void calcularIDM()
+        {
+            double tmr = evp10PorDia.Count + evp11PorDia.Count + evp14PorDia.Count;
+            if (tmr != 0)
+                IDM = tmr / tmr;
+            else IDM = 1;
+            
+        }
+
+        public EstacionEntity(List<Evento> evp8PorDia, List<Evento> evp9PorDia, DateTime startDate, DateTime endDate, int cantidadPuertas)
         {
             this.evp8PorDia = evp8PorDia;
             this.evp9PorDia = evp9PorDia;
@@ -30,7 +57,10 @@ namespace DashboarJira.Model
             this.cantidadPuertas = cantidadPuertas;
             calcularTTOP();
         }
-        public TiempoTotalOperacion(List<Evento> evp8PorDia, List<Evento> evp9PorDia, DateTime startDate, DateTime endDate)
+
+
+
+        public EstacionEntity(List<Evento> evp8PorDia, List<Evento> evp9PorDia, DateTime startDate, DateTime endDate)
         {
             this.evp8PorDia = evp8PorDia;
             this.evp9PorDia = evp9PorDia;
@@ -58,6 +88,7 @@ namespace DashboarJira.Model
             TTOP = diferencia_de_horas * (double)cantidadPuertas;
         }
         public void calcularIOR() {
+
             IOR = (double)cantidadEVP8 / (double)cantidadEVP9;
         
         }
@@ -90,6 +121,30 @@ namespace DashboarJira.Model
                 startDate,
                 endDate,
                 IOR
+            };
+
+            var opcionesJson = new JsonSerializerOptions
+            {
+                WriteIndented = true // Para que el JSON tenga formato legible
+            };
+
+            string json = JsonSerializer.Serialize(objeto, opcionesJson);
+            return json;
+        }
+
+        public string ConvertirAJsonIDM()
+        {
+            int evp10 = evp10PorDia.Count;
+            int evp11 = evp11PorDia.Count;
+            int evp14 = evp14PorDia.Count;
+            var objeto = new
+            {
+                evp10,
+                evp11,
+                evp14,
+                startDate, 
+                endDate,
+                IDM
             };
 
             var opcionesJson = new JsonSerializerOptions

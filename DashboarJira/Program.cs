@@ -11,15 +11,30 @@ DbConnector dbConnector = new DbConnector();
 //-------------------------------------------------
 
 
-ITTSController itts = new ITTSController(jira,dbConnector);
+IDMController IDM = new IDMController(dbConnector);
 List<JsonObject> estaciones = new List<JsonObject>();
 JsonObject E9115 = new JsonObject();
-E9115.Add("idEstacion", "9115");
+E9115.Add("idEstacion", "9116");
 E9115.Add("puertas", 26);
 estaciones.Add(E9115);
-foreach (TiempoTotalOperacion itt in itts.calcularTTOP(estaciones, "2023-05-01", "2023-05-31")) { 
-    Console.WriteLine(itt.ConvertirAJson());
+foreach (EstacionEntity itt in IDM.calcularIDM(estaciones, "2023-05-01", "2023-05-31"))
+{
+    Console.WriteLine(itt.ConvertirAJsonIDM());
 }
+
+
+
+
+
+//ITTSController itts = new ITTSController(jira,dbConnector);
+//List<JsonObject> estaciones = new List<JsonObject>();
+//JsonObject E9115 = new JsonObject();
+//E9115.Add("idEstacion", "9115");
+//E9115.Add("puertas", 26);
+//estaciones.Add(E9115);
+//foreach (EstacionEntity itt in itts.calcularTTOP(estaciones, "2023-05-01", "2023-05-31")) { 
+//    Console.WriteLine(itt.ConvertirAJson());
+//}
 
 
 
