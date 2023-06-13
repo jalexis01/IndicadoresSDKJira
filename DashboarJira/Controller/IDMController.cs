@@ -31,9 +31,9 @@ namespace DashboarJira.Controller
 
             foreach (JsonObject estacion in estaciones)
             {
-                string peticionEVP10 = string.Format(PETICIONEVP10, startDate, endDate, estacion);
-                string peticionEVP11 = string.Format(PETICIONEVP11, startDate, endDate, estacion);
-                string peticionEVP14 = string.Format(PETICIONEVP14, startDate, endDate, estacion);
+                string peticionEVP10 = string.Format(PETICIONEVP10, startDate, endDate, estacion["idEstacion"].GetValue<string>());
+                string peticionEVP11 = string.Format(PETICIONEVP11, startDate, endDate, estacion["idEstacion"].GetValue<string>());
+                string peticionEVP14 = string.Format(PETICIONEVP14, startDate, endDate, estacion["idEstacion"].GetValue<string>());
                 List<Evento> EVP10 = connector.GetEventos(peticionEVP10);
                 List<Evento> EVP11 = connector.GetEventos(peticionEVP11);
                 List<Evento> EVP14 = connector.GetEventos(peticionEVP14);
