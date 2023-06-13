@@ -1,11 +1,17 @@
-﻿using Microsoft.Data.SqlClient;
+﻿using DashboarJira.Model;
+using Microsoft.Data.SqlClient;
 using Newtonsoft.Json;
 using System.Data;
 
 namespace DashboarJira.Services
 {
+
+
+
     public class DbConnector
     {
+        const string PETICIONEVENTOS = "SELECT [Id], [versionTrama], [idRegistro], [idOperador], [idEstacion], [idVagon], [idPuerta], [codigoPuerta], [fechaHoraLecturaDato], [fechaHoraEnvioDato], [tipoTrama], [tramaRetransmitida], [codigoEvento], [estadoAperturaCierrePuertas], [usoBotonManual],[estadoBotonManual], [estadoErrorCritico], [porcentajeCargaBaterias], [ciclosApertura], [horasServicio], [tipoEnergizacion], [velocidaMotor], [fuerzaMotor], [modoOperacion], [numeroEventoBusEstacion], [idVehiculo], [placaVehiculo], [tipologiaVehiculo], [numeroParada], [nombreEstacion], [nombreVagon], [tipoTramaBusEstacion], [codigoAlarma], [codigoNivelAlarma], [tiempoApertura] FROM [Operation].[tbMessages] ";
+
         private string connectionString;
 
         public DbConnector()
@@ -45,9 +51,13 @@ namespace DashboarJira.Services
             return messagesTable;
         }
 
-        public DataTable GetMessagesIORevp8()
+        public List<Evento> GetEventos(string peticion)
         {
-            DataTable messagesTable = new DataTable();
+
+            string query;
+
+            query = PETICIONEVENTOS + peticion;
+            List<Evento> eventos = new List<Evento>();
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -55,15 +65,59 @@ namespace DashboarJira.Services
                 {
                     connection.Open();
 
-                    // SQL query to retrieve the tb.Messages table
-                    string query = "SELECT [Id]\r\n, [idEstacion]\r\n, [codigoEvento]\r\n FROM [Operation].[tbMessages]\r\n WHERE codigoEvento = 'EVP8' ANd fechaHoraEnvioDato BETWEEN '2023-01-01' AND '2023-02-01' ORDER BY fechaHoraEnvioDato ASC";
-
+ 
                     using (SqlCommand command = new SqlCommand(query, connection))
                     {
-                        using (SqlDataAdapter adapter = new SqlDataAdapter(command))
+                        using (SqlDataReader reader = command.ExecuteReader())
                         {
-                            // Fill the DataTable with the data from the query
-                            adapter.Fill(messagesTable);
+
+
+                            while (reader.Read())
+                            {
+                                Evento evento = new Evento();
+
+                                evento.versionTrama = reader.IsDBNull(1) ? null : reader.GetString(1);
+                                evento.idRegistro = reader.IsDBNull(2) ? null : reader.GetString(2);
+                                evento.idOperador = reader.IsDBNull(3) ? null : reader.GetString(3);
+                                evento.idEstacion = reader.IsDBNull(4) ? null : reader.GetString(4);
+                                evento.idVagon = reader.IsDBNull(5) ? null : reader.GetString(5);
+                                evento.idPuerta = reader.IsDBNull(6) ? null : reader.GetString(6);
+                                evento.codigoPuerta = reader.IsDBNull(7) ? null : reader.GetString(7);
+                                evento.fechaHoraLecturaDato = reader.IsDBNull(8) ? null : reader.GetDateTime(8);
+                                evento.fechaHoraEnvioDato = reader.IsDBNull(9) ? null : reader.GetDateTime(9);
+                                evento.tipoTrama = reader.IsDBNull(10) ? null : (int?)reader.GetInt32(10);
+                                evento.tramaRetransmitida = reader.IsDBNull(11) ? null : reader.GetString(11);
+                                evento.codigoEvento = reader.IsDBNull(12) ? null : reader.GetString(12);
+                                evento.estadoAperturaCierrePuertas = reader.IsDBNull(13) ? null : reader.GetString(13);
+                                evento.usoBotonmanual = reader.IsDBNull(14) ? null : reader.GetInt32(14);
+                                evento.estadoBotonManual = reader.IsDBNull(15) ? null : reader.GetBoolean(15);
+                                evento.estadoErrorCritico = reader.IsDBNull(16) ? null : reader.GetBoolean(16);
+                                evento.porcentajeCargaBaterias = reader.IsDBNull(17) ? null : reader.GetFloat(17);
+
+                                evento.ciclosApertura = reader.IsDBNull(18) ? null : reader.GetInt32(18);
+                                evento.horasServicios = reader.IsDBNull(19) ? null : reader.GetInt32(19);
+                                evento.tipoEnergizacion = reader.IsDBNull(20) ? null : reader.GetInt32(20);
+                                evento.velocidadMotor = reader.IsDBNull(21) ? null : reader.GetFloat(21);
+                                evento.fuerzaMotor = reader.IsDBNull(22) ? null : reader.GetFloat(22);
+                                evento.modoOperacion = reader.IsDBNull(23) ? null : reader.GetInt32(23);
+                                evento.numeroEventoBusEstacion = reader.IsDBNull(24) ? null : reader.GetInt32(24);
+                                evento.idVehiculo = reader.IsDBNull(25) ? null : reader.GetString(25);
+                                evento.placaVehiculo = reader.IsDBNull(26) ? null : reader.GetString(26);
+                                evento.tipologiaVehiculo = reader.IsDBNull(27) ? null : reader.GetString(27);
+                                evento.numeroParada = reader.IsDBNull(28) ? null : reader.GetString(28);
+                                evento.nombreEstacion = reader.IsDBNull(29) ? null : reader.GetString(29);
+                                evento.nombreVagon = reader.IsDBNull(30) ? null : reader.GetString(30);
+                                evento.tipoTramaBusEstacion = reader.IsDBNull(31) ? null : reader.GetString(31);
+                                evento.codigoAlarma = reader.IsDBNull(32) ? null : reader.GetString(32);
+                                evento.codigoNivelAlarma = reader.IsDBNull(33) ? null : reader.GetString(33);
+                                evento.tiempoApertura = reader.IsDBNull(34) ? null : reader.GetInt32(34);
+
+                                //Console.WriteLine("****************************************************************");
+                                eventos.Add(evento);
+                            }
+
+
+
                         }
                     }
                 }
@@ -73,8 +127,14 @@ namespace DashboarJira.Services
                 }
             }
 
-            return messagesTable;
+            return eventos;
         }
+
+
+        
+
+
+
         public DataTable GetMessagesIORevp9()
         {
             DataTable messagesTable = new DataTable();
@@ -110,14 +170,21 @@ namespace DashboarJira.Services
 
 
 
+        public List<Evento> setEvento(DateTime fechaInicio, DateTime fechaFin, string codigoEvento)
+        {
+            List<Evento> eventos = new List<Evento>();
+
+
+            return eventos;
+        }
 
 
         public string GetMessagesAsJson()
         {
-            
-            DataTable messagesTableEVP8 = GetMessagesIORevp8();
+
+            DataTable messagesTable = GetMessages();
             // Convert DataTable to JSON
-            string json = JsonConvert.SerializeObject(messagesTableEVP8, Formatting.Indented);
+            string json = JsonConvert.SerializeObject(messagesTable, Formatting.Indented);
 
             return json;
         }
