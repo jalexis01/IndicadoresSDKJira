@@ -11,6 +11,22 @@ function exportToExcel() {
     saveAs(new Blob([wbout], { type: 'application/octet-stream' }), 'tickets.xlsx');
 }
 
+
+function validateDates() {
+    var startDate = $('#dtpStart').val();
+    var endDate = $('#dtpEnd').val();
+    console.log("Fecha inicial: " + startDate);
+    console.log("Fecha final: " + endDate);
+
+    if (startDate === "" || endDate === "") {
+        Swal.fire({
+            title: 'Debe seleccionar la fecha',
+        });
+    } else {
+        ServiceGetTickets();
+    }
+}
+
 function ServiceGetTickets() {
     var startDate = $('#dtpStart').val();
     var endDate = $('#dtpEnd').val();

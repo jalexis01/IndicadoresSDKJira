@@ -5,9 +5,26 @@
 });
 
 
+function validateDates() {
+    var startDate = $('#dtpStart').val();
+    var endDate = $('#dtpEnd').val();
+    console.log("Fecha inicial: " + startDate);
+    console.log("Fecha final: " + endDate);
+
+    if (startDate === "" || endDate === "") {
+        Swal.fire({
+            title: 'Debe seleccionar la fecha',            
+        });
+    } else {
+        ServiceGetIndicadores();
+    }
+}
+
 function ServiceGetIndicadores() {
     var startDate = $('#dtpStart').val();
     var endDate = $('#dtpEnd').val();
+    //var max = document.getElementById("maxSelect").value;
+    //var componente = $('#componente').val();
     console.log("Fecha inicial: " + startDate);
     console.log("Fecha final: " + endDate);
 
@@ -30,17 +47,16 @@ function ServiceGetIndicadores() {
             tbody.empty();
 
             $.each(response, function (index, indicador) {
-                console.log(data)
                 var row = $('<tr>');
                 console.log('Nombre indicador: '+ indicador.nombre)
                 console.log('Valor: ' + indicador.calculo)
                 row.append($('<td>').text(indicador.nombre));
                 row.append($('<td>').text(indicador.calculo));
-                //row.append($('<td>').text(indicador.descripcion));                
-                console.log(indicador.nombre)
-                row.append($('<td>').text(indicador.nombre));
-                row.append($('<td>').text(indicador.calculo));
-                row.append($('<td>').text(indicador.descripcion));                
+                //console.log(indicador.nombre)
+                //row.append($('<td>').text(indicador.nombre));
+                //row.append($('<td>').text(indicador.calculo));
+                //row.append($('<td>').text(indicador.descripcion));
+
                 tbody.append(row);
             });
         },
