@@ -48,7 +48,7 @@ namespace MQTT.Web.Controllers
             {
                 string formattedStartDate;
                 string formattedEndDate;
-
+                /**/
                 if (startDate != null || endDate != null)
                 {
                     //max = 10;
