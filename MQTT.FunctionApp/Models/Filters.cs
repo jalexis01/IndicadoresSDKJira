@@ -111,7 +111,7 @@ namespace MQTT.FunctionApp.Models
             {
                 resultQuery += $" AND key = {this.id_ticket}";
             }
-            
+            resultQuery += " &maxResults=" + Int32.MaxValue;
 
             return results;
         }
