@@ -59,28 +59,125 @@ function ServiceGetIndicadoresDashboard() {
 
 
 function transformData(data) {
-
-
     var generalChilds = [];
     var IAIOChilds = [];
     var IANOChilds = [];
     var RAIOChilds = [];
     var RANOChilds = [];
     var IEPMChilds = [];
+    var ICPMPuertasChilds = [];
+    var ICPMRFIDChilds = [];
+    var ICPMChilds = [];
+
     for (var i = 0; i < data.length; i++) {
         var indicador = data[i];
-        if (indicador.nombre.includes("IAIO Contratista")) {
+        if (indicador.nombre.includes("IAIO CONTRATISTA")) {
             IAIOChilds.push({
                 id: i + 2,
                 idFather: 1,
                 title: indicador.nombre,
                 value: indicador.calculo,
+                childs: []
             });
-    }
-    for (var i = 0; i < data.length; i++) {
-        var indicador = data[i];
+        } else if (indicador.nombre.includes("IAIO NO CONTRATISTA")) {
+            IAIOChilds.push({
+                id: i + 2,
+                idFather: 1,
+                title: indicador.nombre,
+                value: indicador.calculo,
+                childs: []
+            });
+        } else if (indicador.nombre.includes("IANO CONTRATISTA")) {
+            IANOChilds.push({
+                id: i + 2,
+                idFather: 1,
+                title: indicador.nombre,
+                value: indicador.calculo,
+                childs: []
+            });
+        } else if (indicador.nombre.includes("IANO NO CONTRATISTA")) {
+            IANOChilds.push({
+                id: i + 2,
+                idFather: 1,
+                title: indicador.nombre,
+                value: indicador.calculo,
+                childs: []
+            });
+        } else if (indicador.nombre.includes("IEPM CONTRATISTA")) {
+            IEPMChilds.push({
+                id: i + 2,
+                idFather: 1,
+                title: indicador.nombre,
+                value: indicador.calculo,
+                childs: []
+            });
+        } else if (indicador.nombre.includes("IEPM NO CONTRATISTA")) {
+            IEPMChilds.push({
+                id: i + 2,
+                idFather: 1,
+                title: indicador.nombre,
+                value: indicador.calculo,
+                childs: []
+            });
+        } else if (indicador.nombre.includes("RANO CONTRATISTA")) {
+            RANOChilds.push({
+                id: i + 2,
+                idFather: 1,
+                title: indicador.nombre,
+                value: indicador.calculo,
+                childs: []
+            });
+        } else if (indicador.nombre.includes("RANO NO CONTRATISTA")) {
+            RANOChilds.push({
+                id: i + 2,
+                idFather: 1,
+                title: indicador.nombre,
+                value: indicador.calculo,
+                childs: []
+            });
+        } else if (indicador.nombre.includes("RANO CONTRATISTA")) {
+            RANOChilds.push({
+                id: i + 2,
+                idFather: 1,
+                title: indicador.nombre,
+                value: indicador.calculo,
+                childs: []
+            });
+        } else if (indicador.nombre.includes("RANO NO CONTRATISTA")) {
+            RANOChilds.push({
+                id: i + 2,
+                idFather: 1,
+                title: indicador.nombre,
+                value: indicador.calculo,
+                childs: []
+            });
+        } else if (indicador.nombre.includes("RAIO CONTRATISTA")) {
+            RAIOChilds.push({
+                id: i + 2,
+                idFather: 1,
+                title: indicador.nombre,
+                value: indicador.calculo,
+                childs: []
+            });
+        } else if (indicador.nombre.includes("RAIO NO CONTRATISTA")) {
+            RAIOChilds.push({
+                id: i + 2,
+                idFather: 1,
+                title: indicador.nombre,
+                value: indicador.calculo,
+                childs: []
+            });
 
-        if (indicador.nombre.includes("IAIO GENERAL")) {
+        } else if (indicador.nombre.includes("ICPM")) {
+            ICPMChilds.push({
+                id: i + 2,
+                idFather: 1,
+                title: indicador.nombre,
+                value: indicador.calculo,
+                childs: []
+            });
+
+        } else if (indicador.nombre.includes("IAIO GENERAL")) {
             generalChilds.push({
                 id: i + 2,
                 idFather: 1,
@@ -104,7 +201,7 @@ function transformData(data) {
                 value: indicador.calculo,
                 childs: RAIOChilds
             });
-        } else if (indicador.nombre.includes("RAIO GENERAL")) {
+        } else if (indicador.nombre.includes("RANO GENERAL")) {
             generalChilds.push({
                 id: i + 2,
                 idFather: 1,
@@ -126,41 +223,22 @@ function transformData(data) {
                 idFather: 1,
                 title: indicador.nombre,
                 value: indicador.calculo,
-                childs: []
+                childs: ICPMChilds
             });
         }
     }
-    for (var i = 0; i < data.length; i++) {
-        var indicador = data[i];
-        if (indicador.nombre.includes("Contratista")) {
-            generalChilds.push({
-                id: i + 2,
-                idFather: 1,
-                title: indicador.nombre,
-                value: indicador.calculo,
-                childs: []
-            });
-        }
-         else if (indicador.nombre.includes("ICPM")) {
-                generalChilds.push({
-                    id: i + 2,
-                    idFather: 1,
-                    title: indicador.nombre,
-                    value: indicador.calculo,
-                    childs: []
-                });
-            }
-        }
-    }
+
     var result = [
         {
             id: 1,
             title: "Indicadores",
-            description: "Aqu� est�n todos los indicadores",
+            description: "Aquí están todos los indicadores",
             childs: generalChilds
         }
     ];
+
     return result;
+
 }
 
 
@@ -177,31 +255,22 @@ var dataTest = [
             {
                 id: 2,
                 idFather: 1,
-                title: "Indicador",
+                title: "IANO General",
                 description: "child data primary",
                 value: "40",
                 childs: [
                     {
                         id: 21,
                         idFather: 2,
-                        title: "Test-second-0101",
-                        description: "child data secondary",
+                        title: "IANO NO CONTRATISTA",
                         value: "90",
                     },
                     {
                         id: 22,
                         idFather: 2,
-                        title: "Test-second-0102",
-                        description: "child data secondary",
+                        title: "IANO CONTRATISTA",
                         value: "5",
-                    },
-                    {
-                        id: 23,
-                        idFather: 2,
-                        title: "Test-second-0103",
-                        description: "child data secondary",
-                        value: "12",
-                    }
+                    },                   
                 ]
             },
             {
@@ -270,9 +339,6 @@ var dataTest = [
 
 
 $(document).ready(function () {
-    console.log(transformedData)
-    //ExtractData(dataTest);
-    //treeGridDashBoard(dataTest)
     SelectorMonth();
 });
 
@@ -391,7 +457,7 @@ function setDiagramPrimary(data) {
         tooltip: {
             enable: true
         },
-        legendSettings: { enableHighlight: true },
+        legendSettings: { enableHighlight: false },
         series: [
             {
                 type: 'Column',
