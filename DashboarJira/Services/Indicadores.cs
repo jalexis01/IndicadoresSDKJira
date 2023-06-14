@@ -196,11 +196,6 @@ namespace DashboarJira.Services
             indicadorAux.descripcion = IRF_NO_CONTRATISTA.ToString();
             indicadores.Add(indicadorAux);
 
-
-
-            Console.WriteLine("indicadores. " + indicadores);
-
-
             return indicadores;
 
 

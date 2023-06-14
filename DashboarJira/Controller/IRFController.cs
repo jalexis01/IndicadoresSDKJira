@@ -45,7 +45,6 @@ namespace DashboarJira.Controller
             string jql = string.Format(JQL_GENERAL, start, end);
             List<Ticket> total_tickets = jiraAccess.GetTiketsIndicadores(jql);
 
-            Console.WriteLine(jql);
             IRFEntity irf = new IRFEntity(ContarFallasPorPuerta(total_tickets), TOTAL_PUERTAS, total_tickets);
             return irf;
 

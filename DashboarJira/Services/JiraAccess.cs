@@ -89,7 +89,6 @@ namespace DashboarJira.Services
         public List<Ticket> GetTiketsIndicadores(string query)
         {
             var jql = query;
-            //Console.WriteLine(jql);
             var issues = jira.Issues.GetIssuesFromJqlAsync(jql, int.MaxValue, 0);
 
 
