@@ -15,6 +15,7 @@ using MQTT.Infrastructure.Models.Enums;
 using System.ComponentModel.DataAnnotations;
 using MQTT.FunctionApp.Models;
 using Newtonsoft.Json.Linq;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace MQTT.FunctionApp
 {
@@ -155,6 +156,7 @@ namespace MQTT.FunctionApp
                         using (StreamReader objReader = new StreamReader(strReader))
                         {
                             resultJira = objReader.ReadToEnd();
+                            
                         }
                     }
                 }
@@ -165,12 +167,16 @@ namespace MQTT.FunctionApp
                 throw new Exception(msgError);
             }
 
-            log.LogInformation($"{guid}=== Response from Jira: {resultJira}");
+            //log.LogInformation($"{guid}=== Response from Jira: {resultJira}");
+            JObject jObject = JObject.Parse(resultJira);
+            string propertyValue = jObject["total"].Value<string>();
+            int total = int.Parse(propertyValue);
+            log.LogInformation($"{guid}=== Total: {propertyValue}");
             var json = JsonConvert.DeserializeObject<Models.Issue>(resultJira);
-
             log.LogInformation($"{guid}=== Total Issues: {json.Issues.Count}");
-
-
+            double contador = total / 100;
+            contador = Math.Floor(contador) + 1;
+            Console.WriteLine(contador);
             return convertIssueInTicket(json, filters, timeZone);
 
         }
