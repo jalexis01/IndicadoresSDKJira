@@ -11,6 +11,30 @@ var transformedData
 
 
 function ServiceGetIndicadoresDashboard() {
+
+    var datepicker = $('#datepicker').val();
+    var fechaSeleccionada = new Date(datepicker);
+    var mes = (fechaSeleccionada.getMonth() + 1).toString().padStart(2, '0'); // Mes con dos dígitos
+    var anio = fechaSeleccionada.getFullYear();
+
+    // Obtener el primer día del mes
+    var primerDia = new Date(anio, fechaSeleccionada.getMonth(), 1);
+
+    // Obtener el último día del mes
+    var ultimoDia = new Date(anio, fechaSeleccionada.getMonth() + 1, 0);
+
+    console.log("Año: " + anio);
+    console.log("Mes: " + mes);
+    console.log("Primer día del mes: " + primerDia.getDate());
+    console.log("Último día del mes: " + ultimoDia.getDate());
+
+    var startDate2 = anio + '-' + mes + '-' + primerDia.getDate();
+    var endDate2 = anio + '-' + mes + '-' + ultimoDia;
+    console.log("Fecha inicial: " + startDate2);
+    console.log("Fecha final: " + endDate);
+
+
+
     var startDate = '2023-05-01';
     var endDate = '2023-06-01';
     console.log("Fecha inicial: " + startDate);
