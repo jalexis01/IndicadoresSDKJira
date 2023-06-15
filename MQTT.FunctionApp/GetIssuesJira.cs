@@ -172,8 +172,9 @@ namespace MQTT.FunctionApp
             var json = JsonConvert.DeserializeObject<Models.Issue>(resultJira);
             log.LogInformation($"{guid}=== Total Issues: {json.Issues.Count}");
             List<Models.IssueDTO> result = convertIssueInTicket(json, filters, timeZone);
-            if (total < max + start) {
+            if ( max + start < total) {
                 result = result.Concat( getTicketsFromJira(start + max, max, token, filters, timeZone, log, guid, msgError)).ToList();
+                Console.WriteLine("Entro");
             }
             return result;
 
