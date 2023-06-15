@@ -164,14 +164,18 @@ namespace MQTT.FunctionApp
                 msgError = $"Error at {uri} {ex.Message} {ex.InnerException}";
                 throw new Exception(msgError);
             }
-
-            log.LogInformation($"{guid}=== Response from Jira: {resultJira}");
+            
+            JObject jObject = JObject.Parse(resultJira);
+            string propertyValue = jObject["total"].Value<string>();
+            int total = int.Parse(propertyValue);
+            log.LogInformation($"{guid}=== Total: {propertyValue}");
             var json = JsonConvert.DeserializeObject<Models.Issue>(resultJira);
-
             log.LogInformation($"{guid}=== Total Issues: {json.Issues.Count}");
-
-
-            return convertIssueInTicket(json, filters, timeZone);
+            List<Models.IssueDTO> result = convertIssueInTicket(json, filters, timeZone);
+            if (total < max + start) {
+                result = result.Concat( getTicketsFromJira(start + max, max, token, filters, timeZone, log, guid, msgError)).ToList();
+            }
+            return result;
 
         }
     }
