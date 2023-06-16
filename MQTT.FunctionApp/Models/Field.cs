@@ -61,9 +61,13 @@ namespace MQTT.FunctionApp.Models
         public List<Category> customfield_10086 { get; set; }
 
         //[JsonPropertyName("DescriptionRepair")]
-        public string description { get; set; }
+        //public string description { get; set; }
+        public string customfield_10105 { get; set; }
 
         //[JsonPropertyName("DiagnosisCause")]
+        public string customfield_10104 { get; set; }
+
+        //[JsonPropertyName("CauseType")]
         public Category customfield_10067 { get; set; }
         public DateTime? customfield_10101 { get; set; }
 

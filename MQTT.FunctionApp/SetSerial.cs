@@ -78,7 +78,7 @@ namespace MQTT.FunctionApp
                 uri = $"https://manateecc.atlassian.net/rest/api/2/issue/{key}";
 
                 log.LogInformation($"{guid}=== Request to Jira...");
-                var response = BL.Requests.GetResponse(uri, "PUT", token, body);
+                var response = MQTT.Infrastructure.BL.Requests.GetResponse(uri, "PUT", token, body);
                 logRequestIn.Processed = true;
                 log.LogInformation($"{guid}=== Serial set successfully");
                 log.LogInformation($"{guid}==== END PROCESS ======");

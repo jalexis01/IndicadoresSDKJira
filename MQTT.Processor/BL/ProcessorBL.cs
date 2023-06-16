@@ -88,38 +88,7 @@ namespace MQTT.Processor.BL
 
                         item.Processed = true;
                         item.IdProcessed = 2;
-                        item.IdHeaderMessage = idHeaderMessage;
-                        #region old
-                        //string messageCode = (string)dataJson[_identifierField];
-
-                        //var lstValidFields = GetFieldsJSON(dataJson);
-
-
-
-                        //MessageTypeDTO messageStructure = UpdateConfigurationMessage(lstValidFields, messageCode);
-                        //MessageInDTO messageInDTO = new MessageInDTO()
-                        //{
-                        //    IdMessage = messageStructure.Id,
-                        //    IgLogMessageIn = item.Id
-                        //};
-
-                        //foreach (var currentField in messageStructure.Fields)
-                        //{
-                        //    var value = (string)dataJson[currentField.Name];
-
-                        //    MessageInFieldDTO messageInFieldDTO = new MessageInFieldDTO
-                        //    {
-                        //        IdMessageField = currentField.Id,
-                        //        Value = value
-                        //    };
-
-                        //    messageInDTO.Fields.Add(messageInFieldDTO);
-                        //}
-
-                        //AddMessageIn(messageInDTO);
-                        //item.Processed = true;
-                        //item.IdProcessed = 2;
-                        #endregion
+                        item.IdHeaderMessage = idHeaderMessage;                       
                     }
                     catch (Exception exItem)
                     {

@@ -2,6 +2,7 @@
 using MQTT.Infrastructure.Models.DTO;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 
 namespace MQTT.Infrastructure.DAL
@@ -25,7 +26,9 @@ namespace MQTT.Infrastructure.DAL
 
                     LogMessageDTO logMessageDTO = new LogMessageDTO()
                     {
-                        Id = tbLogMessageIn.Id
+                        Id = tbLogMessageIn.Id,
+                        CreationDate = tbLogMessageIn.CreationDate,
+                        Message = message
                     };
                     return logMessageDTO;
                 }
@@ -35,31 +38,59 @@ namespace MQTT.Infrastructure.DAL
                 throw ex;
             }
         }
+        public static LogMessageDTO AddLogHistory(General objContext, LogMessageDTO logMsg)
+        {
+            try
+            {
+                using (var dbContext = objContext.DBConnection())
+                {
+                    TbLogHistoryMessageIn tbLogHistoryMsg = new TbLogHistoryMessageIn
+                    {
+                        CreationDate = logMsg.CreationDate.Value,
+                        Observations = logMsg.Observations,
+                        Processed = logMsg.Processed,
+                        IdProcessed = logMsg.IdProcessed,
+                        DateProcessed = DateTime.UtcNow,
+                        IdHeaderMessage = logMsg.IdHeaderMessage,
+                        Message = logMsg.Message
+                    };
 
-        //public static void Update(General objContext, LogMessageDTO logMessageDTO)
-        //{
-        //    try
-        //    {
-        //        using (var dbContext = objContext.DBConnection())
-        //        {
-        //            var log = (from logMsg in dbContext.TbLogMessageIn
-        //                       where logMsg.Id == logMessageDTO.Id
-        //                       select logMsg).FirstOrDefault();
+                    dbContext.Add(tbLogHistoryMsg);
+                    dbContext.SaveChanges();
 
-        //            log.Observations = logMessageDTO.Observations;
-        //            log.Idprocessed = logMessageDTO.IdProcessed;
-        //            log.Processed = logMessageDTO.Processed;
-        //            log.Ideventrecord = logMessageDTO.IdEventRecord;
+                    LogMessageDTO logMessageDTO = new LogMessageDTO()
+                    {
+                        Id = tbLogHistoryMsg.Id
+                    };
+                    return logMessageDTO;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public static void RemoveLogMsg(General objContext, long id)
+        {
+            try
+            {
+                using (var dbContext = objContext.DBConnection())
+                {
+                    var log = dbContext.TbLogMessageIn.Where(l => l.Id == id).FirstOrDefault();
 
-        //            dbContext.SaveChanges();
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw ex;
-        //    }
-        //}
-
+                    if (log == null)
+                    {
+                        throw new Exception("Log not found.");
+                    }
+                    dbContext.Remove(log);
+                    dbContext.SaveChanges();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
         public static long GetIdLogMessageInByDay(General objContext, DateTime date)
         {
             try
@@ -87,12 +118,11 @@ namespace MQTT.Infrastructure.DAL
                 {
                     var result = (from l in dbContext.TbLogMessageIn
                                   where l.Id > idLog
-                                  select new LogMessageDTO
-                                  {
+                                  select new LogMessageDTO { 
                                       Id = l.Id,
                                       DateIn = l.CreationDate,
                                       IdHeaderMessage = l.IdHeaderMessage,
-                                      IdProcessed = l.IdProcessed,
+                                      IdProcessed = l.IdProcessed, 
                                       Message = l.Message,
                                       Observations = l.Observations,
                                       Processed = l.Processed
@@ -105,14 +135,14 @@ namespace MQTT.Infrastructure.DAL
             {
                 throw ex;
             }
-        }
-        public static List<LogMessageDTO> GetLogMessagePending(General objContext)
-        {
-            try
-            {
-                using (var dbContext = objContext.DBConnection())
+		}
+		public static List<LogMessageDTO> GetLogMessagePending(General objContext)
+		{
+			try
+			{
+				using (var dbContext = objContext.DBConnection())
                 {
-                    var result = (from msg in dbContext.TbLogMessageIn
+					var result = (from msg in dbContext.TbLogMessageIn
                                   where !msg.Processed
                                   select new LogMessageDTO()
                                   {
@@ -121,14 +151,14 @@ namespace MQTT.Infrastructure.DAL
                                   }).ToList();
 
                     return result;
-                }
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-        public static LogMessageDTO GetLogMessageById(General objContext, long id)
+				}
+			}
+			catch (Exception ex)
+			{
+				throw ex;
+			}
+		}
+		public static LogMessageDTO GetLogMessageById(General objContext, long id)
         {
             try
             {

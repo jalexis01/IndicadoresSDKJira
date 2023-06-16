@@ -55,8 +55,8 @@ namespace MQTT.Infrastructure.Models
             }
             else
             {
-                if (!optionsBuilder.IsConfigured)
-                {
+            if (!optionsBuilder.IsConfigured)
+            {
                     optionsBuilder.UseSqlServer("Server=DESKTOP-LG97MDG\\SQLEXPRESS;Database=EYSIntegration;Trusted_Connection=True;");
                 }
             }

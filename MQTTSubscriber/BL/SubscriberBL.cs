@@ -21,6 +21,12 @@ namespace MQTT.Subscriber.BL
             try
             {
                 LogMessageDTO log = AddLogMessageIn(message);
+
+                var body = System.Text.Json.JsonSerializer.Serialize(log);
+                string uri = $"https://functionappmqttengine.azurewebsites.net/api/ProcessMessageMQTT?code=_45i4qPZQEDoczQm2Gv4VU4Ag868oWpTmptLXm_EF-IjAzFudc2OzA==";
+                //string uri = $"http://localhost:7071/api/ProcessMessageMQTT";
+
+                var response = MQTT.Infrastructure.BL.Requests.GetResponse(uri, "POST", parameters: body);
             }
             catch (Exception ex)
             {

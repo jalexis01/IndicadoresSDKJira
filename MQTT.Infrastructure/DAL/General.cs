@@ -1,4 +1,5 @@
-﻿using MQTT.Infrastructure.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using MQTT.Infrastructure.Models;
 using MQTT.Infrastructure.Models.DTO;
 using System;
 using System.Collections.Generic;
@@ -81,7 +82,17 @@ namespace MQTT.Infrastructure.DAL
                     result += $"{value},";
                 }
                 else if (dataType.ToUpper().Contains("VARCHAR"))
+                {
+                    if (simple)
+                    {
+                        result += $"{value}";
+                    }
+                    else
+                    {
+
                     result += $"'{value}',";
+                    }
+                }
                 else if (dataType.ToUpper().Contains("BIT"))
                     result += $"{(value.ToUpper().ToString() == "TRUE" ? 1 : 0)},";
                 else if (dataType.ToUpper().Contains("DATETIME"))
@@ -172,6 +183,43 @@ namespace MQTT.Infrastructure.DAL
             catch (Exception ex)
             {
                 throw;
+            }
+        }
+
+        public static List<SettingDTO> GetColumnsName(General objContext, string tableName)
+        {
+            try
+            {
+                List<SettingDTO> lstColumns = new List<SettingDTO>();
+                string sentence = $"SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = N'{tableName}'";
+                using (var DBContext = objContext.DBConnection())
+                {
+                    using (var command = DBContext.Database.GetDbConnection().CreateCommand())
+                    {
+                        command.CommandText = sentence;
+                        DBContext.Database.OpenConnection();
+                        using (var readerResult = command.ExecuteReader())
+                        {
+                            if (readerResult.HasRows)
+                            {
+                                while (readerResult.Read())
+                                {
+                                    SettingDTO column = new SettingDTO();
+                                    column.Name = readerResult["COLUMN_NAME"].ToString();
+                                    column.Value = readerResult["DATA_TYPE"].ToString();
+
+                                    lstColumns.Add(column);
+                                }
+                            }
+                        }
+                    }
+                }
+
+                return lstColumns;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
         }
     }
