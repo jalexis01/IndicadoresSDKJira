@@ -13,21 +13,19 @@ JiraAccess jira = new JiraAccess();
 // Retrieve messages as string representation
 //string messagesString = dbConnector.GetMessagesAsString();
 //Console.WriteLine(messagesString);
+
 /*
 IAIOController iaio = new IAIOController(jira);
 IANOController iano = new IANOController(jira);
 ICPMController icpm = new ICPMController(jira);
 IEPMController iepm = new IEPMController(jira);
 RAIOController raio = new RAIOController(jira);
-*/
 RANOController rano = new RANOController(jira);
-/*
 IRFController IRF = new IRFController(jira);
-*/
 var fechainicio = "2023-05-01";
 var fechaFinal = "2023-06-01";
 
-/*
+
 Console.WriteLine("IAIO: " + iaio.IAIOGeneral(fechainicio, fechaFinal).CalcularIndicadorIAIO());
 Console.WriteLine("IAIO CONTRATISTA: " + iaio.IAIOContratista(fechainicio, fechaFinal).CalcularIndicadorIAIO());
 Console.WriteLine("IAIO NO CONTRATISTA: " + iaio.IAIONoContratista(fechainicio, fechaFinal).CalcularIndicadorIAIO());
@@ -50,7 +48,7 @@ Console.WriteLine("raio no contratista" + raio.RAIONoContratista(fechainicio, fe
 
 Console.WriteLine("RANO " + rano.RANOGeneral(fechainicio, fechaFinal).CalcularIndicadorRANO());
 Console.WriteLine("RANO contratista " + rano.RANOContratista(fechainicio, fechaFinal).CalcularIndicadorRANO());
-*/
+
 Console.WriteLine("RANO no contratista: " + rano.RANONoContratista(fechainicio, fechaFinal).CalcularIndicadorRANO());
 /*
 Console.WriteLine("IRF " + IRF.IRFGeneral(fechainicio, fechaFinal).calculoIRF());

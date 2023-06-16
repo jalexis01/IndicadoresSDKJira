@@ -174,7 +174,7 @@ namespace DashboarJira.Services
             indicadores.Add(indicadorAux);
 
             //RANO NO CONTRATISTA
-            indicadorAux = new IndicadoresEntity();
+            aindicadorAux = new IndicadoresEntity();
             RANOEntity RANO_NO_CONTRATISTA = rano.RANONoContratista(fechaInicio, fechaFin);
             indicadorAux.nombre = "RANO NO CONTRATISTA";
             indicadorAux.calculo = RANO_NO_CONTRATISTA.CalcularIndicadorRANO();

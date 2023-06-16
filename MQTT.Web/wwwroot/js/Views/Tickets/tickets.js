@@ -91,7 +91,8 @@ function showMoreInformation(idTicket) {
                 title: 'Información del Ticket',
                 html: html,
                 confirmButtonText: 'Cerrar',
-              
+                showCloseButton: true,
+                showConfirmButton: false,
                 customClass: {
                     container: 'swal-wide',
                 },
@@ -101,6 +102,7 @@ function showMoreInformation(idTicket) {
                 allowOutsideClick: false,
                 allowEscapeKey: false,
             });
+
         },
         error: function () {
             Swal.fire('Error', 'No se pudo obtener la información del ticket', 'error');
