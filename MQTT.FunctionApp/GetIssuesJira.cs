@@ -174,7 +174,6 @@ namespace MQTT.FunctionApp
             List<Models.IssueDTO> result = convertIssueInTicket(json, filters, timeZone);
             if ( max + start < total) {
                 result = result.Concat( getTicketsFromJira(start + max, max, token, filters, timeZone, log, guid, msgError)).ToList();
-                Console.WriteLine("Entro");
             }
             return result;
 
