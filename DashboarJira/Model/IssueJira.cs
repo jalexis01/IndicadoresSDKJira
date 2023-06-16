@@ -24,8 +24,8 @@
         public DateTime? FechaSolucion { get; set; }
         public string? Estacion { get; set; }
         public string? Vagon { get; set; }
-        public string? TiempoResolucionAnio { get; set; }
-        public string? TiempoResolucionAIO { get; set; }
+        //public string? TiempoResolucionAnio { get; set; }
+        //public string? TiempoResolucionAIO { get; set; }
         public string? AjustesPuerta { get; set; }
         public string? ConfiguracionPuerta { get; set; }
         public string? AjustesITS { get; set; }
