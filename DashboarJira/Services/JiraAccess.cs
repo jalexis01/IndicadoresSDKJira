@@ -7,7 +7,7 @@ namespace DashboarJira.Services
     {
         string jiraUrl = "https://manateecc.atlassian.net/";
         string username = "desarrollocc@manateeingenieria.com";
-        string password = "ATATT3xFfGF0ZRHIEZTEJVRnhNKviH0CGed6QXqCDMj5bCmKSEbO00UUjHUb3yDcaA4YD1SHohyDr4qnwRx2x4Tu_S_QW_xlGIcIUDvL7CFKEg47_Jcy4Dmq6YzO0dvqB3qeT-EVWfwJ2jJ-9vEUfsqXavD0IIGA7DAZHGCtIWhxgwKIbAWsmeA=038B810D";
+        string password = "ATATT3xFfGF0NhFD9GhXdIJwekhHFY5G_es_iOckYq0YSz11iGSTRbv-dWEM_NB72EACfc_QBOX35LxH85KSY6U8pbZWfnlS1swfgfnpbXomrz_g1MLTAHico0BMhxL7Xv2DXWWhVMGjKwHAMeGeLFmXe6JH0Ir4dYsUFPP5WGIe3ndDPYQksm0=243AC48F";
 
         Jira jira;
 
@@ -115,12 +115,18 @@ namespace DashboarJira.Services
             return result;
 
         }
+        public int totalITem(Task<IPagedQueryResult<Issue>> issues)
+        {
+            int totalInt = issues.Result.ItemsPerPage;
 
+            return totalInt;
+
+        }
 
         public List<Ticket> ConvertIssusInTickets(Task<IPagedQueryResult<Issue>> issues)
         {
             List<Ticket> result = new List<Ticket>();
-
+            //Console.WriteLine(totalITem(issues));
             foreach (var issue in issues.Result)
             {
 

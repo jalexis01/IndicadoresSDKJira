@@ -50,9 +50,9 @@ Console.WriteLine("RANO " + rano.RANOGeneral(fechainicio, fechaFinal).CalcularIn
 Console.WriteLine("RANO contratista " + rano.RANOContratista(fechainicio, fechaFinal).CalcularIndicadorRANO());
 
 Console.WriteLine("RANO no contratista: " + rano.RANONoContratista(fechainicio, fechaFinal).CalcularIndicadorRANO());
-/*
+
 Console.WriteLine("IRF " + IRF.IRFGeneral(fechainicio, fechaFinal).calculoIRF());
-*/
+/*
 Indicadores indicadores = new Indicadores();
 
 
@@ -65,3 +65,7 @@ foreach (IndicadoresEntity indicador in indicadores.indicadores("2023-05-01", "2
 }
 Console.WriteLine();
 
+*/
+Console.WriteLine(jira.GetTikets(0, 0, null, null, null).Count);
+Console.WriteLine(jira.GetTikets(100, 0, null, null, null).Count);
+Console.WriteLine(jira.GetTikets(200, 0, null, null, null).Count);
