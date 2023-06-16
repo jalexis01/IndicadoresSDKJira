@@ -107,14 +107,15 @@ function showMoreInformation(idTicket) {
                 title: 'Información del Ticket',
                 html: html,
                 confirmButtonText: 'Cerrar',
-              
+                showCloseButton: true,
+                showConfirmButton: false,
                 customClass: {
                     container: 'swal-wide',
                 },
                 width: '50%',
                 padding: '2rem',
                 backdrop: true,
-                allowOutsideClick: false,
+                allowOutsideClick: true,
                 allowEscapeKey: false,
             });
         },
