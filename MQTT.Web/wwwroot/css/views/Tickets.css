@@ -50,3 +50,9 @@
         overflow: hidden;
         text-overflow: ellipsis;
     }
+
+#maxSelect {
+    width: 100px;
+    height: 32px;
+    font-size: 13px;
+}

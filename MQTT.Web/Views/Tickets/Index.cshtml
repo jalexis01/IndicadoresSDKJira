@@ -24,23 +24,36 @@
             <input id="dtpEnd" required>
         </div>
     </div>
-    <div class="inputs-container">
+    @*<div class="inputs-container">
         <label class="TextComponente">ID Componente</label>
         <div class="wrapperFI">
             <input type="text" id="componente">
         </div>
+    </div>*@
+
+    <div class="inputs-container">
+        <label class="TextComponente">ID Componente</label>
+        <div class="wrapperFI">
+            <span class="e-input-group e-control-wrapper e-ddl e-lib e-keyboard" tabindex="-1" aria-owns="searchParam_options" role="listbox" aria-haspopup="true" aria-expanded="false" aria-activedescendant="null" aria-live="polite" aria-labelledby="searchParam_hidden" style="width: 100%;">
+                <input type="text" id="componente" class="e-input" role="textbox" placeholder="Ingrese id componente" aria-placeholder="Seleccione un campo" style="" tabindex="-1">
+            </span>
+        </div>
+
     </div>
+
     <div class="inputs-container">
         <label class="TextCantidad">Cant.</label>
         <div class="wrapperFI">
-            <select id="maxSelect">
-                <option value="10">10</option>
-                <option value="20">20</option>
-                <option value="30">30</option>
-                <option value="50">50</option>
-                <option value="100">100</option>
-                <option value="200">200</option>
-            </select>
+            <span class="e-input-group e-control-wrapper e-ddl e-lib e-keyboard" tabindex="-1" aria-disabled="false" aria-owns="searchParam_options" role="listbox" aria-haspopup="true" aria-expanded="false" aria-activedescendant="null" aria-live="polite" aria-labelledby="searchParam_hidden" style="width: 100%;">
+                <select id="maxSelect" tabindex="-1" class="e-input-group e-control-wrapper e-ddl e-lib e-keyboard" tabindex="-1" aria-disabled="false" aria-owns="searchParam_options" role="listbox" aria-haspopup="true" aria-expanded="false" aria-activedescendant="null" aria-live="polite" aria-labelledby="searchParam_hidden" style="width: 100%;">
+                    <option value="10">10</option>
+                    <option value="20">20</option>
+                    <option value="30">30</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                    <option value="200">200</option>
+                </select>
+            </span>
         </div>
     </div>
     <div class="inputs-container">
