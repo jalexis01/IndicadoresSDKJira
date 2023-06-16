@@ -22,10 +22,11 @@ IEPMController iepm = new IEPMController(jira);
 RAIOController raio = new RAIOController(jira);
 RANOController rano = new RANOController(jira);
 IRFController IRF = new IRFController(jira);
+*/
 var fechainicio = "2023-05-01";
 var fechaFinal = "2023-06-01";
 
-
+/*
 Console.WriteLine("IAIO: " + iaio.IAIOGeneral(fechainicio, fechaFinal).CalcularIndicadorIAIO());
 Console.WriteLine("IAIO CONTRATISTA: " + iaio.IAIOContratista(fechainicio, fechaFinal).CalcularIndicadorIAIO());
 Console.WriteLine("IAIO NO CONTRATISTA: " + iaio.IAIONoContratista(fechainicio, fechaFinal).CalcularIndicadorIAIO());
@@ -65,7 +66,8 @@ foreach (IndicadoresEntity indicador in indicadores.indicadores("2023-05-01", "2
 }
 Console.WriteLine();
 
-*/
+
 Console.WriteLine(jira.GetTikets(0, 0, null, null, null).Count);
 Console.WriteLine(jira.GetTikets(100, 0, null, null, null).Count);
-Console.WriteLine(jira.GetTikets(200, 0, null, null, null).Count);
+*/
+Console.WriteLine(jira.GetTikets(0,0, fechainicio, fechaFinal, null).Count);

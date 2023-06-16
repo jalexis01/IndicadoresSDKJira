@@ -7,7 +7,7 @@ namespace DashboarJira.Services
     {
         string jiraUrl = "https://manateecc.atlassian.net/";
         string username = "desarrollocc@manateeingenieria.com";
-        string password = "ATATT3xFfGF0NhFD9GhXdIJwekhHFY5G_es_iOckYq0YSz11iGSTRbv-dWEM_NB72EACfc_QBOX35LxH85KSY6U8pbZWfnlS1swfgfnpbXomrz_g1MLTAHico0BMhxL7Xv2DXWWhVMGjKwHAMeGeLFmXe6JH0Ir4dYsUFPP5WGIe3ndDPYQksm0=243AC48F";
+        string password = "ATATT3xFfGF0ZRHIEZTEJVRnhNKviH0CGed6QXqCDMj5bCmKSEbO00UUjHUb3yDcaA4YD1SHohyDr4qnwRx2x4Tu_S_QW_xlGIcIUDvL7CFKEg47_Jcy4Dmq6YzO0dvqB3qeT-EVWfwJ2jJ-9vEUfsqXavD0IIGA7DAZHGCtIWhxgwKIbAWsmeA=038B810D";
 
         Jira jira;
 
@@ -15,6 +15,8 @@ namespace DashboarJira.Services
         {
             jira = Jira.CreateRestClient(jiraUrl, username, password);
         }
+
+        /*TODO*/
         public List<Ticket> GetTikets(int start, int max, string startDate, string endDate, string idComponente)
         {
             try
@@ -38,9 +40,13 @@ namespace DashboarJira.Services
                 }
                 else if (max == 0)
                 {
-                    issues = jira.Issues.GetIssuesFromJqlAsync(jql, int.MaxValue, 0);
+                    issues = jira.Issues.GetIssuesFromJqlAsync(jql, 100, start);
                 }
 
+                if (issues.Result.Count() < totalITem)
+                {
+
+                }
                 return ConvertIssusInTickets(issues);
             }
             catch (Exception ex)
@@ -50,6 +56,7 @@ namespace DashboarJira.Services
             }
             return null;
         }
+        /*TODO*/
         public List<IssueJira> GetIssuesJira(int start, int max, string startDate, string endDate, string idComponente)
         {
             try
@@ -85,7 +92,7 @@ namespace DashboarJira.Services
             }
             return null;
         }
-
+        /*TODO*/
         public List<Ticket> GetTiketsIndicadores(string query)
         {
             var jql = query;
@@ -125,8 +132,8 @@ namespace DashboarJira.Services
 
         public List<Ticket> ConvertIssusInTickets(Task<IPagedQueryResult<Issue>> issues)
         {
+            
             List<Ticket> result = new List<Ticket>();
-            //Console.WriteLine(totalITem(issues));
             foreach (var issue in issues.Result)
             {
 
@@ -307,7 +314,6 @@ namespace DashboarJira.Services
 
                 }
             }
-            //Cantidad(es) repuesto(s) utilizado(s)
             if (issue.CustomFields["Cantidad(es) repuesto(s) utilizado(s)"] != null)
             {
                 foreach (var lista in issue.CustomFields["Cantidad(es) repuesto(s) utilizado(s)"].Values.ToList())
