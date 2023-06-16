@@ -5,22 +5,27 @@ using DashboarJira.Services;
 using System.Text.Json.Nodes;
 
 JiraAccess jira = new JiraAccess();
-DbConnector dbConnector = new DbConnector();
+
+Console.WriteLine(jira.GetTikets(0, 0, null, null, null).Count);
+Console.WriteLine(jira.GetTikets(100, 0, null, null, null).Count);
+Console.WriteLine(jira.GetTikets(200, 0, null, null, null).Count);
+
+//DbConnector dbConnector = new DbConnector();
 //string peticion = "WHERE fechaHoraEnvioDato >= '2023-01-01' AND fechaHoraEnvioDato <= '2023-02-01' AND codigoEvento = 'EVP8' ORDER BY fechaHoraEnvioDato ASC";
 //dbConnector.GetEventos(peticion);
 //-------------------------------------------------
 
 
-IDMController IDM = new IDMController(dbConnector);
-List<JsonObject> estaciones = new List<JsonObject>();
-JsonObject E9115 = new JsonObject();
-E9115.Add("idEstacion", "9116");
-E9115.Add("puertas", 26);
-estaciones.Add(E9115);
-foreach (EstacionEntity itt in IDM.calcularIDM(estaciones, "2023-05-01", "2023-05-31"))
-{
-    Console.WriteLine(itt.ConvertirAJsonIDM());
-}
+//IDMController IDM = new IDMController(dbConnector);
+//List<JsonObject> estaciones = new List<JsonObject>();
+//JsonObject E9115 = new JsonObject();
+//E9115.Add("idEstacion", "9116");
+//E9115.Add("puertas", 26);
+//estaciones.Add(E9115);
+//foreach (EstacionEntity itt in IDM.calcularIDM(estaciones, "2023-05-01", "2023-05-31"))
+//{
+//    Console.WriteLine(itt.ConvertirAJsonIDM());
+//}
 
 
 

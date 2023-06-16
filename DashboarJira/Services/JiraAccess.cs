@@ -38,7 +38,7 @@ namespace DashboarJira.Services
                 }
                 else if (max == 0)
                 {
-                    issues = jira.Issues.GetIssuesFromJqlAsync(jql, int.MaxValue, 0);
+                    issues = jira.Issues.GetIssuesFromJqlAsync(jql, int.MaxValue, start);
                 }
 
                 return ConvertIssusInTickets(issues);
