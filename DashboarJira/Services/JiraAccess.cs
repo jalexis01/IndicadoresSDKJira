@@ -1,5 +1,8 @@
 ﻿using Atlassian.Jira;
 using DashboarJira.Model;
+using Newtonsoft.Json.Linq;
+using System;
+using System.ComponentModel;
 
 namespace DashboarJira.Services
 {
@@ -15,6 +18,8 @@ namespace DashboarJira.Services
         {
             jira = Jira.CreateRestClient(jiraUrl, username, password);
         }
+
+        /*TODO*/
         public List<Ticket> GetTikets(int start, int max, string startDate, string endDate, string idComponente)
         {
             try
@@ -38,10 +43,16 @@ namespace DashboarJira.Services
                 }
                 else if (max == 0)
                 {
-                    issues = jira.Issues.GetIssuesFromJqlAsync(jql, int.MaxValue, 0);
+                    max = 100;
+                    issues = jira.Issues.GetIssuesFromJqlAsync(jql, max, start);
                 }
-
-                return ConvertIssusInTickets(issues);
+                int total = totalITem(issues);
+                List<Ticket> result = ConvertIssusInTickets(issues);
+                if (total > max + start)
+                {
+                    result = result.Concat(GetTikets(start + max, max, startDate, endDate, idComponente)).ToList();
+                }
+                return result;
             }
             catch (Exception ex)
             {
@@ -50,6 +61,7 @@ namespace DashboarJira.Services
             }
             return null;
         }
+        /*TODO*/
         public List<IssueJira> GetIssuesJira(int start, int max, string startDate, string endDate, string idComponente)
         {
             try
@@ -75,8 +87,14 @@ namespace DashboarJira.Services
                 {
                     issues = jira.Issues.GetIssuesFromJqlAsync(jql, int.MaxValue, 0);
                 }
+                int total = totalITem(issues);
+                List<IssueJira> result = ConvertIssusInIssuesJira(issues);
+                if (total > max + start)
+                {
+                    result = result.Concat(GetIssuesJira(start + max, max, startDate, endDate, idComponente)).ToList();
+                }
+                return result;
 
-                return ConvertIssusInIssuesJira(issues);
             }
             catch (Exception ex)
             {
@@ -85,14 +103,21 @@ namespace DashboarJira.Services
             }
             return null;
         }
-
+        /*TODO*/
         public List<Ticket> GetTiketsIndicadores(string query)
         {
             var jql = query;
             var issues = jira.Issues.GetIssuesFromJqlAsync(jql, int.MaxValue, 0);
-
-
-            return ConvertIssusInTickets(issues);
+            int total = totalITem(issues);
+            int max = 100;
+            int actualPos = 0;
+            List<Ticket> result = ConvertIssusInTickets(issues);
+            for (int i = actualPos + max; i < total; i++)
+            {
+                issues = jira.Issues.GetIssuesFromJqlAsync(jql, max, actualPos + max);
+                result = result.Concat(ConvertIssusInTickets(issues)).ToList();
+            }
+            return result.ToList();
         }
 
         public Ticket getTicket(string id)
@@ -105,7 +130,6 @@ namespace DashboarJira.Services
         public List<IssueJira> ConvertIssusInIssuesJira(Task<IPagedQueryResult<Issue>> issues)
         {
             List<IssueJira> result = new List<IssueJira>();
-
             foreach (var issue in issues.Result)
             {
                 Console.WriteLine(issue.Key);
@@ -115,12 +139,18 @@ namespace DashboarJira.Services
             return result;
 
         }
+        public int totalITem(Task<IPagedQueryResult<Issue>> issues)
+        {
+            int totalInt = issues.Result.TotalItems;
 
+            return totalInt;
+
+        }
 
         public List<Ticket> ConvertIssusInTickets(Task<IPagedQueryResult<Issue>> issues)
         {
-            List<Ticket> result = new List<Ticket>();
 
+            List<Ticket> result = new List<Ticket>();
             foreach (var issue in issues.Result)
             {
 
@@ -301,7 +331,6 @@ namespace DashboarJira.Services
 
                 }
             }
-            //Cantidad(es) repuesto(s) utilizado(s)
             if (issue.CustomFields["Cantidad(es) repuesto(s) utilizado(s)"] != null)
             {
                 foreach (var lista in issue.CustomFields["Cantidad(es) repuesto(s) utilizado(s)"].Values.ToList())
