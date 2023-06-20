@@ -22,6 +22,7 @@
         public string? diagnostico_causa { get; set; }
         public string? tipo_causa { get; set; }
         public string? estado_ticket { get; set; }
+        public string? descripcion { get; set; }
         public override string ToString()
         {
             return $"IdTicket: {id_ticket}, IdEstacion: {id_estacion}, IdVagon: {id_vagon}, IdPuerta: {id_puerta}, IdComponente: {id_componente}, TipoComponente: {tipoComponente}, Identificacion: {identificacion}, TipoMantenimiento: {tipo_mantenimiento}, NivelFalla: {nivel_falla}, CodigoFalla: {codigo_falla}, FechaApertura: {fecha_apertura}, FechaCierre: {fecha_cierre}, FechaArriboLocacion: {fecha_arribo_locacion}, ComponenteParte: {componente_Parte}, TipoReparacion: {tipo_reparacion}, TipoAjusteConfiguracion: {tipo_ajuste_configuracion}, DescripcionReparacion: {descripcion_reparacion}, DiagnosticoCausa: {diagnostico_causa}, TipoCausa: {tipo_causa}, EstadoTicket: {estado_ticket}";

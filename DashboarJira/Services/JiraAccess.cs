@@ -236,6 +236,8 @@ namespace DashboarJira.Services
 
             temp.estado_ticket = (issue.Status != null ? issue.Status.Name : "null");
 
+            temp.estado_ticket = (issue.Description != null ? issue.Description : "null");
+
             return temp;
 
         }
