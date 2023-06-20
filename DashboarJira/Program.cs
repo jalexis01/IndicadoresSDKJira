@@ -51,19 +51,19 @@ Console.WriteLine("raio no contratista" + raio.RAIONoContratista(fechainicio, fe
 Console.WriteLine("RANO " + rano.RANOGeneral(fechainicio, fechaFinal).CalcularIndicadorRANO());
 Console.WriteLine("RANO contratista " + rano.RANOContratista(fechainicio, fechaFinal).CalcularIndicadorRANO());
 */
-Console.WriteLine("RANO no contratista: " + rano.RANONoContratista(fechainicio, fechaFinal).CalcularIndicadorRANO());
-/*
-Console.WriteLine("IRF " + IRF.IRFGeneral(fechainicio, fechaFinal).calculoIRF());
-*/
-Indicadores indicadores = new Indicadores();
+//Console.WriteLine("RANO no contratista: " + rano.RANONoContratista(fechainicio, fechaFinal).CalcularIndicadorRANO());
+///*
+//Console.WriteLine("IRF " + IRF.IRFGeneral(fechainicio, fechaFinal).calculoIRF());
+//*/
+//Indicadores indicadores = new Indicadores();
 
 
-foreach (IndicadoresEntity indicador in indicadores.indicadores("2023-05-01", "2023-06-01"))
-{
-    Console.WriteLine($"Nombre: {indicador.nombre}");
-    Console.WriteLine($"Cálculo: {indicador.calculo}");
-    Console.WriteLine($"Descripción: {indicador.descripcion}");
-    Console.WriteLine();
-}
-Console.WriteLine();
+//foreach (IndicadoresEntity indicador in indicadores.indicadores("2023-05-01", "2023-06-01"))
+//{
+//    Console.WriteLine($"Nombre: {indicador.nombre}");
+//    Console.WriteLine($"Cálculo: {indicador.calculo}");
+//    Console.WriteLine($"Descripción: {indicador.descripcion}");
+//    Console.WriteLine();
+//}
+//Console.WriteLine();
 

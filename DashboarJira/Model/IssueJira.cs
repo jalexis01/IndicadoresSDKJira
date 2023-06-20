@@ -38,7 +38,6 @@
         public string? DescripcionActividadMantenimiento { get; set; }
         public string? MotivoAtraso { get; set; }
         public string? OtroMotivoAtraso { get; set; }
-
-
+        public string? Descripcion { get; internal set; }
     }
 }
