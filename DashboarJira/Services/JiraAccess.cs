@@ -236,7 +236,7 @@ namespace DashboarJira.Services
 
             temp.estado_ticket = (issue.Status != null ? issue.Status.Name : "null");
 
-            temp.estado_ticket = (issue.Description != null ? issue.Description : "null");
+            temp.descripcion = (issue.Description != null ? issue.Description : "null");
 
             return temp;
 
@@ -255,6 +255,7 @@ namespace DashboarJira.Services
             IssueJira temp = new IssueJira();
             temp.Id = issue.Key.Value;
             temp.FechaCreacion = issue.Created;
+            temp.Descripcion = (issue.Description != null ? issue.Description : "null");
             temp.Resumen = issue.Summary;
             temp.QuienRequiereServicio = (issue.CustomFields["¿Quién requiere el servicio?"] != null ? issue.CustomFields["¿Quién requiere el servicio?"].Values[0] : null);
             temp.CanalComunicacion = issue.CustomFields["Canal comunicacion"] != null ? issue.CustomFields["Canal comunicacion"].Values[0] : null;
