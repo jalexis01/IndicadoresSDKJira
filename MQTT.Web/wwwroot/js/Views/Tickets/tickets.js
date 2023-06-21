@@ -4,12 +4,12 @@
     drodownDataSearch(columnsSearch, 'CustomName', 'searchParam');
 });
 
-function exportToExcel() {
-    var table = document.getElementById("table");
-    var wb = XLSX.utils.table_to_book(table, { sheet: "Sheet 1" });
-    var wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
-    saveAs(new Blob([wbout], { type: 'application/octet-stream' }), 'tickets.xlsx');
-}
+//function exportToExcel() {
+//    var table = document.getElementById("table");
+//    var wb = XLSX.utils.table_to_book(table, { sheet: "Sheet 1" });
+//    var wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+//    saveAs(new Blob([wbout], { type: 'application/octet-stream' }), 'tickets.xlsx');
+//}
 
 
 function validateDates() {
@@ -30,9 +30,10 @@ function validateDates() {
 function ServiceGetTickets() {
     var startDate = $('#dtpStart').val();
     var endDate = $('#dtpEnd').val();
-    var max = document.getElementById("maxSelect").value;
+    var max = 0;
     var componente = $('#componente').val();
     console.log("idComponente: " + componente);
+    console.log("Max: " + max);
 
     Swal.fire({
         title: 'Cargando...',
@@ -59,6 +60,7 @@ function ServiceGetTickets() {
                 row.append($('<td>').text(ticket.id_ticket));
                 row.append($('<td>').text(ticket.fecha_apertura));
                 row.append($('<td>').text(ticket.id_componente));
+                row.append($('<td>').text(ticket.tipoComponente));
                 row.append($('<td>').text(ticket.estado_ticket));
                 row.append($('<td>').text(ticket.nivel_falla));
                 row.append($('<td>').text(ticket.codigo_falla));
@@ -71,6 +73,9 @@ function ServiceGetTickets() {
                 row.append($('<td>').text(ticket.id_vagon));
                 row.append($('<td>').text(ticket.id_puerta));
                 row.append($('<td>').text(ticket.identificacion));
+                row.append($('<td>').text(ticket.tipo_mantenimiento));
+                row.append($('<td>').text(ticket.tipo_causa));
+                row.append($('<td>').text(ticket.descripcion));
 
                 tbody.append(row);
             });
@@ -123,4 +128,33 @@ function showMoreInformation(idTicket) {
             Swal.fire('Error', 'No se pudo obtener la información del ticket', 'error');
         }
     });
+}
+
+function exportToExcel() {
+    var table = document.getElementById("table");
+    var headers = table.getElementsByTagName("th");
+    var rows = table.getElementsByTagName("tr");
+
+    // Clonar la tabla para preservar la vista HTML original
+    var clonedTable = table.cloneNode(true);
+
+    // Eliminar el título de la primera columna en las cabeceras clonadas
+    var clonedHeaders = clonedTable.getElementsByTagName("th");
+    if (clonedHeaders.length > 0) {
+        clonedHeaders[0].parentNode.removeChild(clonedHeaders[0]);
+    }
+
+    // Eliminar la primera columna de cada fila clonada (excepto las cabeceras)
+    var clonedRows = clonedTable.getElementsByTagName("tr");
+    for (var i = 0; i < clonedRows.length; i++) {
+        var clonedCells = clonedRows[i].getElementsByTagName("td");
+        if (clonedCells.length > 0) {
+            clonedRows[i].removeChild(clonedCells[0]);
+        }
+    }
+
+    // Crear el libro de Excel sin la primera columna y el título
+    var wb = XLSX.utils.table_to_book(clonedTable, { sheet: "Tickets" });
+    var wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+    saveAs(new Blob([wbout], { type: 'application/octet-stream' }), 'tickets.xlsx');
 }

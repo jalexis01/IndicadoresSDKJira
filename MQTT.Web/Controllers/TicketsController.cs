@@ -34,7 +34,7 @@ namespace MQTT.Web.Controllers
             // Formatear las fechas en el formato deseado
             string startDate = startDateTime.ToString("yyyy-MM-dd");
             string endDate = currentDateTime.ToString("yyyy-MM-dd");
-
+            max = 0;
             List<Ticket> tickets = getTickets(startDate, endDate, max, componente);
             return View(tickets);
         }
@@ -65,6 +65,7 @@ namespace MQTT.Web.Controllers
                 }
 
                 JiraAccess jiraAccess = new JiraAccess();
+                max = 0;
                 return jiraAccess.GetTikets(start, max, formattedStartDate, formattedEndDate, componente);
             }
             catch (Exception ex)
