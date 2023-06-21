@@ -35,24 +35,25 @@
     .styled-table th,
     .styled-table td {
         border: 1px solid #ddd;
-        padding: 8px;
+        padding: 0px;
     }
 
     .styled-table th {
         background-color: #f2f2f2;
-        text-align: left;
+        text-align: center;
+        width: 10000px;
     }
 
     .styled-table td {
-        padding: 30px;
+        padding: 9px;
         text-align: left;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+        width: 1000px;
     }
 
-#maxSelect {
-    width: 100px;
-    height: 32px;
-    font-size: 13px;
-}
+        .styled-table th.columna-3,
+        .styled-table td.columna-3 {
+            width: 200px;
+        }
