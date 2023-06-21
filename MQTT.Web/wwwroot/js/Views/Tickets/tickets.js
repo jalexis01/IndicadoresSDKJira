@@ -68,6 +68,7 @@ function ServiceGetTickets() {
                 row.append($('<td>').text(ticket.fecha_arribo_locacion));
                 row.append($('<td>').text(ticket.fecha_cierre));
                 row.append($('<td>').text(ticket.componente_Parte));
+                row.append($('<td>').text(ticket.tipo_reparacion));
                 row.append($('<td>').text(ticket.descripcion_reparacion));
                 row.append($('<td>').text(ticket.id_estacion));
                 row.append($('<td>').text(ticket.id_vagon));
@@ -75,6 +76,7 @@ function ServiceGetTickets() {
                 row.append($('<td>').text(ticket.identificacion));
                 row.append($('<td>').text(ticket.tipo_mantenimiento));
                 row.append($('<td>').text(ticket.tipo_causa));
+                row.append($('<td>').text(ticket.tipo_ajuste_configuracion));
                 row.append($('<td>').text(ticket.descripcion));
 
                 tbody.append(row);
