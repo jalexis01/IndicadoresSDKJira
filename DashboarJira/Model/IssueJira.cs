@@ -39,5 +39,6 @@
         public string? MotivoAtraso { get; set; }
         public string? OtroMotivoAtraso { get; set; }
         public string? Descripcion { get; internal set; }
+        public byte[]? Archivos { get; set; }
     }
 }

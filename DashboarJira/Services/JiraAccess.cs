@@ -254,6 +254,7 @@ namespace DashboarJira.Services
         {
             IssueJira temp = new IssueJira();
             temp.Id = issue.Key.Value;
+            temp.Archivos = (issue.GetAttachmentsAsync() != null ? issue.GetAttachmentsAsync().Result.First().DownloadData() : null);
             temp.FechaCreacion = issue.Created;
             temp.Descripcion = (issue.Description != null ? issue.Description : "null");
             temp.Resumen = issue.Summary;
