@@ -1,4 +1,5 @@
-﻿$(document).ready(function () {
+﻿var dataHideColums, dataSearchColumns;
+$(document).ready(function () {
     createElemntsTimes();
     multiSelect();
     drodownDataSearch(columnsSearch, 'CustomName', 'searchParam');
@@ -23,7 +24,7 @@ function validateDates() {
             title: 'Debe seleccionar la fecha',
         });
     } else {
-        ServiceGetTickets();
+        ServiceGetMessages();
     }
 }
 
@@ -97,11 +98,11 @@ function showMoreInformation(idTicket) {
         url: '/Tickets/consultarTicket?idTicket=' + idTicket,
         data: { idTicket: idTicket },
         success: function (ticket) {
-           
+
             var html = '<table style="font-family: Arial, sans-serif; width: 100%; border-collapse: collapse;">';
 
             $.each(ticket, function (key, value) {
-                
+
                 html += '<tr>';
                 html += '<td style="text-align: left; padding: 8px; border: 2px solid #7f69a5; white-space: nowrap; font-weight: bold; font-size: 14px; background-color: rgba(127, 105, 165, 0.3);">' + key + ':</td>';
                 html += '<td style="text-align: left; padding: 8px; border: 2px solid #7f69a5; font-size: 13px;">' + value + '</td>';
@@ -159,4 +160,75 @@ function exportToExcel() {
     var wb = XLSX.utils.table_to_book(clonedTable, { sheet: "Tickets" });
     var wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
     saveAs(new Blob([wbout], { type: 'application/octet-stream' }), 'tickets.xlsx');
+}
+
+/********************************* */
+function ServiceGetMessages() {
+    var startDate = $('#dtpStart').val();
+    var endDate = $('#dtpEnd').val();
+    var max = 0;
+    var componente = $('#componente').val();
+    console.log("idComponente: " + componente);
+    console.log("Max: " + max);
+
+    Swal.fire({
+        title: 'Cargando...',
+        allowOutsideClick: false,
+        showConfirmButton: false,
+        onBeforeOpen: (modal) => {
+            modal.showLoading();
+            modal.disableCloseButton();
+        }
+    });
+    $.ajax({
+        type: "GET",
+        url: "/Tickets/GetTickets",
+        data: { startDate: startDate, endDate: endDate, max: max, componente: componente },
+
+    }).then(response => JSON.parse(JSON.stringify(response)))
+        .then(data => {
+
+            Swal.close();
+            console.log(data)
+            if (data.length == 0) {
+                noData();
+                return;
+            } else {
+                let dataColumns = setColums(data, null);
+                let exportFunctions = addFnctionsGrid(['Excel', 'Csv']);
+                dataColumns = addCommandsGridDetails(dataColumns);
+                dataGridSave = data;
+                setGrid(data, dataColumns, exportFunctions);
+            }
+        })
+        .catch(error => {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: error.name + ': ' + error.message
+            });
+        })
+        .then(response => console.log('Success:', response));
+}
+
+
+
+const targetEl = document.getElementById('dropdownInformation');
+
+// set the element that trigger the dropdown menu on click
+const triggerEl = document.getElementById('dropdownInformationButton');
+
+// options with default values
+const options = {
+    placement: 'bottom',
+    onHide: () => {
+        console.log('dropdown has been hidden');
+    },
+    onShow: () => {
+        console.log('dropdown has been shown');
+    }
+};
+
+var detailsData = function (args) {
+    //alert(JSON.stringify(args.rowData));
 }
