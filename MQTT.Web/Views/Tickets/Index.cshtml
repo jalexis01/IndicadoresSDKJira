@@ -25,10 +25,10 @@
         </div>
     </div>
     @*<div class="inputs-container">
-        <label class="TextComponente">ID Componente</label>
-        <div class="wrapperFI">
-            <input type="text" id="componente">
-        </div>
+    <label class="TextComponente">ID Componente</label>
+    <div class="wrapperFI">
+    <input type="text" id="componente">
+    </div>
     </div>*@
 
     <div class="inputs-container">
@@ -41,7 +41,7 @@
 
     </div>
 
-    
+
     <div class="inputs-container">
         <button onclick="validateDates()" type="button" id="button-primary"
                 class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
@@ -49,80 +49,15 @@
         </button>
     </div>
 </div>
-<div class="container-grid">
-    <div class="inputs-container">
-    <button onclick="exportToExcel()" type="button" id="button-primary"
-        class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
-        Descargar Excel
-    </button>
-    </div>
-</div>
-<div class="container-grid">    
 
-    <table id="table" class="styled-table">
-    <thead>
-        <tr>
-            <th>Ver más</th>
-            <th style="width: auto">Id ticket</th>
-            <th>Fecha apertura</th>
-            <th>Id compomente</th>
-            <th>Tipo compomente</th>
-            <th>Estado ticket</th>
-            <th>Nivel falla</th>
-            <th>Código falla</th>
-            <th>Diagnóstico causa</th>
-            <th>Fecha arribo locación</th> 
-            <th>Fecha cierre</th>
-            <th>Parte componente</th>
-            <th>Tipo reparación</th>
-            <th>Descripción reparación</th>
-            <th>Id estación</th>
-            <th>Id vagón</th>
-            <th>Id puerta</th>
-            <th>Serial</th>
-            <th>Tipo de servicio</th>
-            <th>Tipo causa</th>
-            <th>Tipo ajuste configuración</th>
-            <th>Descripción</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var ticket in Model)
-        {
-            <tr>
-                <td onclick='showMoreInformation("@ticket.id_ticket")' style='cursor: pointer; background: none;'>Ver más</td>
-                <td>@ticket.id_ticket</td>
-                <td>@ticket.fecha_apertura</td>
-                <td>@ticket.id_componente</td>
-                <td>@ticket.tipoComponente</td>
-                <td>@ticket.estado_ticket</td>
-                <td>@ticket.nivel_falla</td>
-                <td>@ticket.codigo_falla</td>
-                <td>@ticket.diagnostico_causa</td>                    
-                <td>@ticket.fecha_arribo_locacion</td> 
-                <td>@ticket.fecha_cierre</td>
-                <td>@ticket.componente_Parte</td>
-                <td>@ticket.tipo_reparacion</td>
-                <td>@ticket.descripcion_reparacion</td>
-                <td>@ticket.id_estacion</td>
-                <td>@ticket.id_vagon</td>
-                <td>@ticket.id_puerta</td>
-                <td>@ticket.identificacion</td>
-                <td>@ticket.tipo_mantenimiento</td>
-                <td>@ticket.tipo_causa</td>
-                <td>@ticket.tipo_ajuste_configuracion</td>
-                <td>@ticket.descripcion</td>
-            </tr>
-        }
-      </tbody>
-    </table>
-</div>
+    <div id="Grid"></div>
+
+
 <script type="text/javascript">
     var columnsSearch = @(Html.Raw(ViewBag.columnsSearch));
     var columnsToHide = @(Html.Raw(ViewBag.columnsToHide));
 </script>
+
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/js/Views/Tickets/tickets.js"></script>
 <script src="~/js/Views/Tickets/FileSaver.js"></script>
-<script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
-<script src="https://unpkg.com/xlsx-populate/dist/xlsx-populate.min.js"></script>
