@@ -8,7 +8,7 @@ namespace MQTT.Web.Controllers
 {
     public class IndicadoresController : Controller
     {
-        public IActionResult Index(int max, string componente)
+        public IActionResult Index()
         {
             // Obtiene la identidad del usuario actual
             //var identity = User.Identity as System.Security.Claims.ClaimsIdentity;
@@ -26,8 +26,8 @@ namespace MQTT.Web.Controllers
             //return View();
 
             // Obtener la fecha actual
-            DateTime currentDateTime = DateTime.Now;
-
+            //DateTime currentDateTime = DateTime.Now;
+            /*
             // Restar un mes a la fecha actual
             DateTime startDateTime = currentDateTime.AddMonths(-1);
 
@@ -35,8 +35,9 @@ namespace MQTT.Web.Controllers
             string startDate = startDateTime.ToString("yyyy-MM-dd");
             string endDate = currentDateTime.ToString("yyyy-MM-dd");
 
-            List<IndicadoresEntity> indicadores = getIndicadores(startDate, endDate);
-            return View(indicadores);
+            List<IndicadoresEntity> indicadores = getIndicadores(startDate, endDate);*/
+            //List<IndicadoresEntity> indicadores = new List<IndicadoresEntity>();
+            return View();
         }
 
 

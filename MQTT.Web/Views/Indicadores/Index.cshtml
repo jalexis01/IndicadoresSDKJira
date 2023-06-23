@@ -33,24 +33,7 @@
     </div>
 </div>
 
-<div class="container-grid">
-    <table id="table" class="styled-table">
-    <thead>
-        <tr>
-            <th>Indicador</th>
-            <th>Valor</th>
-        </tr>
-    </thead>
-    <tbody>
-         @foreach (var indicador in Model)
-        {
-            <tr>
-                <td>@indicador.nombre</td>
-                <td>@indicador.calculo</td>
-            </tr>
-        }
-    </table>
-</div>
+<div id="Grid"></div>
 
 <script type="text/javascript">
     var columnsSearch = @(Html.Raw(ViewBag.columnsSearch));
@@ -59,5 +42,3 @@
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/js/Views/Indicadores/indicadores.js"></script>
 <script src="~/js/Views/Indicadores/FileSaver.js"></script>
-<script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
-<script src="https://unpkg.com/xlsx-populate/dist/xlsx-populate.min.js"></script>
