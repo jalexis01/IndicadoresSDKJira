@@ -67,3 +67,14 @@ Console.WriteLine("RANO contratista " + rano.RANOContratista(fechainicio, fechaF
 //}
 //Console.WriteLine();
 
+byte[] bytes = jira.getIssueJira("TICKET-100").Archivos; // Aquí debes obtener tus bytes desde la fuente deseada
+
+string rutaCompleta = Path.Combine("C:", "Users", "DesarrolloJC", "Desktop");
+
+// Crea un FileStream para escribir los bytes en el archivo
+using (FileStream archivo = new FileStream(rutaCompleta, FileMode.Create))
+{
+    archivo.Write(bytes, 0, bytes.Length);
+}
+
+Console.WriteLine("Archivo creado exitosamente.");
