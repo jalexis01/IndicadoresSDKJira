@@ -20,6 +20,7 @@ namespace MQTT.FunctionApp
 {
 	public static class GetIssuesJira
 	{
+        //try
 		[FunctionName("GetIssuesJira")]
 		public static async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", Route = null)] Models.Filters filters, HttpRequest req, ILogger log)
 		{
