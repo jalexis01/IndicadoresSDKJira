@@ -13,6 +13,7 @@ namespace MQTT.Subscriber.BL
     {
 
         private readonly string _connectionString = AppSettings.Instance.Configuration["connectionString"].ToString();
+        private readonly string _uri = AppSettings.Instance.Configuration["uriString"].ToString();
         private readonly string _identifierField = AppSettings.Instance.Configuration["appSettings:identifierField"].ToString();
         private General _objGeneral;
         public General DBAccess { get => _objGeneral; set => _objGeneral = value; }
@@ -28,7 +29,7 @@ namespace MQTT.Subscriber.BL
                 LogMessageDTO log = AddLogMessageIn(message);
 
                 var body = System.Text.Json.JsonSerializer.Serialize(log);
-                string uri = $"https://functionappmqttengine.azurewebsites.net/api/ProcessMessageMQTT?code=_45i4qPZQEDoczQm2Gv4VU4Ag868oWpTmptLXm_EF-IjAzFudc2OzA==";
+                string uri = _uri;
                 //string uri = $"http://localhost:7071/api/ProcessMessageMQTT";
 
                 var response = MQTT.Infrastructure.BL.Requests.GetResponse(uri, "POST", parameters: body);
