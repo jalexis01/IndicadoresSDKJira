@@ -1,0 +1,26 @@
+.container-grid{
+    justify-content: center;
+}
+
+
+
+
+
+.flex-add{
+    display: flex;
+}
+
+.container-inputs{
+ display: flex;
+}
+
+
+
+.organitation-menu{
+    position: absolute;
+    right: 10%;
+}
+
+.e-ddl.e-input-group{
+    display: flex;
+}

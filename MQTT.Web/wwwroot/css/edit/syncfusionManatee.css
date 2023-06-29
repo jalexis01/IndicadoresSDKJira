@@ -1,0 +1,15 @@
+.e-pager div.e-icons {
+    color: #FF9119;
+}
+
+.e-pager .e-numericitem {
+    background: #fff;
+    border-right-color: #dee2e6;
+    color: #FF9119;
+}
+
+.e-pager .e-currentitem, .e-pager .e-currentitem:hover {
+    background: #FF9119;
+    color: #fff;
+    opacity: 1;
+}

@@ -1,0 +1,99 @@
+@font-face {
+    font-family: 'e-ddb-icons';
+    src: url(data:application/x-font-ttf;charset=utf-8;base64,AAEAAAAKAIAAAwAgT1MvMj0gSR8AAAEoAAAAVmNtYXDnKOeBAAABqAAAAEZnbHlmP/EWVwAAAggAAAMMaGVhZBMKQgEAAADQAAAANmhoZWEHnwNtAAAArAAAACRobXR4JygAAAAAAYAAAAAobG9jYQTSBCQAAAHwAAAAFm1heHABGgA+AAABCAAAACBuYW1lmAO1gQAABRQAAALNcG9zdHwLfoAAAAfkAAAAewABAAADUv9qAFoEAAAA//gD8AABAAAAAAAAAAAAAAAAAAAACgABAAAAAQAAJYsEL18PPPUACwPoAAAAANf9/pYAAAAA1/3+lgAAAAAD8APwAAAACAACAAAAAAAAAAEAAAAKADIABgAAAAAAAgAAAAoACgAAAP8AAAAAAAAAAQPqAZAABQAAAnoCvAAAAIwCegK8AAAB4AAxAQIAAAIABQMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAUGZFZABA5wDnCANS/2oAWgPwAJYAAAABAAAAAAAABAAAAAPoAAAD6AAAA+gAAAPoAAAD6AAAA+gAAAPoAAAD6AAAA+gAAAAAAAIAAAADAAAAFAADAAEAAAAUAAQAMgAAAAQABAABAADnCP//AADnAP//AAAAAQAEAAAAAQACAAMABAAFAAYABwAIAAkAAAAAAAAAQgCQAK4A/gEWAS4BRgFoAYYAAAAFAAAAAANyA/AAAwAHAAsADwAlAAABESMRIxEjESMRIxEBFyE3BxEeARchPgE3ETM1IycuASMhIgYPAQJ2P18+Xz8BRBX+yBXzAUc2Afg2RwE/2xsHIBX+8hUgB/YClv5GAbr+RgG6/kYBugEbPz9+/Us2RwEBRzYCtT9TFBcXFJIAAAAGAAAAAAMzA/AAAwAHAAsAFQAZADEAACUzESMDMxEjAzMRIyURFAYjISImNRElFSM1JxUjFTMRHgEXIT4BNxEzNSM1NCYrASIGAfg/P34/P34/PwG5Eg3+CA4SAXq9P/w/ATUpAfgoNQE//BIN/A4SvQH4/ggB+P4IAfh+/SsNEhINAtV+Pz8fXj/9Kyg1AQE1KALVP14OEhIAAAACAAAAAAPvA/AABAAOAAA1FTMBJzcHFzc2NC8BJiLeAlLer3TedBERixAy3t4CUt6vdN50ETIQixEAAAAEAAAAAAPwA/AABwANAB4ALAAANx4CFwc3FgkBLgEnATceAhUUDgEPASc3PgIzMicGBwEDJQE+ATQuAiKqFCAWBaIoFwKv/ewRSzUCFb0THBAKEgsYkBcLGBwTFVQeGP14TgE4AogXGRotPELoCx8oFyihBAHB/es1SxECFGQIHCUVExwYCxeQGAsSCjMNF/14/shOAogYPUI8LRoAAAAAAQAAAAAD8APwAAsAAAEhFSERMxEhNSERIwG5/kcBuX4Buf5HfgI3fv5HAbl+AbkAAQAAAAADsQPwAAsAAAEhFSERMxEhNSERIwG5/kcBuT8Buf5HPwI3P/5HAbk/AbkAAQAAAAADcgPwAAsAAAEhFSERMxEhNSERIwFa/qYBWr4BWv6mvgKWvv6mAVq+AVoAAgAAAAADcgPwAAkAEQAANx4BFyE+ATcRITcjFSE1IychPwFINQH4NUgB/Qyd3ANy3ED+xn41SAEBSDUCdr1+fj8AAAACAAAAAAPwA/AABAAOAAA1FTMBJzcHFzc2NC8BJiL+AlD+ilL+URkZhhhH/v4CUP6JUf5SGEcYhhkAAAAAABIA3gABAAAAAAAAAAEAAAABAAAAAAABABUAAQABAAAAAAACAAcAFgABAAAAAAADABUAHQABAAAAAAAEABUAMgABAAAAAAAFAAsARwABAAAAAAAGABUAUgABAAAAAAAKACwAZwABAAAAAAALABIAkwADAAEECQAAAAIApQADAAEECQABACoApwADAAEECQACAA4A0QADAAEECQADACoA3wADAAEECQAEACoBCQADAAEECQAFABYBMwADAAEECQAGACoBSQADAAEECQAKAFgBcwADAAEECQALACQByyBEaWFncmFtIGJ1aWxkZXIgaWNvbnNSZWd1bGFyRGlhZ3JhbSBidWlsZGVyIGljb25zRGlhZ3JhbSBidWlsZGVyIGljb25zVmVyc2lvbiAxLjBEaWFncmFtIGJ1aWxkZXIgaWNvbnNGb250IGdlbmVyYXRlZCB1c2luZyBTeW5jZnVzaW9uIE1ldHJvIFN0dWRpb3d3dy5zeW5jZnVzaW9uLmNvbQAgAEQAaQBhAGcAcgBhAG0AIABiAHUAaQBsAGQAZQByACAAaQBjAG8AbgBzAFIAZQBnAHUAbABhAHIARABpAGEAZwByAGEAbQAgAGIAdQBpAGwAZABlAHIAIABpAGMAbwBuAHMARABpAGEAZwByAGEAbQAgAGIAdQBpAGwAZABlAHIAIABpAGMAbwBuAHMAVgBlAHIAcwBpAG8AbgAgADEALgAwAEQAaQBhAGcAcgBhAG0AIABiAHUAaQBsAGQAZQByACAAaQBjAG8AbgBzAEYAbwBuAHQAIABnAGUAbgBlAHIAYQB0AGUAZAAgAHUAcwBpAG4AZwAgAFMAeQBuAGMAZgB1AHMAaQBvAG4AIABNAGUAdAByAG8AIABTAHQAdQBkAGkAbwB3AHcAdwAuAHMAeQBuAGMAZgB1AHMAaQBvAG4ALgBjAG8AbQAAAAACAAAAAAAAAAoAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAoBAgEDAQQBBQEGAQcBCAEJAQoBCwAIQl9kZWxldGUIRl9kZWxldGUGTV9FZGl0BkZfRWRpdAVNX0FkZAVGX0FkZAVCX0FkZAhNX2RlbGV0ZQZCX0VkaXQAAAA=) format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+.e-ddb-icons {
+    font-family: 'e-ddb-icons';
+    speak: none;
+    font-size: 55px;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.e-tbar-btn-text.e-toolbar-item.Edit {
+    display: none;
+}
+
+.e-reset::before {
+    content: "\e715";
+    /*font-size: 18px;*/
+}
+
+.material .e-reset::before {
+    content: "\e70a";
+}
+
+.bootstrap .e-reset::before {
+    content: "\e722";
+}
+
+.e-add::before {
+    content: "\e705";
+}
+
+.e-update::before {
+    content: "\f0c7";
+}
+
+.e-copy::before {
+    content: "\f249";
+}
+
+.e-btn-icon.e-icons.e-copy.e-icon-left::before {
+    content: "\f249";
+    font-family: 'Font Awesome 5 Free';
+}
+
+.e-btn-icon.e-icons.e-update.e-icon-left::before {
+    content: "\f0c7";
+    font-family: 'Font Awesome 5 Free';
+}
+
+.e-delete::before {
+    content: "\e701";
+}
+
+.material .e-add::before {
+    content: "\e704";
+}
+
+.material .e-update::before {
+    content: "\e702";
+}
+
+.material .e-delete::before {
+    content: "\e707";
+}
+
+.bootstrap .e-add::before {
+    content: "\e706";
+}
+
+.bootstrap .e-update::before {
+    content: "\e708";
+}
+
+.bootstrap .e-delete::before {
+    content: "\e700";
+}
+
+.e-toolbar .e-toolbar-items .e-toolbar-item .e-tbar-btn.e-btn.e-tbtn-txt .e-icons.e-btn-icon {
+    padding: 3px;
+}
+
+.showDropdown {
+    display: block;
+}
+
+.multiline {
+    margin-top: 60px;
+    width: 100%;
+}

@@ -1,0 +1,58 @@
+﻿@{
+    ViewData["Title"] = "Historial de Comandos";
+}
+
+<link rel="stylesheet" href="~/css/views/Command.css">
+
+<div class="header-view">
+    <h1 class="text-2xl font-bold dark:text-white title-view-text">@ViewBag.Title</h1>
+</div>
+
+
+
+<div class="form-container">
+    <div class="inputs-container">
+        <label class="TextFecha">Fecha Inicial</label>
+        <div class="wrapperFI">
+            <input id="dtpStart"  required>
+        </div>
+    </div>
+    <div class="inputs-container">
+        <label class="TextFecha">Fecha Final</label>
+        <div class="wrapperFI">
+            <input id="dtpEnd" required>
+        </div>
+    </div>
+    <div class="inputs-container">
+        <button onclick="ServiceGetCommands()" type="button" id="button-primary"
+            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Buscar</button>
+    </div>
+    <div class="inputs-container">
+        <label for="">Parametro a buscar</label>
+            <input type="text" id='searchParam' required/>
+    </div>
+    <div class="inputs-container">
+        <div class="control-styles">
+            <input type="text" id='multiSelect' />
+        </div>
+    </div>
+    <div class="inputs-container">
+        <button type="button" id="button-filter" class="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700" id="data-filter" onclick="aplicFilter()" disabled>
+            Aplicar filtro
+        </button>
+    </div>
+</div>
+
+<div class="container-grid">
+    <div id="Grid"></div>
+</div>
+
+
+
+<script type="text/javascript">
+    var columnsSearch = @(Html.Raw(ViewBag.columnsSearch));
+    var columnsToHide = @(Html.Raw(ViewBag.columnsToHide));
+</script>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/js/Views/Commands/Commands.js"></script>
+

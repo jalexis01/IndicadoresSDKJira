@@ -1,0 +1,209 @@
+﻿using MQTT.Infrastructure.Models;
+using MQTT.Infrastructure.Models.DTO;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+
+namespace MQTT.Infrastructure.DAL
+{
+    public class LogMessagesDAL
+    {
+        public static LogMessageDTO Add(General objContext, string message)
+        {
+            try
+            {
+                using (var dbContext = objContext.DBConnection())
+                {
+                    TbLogMessageIn tbLogMessageIn = new TbLogMessageIn
+                    {
+                        CreationDate = DateTime.UtcNow,
+                        Message = message
+                    };
+
+                    dbContext.Add(tbLogMessageIn);
+                    dbContext.SaveChanges();
+
+                    LogMessageDTO logMessageDTO = new LogMessageDTO()
+                    {
+                        Id = tbLogMessageIn.Id,
+                        CreationDate = tbLogMessageIn.CreationDate,
+                        Message = message
+                    };
+                    return logMessageDTO;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public static LogMessageDTO AddLogHistory(General objContext, LogMessageDTO logMsg)
+        {
+            try
+            {
+                using (var dbContext = objContext.DBConnection())
+                {
+                    TbLogHistoryMessageIn tbLogHistoryMsg = new TbLogHistoryMessageIn
+                    {
+                        CreationDate = logMsg.CreationDate.Value,
+                        Observations = logMsg.Observations,
+                        Processed = logMsg.Processed,
+                        IdProcessed = logMsg.IdProcessed,
+                        DateProcessed = DateTime.UtcNow,
+                        IdHeaderMessage = logMsg.IdHeaderMessage,
+                        Message = logMsg.Message
+                    };
+
+                    dbContext.Add(tbLogHistoryMsg);
+                    dbContext.SaveChanges();
+
+                    LogMessageDTO logMessageDTO = new LogMessageDTO()
+                    {
+                        Id = tbLogHistoryMsg.Id
+                    };
+                    return logMessageDTO;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public static void RemoveLogMsg(General objContext, long id)
+        {
+            try
+            {
+                using (var dbContext = objContext.DBConnection())
+                {
+                    var log = dbContext.TbLogMessageIn.Where(l => l.Id == id).FirstOrDefault();
+
+                    if (log == null)
+                    {
+                        throw new Exception("Log not found.");
+                    }
+                    dbContext.Remove(log);
+                    dbContext.SaveChanges();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public static long GetIdLogMessageInByDay(General objContext, DateTime date)
+        {
+            try
+            {
+                using (var dbContext = objContext.DBConnection())
+                {
+                    var result = (from l in dbContext.TbLogMessageInSummaryDay
+                                  where l.DateDay == date
+                                  select l.IdLogMessageIn).FirstOrDefault();
+
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public static List<LogMessageDTO> GetLogMessageGreaterThanId(General objContext, long idLog)
+        {
+            try
+            {
+                using (var dbContext = objContext.DBConnection())
+                {
+                    var result = (from l in dbContext.TbLogMessageIn
+                                  where l.Id > idLog
+                                  select new LogMessageDTO { 
+                                      Id = l.Id,
+                                      DateIn = l.CreationDate,
+                                      IdHeaderMessage = l.IdHeaderMessage,
+                                      IdProcessed = l.IdProcessed, 
+                                      Message = l.Message,
+                                      Observations = l.Observations,
+                                      Processed = l.Processed
+                                  }).ToList();
+
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+		}
+		public static List<LogMessageDTO> GetLogMessagePending(General objContext)
+		{
+			try
+			{
+				using (var dbContext = objContext.DBConnection())
+                {
+					var result = (from msg in dbContext.TbLogMessageIn
+                                  where !msg.Processed
+                                  select new LogMessageDTO()
+                                  {
+                                      Id = msg.Id,
+                                      Message = msg.Message
+                                  }).ToList();
+
+                    return result;
+				}
+			}
+			catch (Exception ex)
+			{
+				throw ex;
+			}
+		}
+		public static LogMessageDTO GetLogMessageById(General objContext, long id)
+        {
+            try
+            {
+                using (var dbContext = objContext.DBConnection())
+                {
+                    var result = (from msg in dbContext.TbLogMessageIn
+                                  where id == msg.Id
+                                  select new LogMessageDTO()
+                                  {
+                                      Id = msg.Id,
+                                      Message = msg.Message
+                                  }).FirstOrDefault();
+
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public static void Update(General objContext, LogMessageDTO logMessageDTO)
+        {
+            try
+            {
+                using (var DBContext = objContext.DBConnection())
+                {
+                    var log = (from msg in DBContext.TbLogMessageIn
+                               where msg.Id == logMessageDTO.Id
+                               select msg).FirstOrDefault();
+
+                    log.DateProcessed = DateTime.UtcNow;
+                    log.Processed = logMessageDTO.Processed;
+                    log.Observations = logMessageDTO.Observations;
+                    log.IdProcessed = logMessageDTO.IdProcessed;
+                    log.IdHeaderMessage = logMessageDTO.IdHeaderMessage;
+
+                    DBContext.SaveChanges();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+    }
+}
