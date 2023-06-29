@@ -1,0 +1,3 @@
+is_global = true
+build_property.RootNamespace = MQTT.Subscriber
+build_property.ProjectDir = C:\Users\juana\Downloads\Puertas Transmilenio (2)\MQTTSubscriber\
