@@ -33,9 +33,9 @@ function Eys(){
 }
 
 function Prueba() {
-    $("#navbar").addClass("footer-prueba");
-    $("#footer").addClass("navbar-prueba");
-    $("#loader").addClass("loader-color-prueba");
+    $("#navbar").addClass("footer-eys");
+    $("#footer").addClass("navbar-eys");
+    $("#loader").addClass("loader-color-eys");
 }
 function Manatee(){
     $("#navbar").addClass("navbar-manatee");
@@ -81,11 +81,11 @@ function bodyLogin(){
             break;
         case 'Eys':
             $("body").addClass("class-body-eys");
-            $("#logo").attr('src','../../img/assabloy-logo.jgg')
+            $("#logo").attr('src','../../img/eys-logo.png')
             break;
         default:
-            $("body").addClass("class-body-eys");
-            $("#logo").attr('src','../../img/eys-logo.png')
+            $("body").addClass("class-body-prueba");
+            $("#logo").attr('src', '../../img/assabloy-logo.png')
             break;
     }
 }
@@ -103,23 +103,4 @@ function selectSpace(){
             break;
     }
 }
-
-/** 
-function setIdUser(){
-    if((sessionStorage.getItem('idUser') == undefined || sessionStorage.getItem('idUser') == null) && location.pathname != "/Identity/Account/Login"){
-        $.ajax({
-            type: "GET",
-            dataType: "json",
-            url: '/Messages/UserDataId',
-          }).then(response => JSON.parse(JSON.stringify(response)))
-          .then(data => {
-            sessionStorage.setItem('idUser', data.idUser);
-          })
-          .catch(error => {
-            location.href = location.origin + "/Identity/Account/Login";
-          })
-          .then(response => console.log('Success:', response));
-    }
-}*/
-
 selectSpace();

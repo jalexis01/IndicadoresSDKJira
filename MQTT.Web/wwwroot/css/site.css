@@ -30,7 +30,7 @@ body{
 
 .footer-prueba, .navbar-prueba {
     background-color: #00A92D;
-    background-image: linear-gradient(160deg, #FF0000 0%, #FF0000 100%);
+    background-image: linear-gradient(160deg, #00A92D 0%, #00A92D 100%);
 }
 
 .title-view-text{
@@ -122,7 +122,7 @@ body{
 .loader-color-manatee{
   color: #FF9E17;
 }
-.loader-color-manatee {
+.loader-color-prueba {
     color: #00A92D;
 }
 .loader:before,
