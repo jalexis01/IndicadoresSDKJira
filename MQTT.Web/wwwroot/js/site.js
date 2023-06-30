@@ -99,7 +99,7 @@ function selectSpace(){
             Eys();
             break;
         default:
-            Eys();
+            Prueba();
             break;
     }
 }
