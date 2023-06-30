@@ -162,6 +162,34 @@ function exportToExcel() {
     saveAs(new Blob([wbout], { type: 'application/octet-stream' }), 'tickets.xlsx');
 }
 
+function showMoreInformationTickets(idTicket) {
+    let ticketToReturn
+    $.ajax({
+        url: '/Tickets/consultarTicket?idTicket=' + idTicket,
+        data: { idTicket: idTicket },
+    }).then(response => JSON.parse(JSON.stringify(response)))
+        .then(data => {
+            console.log("Ticket data: "+data)
+            if (data.length == 0) {
+                noData();
+                return;
+            } else {
+                ticketToReturn = setColums(data, null);
+                return Ok(ticketToReturn);
+            }
+        })
+        .catch(error => {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: error.name + ': ' + error.message
+            });
+        })
+        .then(response => console.log('Success:', response));
+}
+
+
+
 /********************************* */
 function ServiceGetMessages() {
     var startDate = $('#dtpStart').val();
@@ -170,7 +198,6 @@ function ServiceGetMessages() {
     var componente = $('#componente').val();
     console.log("idComponente: " + componente);
     console.log("Max: " + max);
-
     Swal.fire({
         title: 'Cargando...',
         allowOutsideClick: false,
@@ -195,7 +222,8 @@ function ServiceGetMessages() {
                 return;
             } else {
                 let dataColumns = setColums(data, null);
-                let exportFunctions = addFnctionsGrid(['Excel']);
+                let exportFunctions = addFnctionsGrid(['Excel', 'Csv']);
+              
                 dataColumns = addCommandsGridDetails(dataColumns);
                 dataGridSave = data;
                 setGrid(data, dataColumns, exportFunctions);

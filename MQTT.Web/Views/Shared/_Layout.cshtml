@@ -1,7 +1,7 @@
 ﻿@{
-    ViewData["Empresa"] = "Manatee";
+    //ViewData["Empresa"] = "Manatee";
     //ViewData["Empresa"] = "Eys";
-    //ViewData["Empresa"] = "Prueba";
+    ViewData["Empresa"] = "Prueba";
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="~/flowbite/styles.css" />
     <link rel="stylesheet" href="~/css/site.css" />
     <link rel="stylesheet" href="~/css/ej2/bootstrap5.css" />
-    @if(@ViewBag.Empresa == "Manatee"){
+    @if(@ViewBag.Empresa == "Prueba"){
         <link rel="stylesheet" href="~/css/edit/syncfusionManatee.css" />
     }
 </head>
@@ -50,7 +50,7 @@
             titulo: "Prueba",
             fontColor: '#FF0000',
             fontColor2: '#FF0000',
-            location: "Av. 7Nte. # 26N - 35, Sta. Mónica Residencial. Cali, Colombia",
+            location: "Prueba",
             info: "Tel +57 (602) 435 0777 Email servicioalcliente@eysingenieria.com",
         }
     </script>

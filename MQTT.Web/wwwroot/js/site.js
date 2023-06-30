@@ -32,6 +32,11 @@ function Eys(){
     $("#loader").addClass("loader-color-eys");
 }
 
+function Prueba() {
+    $("#navbar").addClass("footer-prueba");
+    $("#footer").addClass("navbar-prueba");
+    $("#loader").addClass("loader-color-prueba");
+}
 function Manatee(){
     $("#navbar").addClass("navbar-manatee");
     $("#footer").addClass("footer-manatee");
@@ -76,7 +81,7 @@ function bodyLogin(){
             break;
         case 'Eys':
             $("body").addClass("class-body-eys");
-            $("#logo").attr('src','../../img/eys-logo.png')
+            $("#logo").attr('src','../../img/assabloy-logo.jgg')
             break;
         default:
             $("body").addClass("class-body-eys");
@@ -94,7 +99,7 @@ function selectSpace(){
             Eys();
             break;
         default:
-            Eys();
+            Prueba();
             break;
     }
 }
