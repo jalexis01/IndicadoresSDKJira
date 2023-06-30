@@ -10,7 +10,12 @@
     overflow-x:hidden; 
     overflow-y:hidden
 }
-
+.class-body-prueba {
+    background-color: #00A92D;
+    background-image: linear-gradient(160deg, #00A92D 0%, #00A92D 100%);
+    overflow-x: hidden;
+    overflow-y: hidden
+}
 .class-body-manatee{
     background-color: #F76B1C;
     background-image: linear-gradient(90deg, #F76B1C 0%, #ff9e17 100%);
