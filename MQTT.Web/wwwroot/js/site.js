@@ -31,7 +31,11 @@ function Eys(){
     $("#footer").addClass("navbar-eys");
     $("#loader").addClass("loader-color-eys");
 }
-
+function Assabloy() {
+    $("#navbar").addClass("footer-assabloy");
+    $("#footer").addClass("navbar-assabloy");
+    $("#loader").addClass("loader-color-assabloy");
+}
 function Prueba() {
     $("#navbar").addClass("footer-eys");
     $("#footer").addClass("navbar-eys");
@@ -83,6 +87,10 @@ function bodyLogin(){
             $("body").addClass("class-body-eys");
             $("#logo").attr('src','../../img/eys-logo.png')
             break;
+        case 'Assabloy':
+            $("body").addClass("class-body-assabloy");
+            $("#logo").attr('src', '../../img/assabloy-logo.png')
+            break;
         default:
             $("body").addClass("class-body-prueba");
             $("#logo").attr('src', '../../img/assabloy-logo.png')
@@ -96,6 +104,9 @@ function selectSpace(){
             Manatee();
             break;
         case 'Eys':
+            Eys();
+            break;
+        case 'Assabloy':
             Eys();
             break;
         default:
