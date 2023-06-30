@@ -8,10 +8,10 @@ namespace MQTT.FunctionApp.Models
     public class FieldAssabloy
     {
         //[JsonPropertyName("Station")]
-        public Category customfield_10057 { get; set; }
+        public Category customfield_10052 { get; set; }
 
         //[JsonPropertyName("Wagon")]
-        public Category customfield_10058 { get; set; }
+        public Category customfield_10073 { get; set; }
 
         //[JsonPropertyName("Door")]
         public string customfield_10060 { get; set; }
