@@ -5,8 +5,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
-using System.ComponentModel.DataAnnotations;
-using System.Net.Http.Headers;
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore.Internal;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace MQTT.Infrastructure.DAL
 {
@@ -208,7 +209,6 @@ namespace MQTT.Infrastructure.DAL
                 throw ex;
             }
         }
-
         public static long AddHeaderMessage(General objContext, List<HeaderFieldDTO> lstHeaderFields, int idMessageType, Dictionary<string, string> dctDataFields, string formatDate = _formateDate)
         {
             try
@@ -267,7 +267,6 @@ namespace MQTT.Infrastructure.DAL
                 throw ex;
             }
         }
-
         public static void UpdateHeaderMessage(General objContext, List<HeaderFieldDTO> lstHeaderFields, Dictionary<string, string> dctDataFields, long idHeaderMessage, string formatDate = _formateDate)
         {
             try
@@ -278,17 +277,13 @@ namespace MQTT.Infrastructure.DAL
                 foreach (var item in dctDataFields)
                 {
                     var dataType = lstHeaderFields.Where(f => f.Name.Equals(item.Key)).Select(f => f.DataType).FirstOrDefault();
-                    if (true)
-                    {
-
-                    }
                     value = General.GetValueFromFields(dataType, item.Value, formatDate);
                     sentence += $"{item.Key} = {value}";
                 }
 
                 sentence = sentence.Remove(sentence.Length - 1);
 
-                sentence += $" WHERE Id = -9223372036851920235 and IdHeaderMessage = {idHeaderMessage}";
+                sentence += $" WHERE IdHeaderMessage = {idHeaderMessage}";
 
                 using (var DBContext = objContext.DBConnection())
                 {
@@ -339,6 +334,74 @@ namespace MQTT.Infrastructure.DAL
                 throw ex;
             }
         }
+        public static void GetHeaderMessageDuplicated(General objContext)
+        {
+            try
+            {
+                using (var dbContext = objContext.DBConnection())
+                {
+                    string sentence = "SELECT O.IDManatee, COUNT(O.IDManatee) FROM [Operation].[tbHeaderMessage] O GROUP BY O.IDManatee HAVING COUNT(O.IDManatee) > 1";
+                    List<string> fields = new List<string>();
+                    List<TbHeaderMessage> headersPending = new List<TbHeaderMessage>();
+                    using (var command = dbContext.Database.GetDbConnection().CreateCommand())
+                    {
+                        command.CommandText = sentence;
+                        dbContext.Database.OpenConnection();
+                        using (var readerResult = command.ExecuteReader())
+                        {
+                            if (readerResult.HasRows)
+                            {
+                                while (readerResult.Read())
+                                {
+                                    fields.Add(readerResult["IDManatee"].ToString());
+                                }
+                            }
+                        }
+                    }
+
+                    foreach (var item in fields)
+                    {
+                        try
+                        {
+
+                            var record = dbContext.TbHeaderMessage.Where(f => f.Idmanatee == item).ToList();
+
+                            if (record.Count > 2)
+                            {
+                                headersPending.AddRange(record);
+                            }
+                            if (record.Count == 1)
+                            {
+                                continue;
+                            }
+                            var headerMessageUpdate = record.OrderBy(f => f.CreationDate).First();
+                            var headerMessageDelete = record.OrderBy(f => f.CreationDate).Last();
+
+                            var log = dbContext.TbLogMessageIn.Where(f => f.IdHeaderMessage == headerMessageDelete.IdHeaderMessage).ToList();
+                            log.ForEach(f => f.IdHeaderMessage = headerMessageUpdate.IdHeaderMessage);
+                            headerMessageUpdate.FechaHoraEnvio = headerMessageDelete.FechaHoraEnvio;
+
+                            var messageToDelete = dbContext.TbMessages.Where(f => f.IdHeaderMessage.Equals(headerMessageUpdate.IdHeaderMessage)).FirstOrDefault();
+                            var messageToUpdate = dbContext.TbMessages.Where(f => f.IdHeaderMessage.Equals(headerMessageDelete.IdHeaderMessage)).FirstOrDefault();
+                            messageToUpdate.IdHeaderMessage= headerMessageUpdate.IdHeaderMessage;
+                            dbContext.Remove(messageToDelete);
+                            dbContext.SaveChanges();
+                            dbContext.Remove(headerMessageDelete);
+                            dbContext.SaveChanges();
+                        }
+                        catch (Exception)
+                        {
+
+                            throw;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
 
         public static int AddWeftMessage(General objContext, MessageTypeDTO messageType, List<MessageTypeFieldDTO> lstMessageTypeFields, long idHeaderMessage, Dictionary<string, string> dctDataFields, string formatDate = _formateDate)
         {
@@ -365,7 +428,7 @@ namespace MQTT.Infrastructure.DAL
 
                 using (var DBContext = objContext.DBConnection())
                 {
-                   totalRows = DBContext.Database.ExecuteSqlCommand(sentence);
+                    totalRows = DBContext.Database.ExecuteSqlCommand(sentence);
                 }
                 return totalRows;
             }
@@ -374,8 +437,6 @@ namespace MQTT.Infrastructure.DAL
                 throw ex;
             }
         }
-
-
         public static DataTable SearchMessages(General objContext, DateTime dtInit, DateTime dtEnd)
         {
             try
@@ -544,7 +605,7 @@ namespace MQTT.Infrastructure.DAL
             {
                 using (var DBContext = objContext.DBConnection())
                 {
-                    var result = DBContext.TbMessages.Where(f=> f.Id == -9223372036853705160).ToList();
+                    var result = DBContext.TbMessages.Where(f=> f.Id > -9223372036853705160).ToList();
 
                     int i = 0;
                     foreach (var item in result)
@@ -556,22 +617,22 @@ namespace MQTT.Infrastructure.DAL
                         Console.WriteLine($"FechaHoraEnvioDato: {item.FechaHoraEnvioDato}");
                         Console.WriteLine($"FechaHoraLecturaDato: {item.FechaHoraLecturaDato}");
 
-                        if (string.IsNullOrEmpty(item.FechaHoraEnvioDato))
+                        if (string.IsNullOrEmpty(item.FechaHoraEnvioDato.ToString()))
                         {
-                            item.FechaHoraEnvioDato = string.Empty;
+                            item.FechaHoraEnvioDato = null;
                         }
                         else
                         {
-                            item.FechaHoraEnvioDato = General.GetValueFromFields("DATETIME", item.FechaHoraEnvioDato, _formateDate, true);
+                            item.FechaHoraEnvioDato = Convert.ToDateTime(General.GetValueFromFields("DATETIME", item.FechaHoraEnvioDato.ToString(), _formateDate, true));
                         }
 
-                        if (string.IsNullOrEmpty(item.FechaHoraLecturaDato))
+                        if (string.IsNullOrEmpty(item.FechaHoraLecturaDato.ToString()))
                         {
-                            item.FechaHoraLecturaDato = string.Empty;
+                            item.FechaHoraLecturaDato = null;
                         }
                         else
                         {
-                            item.FechaHoraLecturaDato = General.GetValueFromFields("DATETIME", item.FechaHoraLecturaDato, _formateDate, true);
+                            item.FechaHoraLecturaDato = Convert.ToDateTime(General.GetValueFromFields("DATETIME", item.FechaHoraLecturaDato.ToString(), _formateDate, true));
                         }
 
                         ids.Add(item.Id);
@@ -583,7 +644,6 @@ namespace MQTT.Infrastructure.DAL
             }
             catch (Exception ex)
             {
-                Console.Write(ex.Message);
                 throw ex;
             }
         }

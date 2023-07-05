@@ -38,6 +38,7 @@ namespace MQTT.Infrastructure.Models
         public virtual DbSet<TbLogElements> TbLogElements { get; set; }
         public virtual DbSet<TbLogExecutionProcessor> TbLogExecutionProcessor { get; set; }
         public virtual DbSet<TbLogExecutions> TbLogExecutions { get; set; }
+        public virtual DbSet<TbLogHistoryMessageIn> TbLogHistoryMessageIn { get; set; }
         public virtual DbSet<TbLogMessageIn> TbLogMessageIn { get; set; }
         public virtual DbSet<TbLogMessageInSummaryDay> TbLogMessageInSummaryDay { get; set; }
         public virtual DbSet<TbLogProcessedTypes> TbLogProcessedTypes { get; set; }
@@ -57,11 +58,11 @@ namespace MQTT.Infrastructure.Models
             }
             else
             {
-                if (!optionsBuilder.IsConfigured)
-                {
+            if (!optionsBuilder.IsConfigured)
+            {
                     optionsBuilder.UseSqlServer("Server=DESKTOP-LG97MDG\\SQLEXPRESS;Database=EYSIntegration;Trusted_Connection=True;");
-                }
             }
+        }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -368,9 +369,9 @@ namespace MQTT.Infrastructure.Models
 
                 entity.ToTable("tbHeaderMessage", "Operation");
 
-                entity.HasIndex(e => e.CreationDate);
-
-                entity.HasIndex(e => e.IdMessageType);
+                entity.HasIndex(e => e.Idmanatee)
+                    .HasName("IX_tbHeaderMessage_Unique")
+                    .IsUnique();
 
                 entity.Property(e => e.CreationDate)
                     .HasColumnType("datetime")
@@ -396,12 +397,6 @@ namespace MQTT.Infrastructure.Models
                     .IsUnicode(false);
 
                 entity.Property(e => e.Trama).HasColumnName("trama");
-
-                entity.HasOne(d => d.IdMessageTypeNavigation)
-                    .WithMany(p => p.TbHeaderMessage)
-                    .HasForeignKey(d => d.IdMessageType)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_tbMessageTypes_tbHeaderMessage");
             });
 
             modelBuilder.Entity<TbLogElements>(entity =>
@@ -452,6 +447,28 @@ namespace MQTT.Infrastructure.Models
                 entity.Property(e => e.InitDateTime).HasColumnType("datetime");
             });
 
+            modelBuilder.Entity<TbLogHistoryMessageIn>(entity =>
+            {
+                entity.ToTable("tbLogHistoryMessageIn", "Log");
+
+                entity.HasIndex(e => e.CreationDate);
+
+                entity.HasIndex(e => e.IdHeaderMessage);
+
+                entity.Property(e => e.CreationDate).HasColumnType("datetime");
+
+                entity.Property(e => e.DateProcessed).HasColumnType("datetime");
+
+                entity.Property(e => e.IdProcessed).HasDefaultValueSql("((1))");
+
+                entity.Property(e => e.Message).IsRequired();
+
+                entity.HasOne(d => d.IdHeaderMessageNavigation)
+                    .WithMany(p => p.TbLogHistoryMessageIn)
+                    .HasForeignKey(d => d.IdHeaderMessage)
+                    .HasConstraintName("FK_tbLogHistoryMessageIn_tbHeaderMessage");
+            });
+
             modelBuilder.Entity<TbLogMessageIn>(entity =>
             {
                 entity.ToTable("tbLogMessageIn", "Log");
@@ -464,8 +481,6 @@ namespace MQTT.Infrastructure.Models
 
                 entity.HasIndex(e => e.Processed)
                     .HasName("IX_tbLogMessageIn_New_Processed");
-
-                entity.Property(e => e.Id).ValueGeneratedNever();
 
                 entity.Property(e => e.CreationDate).HasColumnType("datetime");
 
@@ -599,6 +614,18 @@ namespace MQTT.Infrastructure.Models
             {
                 entity.ToTable("tbMessages", "Operation");
 
+                entity.HasIndex(e => e.CodigoEvento)
+                    .HasName("idx_codigoEvento");
+
+                entity.HasIndex(e => e.FechaHoraEnvioDato)
+                    .HasName("IX_Operation_tbMessages_fechaHoraEnvioDato");
+
+                entity.HasIndex(e => e.FechaHoraLecturaDato)
+                    .HasName("IX_Operation_tbMessages_fechaHoraLecturaDato");
+
+                entity.HasIndex(e => e.IdEstacion)
+                    .HasName("idx_estaciones");
+
                 entity.Property(e => e.CiclosApertura).HasColumnName("ciclosApertura");
 
                 entity.Property(e => e.CodigoAlarma)
@@ -632,13 +659,11 @@ namespace MQTT.Infrastructure.Models
 
                 entity.Property(e => e.FechaHoraEnvioDato)
                     .HasColumnName("fechaHoraEnvioDato")
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasColumnType("datetime");
 
                 entity.Property(e => e.FechaHoraLecturaDato)
                     .HasColumnName("fechaHoraLecturaDato")
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasColumnType("datetime");
 
                 entity.Property(e => e.FuerzaMotor).HasColumnName("fuerzaMotor");
 

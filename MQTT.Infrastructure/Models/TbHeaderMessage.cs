@@ -8,6 +8,7 @@ namespace MQTT.Infrastructure.Models
         public TbHeaderMessage()
         {
             TbCommands = new HashSet<TbCommands>();
+            TbLogHistoryMessageIn = new HashSet<TbLogHistoryMessageIn>();
             TbMessages = new HashSet<TbMessages>();
         }
 
@@ -22,8 +23,8 @@ namespace MQTT.Infrastructure.Models
         public DateTime? FechaHoraEnvio { get; set; }
         public long? Id { get; set; }
 
-        public virtual TbMessageTypes IdMessageTypeNavigation { get; set; }
         public virtual ICollection<TbCommands> TbCommands { get; set; }
+        public virtual ICollection<TbLogHistoryMessageIn> TbLogHistoryMessageIn { get; set; }
         public virtual ICollection<TbMessages> TbMessages { get; set; }
     }
 }

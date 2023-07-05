@@ -7,7 +7,6 @@ namespace MQTT.Infrastructure.Models
     {
         public TbMessageTypes()
         {
-            TbHeaderMessage = new HashSet<TbHeaderMessage>();
             TbMessageTypeFields = new HashSet<TbMessageTypeFields>();
         }
 
@@ -23,7 +22,6 @@ namespace MQTT.Infrastructure.Models
         public string FieldWeft { get; set; }
         public string FieldIdentifierMessage { get; set; }
 
-        public virtual ICollection<TbHeaderMessage> TbHeaderMessage { get; set; }
         public virtual ICollection<TbMessageTypeFields> TbMessageTypeFields { get; set; }
     }
 }

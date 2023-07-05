@@ -14,8 +14,8 @@ namespace MQTT.Infrastructure.Models
         public string IdVagon { get; set; }
         public string IdPuerta { get; set; }
         public string CodigoPuerta { get; set; }
-        public string FechaHoraLecturaDato { get; set; }
-        public string FechaHoraEnvioDato { get; set; }
+        public DateTime? FechaHoraLecturaDato { get; set; }
+        public DateTime? FechaHoraEnvioDato { get; set; }
         public int? TipoTrama { get; set; }
         public string TramaRetransmitida { get; set; }
         public string CodigoEvento { get; set; }
