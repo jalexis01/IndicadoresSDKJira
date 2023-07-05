@@ -87,6 +87,9 @@ namespace MQTT.FunctionApp.Models
                     case "fecha_arribo_locacion":
                         resultQuery += $" AND \"Fecha y Hora de Llegada a Estacion[Time stamp]\" >= {this.fecha_inicial_rango} and \"Fecha y Hora de Llegada a Estacion[Time stamp]\" <= {this.fecha_final_rango}";
                         break;
+                    default:
+                        results.Add(new ValidationResult("El valor tipo_fecha no es valido"));
+                        break;
                 }
             }
 

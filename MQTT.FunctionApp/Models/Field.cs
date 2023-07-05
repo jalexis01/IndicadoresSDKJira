@@ -7,69 +7,69 @@ namespace MQTT.FunctionApp.Models
 {
     public class Field
     {
-        //[JsonPropertyName("Station")]
+        [JsonPropertyName("customfield_10057")]
         public Category customfield_10057 { get; set; }
 
-        //[JsonPropertyName("Wagon")]
+        [JsonPropertyName("customfield_10058")]
         public Category customfield_10058 { get; set; }
 
-        //[JsonPropertyName("Door")]
+        [JsonPropertyName("customfield_10060")]
         public string customfield_10060 { get; set; }
 
-        //[JsonPropertyName("Component")]
+        [JsonPropertyName("customfield_10088")]
         public Category customfield_10088 { get; set; }
 
-        //[JsonPropertyName("Serial")]
+        [JsonPropertyName("customfield_10059")]
         public string customfield_10059 { get; set; }
 
-        //[JsonPropertyName("MaintenanceType")]
+        [JsonPropertyName("customfield_10061")]
         public Category customfield_10061 { get; set; }
 
-        //[JsonPropertyName("FailureLevel")]
+        [JsonPropertyName("customfield_10064")]
         public Category customfield_10064 { get; set; }
 
-        //[JsonPropertyName("FaultCode")]
+        [JsonPropertyName("customfield_10069")]
         public List<Category> customfield_10069 { get; set; }
 
-        //[JsonPropertyName("CreationDate")]
+        [JsonPropertyName("created")]
         public DateTime created { get; set; }
 
-        //[JsonPropertyName("ResolutionDate")]
+        [JsonPropertyName("statuscategorychangedate")]
         public DateTime statuscategorychangedate { get; set; }
 
-        //[JsonPropertyName("LocationDate")]
+        [JsonPropertyName("customfield_10071")]
         public DateTime? customfield_10071 { get; set; }
 
-        //[JsonPropertyName("SpareComponent")]
+        [JsonPropertyName("customfield_10072")]
         public List<Category> customfield_10072 { get; set; }
 
-        //[JsonPropertyName("TypeOfRepair")]
+        [JsonPropertyName("customfield_10081")]
         public List<Category> customfield_10081 { get; set; }
 
-        //[JsonPropertyName("TypeSettingConfiguration")]
+        [JsonPropertyName("customfield_10075")]
         public List<Category> customfield_10075 { get; set; }
 
-        //[JsonPropertyName("TypeSettingConfiguration2")]
+        [JsonPropertyName("customfield_10076")]
         public List<Category> customfield_10076 { get; set; }
 
-        //[JsonPropertyName("TypeSettingConfiguration3")]
+        [JsonPropertyName("customfield_10077")]
         public List<Category> customfield_10077 { get; set; }
 
-        //[JsonPropertyName("TypeSettingConfiguration4")]
+        [JsonPropertyName("customfield_10078")]
         public List<Category> customfield_10078 { get; set; }
 
-        //[JsonPropertyName("TypeSettingConfiguration5")]
+        [JsonPropertyName("customfield_10086")]
         public List<Category> customfield_10086 { get; set; }
 
-        //[JsonPropertyName("DescriptionRepair")]
-        //public string description { get; set; }
+        [JsonPropertyName("customfield_10105")]
         public string customfield_10105 { get; set; }
 
-        //[JsonPropertyName("DiagnosisCause")]
+        [JsonPropertyName("customfield_10104")]
         public string customfield_10104 { get; set; }
 
-        //[JsonPropertyName("CauseType")]
+        [JsonPropertyName("customfield_10067")]
         public Category customfield_10067 { get; set; }
+        [JsonPropertyName("customfield_10101")]
         public DateTime? customfield_10101 { get; set; }
 
         [JsonPropertyName("Status")]
