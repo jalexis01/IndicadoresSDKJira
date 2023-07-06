@@ -199,24 +199,7 @@ namespace DashboarJira.Services
             indicadorAux.descripcion = IRF_NO_CONTRATISTA.ToString();
             indicadores.Add(indicadorAux);
 
-            indicadorAux=new IndicadoresEntity();
-            indicadorAux.nombre = "ITTS";
-            indicadorAux.calculo = 100;
-            indicadorAux.descripcion = "TO DO";
-            indicadores.Add(indicadorAux);
-
-            indicadorAux = new IndicadoresEntity();
-            indicadorAux.nombre = "ICO";
-            indicadorAux.calculo = 100;
-            indicadorAux.descripcion = "TO DO";
-            indicadores.Add(indicadorAux);
-
-            indicadorAux = new IndicadoresEntity();
-            indicadorAux.nombre = "IOR";
-            indicadorAux.calculo = 100;
-            indicadorAux.descripcion = "TO DO";
-            indicadores.Add(indicadorAux);
-
+            
             return indicadores;
 
 

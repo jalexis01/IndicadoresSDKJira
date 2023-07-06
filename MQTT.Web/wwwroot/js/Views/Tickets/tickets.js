@@ -222,7 +222,7 @@ function ServiceGetMessages() {
                 return;
             } else {
                 let dataColumns = setColums(data, null);
-                let exportFunctions = addFnctionsGrid(['Excel', 'Csv']);
+                let exportFunctions = addFnctionsGrid(['Excel']);
               
                 dataColumns = addCommandsGridDetails(dataColumns);
                 dataGridSave = data;

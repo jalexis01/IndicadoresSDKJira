@@ -368,7 +368,7 @@ function unabledCommandsGrid(){
 function getExcelExportProperties(fileName) {
     return {
         header: {
-            headerRows: 7,
+            headerRows: 0,
             rows: [
                 { index: 1, cells: [{ index: 1, colSpan: 5, value: dataExcel.titulo, style: { fontColor: dataExcel.fontColor2, fontSize: 25, hAlign: 'Center', bold: true } }] },
                 {
@@ -397,7 +397,7 @@ function getExcelExportProperties(fileName) {
                 {
                     index: 6,
                     cells: [
-                        { index: 5, value: "Net 30 days", width: 150 }
+                        
                     ]
                 }
             ]
@@ -406,8 +406,8 @@ function getExcelExportProperties(fileName) {
         footer: {
             footerRows: 8,
             rows: [
-                { cells: [{ colSpan: 6, value: "Thank you for your business!", style: { fontColor: dataExcel.fontColor, hAlign: 'Center', bold: true } }] },
-                { cells: [{ colSpan: 6, value: "!Visit Again!", style: { fontColor: dataExcel.fontColor, hAlign: 'Center', bold: true } }] }
+
+
             ]
         },
         
