@@ -347,14 +347,14 @@ function addFnctionsGrid(dataExport){
 
 function addCommandsGrid(columsList){
     columsList.unshift({
-        headerText: 'opciones', width: 120, commands: [{ type: 'Edit', buttonOption: { iconCss: ' e-icons e-edit', cssClass: 'e-flat' }}]
+        headerText: 'opciones', width: 120, commands: [{ type: 'Edit', buttonOption: { iconCss: ' e-icons e-edit', cssClass: 'e-flat' , text:"ver mas"}}]
     })
     return columsList;
 }
 
 function addCommandsGridDetails(columsList){
     columsList.unshift({
-        headerText: 'opciones', width: 120, commands: [{ buttonOption: { iconCss: 'e-icons e-eye', cssClass: 'e-flat' } }]
+        headerText: 'opciones', width: 120, commands: [{ buttonOption: { iconCss: 'e-icons e-eye', cssClass: 'e-flat' , text:"ver mas"} }]
     })
     return columsList;
 }
