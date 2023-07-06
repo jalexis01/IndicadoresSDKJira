@@ -176,7 +176,7 @@ namespace DashboarJira.Services
             IEPMEntity IEPM_NO_CONTRATISTA = iepm.IEPM_NO_CONTRATISTA(fechaInicio, fechaFin);
             return CrearIndicadorEntity("IEPM No Contratista", IEPM_NO_CONTRATISTA.CalcularIndicadorIEPM(), IEPM_NO_CONTRATISTA.ToString());
         }
-
+        /**/
 
         // **************************************************************************************************************************************************************************************************************************************************************************************************
         //RAIO
