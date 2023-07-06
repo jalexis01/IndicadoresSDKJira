@@ -67,7 +67,7 @@ foreach (IndicadoresEntity indicador in indicadores.ObtenerIndicadores("2023-05-
 }
 Console.WriteLine();
 
-/*
+
 byte[] bytes = jira.getIssueJira("TICKET-100").Archivos; // Aquí debes obtener tus bytes desde la fuente deseada
 
 string rutaCompleta = Path.Combine("C:", "Users", "DesarrolloJC", "Desktop");
@@ -79,4 +79,3 @@ using (FileStream archivo = new FileStream(rutaCompleta, FileMode.Create))
 }
 
 Console.WriteLine("Archivo creado exitosamente.");
-*/
