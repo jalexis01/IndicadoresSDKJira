@@ -40,7 +40,7 @@ namespace MQTT.Web.Controllers
 
                 Indicadores indicadores = new Indicadores();
 
-                return indicadores.indicadores(formattedStartDate, formattedEndDate);
+                return indicadores.ObtenerIndicadores(formattedStartDate, formattedEndDate);
 
             }
             catch (Exception ex)
