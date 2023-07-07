@@ -314,7 +314,7 @@ namespace MQTT.FunctionApp
             {
                 field.statuscategorychangedate = null;
             }
-            if (fieldObject["customfield_10056"].Value<DateTime>() != null)
+            if (fieldObject.ContainsKey("customfield_10056") && fieldObject.TryGetValue("customfield_10056", out JToken customField10056) && customField10056.Type != JTokenType.Null)
             {
                 DateTime FechayHoraDeLlegadaAEstacion = fieldObject["customfield_10056"].Value<DateTime>();
                 field.FechayHoraDeLlegadaAEstacion = FechayHoraDeLlegadaAEstacion;
@@ -471,7 +471,7 @@ namespace MQTT.FunctionApp
                 field.TipoCausa = null;
             }
 
-            if (fieldObject["customfield_10055"].Value<DateTime>() != null)
+            if (fieldObject.TryGetValue("customfield_10055", out JToken customfield_10055) && customfield_10055.Type != JTokenType.Null)
             {
                 DateTime FechaSolucion = fieldObject["customfield_10055"].Value<DateTime>();
                 field.FechaSolucion = FechaSolucion;
