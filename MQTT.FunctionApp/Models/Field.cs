@@ -7,73 +7,74 @@ namespace MQTT.FunctionApp.Models
 {
     public class Field
     {
+        [JsonPropertyName("customfield_10052")]
+        public Category? Estacion { get; set; }
+
+        [JsonPropertyName("customfield_10073")]
+        public Category? Vagon { get; set; }
+
         [JsonPropertyName("customfield_10057")]
-        public Category customfield_10057 { get; set; }
+        public string? IdentificacionComponente { get; set; }
+
+        [JsonPropertyName("customfield_10070")]
+        public Category? TipoDeComponente { get; set; }
 
         [JsonPropertyName("customfield_10058")]
-        public Category customfield_10058 { get; set; }
-
-        [JsonPropertyName("customfield_10060")]
-        public string customfield_10060 { get; set; }
-
-        [JsonPropertyName("customfield_10088")]
-        public Category customfield_10088 { get; set; }
-
-        [JsonPropertyName("customfield_10059")]
-        public string customfield_10059 { get; set; }
-
-        [JsonPropertyName("customfield_10061")]
-        public Category customfield_10061 { get; set; }
-
-        [JsonPropertyName("customfield_10064")]
-        public Category customfield_10064 { get; set; }
-
-        [JsonPropertyName("customfield_10069")]
-        public List<Category> customfield_10069 { get; set; }
-
-        [JsonPropertyName("created")]
-        public DateTime created { get; set; }
-
-        [JsonPropertyName("statuscategorychangedate")]
-        public DateTime statuscategorychangedate { get; set; }
-
-        [JsonPropertyName("customfield_10071")]
-        public DateTime? customfield_10071 { get; set; }
+        public string? IdentificacionSerial { get; set; }
 
         [JsonPropertyName("customfield_10072")]
-        public List<Category> customfield_10072 { get; set; }
+        public Category? TipoDeServicio { get; set; }
 
-        [JsonPropertyName("customfield_10081")]
-        public List<Category> customfield_10081 { get; set; }
+        [JsonPropertyName("customfield_10046")]
+        public Category? ClaseDeFallo { get; set; }
 
-        [JsonPropertyName("customfield_10075")]
-        public List<Category> customfield_10075 { get; set; }
+        [JsonPropertyName("customfield_10048")]
+        public List<Category>? DescripcionDeFallo { get; set; }
 
-        [JsonPropertyName("customfield_10076")]
-        public List<Category> customfield_10076 { get; set; }
+        [JsonPropertyName("created")]
+        public DateTime? created { get; set; }
 
-        [JsonPropertyName("customfield_10077")]
-        public List<Category> customfield_10077 { get; set; }
+        [JsonPropertyName("statuscategorychangedate")]
+        public DateTime? statuscategorychangedate { get; set; }
 
-        [JsonPropertyName("customfield_10078")]
-        public List<Category> customfield_10078 { get; set; }
+        [JsonPropertyName("customfield_10056")]
+        public DateTime? FechayHoraDeLlegadaAEstacion { get; set; }
 
-        [JsonPropertyName("customfield_10086")]
-        public List<Category> customfield_10086 { get; set; }
+        [JsonPropertyName("customfield_10050")]
+        public List<Category>? DescripcionRepuesto { get; set; }
 
-        [JsonPropertyName("customfield_10105")]
-        public string customfield_10105 { get; set; }
+        [JsonPropertyName("customfield_10071")]
+        public List<Category>? TipoReparacion    { get; set; }
 
-        [JsonPropertyName("customfield_10104")]
-        public string customfield_10104 { get; set; }
+        [JsonPropertyName("customfield_10060")]
+        public List<Category>? ListadoAjustesPuerta { get; set; }
 
-        [JsonPropertyName("customfield_10067")]
-        public Category customfield_10067 { get; set; }
-        [JsonPropertyName("customfield_10101")]
-        public DateTime? customfield_10101 { get; set; }
+        [JsonPropertyName("customfield_10063")]
+        public List<Category>? ListadoConfiguracionPuerta { get; set; }
+
+        [JsonPropertyName("customfield_10059")]
+        public List<Category>? ListadoAjustesITS { get; set; }
+
+        [JsonPropertyName("customfield_10062")]
+        public List<Category>? ListadoConfiguracionITS { get; set; }
+
+        [JsonPropertyName("customfield_10064")]
+        public List<Category>? ListadoConfiguracionRFID { get; set; }
+
+        [JsonPropertyName("customfield_10087")]
+        public string? DescripcionReparacion { get; set; }
+
+        [JsonPropertyName("customfield_10088")]
+        public string? DiagnosticoCausa { get; set; }
+
+        [JsonPropertyName("customfield_10051")]
+        public Category? TipoCausa { get; set; }
+
+        [JsonPropertyName("customfield_10055")]
+        public DateTime? FechaSolucion { get; set; }
 
         [JsonPropertyName("Status")]
-        public Status status { get; set; }
+        public Status? status { get; set; }
 
     }
 

@@ -15,6 +15,7 @@ using MQTT.Infrastructure.Models.Enums;
 using System.ComponentModel.DataAnnotations;
 using MQTT.FunctionApp.Models;
 using Newtonsoft.Json.Linq;
+using System.Xml.Linq;
 
 namespace MQTT.FunctionApp
 {
@@ -90,33 +91,33 @@ namespace MQTT.FunctionApp
             {
                 var fields = item.Fields;
 
-                var typeSettingConfiguration = (fields.customfield_10075 == null || fields.customfield_10075[0] == null) ? string.Empty : fields.customfield_10075[0].Value;
-                var typeSettingConfiguration2 = (fields.customfield_10076 == null || fields.customfield_10076[0] == null) ? string.Empty : fields.customfield_10076[0].Value;
-                var typeSettingConfiguration3 = (fields.customfield_10077 == null || fields.customfield_10077[0] == null) ? string.Empty : fields.customfield_10077[0].Value;
-                var typeSettingConfiguration4 = (fields.customfield_10078 == null || fields.customfield_10078[0] == null) ? string.Empty : fields.customfield_10078[0].Value;
-                var typeSettingConfiguration5 = (fields.customfield_10086 == null || fields.customfield_10086[0] == null) ? string.Empty : fields.customfield_10086[0].Value;
+                var typeSettingConfiguration = (fields.ListadoAjustesPuerta == null || fields.ListadoAjustesPuerta[0] == null) ? string.Empty : fields.ListadoAjustesPuerta[0].Value;
+                var typeSettingConfiguration2 = (fields.ListadoConfiguracionPuerta == null || fields.ListadoConfiguracionPuerta[0] == null) ? string.Empty : fields.ListadoConfiguracionPuerta[0].Value;
+                var typeSettingConfiguration3 = (fields.ListadoAjustesITS == null || fields.ListadoAjustesITS[0] == null) ? string.Empty : fields.ListadoAjustesITS[0].Value;
+                var typeSettingConfiguration4 = (fields.ListadoConfiguracionITS == null || fields.ListadoConfiguracionITS[0] == null) ? string.Empty : fields.ListadoConfiguracionITS[0].Value;
+                var typeSettingConfiguration5 = (fields.ListadoConfiguracionRFID == null || fields.ListadoConfiguracionRFID[0] == null) ? string.Empty : fields.ListadoConfiguracionRFID[0].Value;
 
                 Models.IssueDTO issueDTO = new Models.IssueDTO
                 {
                     idTicket = item.Key,
-                    idEstacion = fields.customfield_10057 == null ? null : fields.customfield_10057.Value,
-                    idVagon = fields.customfield_10058 == null ? null : fields.customfield_10058.Value,
-                    idPuerta = fields.customfield_10060 != null ? fields.customfield_10060 : null,
-                    tipoComponente = fields.customfield_10088 == null ? null : fields.customfield_10088.Value,
-                    idComponente = fields.customfield_10060 != null ? fields.customfield_10060 : null,
-                    identificacion = fields.customfield_10059 != null ? fields.customfield_10059 : null,
-                    tipoMantenimiento = fields.customfield_10061 == null ? null : fields.customfield_10061.Value,
-                    nivelFalla = fields.customfield_10064 == null ? null : fields.customfield_10064.Value,
-                    codigoFalla = (fields.customfield_10069 == null || fields.customfield_10069[0] == null) ? null : fields.customfield_10069[0].Value,
+                    idEstacion = fields.Estacion == null ? null : fields.Estacion.Value,
+                    idVagon = fields.Vagon == null ? null : fields.Vagon.Value,
+                    idPuerta = fields.IdentificacionComponente != null ? fields.IdentificacionComponente : null,
+                    tipoComponente = fields.TipoDeComponente == null ? null : fields.TipoDeComponente.Value,
+                    idComponente = fields.IdentificacionComponente != null ? fields.IdentificacionComponente : null,
+                    identificacion = fields.IdentificacionSerial != null ? fields.IdentificacionSerial : null,
+                    tipoMantenimiento = fields.TipoDeServicio == null ? null : fields.TipoDeServicio.Value,
+                    nivelFalla = fields.ClaseDeFallo == null ? null : fields.ClaseDeFallo.Value,
+                    codigoFalla = (fields.DescripcionDeFallo == null || fields.DescripcionDeFallo[0] == null) ? null : fields.DescripcionDeFallo[0].Value,
                     fechaApertura = fields.created != null ? TimeZoneInfo.ConvertTime(Convert.ToDateTime(fields.created), TimeZoneInfo.FindSystemTimeZoneById(timeZone)) : (DateTime?)null,
-                    fechaCierre = fields.customfield_10101 != null ? TimeZoneInfo.ConvertTime(Convert.ToDateTime(fields.customfield_10101), TimeZoneInfo.FindSystemTimeZoneById(timeZone)) : (DateTime?)null,
-                    fechaArriboLocacion = fields.customfield_10071 != null ? TimeZoneInfo.ConvertTime(Convert.ToDateTime(fields.customfield_10071), TimeZoneInfo.FindSystemTimeZoneById(timeZone)) : (DateTime?)null,
-                    componenteParte = (fields.customfield_10072 == null || fields.customfield_10072[0] == null) ? null : fields.customfield_10072[0].Value,
-                    tipoReparacion = (fields.customfield_10081 == null || fields.customfield_10081[0] == null) ? null : fields.customfield_10081[0].Value,
+                    fechaCierre = fields.FechaSolucion != null ? TimeZoneInfo.ConvertTime(Convert.ToDateTime(fields.FechaSolucion), TimeZoneInfo.FindSystemTimeZoneById(timeZone)) : (DateTime?)null,
+                    fechaArriboLocacion = fields.FechayHoraDeLlegadaAEstacion != null ? TimeZoneInfo.ConvertTime(Convert.ToDateTime(fields.FechayHoraDeLlegadaAEstacion), TimeZoneInfo.FindSystemTimeZoneById(timeZone)) : (DateTime?)null,
+                    componenteParte = (fields.DescripcionRepuesto == null || fields.DescripcionRepuesto[0] == null) ? null : fields.DescripcionRepuesto[0].Value,
+                    tipoReparacion = (fields.TipoReparacion == null || fields.TipoReparacion[0] == null) ? null : fields.TipoReparacion[0].Value,
                     tipoAjusteConfiguracion = $"{typeSettingConfiguration}{typeSettingConfiguration2}{typeSettingConfiguration3}{typeSettingConfiguration4}{typeSettingConfiguration5}",
-                    descripcionReparacion = fields.customfield_10105 != null ? fields.customfield_10105 : null,
-                    tipoCausa = fields.customfield_10067 != null ? fields.customfield_10067.Value : null,
-                    diagnosticoCausa = fields.customfield_10104 != null ? fields.customfield_10104 : null,
+                    descripcionReparacion = fields.DescripcionReparacion != null ? fields.DescripcionReparacion : null,
+                    tipoCausa = fields.TipoCausa != null ? fields.TipoCausa.Value : null,
+                    diagnosticoCausa = fields.DiagnosticoCausa != null ? fields.DiagnosticoCausa : null,
                     estadoTicket = fields.status == null ? string.Empty : fields.status.name
                 };
 
@@ -134,7 +135,7 @@ namespace MQTT.FunctionApp
 
 		public static List<Models.IssueDTO> getTicketsFromJira(int start, int max, string token, Models.Filters filters, string timeZone, ILogger log, Guid guid, string msgError) {
             //string uri = Environment.GetEnvironmentVariable("urljira", EnvironmentVariableTarget.Process);
-            string uri = "https://manateecc.atlassian.net/rest/api/2/search";
+            string uri = "https://assaabloymda.atlassian.net/rest/api/2/search";
             string resultJira;
             uri = $"{uri}?{filters.resultQuery}" + "&maxResults=" + max + "&startAt=" + start;
 
@@ -170,7 +171,7 @@ namespace MQTT.FunctionApp
             string propertyValue = jObject["total"].Value<string>();
             int total = int.Parse(propertyValue);
             log.LogInformation($"{guid}=== Total: {propertyValue}");
-            var json = JsonConvert.DeserializeObject<Models.Issue>(resultJira);
+            var json = ConverJSONInIssue(jObject);
             log.LogInformation($"{guid}=== Total Issues: {json.Issues.Count}");
             List<Models.IssueDTO> result = convertIssueInTicket(json, filters, timeZone);
             if ( max + start < total) {
@@ -178,6 +179,319 @@ namespace MQTT.FunctionApp
             }
             return result;
 
+        }
+
+        public static Issue ConverJSONInIssue(JObject resultJira) {
+            Issue issue = new Issue();
+            issue.Total = resultJira["total"].Value<int>();
+            var dataList = resultJira["issues"].Value<JArray>();
+            List<Data> data = new List<Data>();
+            foreach (JObject dataItem in dataList) {
+                data.Add(ConvertJsonInData(dataItem));
+            }
+            issue.Issues = data;
+            return issue;
+        }
+
+        public static Data ConvertJsonInData(JObject dataObject) {
+            Data data = new Data();
+            data.Key = dataObject["key"].Value<string>();
+            var dataList = dataObject["fields"].Value<JObject>();
+            data.Fields = ConverJsonInField(dataList);
+            return data;
+        }
+
+        public static Field ConverJsonInField(JObject fieldObject) {
+            Field field = new Field();
+
+            if (fieldObject.ContainsKey("customfield_10052") && fieldObject["customfield_10052"]["value"].Value<string>() != null)
+            {
+                Category estacion = new Category();
+                estacion.Value = fieldObject["customfield_10052"]["value"].Value<string>();
+                field.Estacion = estacion;
+            }
+            else
+            {
+                field.Estacion = null;
+            }
+
+            if (fieldObject.ContainsKey("customfield_10073") && fieldObject["customfield_10073"]["value"].Value<string>() != null)
+            {
+                Category Vagon = new Category();
+                Vagon.Value = fieldObject["customfield_10073"]["value"].Value<string>();
+                field.Vagon = Vagon;
+            }else
+            {
+                field.Vagon = null;
+            }
+
+            if (fieldObject.ContainsKey("customfield_10057") && fieldObject["customfield_10057"].Value<string>() != null)
+            {
+                field.IdentificacionComponente = fieldObject["customfield_10057"].Value<string>();
+            }
+            else
+            {
+                field.IdentificacionComponente= null;
+            }
+
+
+            //Category tipoDeComponente = fieldObject["customfield_10070"].Value<Category>();
+            if (fieldObject.ContainsKey("customfield_10070") && fieldObject["customfield_10070"]["value"].Value<string>() != null)
+            {
+                Category tipoDeComponente = new Category();
+                tipoDeComponente.Value = fieldObject["customfield_10070"]["value"].Value<string>();
+                field.TipoDeComponente = tipoDeComponente;
+            }
+            else
+            {
+                field.TipoDeComponente = null;
+            }
+
+            if (fieldObject.ContainsKey("customfield_10058") && fieldObject["customfield_10058"].Value<string>() != null)
+            {
+                field.IdentificacionSerial = fieldObject["customfield_10058"].Value<string>();
+            }
+            else
+            {
+                field.IdentificacionSerial = null;
+            }
+
+            if (fieldObject["customfield_10072"].Contains("value") && fieldObject["customfield_10072"]["value"].Value<string>() != null)
+            {
+                Category tipoDeServicio = new Category();
+                tipoDeServicio.Value = fieldObject["customfield_10072"]["value"].Value<string>();
+                field.TipoDeServicio = tipoDeServicio;
+            }
+            else
+            {
+                field.TipoDeServicio= null;
+            }
+
+            if (fieldObject["customfield_10046"].Contains("value") && fieldObject["customfield_10046"]["value"].Value<string>() != null)
+            {
+                Category claseDeFallo = new Category();
+                claseDeFallo.Value = fieldObject["customfield_10046"]["value"].Value<string>();
+                field.ClaseDeFallo = claseDeFallo;
+            }
+            else
+            {
+                field.ClaseDeFallo = null;
+            }
+
+            if (fieldObject["customfield_10048"].Value<JArray>() != null)
+            {
+                var descripcionDeFalloArray = fieldObject["customfield_10048"].Value<JArray>();
+                List<Category> descripcionDeFallo = new List<Category>();
+                foreach (JObject dataItem in descripcionDeFalloArray)
+                {
+                    Category temp = new Category();
+                    temp.Value = dataItem["value"].Value<string>();
+                    descripcionDeFallo.Add(temp);
+                }
+                field.DescripcionDeFallo = descripcionDeFallo;
+            }
+            else
+            {
+                field.DescripcionDeFallo = null;
+            }
+
+            if (fieldObject["created"].Value<DateTime>() != null)
+            {
+                DateTime created = fieldObject["created"].Value<DateTime>();
+                field.created = created;
+            }
+            else
+            {
+                field.created = null;
+            }
+
+            if (fieldObject["statuscategorychangedate"].Value<DateTime>() != null)
+            {
+                DateTime statuscategorychangedate = fieldObject["statuscategorychangedate"].Value<DateTime>();
+                field.statuscategorychangedate = statuscategorychangedate;
+            }
+            else
+            {
+                field.statuscategorychangedate = null;
+            }
+            if (fieldObject["customfield_10056"].Value<DateTime>() != null)
+            {
+                DateTime FechayHoraDeLlegadaAEstacion = fieldObject["customfield_10056"].Value<DateTime>();
+                field.FechayHoraDeLlegadaAEstacion = FechayHoraDeLlegadaAEstacion;
+            }
+            else
+            {
+                field.FechayHoraDeLlegadaAEstacion = null;
+            }
+
+            if (fieldObject["customfield_10050"].Value<JArray>() != null)
+            {
+                var DescripcionRepuestoArray = fieldObject["customfield_10050"].Value<JArray>();
+                List<Category> DescripcionRepuesto = new List<Category>();
+                foreach (JObject dataItem in DescripcionRepuestoArray)
+                {
+                    Category temp = new Category();
+                    temp.Value = dataItem["value"].Value<string>();
+                    DescripcionRepuesto.Add(temp);
+                }
+                field.DescripcionRepuesto = DescripcionRepuesto;
+            }
+            else
+            {
+                field.DescripcionRepuesto = null;
+            }
+
+            if (fieldObject["customfield_10071"].Value<JArray>() != null)
+            {
+                var TipoReparacionArray = fieldObject["customfield_10071"].Value<JArray>();
+                List<Category> TipoReparacion = new List<Category>();
+                foreach (JObject dataItem in TipoReparacionArray)
+                {
+                    Category temp = new Category();
+                    temp.Value = dataItem["value"].Value<string>();
+                    TipoReparacion.Add(temp);
+                }
+                field.TipoReparacion = TipoReparacion;
+            }
+            else
+            {
+                field.TipoReparacion = null;
+            }
+
+            if (fieldObject["customfield_10060"].Value<JArray>() != null)
+            {
+                var ListadoAjustesPuertaArray = fieldObject["customfield_10060"].Value<JArray>();
+                List<Category> ListadoAjustesPuerta = new List<Category>();
+                foreach (JObject dataItem in ListadoAjustesPuertaArray)
+                {
+                    Category temp = new Category();
+                    temp.Value = dataItem["value"].Value<string>();
+                    ListadoAjustesPuerta.Add(temp);
+                }
+                field.ListadoAjustesPuerta = ListadoAjustesPuerta;
+            }
+            else
+            {
+                field.ListadoConfiguracionPuerta = null;
+            }
+
+            if (fieldObject["customfield_10063"].Value<JArray>() != null)
+            {
+                var ListadoConfiguracionPuertaArray = fieldObject["customfield_10063"].Value<JArray>();
+                List<Category> ListadoConfiguracionPuerta = new List<Category>();
+                foreach (JObject dataItem in ListadoConfiguracionPuertaArray)
+                {
+                    Category temp = new Category();
+                    temp.Value = dataItem["value"].Value<string>();
+                    ListadoConfiguracionPuerta.Add(temp);
+                }
+                field.ListadoConfiguracionPuerta = ListadoConfiguracionPuerta;
+            }
+            else
+            {
+                field.ListadoConfiguracionPuerta = null;
+            }
+
+            if (fieldObject["customfield_10059"].Value<JArray>() != null)
+            {
+                var ListadoAjustesITSArray = fieldObject["customfield_10059"].Value<JArray>();
+                List<Category> ListadoAjustesITS = new List<Category>();
+                foreach (JObject dataItem in ListadoAjustesITSArray)
+                {
+                    Category temp = new Category();
+                    temp.Value = dataItem["value"].Value<string>();
+                    ListadoAjustesITS.Add(temp);
+                }
+                field.ListadoAjustesITS = ListadoAjustesITS;
+            }
+            else
+            {
+                field.ListadoAjustesITS = null;
+            }
+
+            if (fieldObject["customfield_10062"].Value<JArray>() != null)
+            {
+                var ListadoConfiguracionITSArray = fieldObject["customfield_10062"].Value<JArray>();
+                List<Category> ListadoConfiguracionITS = new List<Category>();
+                foreach (JObject dataItem in ListadoConfiguracionITSArray)
+                {
+                    Category temp = new Category();
+                    temp.Value = dataItem["value"].Value<string>();
+                    ListadoConfiguracionITS.Add(temp);
+                }
+                field.ListadoConfiguracionITS = ListadoConfiguracionITS;
+            }
+            else
+            {
+                field.ListadoConfiguracionITS = null;
+            }
+
+            if (fieldObject["customfield_10064"].Value<JArray>() != null)
+            {
+                var ListadoConfiguracionRFIDArray = fieldObject["customfield_10064"].Value<JArray>();
+                List<Category> ListadoConfiguracionRFID = new List<Category>();
+                foreach (JObject dataItem in ListadoConfiguracionRFIDArray)
+                {
+                    Category temp = new Category();
+                    temp.Value = dataItem["value"].Value<string>();
+                    ListadoConfiguracionRFID.Add(temp);
+                }
+                field.ListadoConfiguracionRFID = ListadoConfiguracionRFID;
+            }
+            else
+            {
+                field.ListadoConfiguracionRFID = null;
+            }
+
+            if (fieldObject["customfield_10087"].Value<string>() != null)
+            {
+                field.DescripcionReparacion = fieldObject["customfield_10087"].Value<string>();
+            }
+            else
+            {
+                field.DescripcionReparacion = null;
+            }
+
+            if (fieldObject["customfield_10088"].Value<string>() != null)
+            {
+                field.DiagnosticoCausa = fieldObject["customfield_10088"].Value<string>();
+            }
+            else
+            {
+                field.DiagnosticoCausa = null;
+            }
+            if (fieldObject["customfield_10051"].Contains("value")&&fieldObject["customfield_10051"]["value"].Value<string>() != null)
+            {
+                Category TipoCausa = new Category();
+                TipoCausa.Value = fieldObject["customfield_10051"]["value"].Value<string>();
+                field.TipoCausa = TipoCausa;
+            }
+            else
+            {
+                field.TipoCausa = null;
+            }
+
+            if (fieldObject["customfield_10055"].Value<DateTime>() != null)
+            {
+                DateTime FechaSolucion = fieldObject["customfield_10055"].Value<DateTime>();
+                field.FechaSolucion = FechaSolucion;
+            }
+            else
+            {
+                field.FechaSolucion = null;
+            }
+
+            if (fieldObject["status"]["name"].Value<string>() != null)
+            {
+                Status status = new Status();
+                status.name = fieldObject["status"]["name"].Value<string>();
+                field.status = status;
+            }
+            else
+            {
+                field.status = null;
+            }
+            return field;
         }
     }
 }
