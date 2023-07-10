@@ -31,8 +31,8 @@ namespace MQTT.FunctionApp
             DateTime dtIni = DateTime.UtcNow;
             try
             {
-                //var connectionString = Environment.GetEnvironmentVariable("ConnectionStringDB", EnvironmentVariableTarget.Process);
-                var connectionString = "Server=manatee.database.windows.net;Database=PuertasTransmilenioDBQA;User Id=administrador;Password=2022/M4n4t334zur3;";
+                var connectionString = Environment.GetEnvironmentVariable("ConnectionStringDB", EnvironmentVariableTarget.Process);
+                //var connectionString = "Server=manatee.database.windows.net;Database=PuertasTransmilenioDBQA;User Id=administrador;Password=2022/M4n4t334zur3;";
                 DBAccess = new General(connectionString);
                 _messagesType = MessagesDAL.GetAllMessageTypes(DBAccess);
                 _headerFields = MessagesDAL.GetHeaderFields(DBAccess);
@@ -185,24 +185,6 @@ namespace MQTT.FunctionApp
         {
             try
             {
-                //add = false;
-                //Dictionary<string, string> dctDataFields = GetHeaderFromJson(dataJson, fieldWeft);
-
-                //var id = dctDataFields[messageType.FieldIdentifierMessage];
-                //long? idHeaderMessage = MessagesDAL.GetHeaderMessageById(DBAccess, _headerFields, messageType.FieldIdentifierMessage, id);
-
-                //if (idHeaderMessage.HasValue)
-                //{
-                //    dctDataFields.Remove(messageType.FieldIdentifierMessage);
-                //    MessagesDAL.UpdateHeaderMessage(DBAccess, _headerFields, dctDataFields, idHeaderMessage.Value);
-                //}
-                //else
-                //{
-                //    idHeaderMessage = MessagesDAL.AddHeaderMessage(DBAccess, _headerFields, messageType.Id, dctDataFields);
-                //    add = true;
-                //}
-
-
                 add = false;
                 Dictionary<string, string> dctDataFields = GetHeaderFromJson(dataJson, fieldWeft);
                 long? idHeaderMessage;

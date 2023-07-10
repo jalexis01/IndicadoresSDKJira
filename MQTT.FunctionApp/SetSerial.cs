@@ -76,8 +76,8 @@ namespace MQTT.FunctionApp
                 log.LogInformation($"{guid}=== Element Name: {dataIssue.fields.customfield_10070.value}");
                 log.LogInformation($"{guid}=== Element Value: {dataIssue.fields.customfield_10058}");
                 body = System.Text.Json.JsonSerializer.Serialize(dataIssue);
-                //string url = Environment.GetEnvironmentVariable("urljiraSerial", EnvironmentVariableTarget.Process);
-                string url = "https://assaabloymda.atlassian.net/rest/api/2/issue/";
+                string url = Environment.GetEnvironmentVariable("urljiraSerial", EnvironmentVariableTarget.Process);
+                //string url = "https://assaabloymda.atlassian.net/rest/api/2/issue/";
                 uri = url+key;
 
                 log.LogInformation($"{guid}=== Request to Jira...");
