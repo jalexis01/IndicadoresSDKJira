@@ -28,10 +28,10 @@ namespace MQTT.FunctionApp
             var logRequestIn = new Infrastructure.Models.DTO.LogRequestInDTO();
             logRequestIn.IdEndPoint = (int)EndPointEnum.SetSerial;
 
-            var connectionString = Environment.GetEnvironmentVariable("ConnectionStringDB", EnvironmentVariableTarget.Process);
-            string token = Environment.GetEnvironmentVariable("TokenJira", EnvironmentVariableTarget.Process).ToString();
-            //var connectionString = "Server=manatee.database.windows.net;Database=PuertasTransmilenioDB;User Id=administrador;Password=2022/M4n4t334zur3;";
-            //string token = "anVhbl9rXzk2MkBob3RtYWlsLmNvbTpxcDlJdHBjVVhOY2VaUHhlRGg3ZjkwOTk=";
+            //var connectionString = Environment.GetEnvironmentVariable("ConnectionStringDB", EnvironmentVariableTarget.Process);
+            //string token = Environment.GetEnvironmentVariable("TokenJira", EnvironmentVariableTarget.Process).ToString();
+            var connectionString = "Server=manatee.database.windows.net;Database=PuertasTransmilenioDBQA;User Id=administrador;Password=2022/M4n4t334zur3;";
+            string token = "anVhbl9rXzk2MkBob3RtYWlsLmNvbTpxcDlJdHBjVVhOY2VaUHhlRGg3ZjkwOTk=";
             General DBAccess = new General(connectionString);
 
             try
@@ -49,7 +49,7 @@ namespace MQTT.FunctionApp
                 log.LogInformation($"{guid}=== body: {requestBody}");
 
                 JObject data = JObject.Parse(requestBody);
-                string field = (string)data["issue"]["fields"]["customfield_10060"];
+                string field = (string)data["issue"]["fields"]["customfield_10057"];
                 string key = (string)data["issue"]["key"];
                 log.LogInformation($"{guid}=== issue Key: {key}");
                 log.LogInformation($"{guid}=== field to search: {field}");
@@ -66,17 +66,19 @@ namespace MQTT.FunctionApp
                 var dataIssue = new 
                 { 
                     fields =new {
-                        customfield_10059 = dataElement.Value,
-                        customfield_10088 = new { 
+                        customfield_10058 = dataElement.Value,
+                        customfield_10070 = new { 
                             value= dataElement.NameElementType,
                         } ,
                     }
                 };
 
-                log.LogInformation($"{guid}=== Element Name: {dataIssue.fields.customfield_10088.value}");
-                log.LogInformation($"{guid}=== Element Value: {dataIssue.fields.customfield_10059}");
+                log.LogInformation($"{guid}=== Element Name: {dataIssue.fields.customfield_10070.value}");
+                log.LogInformation($"{guid}=== Element Value: {dataIssue.fields.customfield_10058}");
                 body = System.Text.Json.JsonSerializer.Serialize(dataIssue);
-                uri = $"https://manateecc.atlassian.net/rest/api/2/issue/{key}";
+                //string url = Environment.GetEnvironmentVariable("urljiraSerial", EnvironmentVariableTarget.Process);
+                string url = "https://assaabloymda.atlassian.net/rest/api/2/issue/";
+                uri = url+key;
 
                 log.LogInformation($"{guid}=== Request to Jira...");
                 var response = MQTT.Infrastructure.BL.Requests.GetResponse(uri, "PUT", token, body);
