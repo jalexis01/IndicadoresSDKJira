@@ -56,7 +56,7 @@ Console.WriteLine("RANO contratista " + rano.RANOContratista(fechainicio, fechaF
 //Console.WriteLine("IRF " + IRF.IRFGeneral(fechainicio, fechaFinal).calculoIRF());
 //*/
 Indicadores indicadores = new Indicadores();
-
+/*
 
 foreach (IndicadoresEntity indicador in indicadores.ObtenerIndicadores("2023-05-01", "2023-06-01"))
 {
@@ -77,5 +77,7 @@ using (FileStream archivo = new FileStream(rutaCompleta, FileMode.Create))
 {
     archivo.Write(bytes, 0, bytes.Length);
 }
-
+*/
 Console.WriteLine("Archivo creado exitosamente.");
+
+jira.GetTikets(0, 0, fechainicio, fechaFinal, null);

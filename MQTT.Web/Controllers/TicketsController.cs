@@ -3,9 +3,11 @@ using DashboarJira.Services;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MQTT.Web.Controllers
 {
+    [Authorize]
     public class TicketsController : Controller
     {
         public IActionResult Index(int max, string componente)

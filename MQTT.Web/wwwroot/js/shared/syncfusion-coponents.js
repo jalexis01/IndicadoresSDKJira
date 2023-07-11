@@ -160,7 +160,9 @@ function setColums(dataColumns, columnsHide = null){
     for (var key in dataColumns[0]) {
         let keyFormat = key.replace(/([A-Z])/g, ' $1').trim();
         let title = keyFormat.replace(/  +/g, ' ');
-
+        let formattedKey = key.replace(/_(\w)/g, function (_, letter) {
+            return letter.toUpperCase();
+        });
         let typeKey =  dataColumns[0][key] == null ? null : typeof dataColumns[0][key];
 
         let dataVisible = true;
@@ -171,15 +173,20 @@ function setColums(dataColumns, columnsHide = null){
         
 
         if (typeKey == 'object') {
+
             arr.push({
-                field: key, headerText: title, textAlign: 'Center', headerTextAlign: 'Center', visible: false
+                field: key, headerText: formattedKey, textAlign: 'Center', headerTextAlign: 'Center', visible: false
             })
-        }else{
+        } else {
+
             arr.push({
-                field: key, headerText: title, textAlign: 'Center', headerTextAlign: 'Center', visible: dataVisible
-            })
+                field: key,
+                headerText: formattedKey,
+                textAlign: 'Center',
+                headerTextAlign: 'Center',
+                visible: dataVisible
+            });
         }
-        
     }
     return arr;
 }
@@ -354,7 +361,7 @@ function addCommandsGrid(columsList){
 
 function addCommandsGridDetails(columsList){
     columsList.unshift({
-        headerText: 'opciones', width: 120, commands: [{ buttonOption: { iconCss: 'e-icons e-eye', cssClass: 'e-flat' , text:"ver mas"} }]
+        headerText: 'Ver', title:"Ver mas", width: 250, commands: [{ buttonOption: { title: "Ver más" , iconCss: 'e-icons e-eye', cssClass: 'e-flat' , text:"ver mas"} }]
     })
     return columsList;
 }
@@ -614,10 +621,92 @@ function aplicFilter(){
     grid.dataSource = dataSet;
 }
 
+// dataHtmlList += "<li style='padding: 1% 0%;'><div class='flex items-center space-x-4'><div class='flex-1 min-w-0' style='text-align: initial;'><p class='text-sm font-small text-gray-900 truncate dark:text-white' style=''>" + key + "</p></div><div class='inline-flex items-center text-sm font-small text-gray-900 truncate dark:text-white' style='''>" + args.rowData[key] + "</div></div></li>"
+
+var detailsData = function (args) {
+    var dataHtmlList = "";
+    for (var key in args.rowData) {
+        let formattedKey = key.replace(/_(\w)/g, function (_, letter) {
+            return letter.toUpperCase();
+        });
+        formattedKey = formattedKey.charAt(0).toLowerCase() + formattedKey.slice(1);
+        let value = args.rowData[key];
+        dataHtmlList += "<ul><li style='padding: 1% 0%;'><div class='flex items-start space-x-4'><div class='flex-1 min-w-0' style='text-align: initial;'><p class='text-sm font-medium text-gray-900 truncate dark:text-white'>" + formattedKey + "</p></div></li><li><div class='flex items-start space-x-4'><div class='flex-1 min-w-0' style='text-align: initial'><p class='text-sm font-sm text-gray-900 truncate dark:text-white'>" + value + "</p></div></li></ul>"
+    }
+
+    Swal.fire({
+        title: '<strong><u>Información</u></strong>',
+        html: '<div style="max-height: 100vh; overflow-y: auto; overflow-x: scroll;"><div style="width: 60vw;"><ul class="max-w-full divide-y divide-gray-200 dark:divide-gray-700">' + dataHtmlList + '</ul></div></div>',
+        showConfirmButton: false,
+        showCloseButton: true,
+        customClass: {
+            container: 'swal2-container',
+            content: 'max-h-full',
+            popup: 'swal2-popup',
+        },
+        width: 'auto',
+        didOpen: function () {
+            Swal.getContent().style.setProperty('flex-direction', 'column');
+            Swal.getHtmlContainer().style.setProperty('max-width', 'none');
+        },
+    });
+}
+/*
+ var detailsData = function(args) {
+    var dataHtmlList = "";
+    for (var key in args.rowData) {
+        let formattedKey = key.replace(/_(\w)/g, function(_, letter) {
+            return letter.toUpperCase();
+        });
+        formattedKey = formattedKey.charAt(0).toLowerCase() + formattedKey.slice(1);
+        let value = args.rowData[key];
+        dataHtmlList += "<li style='padding: 1% 0%;'><div class='flex items-start space-x-4'><div class='flex-1 min-w-0' style='text-align: initial;'><p class='text-sm font-medium text-gray-900 truncate dark:text-white'>" + formattedKey + "</p></div><div class='inline-flex items-start text-base font-normal text-gray-900 dark:text-white'>" + value + "</div></div></li>"
+    }
+
+    Swal.fire({
+        title: '<strong><u>Informacion</u></strong>',
+        html: '<div style="max-height: 100vh; overflow-y: auto; overflow-x: scroll;"><div style="width: 50vw;"><ul class="max-w-full divide-y divide-gray-200 dark:divide-gray-700">' + dataHtmlList + '</ul></div></div>',
+        showConfirmButton: false,
+        showCloseButton: true,
+        customClass: {
+            container: 'swal2-container',
+            content: 'max-h-full',
+            popup: 'swal2-popup',
+        },
+        width: '50%',
+    });
+}
+
+ */
+
+
+/* idTicket eg
+var detailsData = function (args) {
+    var dataHtmlList = "";
+    for (var key in args.rowData) {
+        let formattedKey = key.replace(/_(\w)/g, function (_, letter) {
+            return letter.toUpperCase();
+        });
+        formattedKey = formattedKey.charAt(0).toLowerCase() + formattedKey.slice(1);
+        dataHtmlList += "<li style='padding: 1% 0%;'><div class='flex items-center space-x-4'><div class='flex-1 min-w-0' style='text-align: initial;'><p class='text-sm font-small text-gray-900 truncate dark:text-white' style=''>" + formattedKey + "</p></div><div class='inline-flex items-center text-sm font-small text-gray-900 truncate dark:text-white' style='''>" + args.rowData[key] + "</div></div></li>"
+    }
+
+    Swal.fire({
+        title: '<strong><u>Informacion</u></strong>',
+        html: '<ul class="max-w-md divide-y divide-gray-200 dark:divide-gray-700">' + dataHtmlList + '</ul>',
+        showConfirmButton: false,
+        showCloseButton: true,
+    });
+}
+*/
+/*
 var detailsData = function(args){
     var dataHtmlList = "";
     for (var key in args.rowData) {
-        dataHtmlList += "<li style='padding: 1% 0%;'><div class='flex items-center space-x-4'><div class='flex-1 min-w-0' style='text-align: initial;'><p class='text-sm font-medium text-gray-900 truncate dark:text-white' style=''>"+key+"</p></div><div class='inline-flex items-center text-base font-semibold text-gray-900 dark:text-white'>"+ args.rowData[key]+"</div></div></li>"
+        let formattedKey = key.replace(/_(\w)/g, function (_, letter) {
+            return letter.toUpperCase();
+        });
+       
     }
     //alert(JSON.stringify(args.rowData));
     Swal.fire({
@@ -626,4 +715,4 @@ var detailsData = function(args){
         showConfirmButton: false,
         showCloseButton: true,
       })
-  }
+  }*/
