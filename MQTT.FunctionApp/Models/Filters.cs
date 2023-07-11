@@ -15,13 +15,13 @@ namespace MQTT.FunctionApp.Models
             issueType = "Solicitud de Mantenimiento";
         }
 
-        public string fecha_inicial_rango { get; set; }
-        public string fecha_final_rango { get; set; }
-        public string tipo_fecha { get; set; }
-        public string estado_ticket { get; set; }
-        public string nivel_falla { get; set; }
-        public string codigo_falla { get; set; }
-        public string id_ticket { get; set; }
+        public string fechaInicialRango { get; set; }
+        public string fechaFinalRango { get; set; }
+        public string tipoFecha { get; set; }
+        public string estadoTicket { get; set; }
+        public string nivelFalla { get; set; }
+        public string codigoFalla { get; set; }
+        public string idTicket { get; set; }
         public string issueType { get; set; }
         public string resultQuery { get; set; }
         public List<EquivalenceDTO> equivalenceServiceType { get; set; }
@@ -42,31 +42,31 @@ namespace MQTT.FunctionApp.Models
         {
             var results = new List<ValidationResult>();
 
-            if (this.id_ticket is null)
+            if (this.idTicket is null)
             {
-                if (this.tipo_fecha is null || string.IsNullOrEmpty(this.tipo_fecha.ToString()))
+                if (this.tipoFecha is null || string.IsNullOrEmpty(this.tipoFecha.ToString()))
                 {
-                    results.Add(new ValidationResult("El parámetro tipo_fecha es obligatorio"));
+                    results.Add(new ValidationResult("El parámetro tipoFecha es obligatorio"));
                 }
                 
-                if (this.fecha_inicial_rango is null || string.IsNullOrEmpty(this.fecha_inicial_rango.ToString()))
+                if (this.fechaInicialRango is null || string.IsNullOrEmpty(this.fechaInicialRango.ToString()))
                 {
-                    results.Add(new ValidationResult("El parámetro fecha_inicial_rango es obligatorio"));
+                    results.Add(new ValidationResult("El parámetro fechaInicialRango es obligatorio"));
                 }
                 
-                if (this.fecha_final_rango is null || string.IsNullOrEmpty(this.fecha_final_rango.ToString()))
+                if (this.fechaFinalRango is null || string.IsNullOrEmpty(this.fechaFinalRango.ToString()))
                 {
-                    results.Add(new ValidationResult("El parámetro fecha_inicial_rango es obligatorio"));
+                    results.Add(new ValidationResult("El parámetro fechaFinalRango es obligatorio"));
                 }
             }
             else
             {
-                this.fecha_inicial_rango = null;
-                this.fecha_final_rango = null;
-                this.tipo_fecha = null;
-                this.estado_ticket = null;
-                this.nivel_falla = null;
-                this.codigo_falla = null;
+                this.fechaInicialRango = null;
+                this.fechaFinalRango = null;
+                this.tipoFecha = null;
+                this.estadoTicket = null;
+                this.nivelFalla = null;
+                this.codigoFalla = null;
             }
 
             if (!string.IsNullOrEmpty(this.issueType))
@@ -74,45 +74,57 @@ namespace MQTT.FunctionApp.Models
                 resultQuery = $"jql=issuetype in ('{this.issueType}') AND status not in ('Descartado')";
             }
 
-            if (!string.IsNullOrEmpty(this.tipo_fecha))
+            if (!string.IsNullOrEmpty(this.tipoFecha))
             {
-                switch (this.tipo_fecha)
+                switch (this.tipoFecha)
                 {
-                    case "fecha_apertura":
-                        resultQuery += $" AND created >= {this.fecha_inicial_rango} and created <= {this.fecha_final_rango}";
+                    case "fechaApertura":
+                        resultQuery += $" AND created >= {this.fechaInicialRango} and created <= {this.fechaFinalRango}";
                         break;
-                    case "fecha_cierre":
-                        resultQuery += $" AND \"Fecha de solucion[Time stamp]\" >= {this.fecha_inicial_rango} and \"Fecha de solucion[Time stamp]\" <= {this.fecha_final_rango}";
+                    case "fechaCierre":
+                        resultQuery += $" AND \"Fecha de solucion[Time stamp]\" >= {this.fechaInicialRango} and \"Fecha de solucion[Time stamp]\" <= {this.fechaFinalRango}";
                         break;
-                    case "fecha_arribo_locacion":
-                        resultQuery += $" AND \"Fecha y Hora de Llegada a Estacion[Time stamp]\" >= {this.fecha_inicial_rango} and \"Fecha y Hora de Llegada a Estacion[Time stamp]\" <= {this.fecha_final_rango}";
+                    case "fechaArriboLocacion":
+                        resultQuery += $" AND \"Fecha y Hora de Llegada a Estacion[Time stamp]\" >= {this.fechaInicialRango} and \"Fecha y Hora de Llegada a Estacion[Time stamp]\" <= {this.fechaFinalRango}";
                         break;
                     default:
-                        results.Add(new ValidationResult("El valor tipo_fecha no es valido"));
+                        results.Add(new ValidationResult("El parámetro tipoFecha no es valido"));
                         break;
                 }
             }
 
-            if (!string.IsNullOrEmpty(this.estado_ticket))
+            if (!string.IsNullOrEmpty(this.estadoTicket))
             {
-                var equivalences = equivalenceServiceType.Where(e => e.Value.ToUpper() == estado_ticket.ToUpper()).Select(e => $"'{e.Name}'").ToList();
-                resultQuery += $" AND status in ({string.Join(',',equivalences)})";
+                switch (this.estadoTicket)
+                {
+                    case "Abierto":
+                        resultQuery += $" AND status NOT IN(Cerrado, DESCARTADO)";
+                        break;
+                    case "Cerrado":
+                        resultQuery += $" AND status IN (Cerrado)";
+                        break;
+                    
+                    default:
+                        results.Add(new ValidationResult("El valor estadoTicket no es valido"));
+                        break;
+                }
+                
 
             }
 
-            if (!string.IsNullOrEmpty(this.nivel_falla))
+            if (!string.IsNullOrEmpty(this.nivelFalla))
             {
-                resultQuery += $" AND \"Clase de fallo[Dropdown]\" = '{this.nivel_falla}'";
+                resultQuery += $" AND \"Clase de fallo[Dropdown]\" = '{this.nivelFalla}'";
             }
 
-            if (!string.IsNullOrEmpty(this.codigo_falla))
+            if (!string.IsNullOrEmpty(this.codigoFalla))
             {
-                resultQuery += $" AND \"Descripcion de fallo[Select List (multiple choices)]\" = '{this.codigo_falla}'";
+                resultQuery += $" AND \"Descripcion de fallo[Select List (multiple choices)]\" = '{this.codigoFalla}'";
             }
 
-            if (!string.IsNullOrEmpty(this.id_ticket))
+            if (!string.IsNullOrEmpty(this.idTicket))
             {
-                resultQuery += $" AND key = {this.id_ticket}";
+                resultQuery += $" AND key = {this.idTicket}";
             }
             //resultQuery += " AND 'Descripcion de la reparacion' is not empty ";
 
