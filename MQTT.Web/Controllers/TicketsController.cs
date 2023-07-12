@@ -55,7 +55,7 @@ namespace MQTT.Web.Controllers
                 {
                     //max = 10;
                     DateTime startDateTime = DateTime.Parse(startDate);
-                    DateTime endDateTime = DateTime.Parse(endDate).AddDays(1).AddSeconds(-1); //agrega 1 día y resta 1 segundo para obtener el final del día
+                    DateTime endDateTime = DateTime.Parse(endDate).AddDays(1); //agrega 1 día y resta 1 segundo para obtener el final del día
 
                     formattedStartDate = startDateTime.ToString("yyyy-MM-dd");
                     formattedEndDate = endDateTime.ToString("yyyy-MM-dd");

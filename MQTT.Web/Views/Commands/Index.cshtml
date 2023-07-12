@@ -14,13 +14,13 @@
     <div class="inputs-container">
         <label class="TextFecha">Fecha Inicial</label>
         <div class="wrapperFI">
-            <input id="dtpStart"  required>
+            <input id="dtpStartMessage"  required>
         </div>
     </div>
     <div class="inputs-container">
         <label class="TextFecha">Fecha Final</label>
         <div class="wrapperFI">
-            <input id="dtpEnd" required>
+            <input id="dtpEndMessage" required>
         </div>
     </div>
     <div class="inputs-container">
@@ -54,5 +54,8 @@
     var columnsToHide = @(Html.Raw(ViewBag.columnsToHide));
 </script>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/js/sweetalert2/sweetalert2.min.js" asp-append-version="true"></script>
+<script src="~/js/Shared/syncfusion-componentsMessages.js" asp-append-version="true"></script>
+
 <script src="~/js/Views/Commands/Commands.js"></script>
 

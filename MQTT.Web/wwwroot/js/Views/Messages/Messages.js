@@ -12,7 +12,7 @@ $(document).ready(function(){
 function ServiceGetMessages() {
     // Display loading modal
     Swal.fire({
-        title: 'Loading...',
+        title: 'Cargando...',
         allowOutsideClick: false,
         showConfirmButton: false, // Oculta el botón de confirmación
         onBeforeOpen: (modal) => {
@@ -22,8 +22,8 @@ function ServiceGetMessages() {
     });
 
     var data = {
-        startDate: $("#dtpStart").val(),
-        endDate: $("#dtpEnd").val(),
+        startDate: $("#dtpStartMessage").val(),
+        endDate: $("#dtpEndMessage").val(),
     };
 
     $.ajax({
@@ -47,7 +47,7 @@ function ServiceGetMessages() {
             multiSelectInput.enabled = false;
             const btn = document.getElementById('button-filter');
             btn.disabled = false;
-            dateDocuments = $("#dtpStart").val() + " " + $("#dtpEnd").val();
+            dateDocuments = $("#dtpStartMessage").val() + " " + $("#dtpEndMessage").val();
             let dataColumns = setColums(data.dataMessages, columnsToHide);
             let exportFunctions = addFnctionsGrid(['Excel']);
             dataColumns = addCommandsGridDetails(dataColumns);

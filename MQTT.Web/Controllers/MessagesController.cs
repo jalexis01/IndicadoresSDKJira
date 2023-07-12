@@ -65,8 +65,8 @@ namespace MQTT.Web.Controllers
         {
             try
             {
-                startDate = startDate.ToUniversalTime();
-                endDate = endDate.ToUniversalTime();
+               // startDate = startDate.ToUniversalTime();
+              //  endDate = endDate.ToUniversalTime();
                 var result = SearchMessage(startDate, endDate);
                 List<FilterViewModel> fields = new List<FilterViewModel>();
 

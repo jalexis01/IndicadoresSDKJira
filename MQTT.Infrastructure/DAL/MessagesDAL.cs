@@ -460,7 +460,7 @@ namespace MQTT.Infrastructure.DAL
                     "FROM [Operation].[tbMessages] M INNER JOIN [Operation].tbHeaderMessage HM ON M.IdHeaderMessage = HM.IdHeaderMessage";
                 string where = $" WHERE M.fechaHoraLecturaDato BETWEEN '{formattedDtInit}' AND '{formattedDtEnd}' ";
 
-                if (dtInit == dtEnd)
+                if (string.IsNullOrEmpty(formattedDtInit) || string.IsNullOrEmpty(formattedDtEnd))
                 {
                     sentence = "SELECT TOP(1000) M.fechaHoraLecturaDato, M.fechaHoraEnvioDato, DATEADD(HOUR,-5,HM.CreationDate) [CreationDateLocal], M.idEstacion, " +
                     "M.idVagon, M.idPuerta, M.codigoEvento, M.estadoAperturaCierrePuertas, M.numeroParada, M.idVehiculo, M.placaVehiculo, M.tipologiaVehiculo, " +

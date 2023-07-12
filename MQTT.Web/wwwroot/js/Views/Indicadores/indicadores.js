@@ -31,7 +31,7 @@ function serviceGetIndicadores() {
     console.log("Fecha final: " + endDate);
 
     Swal.fire({
-        title: 'Cargando indicadores...',
+        title: 'Cargando...',
         allowOutsideClick: false,
         showConfirmButton: false,
         onBeforeOpen: (modal) => {

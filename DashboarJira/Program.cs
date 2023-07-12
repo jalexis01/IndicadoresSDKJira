@@ -80,4 +80,4 @@ using (FileStream archivo = new FileStream(rutaCompleta, FileMode.Create))
 */
 Console.WriteLine("Archivo creado exitosamente.");
 
-jira.GetTikets(0, 0, fechainicio, fechaFinal, null);
+//jira.GetTikets(0, 0, fechainicio, fechaFinal, null);

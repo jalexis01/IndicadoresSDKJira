@@ -23,7 +23,7 @@ L10n.load({
     'es': {
         'datepicker': {
             placeholder: 'Wählen Sie ein Datum aus',
-            today: 'Hoy'
+            today: 'Haute'
         }
     },
 });
@@ -92,6 +92,7 @@ function setGrid(data, dataColumns, exportFunctions = null, nameGrid = "Grid"){
         enableHover: false,
         width: '100%',
         height: '100%',
+        locale: 'es-ES',
         queryCellInfo: customiseCell,
         dataSource: data,
         columns: dataColumns,
@@ -223,99 +224,43 @@ function customiseCell(args) {
         args.cell.textContent = value.Name; 
     } 
 }
-/*
+
 function createElemntsTimes() {
     if (datepicker != null) {
         return;
     }
-    document.getElementById("dtpStart")
-    datepicker = new ej.calendars.DatePicker({
+    datepicker = new ej.calendars.DateTimePicker({
         placeholder: 'Ingrese fecha de inicio',
-        format: 'yyyy-MM-dd',
+        format: 'yyyy-MM-dd HH:mm',
         close: selectDateStar,
         cleared: clean
     });
     datepicker.appendTo('#dtpStart');
 
-    datepickerEnd = new ej.calendars.DatePicker({
-        placeholder: 'Ingrese fecha fin',
-        enabled: false,
-        format: 'yyyy-MM-dd',
-    });
-    datepickerEnd.appendTo('#dtpEnd');
-   
-    datepickerMessage = new ej.calendars.DateTimePicker({
-        placeholder: 'Ingrese fecha de inicio',
-        format: 'yyyy-MM-dd HH:mm',
-        close: selectDateStarMessage,
-        cleared: clean
-    });
-    datepickerMessage.appendTo('#dtpStartMessage');
-
     datepickerEnd = new ej.calendars.DateTimePicker({
         placeholder: 'Ingrese fecha fin',
-        enabled: false,
+        enabled:false,
         format: 'yyyy-MM-dd HH:mm',
     });
-    datepickerEnd.appendTo('#dtpEndMessage');
+    datepickerEnd.appendTo('#dtpEnd');
 }
-*/
-function createElemntsTimes() {
-    if (datepicker != null) {
-        return;
-    }
-    if (document.getElementById("dtpStartMessage") || document.getElementById("dtpEndMessage")) {
-        createElemntsTimesMessage();
-    } else {
-        datepicker = new ej.calendars.DatePicker({
-            placeholder: 'Ingrese fecha de inicio',
-            format: 'yyyy-MM-dd',
-            close: selectDateStar,
-            cleared: clean
-        });
-        datepicker.appendTo('#dtpStart');
 
-        datepickerEnd = new ej.calendars.DatePicker({
-            placeholder: 'Ingrese fecha fin',
-            enabled: false,
-            format: 'yyyy-MM-dd',
-        });
-        datepickerEnd.appendTo('#dtpEnd');
-
-    }
-}
 function createElemntsTimesBackup() {
     if (datepickerModal != null) {
         return;
     }
-    datepickerModal = new ej.calendars.DatePicker({
+    datepickerModal = new ej.calendars.DateTimePicker({
         placeholder: 'Ingrese fecha de inicio',
-        format: 'yyyy-MM-dd',
+        format: 'yyyy-MM-dd HH:mm',
         close: selectDateStarB,
         cleared: cleanB
     });
     datepickerModal.appendTo('#dtpStartModal');
 
-    datepickerEndModal = new ej.calendars.DatePicker({
+    datepickerEndModal = new ej.calendars.DateTimePicker({
         placeholder: 'Ingrese fecha fin',
         enabled:false,
-        format: 'yyyy-MM-dd',
-
-    });
-    datepickerEndModal.appendTo('#dtpEndModal');
-    /*Messages*/
-    datepickerModalMessage = new ej.calendars.DateTimePicker({
-        placeholder: 'Ingrese fecha de inicio',
-        format: 'yyyy-MM-dd',
-        close: selectDateStarBMessage,
-        cleared: cleanB
-    });
-    datepickerModal.appendTo('#dtpStartModal');
-
-    datepickerEndModalMessage = new ej.calendars.DateTimePicker({
-        placeholder: 'Ingrese fecha fin',
-        enabled: false,
-        format: 'yyyy-MM-dd',
+        format: 'yyyy-MM-dd HH:mm',
 
     });
     datepickerEndModal.appendTo('#dtpEndModal');
@@ -701,7 +646,7 @@ var detailsData = function (args) {
         let value = args.rowData[key];
         dataHtmlList += "<ul><li style='padding: 1% 0%;'><div class='flex items-start space-x-4'><div class='flex-1 min-w-0' style='text-align: initial;'><p class='text-sm font-medium text-gray-900 truncate dark:text-white'>" + formattedKey + "</p></div></li><li><div class='flex items-start space-x-4'><div class='flex-1 min-w-0' style='text-align: initial'><p class='text-sm font-sm text-gray-900 truncate dark:text-white'>" + value + "</p></div></li></ul>"
     }
-    console.log("Entro al swal")
+
     Swal.fire({
         title: '<strong><u>Información</u></strong>',
         html: '<div style="max-height: 100vh; overflow-y: auto; overflow-x: scroll;"><div style="width: 60vw;"><ul class="max-w-full divide-y divide-gray-200 dark:divide-gray-700">' + dataHtmlList + '</ul></div></div>',
@@ -784,84 +729,3 @@ var detailsData = function(args){
         showCloseButton: true,
       })
   }*/
-
-
-
-
-
-
-
-
-function createElemntsTimesMessage() {
-    if (datepicker != null) {
-        return;
-    }
-    datepicker = new ej.calendars.DateTimePicker({
-        placeholder: 'Ingrese fecha de inicio',
-        format: 'yyyy-MM-dd HH:mm',
-        close: selectDateStarMessage,
-        cleared: clean
-    });
-    datepicker.appendTo('#dtpStartMessage');
-
-    datepickerEnd = new ej.calendars.DateTimePicker({
-        placeholder: 'Ingrese fecha fin',
-        enabled: false,
-        format: 'yyyy-MM-dd HH:mm',
-    });
-    datepickerEnd.appendTo('#dtpEndMessage');
-}
-
-function createElemntsTimesBackupMessage() {
-    if (datepickerModal != null) {
-        return;
-    }
-    datepickerModal = new ej.calendars.DatePicker({
-        placeholder: 'Ingrese fecha de inicio',
-        format: 'yyyy-MM-dd',
-        close: selectDateStarBMessage,
-        cleared: cleanB
-    });
-    datepickerModal.appendTo('#dtpStartModal');
-
-    datepickerEndModal = new ej.calendars.DatePicker({
-        placeholder: 'Ingrese fecha fin',
-        enabled: false,
-        format: 'yyyy-MM-dd',
-
-    });
-    datepickerEndModal.appendTo('#dtpEndModalMessage');
-}
-
-function selectDateStarMessage() {
-    console.log("Start Message")
-    var stDateStart = $("#dtpStartMessage").val();
-    let arr = stDateStart.split('-');
-    if (arr[1] != undefined) {
-        datepickerEnd.value = new Date(Date.now())
-        let arrDay = arr[2].split(' ');
-        datepickerEnd.enabled = true;
-        datepickerEnd.min = new Date(parseInt(arr[0]), parseInt(arr[1] - 1), parseInt(arrDay[0]))
-        datepickerEnd.max = new Date(parseInt(arr[0]), parseInt(arr[1] + 3), parseInt(arrDay[0]))
-    } else {
-        datepickerEnd.value = undefined;
-        datepickerEnd.enabled = false;
-
-    }
-}
-
-function selectDateStarBMessage() {
-    var stDateStart = $("#dtpStartModalMessage").val();
-    let arr = stDateStart.split('-');
-    if (arr[1] != undefined) {
-        datepickerEndModal.value = new Date(Date.now())
-        let arrDay = arr[2].split(' ');
-        datepickerEndModal.enabled = true;
-        datepickerEndModal.min = new Date(parseInt(arr[0]), parseInt(arr[1] - 1), parseInt(arrDay[0]))
-        datepickerEndModal.max = new Date(parseInt(arr[0]), parseInt(arr[1] + 3), parseInt(arrDay[0]))
-    } else {
-        datepickerEndModal.value = undefined;
-        datepickerEndModal.enabled = false;
-
-    }
-}
