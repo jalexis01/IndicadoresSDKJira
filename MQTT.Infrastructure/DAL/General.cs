@@ -90,7 +90,7 @@ namespace MQTT.Infrastructure.DAL
                     else
                     {
 
-                    result += $"'{value}',";
+                        result += $"'{value}',";
                     }
                 }
                 else if (dataType.ToUpper().Contains("BIT"))

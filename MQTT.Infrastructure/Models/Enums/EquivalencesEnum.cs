@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace MQTT.Infrastructure.Models.Enums
+﻿namespace MQTT.Infrastructure.Models.Enums
 {
-	public enum EquivalencesEnum
-	{
-		Components=1,
-		MaintenanceType=2,
-		RepairType=3,
-		TicketStatus=4, 
-		ServiceType=5
-	}
+    public enum EquivalencesEnum
+    {
+        Components = 1,
+        MaintenanceType = 2,
+        RepairType = 3,
+        TicketStatus = 4,
+        ServiceType = 5
+    }
 }

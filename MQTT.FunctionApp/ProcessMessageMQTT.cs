@@ -1,19 +1,15 @@
-using System;
-using System.IO;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using MQTT.Infrastructure.DAL;
 using MQTT.Infrastructure.Models.DTO;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
-using Microsoft.VisualBasic;
-using MQTT.Infrastructure.Models;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
+using System.IO;
+using System.Threading.Tasks;
 
 namespace MQTT.FunctionApp
 {

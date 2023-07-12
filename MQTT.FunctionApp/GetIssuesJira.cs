@@ -1,36 +1,34 @@
-using System;
-using System.IO;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
-using System.Net;
-using System.Collections.Generic;
-using MQTT.Infrastructure.DAL;
-using System.Linq;
-using MQTT.Infrastructure.Models.Enums;
-using System.ComponentModel.DataAnnotations;
 using MQTT.FunctionApp.Models;
+using MQTT.Infrastructure.DAL;
+using MQTT.Infrastructure.Models.Enums;
 using Newtonsoft.Json.Linq;
-using System.Xml.Linq;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.IO;
+using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
 
 namespace MQTT.FunctionApp
 {
-	public static class GetIssuesJira
-	{
-		[FunctionName("GetIssuesJira")]
-		public static async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", Route = null)] Models.Filters filters, HttpRequest req, ILogger log)
-		{
+    public static class GetIssuesJira
+    {
+        [FunctionName("GetIssuesJira")]
+        public static async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", Route = null)] Models.Filters filters, HttpRequest req, ILogger log)
+        {
             var guid = Guid.NewGuid();
 
-			log.LogInformation($"{guid}====== START PROCESS ======");
-			string msgError = string.Empty;
-			string uri = string.Empty;
-			var logRequestIn = new Infrastructure.Models.DTO.LogRequestInDTO();
-			logRequestIn.IdEndPoint = (int)EndPointEnum.GetIssueJira;
+            log.LogInformation($"{guid}====== START PROCESS ======");
+            string msgError = string.Empty;
+            string uri = string.Empty;
+            var logRequestIn = new Infrastructure.Models.DTO.LogRequestInDTO();
+            logRequestIn.IdEndPoint = (int)EndPointEnum.GetIssueJira;
 
             //var connectionString = Environment.GetEnvironmentVariable("ConnectionStringDB", EnvironmentVariableTarget.Process);
             //string token = Environment.GetEnvironmentVariable("TokenJira", EnvironmentVariableTarget.Process).ToString();
@@ -39,27 +37,27 @@ namespace MQTT.FunctionApp
             string token = "ZGVzYXJyb2xsb2NjQG1hbmF0ZWVpbmdlbmllcmlhLmNvbTpoZlV0Z1o5UkZHb1F5MlNmSDdzQ0Y5QTY=";
             string timeZone = "SA Pacific Standard Time";
             General DBAccess = new General(connectionString);
-			 
-			try
-			{
-				log.LogInformation($"{guid}=== Log request in...");
-				logRequestIn.DataQuery = req.QueryString.ToString();
-				logRequestIn.DataBody = await new StreamReader(req.Body).ReadToEndAsync();
-				logRequestIn.DataBody = string.IsNullOrEmpty(logRequestIn.DataBody) ? null : logRequestIn.DataBody;
-				LogRequestInDAL.Add(DBAccess, ref logRequestIn);
-				log.LogInformation($"{guid}=== IdRequestIn: {logRequestIn.Id}");
-				log.LogInformation($"{guid}=== dataSource: {connectionString}");
-				log.LogInformation($"{guid}=== token: {token}");
 
-				log.LogInformation($"{guid}=== Getting equivalences...");
-				filters.GetAllEquivalences(DBAccess);
-				var equivalenceServiceType = filters.equivalenceServiceType;
+            try
+            {
+                log.LogInformation($"{guid}=== Log request in...");
+                logRequestIn.DataQuery = req.QueryString.ToString();
+                logRequestIn.DataBody = await new StreamReader(req.Body).ReadToEndAsync();
+                logRequestIn.DataBody = string.IsNullOrEmpty(logRequestIn.DataBody) ? null : logRequestIn.DataBody;
+                LogRequestInDAL.Add(DBAccess, ref logRequestIn);
+                log.LogInformation($"{guid}=== IdRequestIn: {logRequestIn.Id}");
+                log.LogInformation($"{guid}=== dataSource: {connectionString}");
+                log.LogInformation($"{guid}=== token: {token}");
+
+                log.LogInformation($"{guid}=== Getting equivalences...");
+                filters.GetAllEquivalences(DBAccess);
+                var equivalenceServiceType = filters.equivalenceServiceType;
 
                 List<ValidationResult> resultValidationsModel = new List<ValidationResult>();
                 ValidationContext context = new ValidationContext(filters, null, null);
                 if (!Validator.TryValidateObject(filters, context, resultValidationsModel, true))
                 {
-					throw new Exception(string.Join(", ",resultValidationsModel));
+                    throw new Exception(string.Join(", ", resultValidationsModel));
                 }
                 int start = 0;
                 int max = 100;
@@ -68,27 +66,29 @@ namespace MQTT.FunctionApp
 
 
                 log.LogInformation($"{guid}==== END PROCESS ======");
-				logRequestIn.Processed = true;
-                if( result.Count == 1 )
+                logRequestIn.Processed = true;
+                if (result.Count == 1)
                 {
                     return new OkObjectResult(result[0]);
                 }
-				return new OkObjectResult(result);
-			}
-			catch (Exception ex)
-			{
-				msgError = $"{ex.Message} {ex.InnerException}";
-				msgError += string.IsNullOrEmpty(uri) ? "" : $"|Uri:{uri}";
-				log.LogError($"{guid}===ERROR: {msgError}");
-				logRequestIn.Observations = msgError;
-				return new ConflictObjectResult(msgError);
-			}
-			finally {
-				LogRequestInDAL.Update(DBAccess, logRequestIn);
-			}
-		}
+                return new OkObjectResult(result);
+            }
+            catch (Exception ex)
+            {
+                msgError = $"{ex.Message} {ex.InnerException}";
+                msgError += string.IsNullOrEmpty(uri) ? "" : $"|Uri:{uri}";
+                log.LogError($"{guid}===ERROR: {msgError}");
+                logRequestIn.Observations = msgError;
+                return new ConflictObjectResult(msgError);
+            }
+            finally
+            {
+                LogRequestInDAL.Update(DBAccess, logRequestIn);
+            }
+        }
 
-		public static List<Models.IssueDTO> convertIssueInTicket(Issue issues, Models.Filters filters, string timeZone) {
+        public static List<Models.IssueDTO> convertIssueInTicket(Issue issues, Models.Filters filters, string timeZone)
+        {
             var equivalenceServiceType = filters.equivalenceServiceType;
             List<Models.IssueDTO> result = new List<Models.IssueDTO>();
             foreach (var item in issues.Issues)
@@ -109,16 +109,16 @@ namespace MQTT.FunctionApp
                     idPuerta = fields.IdentificacionComponente == null || fields.IdentificacionComponente.Equals(string.Empty) ? null : fields.IdentificacionComponente,
                     tipoComponente = fields.TipoDeComponente == null || fields.TipoDeComponente.Equals(string.Empty) ? null : fields.TipoDeComponente.Value,
                     idComponente = fields.IdentificacionComponente == null || fields.IdentificacionComponente.Equals(string.Empty) ? null : fields.IdentificacionComponente,
-                    identificacion = fields.IdentificacionSerial == null || fields.IdentificacionSerial.Equals(string.Empty)  ? null : fields.IdentificacionSerial,
+                    identificacion = fields.IdentificacionSerial == null || fields.IdentificacionSerial.Equals(string.Empty) ? null : fields.IdentificacionSerial,
                     tipoMantenimiento = fields.TipoDeServicio == null || fields.TipoDeServicio.Equals(string.Empty) ? null : fields.TipoDeServicio.Value,
                     nivelFalla = fields.ClaseDeFallo == null || fields.ClaseDeFallo.Equals(string.Empty) ? null : fields.ClaseDeFallo.Value,
-                    codigoFalla = (fields.DescripcionDeFallo == null || fields.DescripcionDeFallo[0] == null)|| fields.DescripcionDeFallo.Equals(string.Empty) ? null : fields.DescripcionDeFallo[0].Value,
+                    codigoFalla = (fields.DescripcionDeFallo == null || fields.DescripcionDeFallo[0] == null) || fields.DescripcionDeFallo.Equals(string.Empty) ? null : fields.DescripcionDeFallo[0].Value,
                     fechaApertura = fields.created != null ? TimeZoneInfo.ConvertTime(Convert.ToDateTime(fields.created), TimeZoneInfo.FindSystemTimeZoneById(timeZone)) : (DateTime?)null,
                     fechaCierre = fields.FechaSolucion != null ? TimeZoneInfo.ConvertTime(Convert.ToDateTime(fields.FechaSolucion), TimeZoneInfo.FindSystemTimeZoneById(timeZone)) : (DateTime?)null,
                     fechaArriboLocacion = fields.FechayHoraDeLlegadaAEstacion != null ? TimeZoneInfo.ConvertTime(Convert.ToDateTime(fields.FechayHoraDeLlegadaAEstacion), TimeZoneInfo.FindSystemTimeZoneById(timeZone)) : (DateTime?)null,
                     componenteParte = (fields.DescripcionRepuesto == null || fields.DescripcionRepuesto[0] == null) || fields.DescripcionRepuesto.Equals(string.Empty) ? null : fields.DescripcionRepuesto[0].Value,
                     tipoReparacion = (fields.TipoReparacion == null || fields.TipoReparacion[0] == null) || fields.TipoReparacion.Equals(string.Empty) ? null : fields.TipoReparacion[0].Value,
-                    tipoAjusteConfiguracion = $"{typeSettingConfiguration}{typeSettingConfiguration2}{typeSettingConfiguration3}{typeSettingConfiguration4}{typeSettingConfiguration5}".Equals(string.Empty)? null: $"{typeSettingConfiguration}{typeSettingConfiguration2}{typeSettingConfiguration3}{typeSettingConfiguration4}{typeSettingConfiguration5}",
+                    tipoAjusteConfiguracion = $"{typeSettingConfiguration}{typeSettingConfiguration2}{typeSettingConfiguration3}{typeSettingConfiguration4}{typeSettingConfiguration5}".Equals(string.Empty) ? null : $"{typeSettingConfiguration}{typeSettingConfiguration2}{typeSettingConfiguration3}{typeSettingConfiguration4}{typeSettingConfiguration5}",
                     descripcionReparacion = fields.DescripcionReparacion == null || fields.DescripcionReparacion.Equals(string.Empty) ? null : fields.DescripcionReparacion,
                     tipoCausa = fields.TipoCausa == null || fields.TipoCausa.Equals(string.Empty) ? null : fields.TipoCausa.Value,
                     diagnosticoCausa = fields.DiagnosticoCausa == null || fields.DiagnosticoCausa.Equals(string.Empty) ? null : fields.DiagnosticoCausa,
@@ -137,10 +137,11 @@ namespace MQTT.FunctionApp
             return result;
         }
 
-		public static List<Models.IssueDTO> getTicketsFromJira(int start, int max, string token, Models.Filters filters, string timeZone, ILogger log, Guid guid, string msgError) {
+        public static List<Models.IssueDTO> getTicketsFromJira(int start, int max, string token, Models.Filters filters, string timeZone, ILogger log, Guid guid, string msgError)
+        {
             //string uri = Environment.GetEnvironmentVariable("urljira", EnvironmentVariableTarget.Process);
             //string uri = "https://assaabloymda.atlassian.net/rest/api/2/search";
-            string uri = Constantes.URI+ "/search";
+            string uri = Constantes.URI + "/search";
             string resultJira;
             uri = $"{uri}?{filters.resultQuery}" + "&maxResults=" + max + "&startAt=" + start;
 
@@ -171,7 +172,7 @@ namespace MQTT.FunctionApp
                 msgError = $"Error at {uri} {ex.Message} {ex.InnerException}";
                 throw new Exception(msgError);
             }
-            
+
             JObject jObject = JObject.Parse(resultJira);
             string propertyValue = jObject["total"].Value<string>();
             int total = int.Parse(propertyValue);
@@ -179,26 +180,30 @@ namespace MQTT.FunctionApp
             var json = ConverJSONInIssue(jObject);
             log.LogInformation($"{guid}=== Total Issues: {json.Issues.Count}");
             List<Models.IssueDTO> result = convertIssueInTicket(json, filters, timeZone);
-            if ( max + start < total) {
-                result = result.Concat( getTicketsFromJira(start + max, max, token, filters, timeZone, log, guid, msgError)).ToList();
+            if (max + start < total)
+            {
+                result = result.Concat(getTicketsFromJira(start + max, max, token, filters, timeZone, log, guid, msgError)).ToList();
             }
             return result;
 
         }
 
-        public static Issue ConverJSONInIssue(JObject resultJira) {
+        public static Issue ConverJSONInIssue(JObject resultJira)
+        {
             Issue issue = new Issue();
             issue.Total = resultJira["total"].Value<int>();
             var dataList = resultJira["issues"].Value<JArray>();
             List<Data> data = new List<Data>();
-            foreach (JObject dataItem in dataList) {
+            foreach (JObject dataItem in dataList)
+            {
                 data.Add(ConvertJsonInData(dataItem));
             }
             issue.Issues = data;
             return issue;
         }
 
-        public static Data ConvertJsonInData(JObject dataObject) {
+        public static Data ConvertJsonInData(JObject dataObject)
+        {
             Data data = new Data();
             data.Key = dataObject["key"].Value<string>();
             var dataList = dataObject["fields"].Value<JObject>();
@@ -206,7 +211,8 @@ namespace MQTT.FunctionApp
             return data;
         }
 
-        public static Field ConverJsonInField(JObject fieldObject) {
+        public static Field ConverJsonInField(JObject fieldObject)
+        {
             Field field = new Field();
 
             if (fieldObject.TryGetValue(Constantes.Estacion, out JToken estacion) && estacion.Type != JTokenType.Null)
@@ -225,7 +231,8 @@ namespace MQTT.FunctionApp
                 Category Vagon = new Category();
                 Vagon.Value = fieldObject[Constantes.Vagon]["value"].Value<string>();
                 field.Vagon = Vagon;
-            } else
+            }
+            else
             {
                 field.Vagon = null;
             }

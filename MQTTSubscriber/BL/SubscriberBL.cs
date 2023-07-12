@@ -1,11 +1,6 @@
 ﻿using MQTT.Infrastructure.DAL;
-using MQTT.Infrastructure.Models;
 using MQTT.Infrastructure.Models.DTO;
-using MQTT.Subscriber;
-using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace MQTT.Subscriber.BL
 {

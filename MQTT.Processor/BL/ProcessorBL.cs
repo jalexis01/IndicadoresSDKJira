@@ -1,9 +1,8 @@
-﻿    using MQTT.Infrastructure.DAL;
+﻿using MQTT.Infrastructure.DAL;
 using MQTT.Infrastructure.Models.DTO;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace MQTT.Processor.BL
 {
@@ -89,7 +88,7 @@ namespace MQTT.Processor.BL
 
                         item.Processed = true;
                         item.IdProcessed = 2;
-                        item.IdHeaderMessage = idHeaderMessage;                       
+                        item.IdHeaderMessage = idHeaderMessage;
                     }
                     catch (Exception exItem)
                     {
@@ -107,8 +106,8 @@ namespace MQTT.Processor.BL
             {
                 msgError = $"{ex.Message} {ex.InnerException}";
             }
-            finally 
-            { 
+            finally
+            {
                 endDate = DateTime.UtcNow;
                 Console.WriteLine($">>>>> Agregando registro de ejecución.");
                 AddLogExecution(idLogMessageInit, idLogMessageEnd, initDate, endDate, msgError);
@@ -119,7 +118,8 @@ namespace MQTT.Processor.BL
         {
             try
             {
-                var logExecutionProcessorDTO = new LogExecutionProcessorDTO { 
+                var logExecutionProcessorDTO = new LogExecutionProcessorDTO
+                {
                     Init = dtInit,
                     End = dtEnd,
                     IdLogMessageInInit = idLogMessageInInit,
@@ -138,7 +138,7 @@ namespace MQTT.Processor.BL
         {
             try
             {
-                messageType = null ;
+                messageType = null;
                 dataWeft = null;
                 string codeMsg = null;
 
@@ -252,7 +252,7 @@ namespace MQTT.Processor.BL
                 }
                 else
                 {
-                    idHeaderMessage= MessagesDAL.AddHeaderMessage(DBAccess, _headerFields, messageType.Id, dctDataFields);
+                    idHeaderMessage = MessagesDAL.AddHeaderMessage(DBAccess, _headerFields, messageType.Id, dctDataFields);
                     add = true;
                 }
                 return idHeaderMessage.Value;

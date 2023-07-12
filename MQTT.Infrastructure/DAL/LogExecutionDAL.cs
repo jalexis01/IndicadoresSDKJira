@@ -1,8 +1,6 @@
 ﻿using MQTT.Infrastructure.Models;
 using System;
 using System.Linq;
-using System.Collections.Generic;
-using System.Text;
 
 namespace MQTT.Infrastructure.DAL
 {
@@ -14,7 +12,8 @@ namespace MQTT.Infrastructure.DAL
             {
                 using (var dbContext = objContext.DBConnection())
                 {
-                    TbLogExecutions tbLogExecutions = new TbLogExecutions { 
+                    TbLogExecutions tbLogExecutions = new TbLogExecutions
+                    {
                         InitDateTime = DateTime.UtcNow
                     };
 
@@ -36,8 +35,8 @@ namespace MQTT.Infrastructure.DAL
                 using (var dbContext = objContext.DBConnection())
                 {
                     var obLog = (from l in dbContext.TbLogExecutions
-                                  where l.Id == id
-                                  select l).FirstOrDefault() ;
+                                 where l.Id == id
+                                 select l).FirstOrDefault();
 
                     obLog.EndDateTime = DateTime.UtcNow;
                     obLog.Observations = observations;

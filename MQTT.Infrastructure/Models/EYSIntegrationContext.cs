@@ -1,6 +1,4 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace MQTT.Infrastructure.Models
 {
@@ -58,11 +56,11 @@ namespace MQTT.Infrastructure.Models
             }
             else
             {
-            if (!optionsBuilder.IsConfigured)
-            {
+                if (!optionsBuilder.IsConfigured)
+                {
                     optionsBuilder.UseSqlServer("Server=DESKTOP-LG97MDG\\SQLEXPRESS;Database=EYSIntegration;Trusted_Connection=True;");
+                }
             }
-        }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

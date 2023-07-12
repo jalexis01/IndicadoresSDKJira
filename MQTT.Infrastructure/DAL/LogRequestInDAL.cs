@@ -2,14 +2,12 @@
 using MQTT.Infrastructure.Models.DTO;
 using System;
 using System.Linq;
-using System.Collections.Generic;
-using System.Text;
 
 namespace MQTT.Infrastructure.DAL
 {
     public class LogRequestInDAL
     {
-        public static void Add(General objContext,ref LogRequestInDTO logRequestIn)
+        public static void Add(General objContext, ref LogRequestInDTO logRequestIn)
         {
             try
             {
@@ -28,7 +26,7 @@ namespace MQTT.Infrastructure.DAL
                     DBContext.Add(tbLogRequestsIn);
                     DBContext.SaveChanges();
 
-                    logRequestIn.Id= tbLogRequestsIn.Id;
+                    logRequestIn.Id = tbLogRequestsIn.Id;
                 }
             }
             catch (Exception ex)

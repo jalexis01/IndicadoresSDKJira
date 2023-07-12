@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using MQTT.Infrastructure.Models.DTO;
 
 namespace MQTT.Infrastructure.Models.DTO
 {

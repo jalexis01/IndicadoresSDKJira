@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Text.Json.Serialization;
 
 namespace MQTT.FunctionApp.Models
@@ -44,7 +43,7 @@ namespace MQTT.FunctionApp.Models
         public List<Category>? DescripcionRepuesto { get; set; }
 
         [JsonPropertyName("customfield_10071")]
-        public List<Category>? TipoReparacion    { get; set; }
+        public List<Category>? TipoReparacion { get; set; }
 
         [JsonPropertyName("customfield_10060")]
         public List<Category>? ListadoAjustesPuerta { get; set; }

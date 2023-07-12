@@ -1,7 +1,7 @@
-﻿using System;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using MQTT.Infrastructure.DAL;
 using MQTT.Infrastructure.Models.DTO;
+using System;
 
 namespace MQTT.Web.Controllers
 {

@@ -3,12 +3,10 @@ using MQTT.Infrastructure.Models.DTO;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
 
 namespace MQTT.FunctionApp.Models
 {
-    public class Filters:IValidatableObject
+    public class Filters : IValidatableObject
     {
         public Filters()
         {
@@ -48,12 +46,12 @@ namespace MQTT.FunctionApp.Models
                 {
                     results.Add(new ValidationResult("El parámetro tipoFecha es obligatorio"));
                 }
-                
+
                 if (this.fechaInicialRango is null || string.IsNullOrEmpty(this.fechaInicialRango.ToString()))
                 {
                     results.Add(new ValidationResult("El parámetro fechaInicialRango es obligatorio"));
                 }
-                
+
                 if (this.fechaFinalRango is null || string.IsNullOrEmpty(this.fechaFinalRango.ToString()))
                 {
                     results.Add(new ValidationResult("El parámetro fechaFinalRango es obligatorio"));
@@ -103,12 +101,12 @@ namespace MQTT.FunctionApp.Models
                     case "Cerrado":
                         resultQuery += $" AND status IN (Cerrado)";
                         break;
-                    
+
                     default:
                         results.Add(new ValidationResult("El valor estadoTicket no es valido"));
                         break;
                 }
-                
+
 
             }
 

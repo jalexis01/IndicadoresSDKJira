@@ -1,13 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MQTT.Infrastructure.DAL;
-using System;
-using System.Linq;
-using System.Collections.Generic;
 using MQTT.Infrastructure.Models.DTO;
-using System.Data;
-using Newtonsoft.Json;
-using Microsoft.AspNetCore.Authorization;
 using MQTT.Web.Models;
+using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
 
 namespace MQTT.Web.Controllers
 {
@@ -108,7 +108,8 @@ namespace MQTT.Web.Controllers
             }
         }
 
-        public IActionResult BackupSearch(){
+        public IActionResult BackupSearch()
+        {
             _validFields = ValidFieldsDAL.GetListValidFields(DBAccess, "Messages");
             var columnsSearch = _validFields.Where(f => f.SearchType).ToList();
             var json = Json(
@@ -126,7 +127,7 @@ namespace MQTT.Web.Controllers
             {
                 DBAccess = new General(_connectionString);
                 DataTable dtResult = MessagesDAL.SearchMessages(DBAccess, startDate, endDate);
-              
+
 
                 //foreach (DataColumn item in dtResult.Columns)
                 //{

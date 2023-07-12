@@ -1,13 +1,11 @@
-﻿using MQTT.Infrastructure.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
+using MQTT.Infrastructure.Models;
 using MQTT.Infrastructure.Models.DTO;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using Microsoft.EntityFrameworkCore;
 using System.Data;
-using Microsoft.Data.SqlClient;
-using Microsoft.EntityFrameworkCore.Internal;
-using Microsoft.EntityFrameworkCore.Storage;
+using System.Linq;
 
 namespace MQTT.Infrastructure.DAL
 {
@@ -23,7 +21,7 @@ namespace MQTT.Infrastructure.DAL
                     var currentMessage = GetMessageDTO(objContext, code);
 
                     if (currentMessage == null)
-                    { 
+                    {
                         return null;
                     }
                     var fields = (from eventfield in DBContext.TbMessageTypeFields
@@ -158,14 +156,15 @@ namespace MQTT.Infrastructure.DAL
                     TbMessagesIn tbMessagesIn = new TbMessagesIn()
                     {
                         IdLogMessageIn = messageInDTO.IgLogMessageIn,
-                        IdMessage= messageInDTO.IdMessage
+                        IdMessage = messageInDTO.IdMessage
                     };
                     DBContext.Add(tbMessagesIn);
                     DBContext.SaveChanges();
 
                     foreach (var item in messageInDTO.Fields)
                     {
-                        TbMessageInFields tbMessageInFields = new TbMessageInFields() { 
+                        TbMessageInFields tbMessageInFields = new TbMessageInFields()
+                        {
                             IdMessageIn = tbMessagesIn.Id,
                             IdMessageField = item.IdMessageField,
                             Value = item.Value
@@ -189,8 +188,9 @@ namespace MQTT.Infrastructure.DAL
             {
                 using (var DBContext = objContext.DBConnection())
                 {
-                    var result = DBContext.TbHeaderFields.Select(p => 
-                    new HeaderFieldDTO { 
+                    var result = DBContext.TbHeaderFields.Select(p =>
+                    new HeaderFieldDTO
+                    {
                         Id = p.Id,
                         Name = p.Name,
                         DataType = p.DataType,
@@ -383,7 +383,7 @@ namespace MQTT.Infrastructure.DAL
 
                             var messageToDelete = dbContext.TbMessages.Where(f => f.IdHeaderMessage.Equals(headerMessageUpdate.IdHeaderMessage)).FirstOrDefault();
                             var messageToUpdate = dbContext.TbMessages.Where(f => f.IdHeaderMessage.Equals(headerMessageDelete.IdHeaderMessage)).FirstOrDefault();
-                            messageToUpdate.IdHeaderMessage= headerMessageUpdate.IdHeaderMessage;
+                            messageToUpdate.IdHeaderMessage = headerMessageUpdate.IdHeaderMessage;
                             dbContext.Remove(messageToDelete);
                             dbContext.SaveChanges();
                             dbContext.Remove(headerMessageDelete);
@@ -550,7 +550,8 @@ namespace MQTT.Infrastructure.DAL
 
                 var result = DBContext.TbMessageTypes.Where(f => f.Id == id).FirstOrDefault();
 
-                MessageTypeDTO messageTypeDTO = new MessageTypeDTO { 
+                MessageTypeDTO messageTypeDTO = new MessageTypeDTO
+                {
                     Id = result.Id,
                     Code = result.Code,
                     Description = result.Description,
@@ -605,7 +606,7 @@ namespace MQTT.Infrastructure.DAL
             {
                 using (var DBContext = objContext.DBConnection())
                 {
-                    var result = DBContext.TbMessages.Where(f=> f.Id > -9223372036853705160).ToList();
+                    var result = DBContext.TbMessages.Where(f => f.Id > -9223372036853705160).ToList();
 
                     int i = 0;
                     foreach (var item in result)
