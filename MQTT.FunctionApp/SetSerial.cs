@@ -31,7 +31,7 @@ namespace MQTT.FunctionApp
             var connectionString = Environment.GetEnvironmentVariable("ConnectionStringDB", EnvironmentVariableTarget.Process);
             string token = Environment.GetEnvironmentVariable("TokenJira", EnvironmentVariableTarget.Process).ToString();
             //var connectionString = "Server=manatee.database.windows.net;Database=PuertasTransmilenioDB;User Id=administrador;Password=2022/M4n4t334zur3;";
-            //string token = "anVhbl9rXzk2MkBob3RtYWlsLmNvbTpxcDlJdHBjVVhOY2VaUHhlRGg3ZjkwOTk=";
+            //string token = "ZGVzYXJyb2xsb2NjQG1hbmF0ZWVpbmdlbmllcmlhLmNvbTpoZlV0Z1o5UkZHb1F5MlNmSDdzQ0Y5QTY=";
             General DBAccess = new General(connectionString);
 
             try
@@ -39,7 +39,7 @@ namespace MQTT.FunctionApp
                 string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
 
                 log.LogInformation($"{guid}=== Log request in...");
-                logRequestIn.DataQuery = string.IsNullOrEmpty(req.QueryString.ToString())? null: req.QueryString.ToString();
+                logRequestIn.DataQuery = string.IsNullOrEmpty(req.QueryString.ToString()) ? null : req.QueryString.ToString();
                 logRequestIn.DataBody = string.IsNullOrEmpty(requestBody) ? null : requestBody;
                 LogRequestInDAL.Add(DBAccess, ref logRequestIn);
                 log.LogInformation($"{guid}=== IdRequestIn: {logRequestIn.Id}");
@@ -63,20 +63,20 @@ namespace MQTT.FunctionApp
                     msgError = $"Element *{door}* not found in database.";
                     throw new Exception(msgError);
                 }
-                var dataIssue = new 
-                { 
-                    fields =new {
-                        customfield_10059 = dataElement.Value,
-                        customfield_10088 = new { 
-                            value= dataElement.NameElementType,
-                        } ,
-                    }
-                };
+               
+               
+                JObject dataIssueJson = new JObject();
+                JObject fieldJson = new JObject();
+                fieldJson.Add(Constantes.IdentificacionSerial, dataElement.Value);
+                JObject tipoComponente = new JObject();
+                tipoComponente.Add("value", dataElement.NameElementType);
+                fieldJson.Add(Constantes.TipoDeComponente, tipoComponente);
+                dataIssueJson.Add("fields", fieldJson);
 
-                log.LogInformation($"{guid}=== Element Name: {dataIssue.fields.customfield_10088.value}");
-                log.LogInformation($"{guid}=== Element Value: {dataIssue.fields.customfield_10059}");
-                body = System.Text.Json.JsonSerializer.Serialize(dataIssue);
-                uri = $"https://manateecc.atlassian.net/rest/api/2/issue/{key}";
+                Console.WriteLine(dataIssueJson);
+                log.LogInformation($"{guid}=== Element Name: {dataIssueJson}");
+                body = dataIssueJson.ToString();
+                uri = Constantes.URI + $"/issue/{key}";
 
                 log.LogInformation($"{guid}=== Request to Jira...");
                 var response = MQTT.Infrastructure.BL.Requests.GetResponse(uri, "PUT", token, body);

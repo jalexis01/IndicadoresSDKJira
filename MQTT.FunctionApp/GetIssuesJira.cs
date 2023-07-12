@@ -32,12 +32,12 @@ namespace MQTT.FunctionApp
 			var logRequestIn = new Infrastructure.Models.DTO.LogRequestInDTO();
 			logRequestIn.IdEndPoint = (int)EndPointEnum.GetIssueJira;
 
-            var connectionString = Environment.GetEnvironmentVariable("ConnectionStringDB", EnvironmentVariableTarget.Process);
-            string token = Environment.GetEnvironmentVariable("TokenJira", EnvironmentVariableTarget.Process).ToString();
-            string timeZone = Environment.GetEnvironmentVariable("TimeZone", EnvironmentVariableTarget.Process).ToString();
-            //var connectionString = "Server=manatee.database.windows.net;Database=PuertasTransmilenioDB;User Id=administrador;Password=2022/M4n4t334zur3;";
-            //string token = "ZGVzYXJyb2xsb2NjQG1hbmF0ZWVpbmdlbmllcmlhLmNvbTpoZlV0Z1o5UkZHb1F5MlNmSDdzQ0Y5QTY=";
-            //string timeZone = "SA Pacific Standard Time";
+            //var connectionString = Environment.GetEnvironmentVariable("ConnectionStringDB", EnvironmentVariableTarget.Process);
+            //string token = Environment.GetEnvironmentVariable("TokenJira", EnvironmentVariableTarget.Process).ToString();
+            //string timeZone = Environment.GetEnvironmentVariable("TimeZone", EnvironmentVariableTarget.Process).ToString();
+            var connectionString = "Server=manatee.database.windows.net;Database=PuertasTransmilenioDB;User Id=administrador;Password=2022/M4n4t334zur3;";
+            string token = "ZGVzYXJyb2xsb2NjQG1hbmF0ZWVpbmdlbmllcmlhLmNvbTpoZlV0Z1o5UkZHb1F5MlNmSDdzQ0Y5QTY=";
+            string timeZone = "SA Pacific Standard Time";
             General DBAccess = new General(connectionString);
 			 
 			try
@@ -140,7 +140,7 @@ namespace MQTT.FunctionApp
 		public static List<Models.IssueDTO> getTicketsFromJira(int start, int max, string token, Models.Filters filters, string timeZone, ILogger log, Guid guid, string msgError) {
             //string uri = Environment.GetEnvironmentVariable("urljira", EnvironmentVariableTarget.Process);
             //string uri = "https://assaabloymda.atlassian.net/rest/api/2/search";
-            string uri = "https://manateecc.atlassian.net/rest/api/2/search";
+            string uri = Constantes.URI+ "/search";
             string resultJira;
             uri = $"{uri}?{filters.resultQuery}" + "&maxResults=" + max + "&startAt=" + start;
 
@@ -209,42 +209,42 @@ namespace MQTT.FunctionApp
         public static Field ConverJsonInField(JObject fieldObject) {
             Field field = new Field();
 
-            if (fieldObject.ContainsKey("customfield_10057") && fieldObject.TryGetValue("customfield_10057", out JToken customfield_10057) && customfield_10057.Type != JTokenType.Null)
+            if (fieldObject.TryGetValue(Constantes.Estacion, out JToken estacion) && estacion.Type != JTokenType.Null)
             {
-                Category estacion = new Category();
-                estacion.Value = fieldObject["customfield_10057"]["value"].Value<string>();
-                field.Estacion = estacion;
+                Category Estacion = new Category();
+                Estacion.Value = fieldObject[Constantes.Estacion]["value"].Value<string>();
+                field.Estacion = Estacion;
             }
             else
             {
                 field.Estacion = null;
             }
 
-            if (fieldObject.ContainsKey("customfield_10058") && fieldObject.TryGetValue("customfield_10058", out JToken customField10056) && customField10056.Type != JTokenType.Null)
+            if (fieldObject.TryGetValue(Constantes.Vagon, out JToken vagon) && vagon.Type != JTokenType.Null)
             {
                 Category Vagon = new Category();
-                Vagon.Value = fieldObject["customfield_10058"]["value"].Value<string>();
+                Vagon.Value = fieldObject[Constantes.Vagon]["value"].Value<string>();
                 field.Vagon = Vagon;
-            }else
+            } else
             {
                 field.Vagon = null;
             }
 
-            if (fieldObject.ContainsKey("customfield_10060") && fieldObject.TryGetValue("customfield_10060", out JToken customfield_10060) && customfield_10060.Type != JTokenType.Null)
+            if (fieldObject.TryGetValue(Constantes.IdentificacionComponente, out JToken IdentificacionComponente) && IdentificacionComponente.Type != JTokenType.Null)
             {
-                field.IdentificacionComponente = fieldObject["customfield_10060"].Value<string>();
+                field.IdentificacionComponente = fieldObject[Constantes.IdentificacionComponente].Value<string>();
             }
             else
             {
-                field.IdentificacionComponente= null;
+                field.IdentificacionComponente = null;
             }
 
 
             //Category tipoDeComponente = fieldObject["customfield_10070"].Value<Category>();
-            if (fieldObject.ContainsKey("customfield_10088") && fieldObject.TryGetValue("customfield_10088", out JToken customfield_10088) && customfield_10088.Type != JTokenType.Null)
+            if (fieldObject.TryGetValue(Constantes.TipoDeComponente, out JToken TipoDeComponente) && TipoDeComponente.Type != JTokenType.Null)
             {
                 Category tipoDeComponente = new Category();
-                tipoDeComponente.Value = fieldObject["customfield_10088"]["value"].Value<string>();
+                tipoDeComponente.Value = fieldObject[Constantes.TipoDeComponente]["value"].Value<string>();
                 field.TipoDeComponente = tipoDeComponente;
             }
             else
@@ -252,7 +252,7 @@ namespace MQTT.FunctionApp
                 field.TipoDeComponente = null;
             }
 
-            if (fieldObject.ContainsKey("customfield_10059") && fieldObject.TryGetValue("customfield_10059", out JToken customfield_10059) && customfield_10059.Type != JTokenType.Null)
+            if (fieldObject.TryGetValue(Constantes.IdentificacionSerial, out JToken IdentificacionSerial) && IdentificacionSerial.Type != JTokenType.Null)
             {
                 field.IdentificacionSerial = fieldObject["customfield_10059"].Value<string>();
             }
@@ -261,21 +261,21 @@ namespace MQTT.FunctionApp
                 field.IdentificacionSerial = null;
             }
 
-            if (fieldObject.TryGetValue("customfield_10061", out JToken customfield_10061) && customfield_10061.Type != JTokenType.Null)
+            if (fieldObject.TryGetValue(Constantes.TipoDeServicio, out JToken TipoDeServicio) && TipoDeServicio.Type != JTokenType.Null)
             {
                 Category tipoDeServicio = new Category();
-                tipoDeServicio.Value = fieldObject["customfield_10061"]["value"].Value<string>();
+                tipoDeServicio.Value = fieldObject[Constantes.TipoDeServicio]["value"].Value<string>();
                 field.TipoDeServicio = tipoDeServicio;
             }
             else
             {
-                field.TipoDeServicio= null;
+                field.TipoDeServicio = null;
             }
 
-            if ( fieldObject.TryGetValue("customfield_10064", out JToken customfield_10064) && customfield_10064.Type != JTokenType.Null)
+            if (fieldObject.TryGetValue(Constantes.ClaseDeFallo, out JToken ClaseDeFallo) && ClaseDeFallo.Type != JTokenType.Null)
             {
                 Category claseDeFallo = new Category();
-                claseDeFallo.Value = fieldObject["customfield_10064"]["value"].Value<string>();
+                claseDeFallo.Value = fieldObject[Constantes.ClaseDeFallo]["value"].Value<string>();
                 field.ClaseDeFallo = claseDeFallo;
             }
             else
@@ -283,9 +283,9 @@ namespace MQTT.FunctionApp
                 field.ClaseDeFallo = null;
             }
 
-            if (fieldObject.TryGetValue("customfield_10069", out JToken customfield_10069) && customfield_10069.Type != JTokenType.Null)
+            if (fieldObject.TryGetValue(Constantes.DescripcionDeFallo, out JToken DescripcionDeFallo) && DescripcionDeFallo.Type != JTokenType.Null)
             {
-                var descripcionDeFalloArray = fieldObject["customfield_10069"].Value<JArray>();
+                var descripcionDeFalloArray = fieldObject[Constantes.DescripcionDeFallo].Value<JArray>();
                 List<Category> descripcionDeFallo = new List<Category>();
                 foreach (JObject dataItem in descripcionDeFalloArray)
                 {
@@ -300,9 +300,9 @@ namespace MQTT.FunctionApp
                 field.DescripcionDeFallo = null;
             }
 
-            if (fieldObject["created"].Value<DateTime>() != null)
+            if (fieldObject[Constantes.Created].Value<DateTime>() != null)
             {
-                DateTime created = fieldObject["created"].Value<DateTime>();
+                DateTime created = fieldObject[Constantes.Created].Value<DateTime>();
                 field.created = created;
             }
             else
@@ -310,18 +310,18 @@ namespace MQTT.FunctionApp
                 field.created = null;
             }
 
-            if (fieldObject["statuscategorychangedate"].Value<DateTime>() != null)
+            if (fieldObject[Constantes.StatusCategoryChangeDate].Value<DateTime>() != null)
             {
-                DateTime statuscategorychangedate = fieldObject["statuscategorychangedate"].Value<DateTime>();
+                DateTime statuscategorychangedate = fieldObject[Constantes.StatusCategoryChangeDate].Value<DateTime>();
                 field.statuscategorychangedate = statuscategorychangedate;
             }
             else
             {
                 field.statuscategorychangedate = null;
             }
-            if (fieldObject.ContainsKey("customfield_10071") && fieldObject.TryGetValue("customfield_10071", out JToken customfield_10071) && customfield_10071.Type != JTokenType.Null)
+            if (fieldObject.TryGetValue(Constantes.FechayHoraDeLlegadaAEstacion, out JToken Fechay_Hora_De_Llegada_Estacion) && Fechay_Hora_De_Llegada_Estacion.Type != JTokenType.Null)
             {
-                DateTime FechayHoraDeLlegadaAEstacion = fieldObject["customfield_10071"].Value<DateTime>();
+                DateTime FechayHoraDeLlegadaAEstacion = fieldObject[Constantes.FechayHoraDeLlegadaAEstacion].Value<DateTime>();
                 field.FechayHoraDeLlegadaAEstacion = FechayHoraDeLlegadaAEstacion;
             }
             else
@@ -329,26 +329,26 @@ namespace MQTT.FunctionApp
                 field.FechayHoraDeLlegadaAEstacion = null;
             }
 
-            if (fieldObject.TryGetValue("customfield_10072", out JToken customfield_10072) && customfield_10072.Type != JTokenType.Null)
+            if (fieldObject.TryGetValue(Constantes.DescripcionRepuesto, out JToken DescripcionRepuesto) && DescripcionRepuesto.Type != JTokenType.Null)
             {
-                var DescripcionRepuestoArray = fieldObject["customfield_10072"].Value<JArray>();
-                List<Category> DescripcionRepuesto = new List<Category>();
-                foreach (JObject dataItem in DescripcionRepuestoArray)
+                var descripcionRepuestoArray = fieldObject[Constantes.DescripcionRepuesto].Value<JArray>();
+                List<Category> descripcionRepuesto = new List<Category>();
+                foreach (JObject dataItem in descripcionRepuestoArray)
                 {
                     Category temp = new Category();
                     temp.Value = dataItem["value"].Value<string>();
-                    DescripcionRepuesto.Add(temp);
+                    descripcionRepuesto.Add(temp);
                 }
-                field.DescripcionRepuesto = DescripcionRepuesto;
+                field.DescripcionRepuesto = descripcionRepuesto;
             }
             else
             {
                 field.DescripcionRepuesto = null;
             }
 
-            if (fieldObject.TryGetValue("customfield_10081", out JToken customfield_10081) && customfield_10081.Type != JTokenType.Null)
+            if (fieldObject.TryGetValue(Constantes.TipoReparacion, out JToken tipoReparacion) && tipoReparacion.Type != JTokenType.Null)
             {
-                var TipoReparacionArray = fieldObject["customfield_10081"].Value<JArray>();
+                var TipoReparacionArray = fieldObject[Constantes.TipoReparacion].Value<JArray>();
                 List<Category> TipoReparacion = new List<Category>();
                 foreach (JObject dataItem in TipoReparacionArray)
                 {
@@ -363,9 +363,9 @@ namespace MQTT.FunctionApp
                 field.TipoReparacion = null;
             }
 
-            if (fieldObject.TryGetValue("customfield_10075", out JToken customfield_10075) && customfield_10075.Type != JTokenType.Null)
+            if (fieldObject.TryGetValue(Constantes.ListadoAjustesPuerta, out JToken listadoAjustePuerta) && listadoAjustePuerta.Type != JTokenType.Null)
             {
-                var ListadoAjustesPuertaArray = fieldObject["customfield_10075"].Value<JArray>();
+                var ListadoAjustesPuertaArray = fieldObject[Constantes.ListadoAjustesPuerta].Value<JArray>();
                 List<Category> ListadoAjustesPuerta = new List<Category>();
                 foreach (JObject dataItem in ListadoAjustesPuertaArray)
                 {
@@ -380,9 +380,9 @@ namespace MQTT.FunctionApp
                 field.ListadoConfiguracionPuerta = null;
             }
 
-            if (fieldObject.TryGetValue("customfield_10076", out JToken customfield_10076) && customfield_10076.Type != JTokenType.Null)
+            if (fieldObject.TryGetValue(Constantes.ListadoConfiguracionPuerta, out JToken customfield_10076) && customfield_10076.Type != JTokenType.Null)
             {
-                var ListadoConfiguracionPuertaArray = fieldObject["customfield_10076"].Value<JArray>();
+                var ListadoConfiguracionPuertaArray = fieldObject[Constantes.ListadoConfiguracionPuerta].Value<JArray>();
                 List<Category> ListadoConfiguracionPuerta = new List<Category>();
                 foreach (JObject dataItem in ListadoConfiguracionPuertaArray)
                 {
@@ -397,9 +397,9 @@ namespace MQTT.FunctionApp
                 field.ListadoConfiguracionPuerta = null;
             }
 
-            if (fieldObject.TryGetValue("customfield_10077", out JToken customfield_10077) && customfield_10077.Type != JTokenType.Null)
+            if (fieldObject.TryGetValue(Constantes.ListadoAjustesITS, out JToken listadoAjusteIts) && listadoAjusteIts.Type != JTokenType.Null)
             {
-                var ListadoAjustesITSArray = fieldObject["customfield_10077"].Value<JArray>();
+                var ListadoAjustesITSArray = fieldObject[Constantes.ListadoAjustesITS].Value<JArray>();
                 List<Category> ListadoAjustesITS = new List<Category>();
                 foreach (JObject dataItem in ListadoAjustesITSArray)
                 {
@@ -414,9 +414,9 @@ namespace MQTT.FunctionApp
                 field.ListadoAjustesITS = null;
             }
 
-            if (fieldObject.TryGetValue("customfield_10078", out JToken customfield_10078) && customfield_10078.Type != JTokenType.Null)
+            if (fieldObject.TryGetValue(Constantes.ListadoConfiguracionITS, out JToken listadoConfiguracionITS) && listadoConfiguracionITS.Type != JTokenType.Null)
             {
-                var ListadoConfiguracionITSArray = fieldObject["customfield_10078"].Value<JArray>();
+                var ListadoConfiguracionITSArray = fieldObject[Constantes.ListadoConfiguracionITS].Value<JArray>();
                 List<Category> ListadoConfiguracionITS = new List<Category>();
                 foreach (JObject dataItem in ListadoConfiguracionITSArray)
                 {
@@ -431,9 +431,9 @@ namespace MQTT.FunctionApp
                 field.ListadoConfiguracionITS = null;
             }
 
-            if (fieldObject.TryGetValue("customfield_10086", out JToken customfield_10086) && customfield_10086.Type != JTokenType.Null)
+            if (fieldObject.TryGetValue(Constantes.ListadoConfiguracionRFID, out JToken listadoConfiguracionRFID) && listadoConfiguracionRFID.Type != JTokenType.Null)
             {
-                var ListadoConfiguracionRFIDArray = fieldObject["customfield_10086"].Value<JArray>();
+                var ListadoConfiguracionRFIDArray = fieldObject[Constantes.ListadoConfiguracionRFID].Value<JArray>();
                 List<Category> ListadoConfiguracionRFID = new List<Category>();
                 foreach (JObject dataItem in ListadoConfiguracionRFIDArray)
                 {
@@ -448,16 +448,16 @@ namespace MQTT.FunctionApp
                 field.ListadoConfiguracionRFID = null;
             }
 
-            if (fieldObject.TryGetValue("customfield_10105", out JToken customfield_10105) && customfield_10105.Type != JTokenType.Null)
+            if (fieldObject.TryGetValue(Constantes.DescripcionReparacion, out JToken DescripcionReparacion) && DescripcionReparacion.Type != JTokenType.Null)
             {
-                field.DescripcionReparacion = fieldObject["customfield_10105"].Value<string>();
+                field.DescripcionReparacion = fieldObject[Constantes.DescripcionReparacion].Value<string>();
             }
             else
             {
                 field.DescripcionReparacion = null;
             }
 
-            if (fieldObject.TryGetValue("customfield_10104", out JToken customfield_10104) && customfield_10104.Type != JTokenType.Null)
+            if (fieldObject.TryGetValue(Constantes.DiagnosticoCausa, out JToken DiagnosticoCausa) && DiagnosticoCausa.Type != JTokenType.Null)
             {
                 field.DiagnosticoCausa = fieldObject["customfield_10104"].Value<string>();
             }
@@ -465,10 +465,10 @@ namespace MQTT.FunctionApp
             {
                 field.DiagnosticoCausa = null;
             }
-            if (fieldObject.TryGetValue("customfield_10067", out JToken customfield_10067) && customfield_10067.Type != JTokenType.Null)
+            if (fieldObject.TryGetValue(Constantes.TipoCausa, out JToken tipoCausa) && tipoCausa.Type != JTokenType.Null)
             {
                 Category TipoCausa = new Category();
-                TipoCausa.Value = fieldObject["customfield_10067"]["value"].Value<string>();
+                TipoCausa.Value = fieldObject[Constantes.TipoCausa]["value"].Value<string>();
                 field.TipoCausa = TipoCausa;
             }
             else
@@ -476,9 +476,9 @@ namespace MQTT.FunctionApp
                 field.TipoCausa = null;
             }
 
-            if (fieldObject.TryGetValue("customfield_10101", out JToken customfield_10101) && customfield_10101.Type != JTokenType.Null)
+            if (fieldObject.TryGetValue(Constantes.FechaSolucion, out JToken fechaSolucion) && fechaSolucion.Type != JTokenType.Null)
             {
-                DateTime FechaSolucion = fieldObject["customfield_10101"].Value<DateTime>();
+                DateTime FechaSolucion = fieldObject[Constantes.FechaSolucion].Value<DateTime>();
                 field.FechaSolucion = FechaSolucion;
             }
             else
@@ -486,10 +486,10 @@ namespace MQTT.FunctionApp
                 field.FechaSolucion = null;
             }
 
-            if (fieldObject["status"]["name"].Value<string>() != null)
+            if (fieldObject.TryGetValue(Constantes.Status, out JToken Status) && Status.Type != JTokenType.Null)
             {
                 Status status = new Status();
-                status.name = fieldObject["status"]["name"].Value<string>();
+                status.name = fieldObject[Constantes.Status]["name"].Value<string>();
                 field.status = status;
             }
             else
