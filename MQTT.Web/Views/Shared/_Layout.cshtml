@@ -11,7 +11,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - MQTT.Web</title>   
+    <title>@ViewData["Title"]</title>   
     <link rel="stylesheet" href="~/css/sweetalert/sweetalert2.min.css" />
     <link rel="stylesheet" href="~/flowbite/styles.css" />
     <link rel="stylesheet" href="~/css/site.css" />
@@ -110,7 +110,7 @@
                 <aside class="w-64" aria-label="Sidebar">
                     <div class="overflow-y-auto py-4 px-3 rounded ">
                         <ul class="space-y-2">
-                            @if (ViewBag.Menu != "admin")
+                            @if (ViewBag.Menu != "user")
                             {
                             <li>
                                 <a class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
@@ -337,10 +337,10 @@
     </div>
     <footer id="footer"
         class="p-4 bg-white rounded-lg shadow md:flex md:items-center md:justify-between md:p-6 dark:bg-gray-800 border-top footer text-muted footer">
-        <span class="text-sm text-white-500 sm:text-center dark:text-gray-400 text-white">&copy; 2022 - MQTT.Web - <a
+        <span class="text-sm text-white-500 sm:text-center dark:text-gray-400 text-white">&copy; 2022 - <a
                 href="https://flowbite.com/" class="hover:underline">@ViewBag.Empresa™</a>. All Rights Reserved.
         </span>
-        <ul class="flex flex-wrap items-center mt-3 text-sm text-gray-500 dark:text-gray-400 sm:mt-0 text-white">
+        @*<ul class="flex flex-wrap items-center mt-3 text-sm text-gray-500 dark:text-gray-400 sm:mt-0 text-white">
             <li>
                 <a href="#" class="mr-4 hover:underline md:mr-6 ">About</a>
             </li>
@@ -353,7 +353,7 @@
             <li>
                 <a href="#" class="hover:underline">Contact</a>
             </li>
-        </ul>
+        </ul>*@
     </footer>
     <script>
         var dataEmpresa = "@ViewBag.Empresa";

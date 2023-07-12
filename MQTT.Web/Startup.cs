@@ -49,7 +49,7 @@ namespace MQTT.Web
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Messages}/{action=Index}/{id?}");
+                    pattern: "{controller=Tickets}/{action=Index}/{id?}");
 
                 endpoints.MapRazorPages();
             });

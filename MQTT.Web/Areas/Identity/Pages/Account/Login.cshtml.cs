@@ -74,7 +74,8 @@ namespace MQTT.Web.Areas.Identity.Pages.Account
         {
             //returnUrl = Url.Content("~/Tickets/Index");
             //returnUrl = User.IsInRole("Administrador") ? Url.Content("~/Tickets/Index") : Url.Content("~/Messages/Index");
-            returnUrl = Input.Email.Equals("admin@admin.com", StringComparison.OrdinalIgnoreCase) ? Url.Content("~/Tickets/Index") : Url.Content("~/Messages/Index");
+            //returnUrl = Input.Email.Equals("admin@admin.com", StringComparison.OrdinalIgnoreCase) ? Url.Content("~/Tickets/Index") : Url.Content("~/Messages/Index");
+            returnUrl = Input.Email.Equals("admin@admin.com", StringComparison.OrdinalIgnoreCase) ? Url.Content("~/Messages/Index") : Url.Content("~/Tickets/Index");
 
             if (ModelState.IsValid)
             {
