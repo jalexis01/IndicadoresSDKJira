@@ -8,7 +8,10 @@ namespace DashboarJira.Services
 {
     public class JiraAccess
     {
-        string jiraUrl = "https://manateecc.atlassian.net/";
+        //string jiraUrl = "https://manateecc.atlassian.net/";
+        //string username = "desarrollocc@manateeingenieria.com";
+        //string password = "ATATT3xFfGF0ZRHIEZTEJVRnhNKviH0CGed6QXqCDMj5bCmKSEbO00UUjHUb3yDcaA4YD1SHohyDr4qnwRx2x4Tu_S_QW_xlGIcIUDvL7CFKEg47_Jcy4Dmq6YzO0dvqB3qeT-EVWfwJ2jJ-9vEUfsqXavD0IIGA7DAZHGCtIWhxgwKIbAWsmeA=038B810D";
+        string jiraUrl = "https://assaabloymda.atlassian.net/";
         string username = "desarrollocc@manateeingenieria.com";
         string password = "ATATT3xFfGF0ZRHIEZTEJVRnhNKviH0CGed6QXqCDMj5bCmKSEbO00UUjHUb3yDcaA4YD1SHohyDr4qnwRx2x4Tu_S_QW_xlGIcIUDvL7CFKEg47_Jcy4Dmq6YzO0dvqB3qeT-EVWfwJ2jJ-9vEUfsqXavD0IIGA7DAZHGCtIWhxgwKIbAWsmeA=038B810D";
 
@@ -24,8 +27,17 @@ namespace DashboarJira.Services
         {
             try
             {
+                var jql = "";
                 //created >= 2023-04-04 AND created <= 2023-04-13 AND issuetype = "Solicitud de Mantenimiento" AND resolution = Unresolved AND "Clase de fallo" = AIO AND "Identificacion componente" ~ 9119-WA-OR-1 ORDER BY key DESC, "Time to resolution" ASC
-                var jql = "project = 'Centro de Control' and issuetype = 'Solicitud de Mantenimiento'";
+                if (jiraUrl == "https://assaabloymda.atlassian.net/")
+                {
+                    jql = "project = 'Mesa de Ayuda' and issuetype = 'Solicitud de Mantenimiento'";
+                }
+                else
+                {
+                    jql = "project = 'Centro de Control' and issuetype = 'Solicitud de Mantenimiento'";
+                }
+
                 if (startDate != null && endDate != null)
                 {
                     jql += " AND " + "created >= " + startDate + " AND " + "created <= " + endDate;
@@ -67,7 +79,7 @@ namespace DashboarJira.Services
             try
             {
                 //created >= 2023-04-04 AND created <= 2023-04-13 AND issuetype = "Solicitud de Mantenimiento" AND resolution = Unresolved AND "Clase de fallo" = AIO AND "Identificacion componente" ~ 9119-WA-OR-1 ORDER BY key DESC, "Time to resolution" ASC
-                var jql = "project = 'Centro de Control' and issuetype = 'Solicitud de Mantenimiento'";
+                var jql = "project = 'Mesa de Ayuda' and issuetype = 'Solicitud de Mantenimiento'";
                 if (startDate != null && endDate != null)
                 {
                     jql += " AND " + "created >= " + startDate + " AND " + "created <= " + endDate;
@@ -193,9 +205,10 @@ namespace DashboarJira.Services
 
 
             temp.fecha_apertura = issue.Created == null ? null : DateTime.Parse(issue.Created.Value.ToString());
-            // temp.fecha_cierre = (issue.CustomFields["Fecha de solucion"] != null ? DateTime.Parse(issue.CustomFields["Fecha de solucion"].Values[0]) : null);
+
 
             temp.fecha_arribo_locacion = (issue.CustomFields["Fecha y Hora de Llegada a Estacion"] != null ? DateTime.Parse(issue.CustomFields["Fecha y Hora de Llegada a Estacion"].Values[0]) : null);
+            
 
 
             temp.fecha_cierre = (issue.CustomFields["Fecha de solucion"] != null ? DateTime.Parse(issue.CustomFields["Fecha de solucion"].Values[0]) : null);
