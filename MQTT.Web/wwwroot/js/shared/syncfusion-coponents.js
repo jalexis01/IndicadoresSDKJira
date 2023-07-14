@@ -601,7 +601,7 @@ function setTreeGrid(data, dataColumns, exportFunctions = null, add = false, nam
         allowSorting: true,
         allowFiltering: true,
         filterSettings: { type: 'Menu' },
-        pageSettings: { pageCount: 3 },
+        pageSettings: { pageCount: 5, pageSizes: true, currentPage: 1 },
         width: '100%',
         height: '100%',
         locale: 'es-CO',
