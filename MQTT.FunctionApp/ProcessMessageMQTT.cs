@@ -185,22 +185,7 @@ namespace MQTT.FunctionApp
         {
             try
             {
-                //add = false;
-                //Dictionary<string, string> dctDataFields = GetHeaderFromJson(dataJson, fieldWeft);
 
-                //var id = dctDataFields[messageType.FieldIdentifierMessage];
-                //long? idHeaderMessage = MessagesDAL.GetHeaderMessageById(DBAccess, _headerFields, messageType.FieldIdentifierMessage, id);
-
-                //if (idHeaderMessage.HasValue)
-                //{
-                //    dctDataFields.Remove(messageType.FieldIdentifierMessage);
-                //    MessagesDAL.UpdateHeaderMessage(DBAccess, _headerFields, dctDataFields, idHeaderMessage.Value);
-                //}
-                //else
-                //{
-                //    idHeaderMessage = MessagesDAL.AddHeaderMessage(DBAccess, _headerFields, messageType.Id, dctDataFields);
-                //    add = true;
-                //}
 
 
                 add = false;
