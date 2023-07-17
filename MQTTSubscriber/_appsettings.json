@@ -5,9 +5,9 @@
   "appSettings": {
     "identifierField": "codigoEvento",
     //"TCPServer": "test.mosquitto.org",
-    "TCPServer": "4.236.168.64",
+    //"TCPServer": "4.236.168.64",
     //"TCPServer": "20.228.195.5",
-    //"TCPServer": "20.228.178.62",
+    "TCPServer": "20.228.178.62",
     "port": 1883,
     "Topic": "S1"
   }

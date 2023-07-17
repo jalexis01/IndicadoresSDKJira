@@ -27,12 +27,15 @@ namespace MQTT.FunctionApp
         [FunctionName("ProcessMessageMQTT")]
         public static async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequest req, ILogger log)
         {
+            var watch = new System.Diagnostics.Stopwatch();
+
+            watch.Start();
             LogMessageDTO logMsg = new LogMessageDTO();
             DateTime dtIni = DateTime.UtcNow;
             try
             {
-                var connectionString = Environment.GetEnvironmentVariable("ConnectionStringDB", EnvironmentVariableTarget.Process);
-                //var connectionString = "Server=manatee.database.windows.net;Database=PuertasTransmilenioDBQA;User Id=administrador;Password=2022/M4n4t334zur3;";
+                //var connectionString = Environment.GetEnvironmentVariable("ConnectionStringDB", EnvironmentVariableTarget.Process);
+                var connectionString = "Server=manatee.database.windows.net;Database=PuertasTransmilenioDBQA;User Id=administrador;Password=2022/M4n4t334zur3;";
                 DBAccess = new General(connectionString);
                 _messagesType = MessagesDAL.GetAllMessageTypes(DBAccess);
                 _headerFields = MessagesDAL.GetHeaderFields(DBAccess);
@@ -85,6 +88,9 @@ namespace MQTT.FunctionApp
             {
                 AddLogExecution(logMsg.Id, logMsg.Id, dtIni, DateTime.UtcNow, $"Error FX(ProcessMessageMQTT)-ProcessLogAsHistory: {ex.Message} {ex.InnerException}");
             }
+            watch.Stop();
+
+            log.LogInformation($"Execution Time: {watch.ElapsedMilliseconds} ms");
             return new OkObjectResult("oK");
         }
         private static void AddLogExecution(long? idLogMessageInInit, long? idLogMessageInEnd, DateTime dtInit, DateTime dtEnd, string observations = null)
@@ -185,9 +191,6 @@ namespace MQTT.FunctionApp
         {
             try
             {
-
-
-
                 add = false;
                 Dictionary<string, string> dctDataFields = GetHeaderFromJson(dataJson, fieldWeft);
                 long? idHeaderMessage;
