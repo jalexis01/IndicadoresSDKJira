@@ -47,7 +47,7 @@ namespace DashboarJira.Services
 
                     jql += " AND " + "'Identificacion componente' ~ " + idComponente;
                 }
-                jql += " AND 'Descripcion de la reparacion' is not empty ";
+                //jql += " AND 'Tipo de servicio' is not empty ";
                 jql += " ORDER BY key DESC, 'Time to resolution' ASC";
           
                 Task<IPagedQueryResult<Issue>> issues = null;
@@ -250,8 +250,19 @@ namespace DashboarJira.Services
             temp.tipo_causa = (issue.CustomFields["Tipo de causa"] != null ? issue.CustomFields["Tipo de causa"].Values[0] : "null");
 
 
+            //temp.estado_ticket = issue.Status.Name;
+            
+            if (issue.Status.Name == "Cerrado" || issue.Status.Name == "DESCARTADO")
+            {
+                temp.estado_ticket = issue.Status.Name;
+            }
+            else
+            {
+                temp.estado_ticket = "Abierto";
+            }
+            if(issue.Status == null)
             temp.estado_ticket = (issue.Status != null ? issue.Status.Name : "null");
-
+            
             temp.descripcion = (issue.Description != null ? issue.Description : "null");
 
             return temp;
