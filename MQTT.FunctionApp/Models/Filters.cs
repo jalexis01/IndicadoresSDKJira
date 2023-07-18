@@ -126,7 +126,7 @@ namespace MQTT.FunctionApp.Models
             {
                 resultQuery += $" AND key = {this.idTicket}";
             }
-            resultQuery += " AND 'Descripcion de la reparacion' is not empty ";
+            resultQuery += " AND 'Tipo de servicio' is not empty ";
 
             return results;
         }
