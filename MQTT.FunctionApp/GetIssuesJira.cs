@@ -129,8 +129,10 @@ namespace MQTT.FunctionApp
                 issueDTO.tipoMantenimiento = string.IsNullOrEmpty(equivalence) ? issueDTO.tipoMantenimiento : equivalence;
 
                 equivalence = string.Empty;
+                Console.WriteLine($"Valor de issueDTO.estadoTicket antes de la consulta: {issueDTO.estadoTicket}");
                 equivalence = equivalenceServiceType.Where(e => e.Name == issueDTO.estadoTicket).Select(e => e.Value).FirstOrDefault();
-                issueDTO.estadoTicket = string.IsNullOrEmpty(equivalence) ? "Abierto" : equivalence;
+                Console.WriteLine($"Valor de equivalence después de la consulta: {equivalence}");
+                issueDTO.estadoTicket = fields.status.name != "Cerrado" && fields.status.name != "DESCARTADO" ? "Abierto" : fields.status.name == "Cerrado" ? "Cerrado" : "DESCARTADO";
                 if (issueDTO.tipoMantenimiento != null)
                     result.Add(issueDTO);
             }

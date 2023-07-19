@@ -34,8 +34,8 @@ namespace MQTT.FunctionApp
             DateTime dtIni = DateTime.UtcNow;
             try
             {
-                //var connectionString = Environment.GetEnvironmentVariable("ConnectionStringDB", EnvironmentVariableTarget.Process);
-                var connectionString = "Server=manatee.database.windows.net;Database=PuertasTransmilenioDBQA;User Id=administrador;Password=2022/M4n4t334zur3;";
+                var connectionString = Environment.GetEnvironmentVariable("ConnectionStringDB", EnvironmentVariableTarget.Process);
+                //var connectionString = "Server=manatee.database.windows.net;Database=PuertasTransmilenioDBQA;User Id=administrador;Password=2022/M4n4t334zur3;";
                 DBAccess = new General(connectionString);
                 _messagesType = MessagesDAL.GetAllMessageTypes(DBAccess);
                 _headerFields = MessagesDAL.GetHeaderFields(DBAccess);
