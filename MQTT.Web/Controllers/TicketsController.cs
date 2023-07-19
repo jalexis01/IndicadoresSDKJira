@@ -90,6 +90,19 @@ namespace MQTT.Web.Controllers
                 throw ex;
             }
         }
+        public IActionResult getImageTicket(string idTicket)
+        {
+            try
+            {
+                JiraAccess jira = new JiraAccess();
+                List<byte[]> ticket = jira.GetAttachmentImages(idTicket);
+                return Ok(ticket);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 
 }

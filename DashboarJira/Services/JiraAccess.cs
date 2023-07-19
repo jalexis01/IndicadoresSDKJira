@@ -3,6 +3,15 @@ using DashboarJira.Model;
 using Newtonsoft.Json.Linq;
 using System;
 using System.ComponentModel;
+using System.Collections.Generic;
+using System.Net.Http;
+using System.Text;
+using System.Threading.Tasks;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.IO;
+using System.Net.Http;
 
 namespace DashboarJira.Services
 {
@@ -272,9 +281,35 @@ namespace DashboarJira.Services
         public IssueJira getIssueJira(string id)
         {
             var issue = jira.Issues.GetIssueAsync(id).Result;
-
+            var attachments = issue.GetAttachmentsAsync().Result.FirstOrDefault();
+            Console.WriteLine(attachments.Id);
+            
+            var tempFile = Path.GetTempFileName();
             return convertIssueInIssueJira(issue);
 
+        }
+
+        public List<byte[]> GetAttachmentImages(string id)
+        {
+            var issue = jira.Issues.GetIssueAsync(id).Result;
+            var attachments = issue.GetAttachmentsAsync().Result;
+            List<byte[]> imageList = new List<byte[]>();
+
+            using (HttpClient client = new HttpClient())
+            {
+                string credentials = Convert.ToBase64String(Encoding.ASCII.GetBytes($"{username}:{password}"));
+                client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", credentials);
+
+                foreach (var attachment in attachments)
+                {
+                    string imageUrl = $"{jiraUrl}/rest/api/2/attachment/content/{attachment.Id}";
+
+                    byte[] imageBytes = client.GetByteArrayAsync(imageUrl).Result;
+                    imageList.Add(imageBytes);
+                }
+            }
+
+            return imageList;
         }
 
         public IssueJira convertIssueInIssueJira(Issue issue)
