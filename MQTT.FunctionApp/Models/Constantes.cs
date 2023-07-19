@@ -6,6 +6,9 @@ namespace MQTT.FunctionApp.Models
 {
     public class Constantes
     {
+
+
+        /*Manatee*/
         //public static string Estacion = "customfield_10057";
         //public static string Vagon = "customfield_10058";
         //public static string IdentificacionComponente = "customfield_10060";
@@ -31,6 +34,11 @@ namespace MQTT.FunctionApp.Models
         //public static string Status = "status";
 
         //public static string URI = "https://manateecc.atlassian.net/rest/api/2";
+
+
+
+        /*Assaabloy*/
+
 
 
         public const string Estacion = "customfield_10052";

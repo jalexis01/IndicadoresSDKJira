@@ -12,11 +12,11 @@ namespace MQTT.Subscriber.BL
     public class SubscriberBL
     {
 
-        //private readonly string _connectionString = AppSettings.Instance.Configuration["connectionString"].ToString();
-        //private readonly string _identifierField = AppSettings.Instance.Configuration["appSettings:identifierField"].ToString();
-
-        private readonly string _connectionString = "Server=manatee.database.windows.net;Database=PuertasTransmilenioDBQA;User Id=administrador;Password=2022/M4n4t334zur3;";
+        private readonly string _connectionString = AppSettings.Instance.Configuration["connectionString"].ToString();
         private readonly string _identifierField = AppSettings.Instance.Configuration["appSettings:identifierField"].ToString();
+        private string uri = AppSettings.Instance.Configuration["appSettings:url"].ToString();
+        //private readonly string _connectionString = "Server=manatee.database.windows.net;Database=PuertasTransmilenioDBQA;User Id=administrador;Password=2022/M4n4t334zur3;";
+        //private readonly string _identifierField = AppSettings.Instance.Configuration["appSettings:identifierField"].ToString();
 
         private General _objGeneral;
         public General DBAccess { get => _objGeneral; set => _objGeneral = value; }
@@ -33,8 +33,8 @@ namespace MQTT.Subscriber.BL
 
                 var body = System.Text.Json.JsonSerializer.Serialize(log);
                 //string uri = $"https://functionappmqttengine.azurewebsites.net/api/ProcessMessageMQTT?code=_45i4qPZQEDoczQm2Gv4VU4Ag868oWpTmptLXm_EF-IjAzFudc2OzA==";
-                string uri = $"http://localhost:7071/api/ProcessMessageMQTT";
-
+                //string uri = $"http://localhost:7071/api/ProcessMessageMQTT";
+                
                 var response = MQTT.Infrastructure.BL.Requests.GetResponse(uri, "POST", parameters: body);
             }
             catch (Exception ex)

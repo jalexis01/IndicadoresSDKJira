@@ -3,6 +3,7 @@
   "connectionString": "Server=manatee.database.windows.net;Database=PuertasTransmilenioDBQA;User Id=administrador;Password=2022/M4n4t334zur3;",
   //"connectionString": "Server=DESKTOP-LG97MDG\\SQLEXPRESS;Database=EYSIntegration;Trusted_Connection=True;",
   "appSettings": {
+    "url": "https://functionappmqttengineqa.azurewebsites.net/api/ProcessMessageMQTT?code=3QpZnN-BoL6ZAa_FTAjL_Cxi1Lk4PdE55SxoZsnO6XhNAzFuLu7B5Q==",
     "identifierField": "codigoEvento",
     //"TCPServer": "test.mosquitto.org",
     //"TCPServer": "4.236.168.64",
