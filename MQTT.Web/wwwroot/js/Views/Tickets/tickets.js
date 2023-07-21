@@ -96,18 +96,17 @@ function getImageTicket(idTicket) {
     $.ajax({
         url: '/Tickets/getImageTicket?idTicket=' + idTicket,
         data: { idTicket: idTicket },
-        success: function (images) {
-            if (images.length > 0) {
-                var imageElements = '';
-                images.forEach(function (imageBytes) {
-                    var base64String = btoa(String.fromCharCode.apply(null, imageBytes));
-                    var imageUrl = 'data:image/jpeg;base64,' + base64String;
-                    imageElements += '<img src="' + imageUrl + '" style="width: 100%;" />';
-                });
+        success: function (base64Image) {
+            if (base64Image) {
+                // Create an image element and set its source to the base64 image data
+                var imageElement = document.createElement('img');
+                imageElement.src = 'data:image/jpeg;base64,' + base64Image;
+                imageElement.style.width = '100%';
 
+                // Show the image directly in the Swal dialog
                 Swal.fire({
                     title: 'Imágenes del Ticket',
-                    html: imageElements,
+                    html: imageElement,
                     confirmButtonText: 'Cerrar',
                     showCloseButton: true,
                     showConfirmButton: false,

@@ -91,19 +91,30 @@ namespace MQTT.Web.Controllers
                 throw ex;
             }
         }
-        public IActionResult getImageTicket(string idTicket)
+        public IActionResult GetImageTicket(string idTicket)
         {
             try
             {
                 JiraAccess jira = new JiraAccess();
-                List<byte[]> ticket = jira.GetAttachmentImages(idTicket);
-                return new FileContentResult(ticket.SelectMany(x => x).ToArray(), "application/octet-stream");
+                List<byte[]> images = jira.GetAttachmentImages(idTicket);
+
+                if (images.Count > 0)
+                {
+                    byte[] imageData = images[0]; // Assuming you want to return the first image
+                    string base64Image = Convert.ToBase64String(imageData);
+                    return Ok(base64Image);
+                }
+                else
+                {
+                    return NotFound(); // or return some appropriate response when no images are found
+                }
             }
             catch (Exception ex)
             {
-                throw ex;
+                return StatusCode(500, ex.Message); // or handle the exception in an appropriate way
             }
         }
+
 
     }
 

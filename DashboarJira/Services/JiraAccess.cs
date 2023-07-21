@@ -288,7 +288,7 @@ namespace DashboarJira.Services
             return convertIssueInIssueJira(issue);
 
         }
-
+        /*
         public List<byte[]> GetAttachmentImages(string id)
         {
             var issue = jira.Issues.GetIssueAsync(id).Result;
@@ -311,7 +311,29 @@ namespace DashboarJira.Services
 
             return imageList;
         }
+        */
+        public List<byte[]> GetAttachmentImages(string id)
+        {
+            var issue = jira.Issues.GetIssueAsync(id).Result;
+            var attachments = issue.GetAttachmentsAsync().Result;
+            List<byte[]> imageList = new List<byte[]>();
 
+            using (HttpClient client = new HttpClient())
+            {
+                string credentials = Convert.ToBase64String(Encoding.ASCII.GetBytes($"{username}:{password}"));
+                client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", credentials);
+
+                foreach (var attachment in attachments)
+                {
+                    string imageUrl = $"{jiraUrl}/rest/api/2/attachment/content/{attachment.Id}";
+
+                    byte[] imageBytes = client.GetByteArrayAsync(imageUrl).Result;
+                    imageList.Add(imageBytes);
+                }
+            }
+
+            return imageList;
+        }
         public IssueJira convertIssueInIssueJira(Issue issue)
         {
             IssueJira temp = new IssueJira();
