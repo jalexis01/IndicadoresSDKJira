@@ -92,7 +92,42 @@ function ServiceGetTickets() {
         }
     });
 }
+function getImageTicket(idTicket) {
+    $.ajax({
+        url: '/Tickets/getImageTicket?idTicket=' + idTicket,
+        data: { idTicket: idTicket },
+        success: function (base64Image) {
+            if (base64Image) {
+                // Create an image element and set its source to the base64 image data
+                var imageElement = document.createElement('img');
+                imageElement.src = 'data:image/jpeg;base64,' + base64Image;
+                imageElement.style.width = '100%';
 
+                // Show the image directly in the Swal dialog
+                Swal.fire({
+                    title: 'Imágenes del Ticket',
+                    html: imageElement,
+                    confirmButtonText: 'Cerrar',
+                    showCloseButton: true,
+                    showConfirmButton: false,
+                    customClass: {
+                        container: 'swal-wide',
+                    },
+                    width: '80%',
+                    padding: '2rem',
+                    backdrop: true,
+                    allowOutsideClick: true,
+                    allowEscapeKey: false,
+                });
+            } else {
+                Swal.fire('Información', 'El ticket no tiene imágenes adjuntas', 'info');
+            }
+        },
+        error: function () {
+            Swal.fire('Error', 'No se pudo obtener las imágenes del ticket', 'error');
+        }
+    });
+}
 function showMoreInformation(idTicket) {
     $.ajax({
         url: '/Tickets/consultarTicket?idTicket=' + idTicket,
@@ -128,7 +163,7 @@ function showMoreInformation(idTicket) {
             });
         },
         error: function () {
-            Swal.fire('Error', 'No se pudo obtener la información del ticket', 'error');
+           
         }
     });
 }
