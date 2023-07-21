@@ -1,18 +1,18 @@
-var grid = null, multiSelectInput,columns, dataArgs, treeGridObj = null, dropdowns = null, idDrag, dropdownsModal = null, isDrag =false, datepicker=null, datepickerEnd=null, datepickerModal=null, 
-datepickerEndModal=null, dateDocuments =  new Date(Date.now()).toUTCString(), valueFild,beginUpdate, beginCreate;
-var listFunctionalitiesExportGrid = ['ExcelExport','PdfExport', 'CsvExport'];
+var grid = null, multiSelectInput, columns, dataArgs, treeGridObj = null, dropdowns = null, idDrag, dropdownsModal = null, isDrag = false, datepicker = null, datepickerEnd = null, datepickerModal = null,
+    datepickerEndModal = null, dateDocuments = new Date(Date.now()).toUTCString(), valueFild, beginUpdate, beginCreate;
+var listFunctionalitiesExportGrid = ['ExcelExport', 'PdfExport', 'CsvExport'];
 
 
 
 
 
 
-$(document).ready(function(){
+$(document).ready(function () {
     var indicatortypes = [
         { id: 'Shimmer', type: 'Shimmer' },
         { id: 'Spinner', type: 'Spinner' },
     ];
-  });
+});
 
 
 ej.base.enableRipple(true);
@@ -60,19 +60,19 @@ ej.base.L10n.load({
     }
 });
 
-function ActionBeginSet(varUpdate, varCreate){
+function ActionBeginSet(varUpdate, varCreate) {
     beginUpdate = varUpdate;
     beginCreate = varCreate;
 }
 
-function setGrid(data, dataColumns, exportFunctions = null, nameGrid = "Grid"){
+function setGrid(data, dataColumns, exportFunctions = null, nameGrid = "Grid") {
     if (grid != null) {
         grid.dataSource = data;
         return;
     }
-    if(exportFunctions == null ){
+    if (exportFunctions == null) {
         exportFunctions = ['Search']
-    }else{
+    } else {
         exportFunctions.push('Search')
     }
     grid = new ej.grids.Grid({
@@ -81,7 +81,7 @@ function setGrid(data, dataColumns, exportFunctions = null, nameGrid = "Grid"){
         allowExcelExport: true,
         allowPdfExport: true,
         allowCsvExport: true,
-        editSettings: { allowEditing: true, allowEditOnDblClick: false  },
+        editSettings: { allowEditing: true, allowEditOnDblClick: false },
         loadingIndicator: { indicatorType: 'Shimmer' },
         toolbar: exportFunctions,
         locale: 'es-CO',
@@ -100,31 +100,31 @@ function setGrid(data, dataColumns, exportFunctions = null, nameGrid = "Grid"){
     grid.dataBound = () => {
         grid.autoFitColumns()
     };
-    grid.appendTo("#"+nameGrid);
+    grid.appendTo("#" + nameGrid);
     grid.toolbarClick = function (args) {
-        if (args.item.id === nameGrid+'_pdfexport') {
+        if (args.item.id === nameGrid + '_pdfexport') {
             grid.pdfExport(getPdfExportProperties());
         }
-        if (args.item.id === nameGrid+'_excelexport') {
+        if (args.item.id === nameGrid + '_excelexport') {
             grid.excelExport(getExcelExportProperties("exceldocument.xlsx"));
         }
-        if (args.item.id === nameGrid+'_csvexport') {
+        if (args.item.id === nameGrid + '_csvexport') {
             grid.csvExport();
         }
     };
 
 
     grid.commandClick = detailsData;
-    
+
 }
 
-function createColumnsEditing(dataColumns, columnsHide = null, columnInEdit = null){
+function createColumnsEditing(dataColumns, columnsHide = null, columnInEdit = null) {
     var arr = [];
     for (var key in dataColumns[0]) {
         let keyFormat = key.replace(/([A-Z])/g, ' $1').trim();
         let title = keyFormat.replace(/  +/g, ' ');
 
-        let typeKey =  dataColumns[0][key] == null ? null : typeof dataColumns[0][key];
+        let typeKey = dataColumns[0][key] == null ? null : typeof dataColumns[0][key];
 
         let dataVisible = true;
 
@@ -133,12 +133,12 @@ function createColumnsEditing(dataColumns, columnsHide = null, columnInEdit = nu
         let validationRuleRequerid = true;
 
         if (columnsHide != null) {
-            dataVisible = columnsHide.filter(x => x.name == key).length == 0 ? true : false; 
+            dataVisible = columnsHide.filter(x => x.name == key).length == 0 ? true : false;
         }
-        
+
         if (columnInEdit != null) {
             let filterData = columnInEdit.filter(x => x.name == key);
-            dataEditinBool = filterData.length == 0 ? false : true; 
+            dataEditinBool = filterData.length == 0 ? false : true;
             validationRuleRequerid = filterData.length == 0 ? false : filterData[0].validation;
         }
 
@@ -146,28 +146,28 @@ function createColumnsEditing(dataColumns, columnsHide = null, columnInEdit = nu
             arr.push({
                 field: key, headerText: title, textAlign: 'Center', headerTextAlign: 'Center', visible: false
             })
-        }else if(typeKey == 'boolean'){
+        } else if (typeKey == 'boolean') {
             arr.push({
-                field: key, headerText: title, textAlign: 'Center', headerTextAlign: 'Center', visible: dataVisible, allowEditing: dataEditinBool, validationRules: {required: validationRuleRequerid}, editType: 'dropdownedit', 
-                edit: {  
-                    params: {  
-                        query: new ej.data.Query(),   
-                        dataSource: [{dataBoolCol: "Activo", value: true},{dataBoolCol: "Inactivo", value: false}], 
-                        fields:{text:'dataBoolCol',value:'value'},
+                field: key, headerText: title, textAlign: 'Center', headerTextAlign: 'Center', visible: dataVisible, allowEditing: dataEditinBool, validationRules: { required: validationRuleRequerid }, editType: 'dropdownedit',
+                edit: {
+                    params: {
+                        query: new ej.data.Query(),
+                        dataSource: [{ dataBoolCol: "Activo", value: true }, { dataBoolCol: "Inactivo", value: false }],
+                        fields: { text: 'dataBoolCol', value: 'value' },
                     }
                 }
             })
-        }else{
+        } else {
             arr.push({
-                field: key, headerText: title, textAlign: 'Center', headerTextAlign: 'Center', visible: dataVisible, allowEditing: dataEditinBool, validationRules: {required: validationRuleRequerid}
+                field: key, headerText: title, textAlign: 'Center', headerTextAlign: 'Center', visible: dataVisible, allowEditing: dataEditinBool, validationRules: { required: validationRuleRequerid }
             })
         }
-        
+
     }
     return arr;
 }
 
-function setColums(dataColumns, columnsHide = null){
+function setColums(dataColumns, columnsHide = null) {
     var arr = [];
     for (var key in dataColumns[0]) {
         let keyFormat = key.replace(/([A-Z])/g, ' $1').trim();
@@ -175,14 +175,14 @@ function setColums(dataColumns, columnsHide = null){
         let formattedKey = key.replace(/_(\w)/g, function (_, letter) {
             return letter.toUpperCase();
         });
-        let typeKey =  dataColumns[0][key] == null ? null : typeof dataColumns[0][key];
+        let typeKey = dataColumns[0][key] == null ? null : typeof dataColumns[0][key];
 
         let dataVisible = true;
 
         if (columnsHide != null) {
-            dataVisible = columnsHide.filter(x => x.name == key).length == 0 ? true : false; 
+            dataVisible = columnsHide.filter(x => x.name == key).length == 0 ? true : false;
         }
-        
+
 
         if (typeKey == 'object') {
 
@@ -205,23 +205,23 @@ function setColums(dataColumns, columnsHide = null){
 
 function customiseCell(args) {
     for (var key in args.data) {
-        typeKey = typeof  args.data[key];
+        typeKey = typeof args.data[key];
         if (typeKey == 'boolean') {
             if (args.column.field == key) {
-                if(args.data[key]){
+                if (args.data[key]) {
                     args.cell.classList.add('active');
                     args.cell.textContent = "Activo";
-                }else{
+                } else {
                     args.cell.classList.add('inactive');
                     args.cell.textContent = "Inactivo";
                 }
             }
         }
     }
-    if (args.column.field === "idElementType") { 
-        let value = typeElements.find(x => x.Id == args.data["idElementType"]); 
-        args.cell.textContent = value.Name; 
-    } 
+    if (args.column.field === "idElementType") {
+        let value = typeElements.find(x => x.Id == args.data["idElementType"]);
+        args.cell.textContent = value.Name;
+    }
 }
 /*
 function createElemntsTimes() {
@@ -298,7 +298,7 @@ function createElemntsTimesBackup() {
 
     datepickerEndModal = new ej.calendars.DatePicker({
         placeholder: 'Ingrese fecha fin',
-        enabled:false,
+        enabled: false,
         format: 'yyyy-MM-dd',
 
     });
@@ -324,67 +324,67 @@ function createElemntsTimesBackup() {
 function selectDateStar() {
     var stDateStart = $("#dtpStart").val();
     let arr = stDateStart.split('-');
-    if(arr[1] != undefined){
+    if (arr[1] != undefined) {
         datepickerEnd.value = new Date(Date.now())
         let arrDay = arr[2].split(' ');
         datepickerEnd.enabled = true;
-        datepickerEnd.min = new Date(parseInt(arr[0]), parseInt(arr[1]-1), parseInt(arrDay[0]))
-        datepickerEnd.max = new Date(parseInt(arr[0]), parseInt(arr[1]+3), parseInt(arrDay[0]))
-    }else{
+        datepickerEnd.min = new Date(parseInt(arr[0]), parseInt(arr[1] - 1), parseInt(arrDay[0]))
+        datepickerEnd.max = new Date(parseInt(arr[0]), parseInt(arr[1] + 3), parseInt(arrDay[0]))
+    } else {
         datepickerEnd.value = undefined;
         datepickerEnd.enabled = false;
-        
+
     }
 }
 
 function selectDateStarB() {
     var stDateStart = $("#dtpStartModal").val();
     let arr = stDateStart.split('-');
-    if(arr[1] != undefined){
+    if (arr[1] != undefined) {
         datepickerEndModal.value = new Date(Date.now())
         let arrDay = arr[2].split(' ');
         datepickerEndModal.enabled = true;
-        datepickerEndModal.min = new Date(parseInt(arr[0]), parseInt(arr[1]-1), parseInt(arrDay[0]))
-        datepickerEndModal.max = new Date(parseInt(arr[0]), parseInt(arr[1]+3), parseInt(arrDay[0]))
-    }else{
+        datepickerEndModal.min = new Date(parseInt(arr[0]), parseInt(arr[1] - 1), parseInt(arrDay[0]))
+        datepickerEndModal.max = new Date(parseInt(arr[0]), parseInt(arr[1] + 3), parseInt(arrDay[0]))
+    } else {
         datepickerEndModal.value = undefined;
         datepickerEndModal.enabled = false;
-        
+
     }
 }
 
-function clean(){
+function clean() {
     datepickerEnd.value = undefined;
     datepickerEnd.enabled = false;
 }
 
-function cleanB(){
+function cleanB() {
     datepickerEndModal.value = undefined;
     datepickerEndModal.enabled = false;
 }
 
-function drodownDataSearch(searchData, searchTitlesText,nameDiv){
-    if(dropdowns != null){
+function drodownDataSearch(searchData, searchTitlesText, nameDiv) {
+    if (dropdowns != null) {
         dropdowns.dataSource = searchData;
         return;
     }
-     dropdowns = new ej.dropdowns.DropDownList({
+    dropdowns = new ej.dropdowns.DropDownList({
         dataSource: searchData,
         fields: { text: searchTitlesText },
         placeholder: 'Seleccione un campo',
-        enabled:false,
+        enabled: false,
         popupHeight: '200px',
         change: valueChange
     });
-    dropdowns.appendTo('#' +nameDiv);
+    dropdowns.appendTo('#' + nameDiv);
 }
 
-function valueChange(args){
+function valueChange(args) {
     multiSelectInput.value = null
-    grid.dataSource =dataGridSave;
-    if(filtersData.filter(x => x.nameField == args.itemData.Name)[0]['value'] == null){
+    grid.dataSource = dataGridSave;
+    if (filtersData.filter(x => x.nameField == args.itemData.Name)[0]['value'] == null) {
         multiSelectInput.dataSource = [];
-    }else{
+    } else {
         multiSelectInput.dataSource = filtersData.filter(x => x.nameField == args.itemData.Name);
     }
     multiSelectInput.enabled = true;
@@ -393,49 +393,49 @@ function valueChange(args){
 
 
 
-function drodownDataSearchBackup(searchData, searchTitlesText){
-    if(dropdownsModal != null){
+function drodownDataSearchBackup(searchData, searchTitlesText) {
+    if (dropdownsModal != null) {
         dropdowns.dataSource = searchData.dataMessages;
         return;
     }
-     dropdownsModal = new ej.dropdowns.DropDownList({
+    dropdownsModal = new ej.dropdowns.DropDownList({
         width: '100%',
         dataSource: searchData.dataMessages,
-        fields: { text: searchTitlesText},
+        fields: { text: searchTitlesText },
         placeholder: 'Seleccione un campo',
         popupHeight: '200px',
     });
     dropdownsModal.appendTo('#searchParamModal');
 }
 
-function addFnctionsGrid(dataExport){
-    if(typeof dataExport == 'string'){
+function addFnctionsGrid(dataExport) {
+    if (typeof dataExport == 'string') {
         return listFunctionalitiesExportGrid.filter(x => x == dataExport + "Export");
-    }else{
+    } else {
         arrDataExport = []
-        for(var key in dataExport){
+        for (var key in dataExport) {
             arrDataExport.push(listFunctionalitiesExportGrid.filter(x => x == dataExport[key] + "Export")[0]);
         }
         return arrDataExport;
     }
 }
 
-function addCommandsGrid(columsList){
+function addCommandsGrid(columsList) {
     columsList.unshift({
-        headerText: 'opciones', width: 120, commands: [{ type: 'Edit', buttonOption: { iconCss: ' e-icons e-edit', cssClass: 'e-flat' , text:"ver mas"}}]
+        headerText: 'opciones', width: 120, commands: [{ type: 'Edit', buttonOption: { iconCss: ' e-icons e-edit', cssClass: 'e-flat', text: "ver mas" } }]
     })
     return columsList;
 }
 
-function addCommandsGridDetails(columsList){
+function addCommandsGridDetails(columsList) {
     columsList.unshift({
-        headerText: 'Ver', title:"Ver mas", width: 250, commands: [{ buttonOption: { title: "Ver más" , iconCss: 'e-icons e-eye', cssClass: 'e-flat' , text:"ver mas"} }]
+        headerText: 'Ver', title: "Ver mas", width: 250, commands: [{ buttonOption: { title: "Ver más", iconCss: 'e-icons e-eye', cssClass: 'e-flat', text: "ver mas" } }]
     })
     return columsList;
 }
 
-function unabledCommandsGrid(){
-    grid.commandClick = function(args) {
+function unabledCommandsGrid() {
+    grid.commandClick = function (args) {
         location.href = location.origin + '/MessageTypes/Edit/' + args.rowData.Id;
     };
 }
@@ -472,7 +472,7 @@ function getExcelExportProperties(fileName) {
                 {
                     index: 6,
                     cells: [
-                        
+
                     ]
                 }
             ]
@@ -485,7 +485,7 @@ function getExcelExportProperties(fileName) {
 
             ]
         },
-        
+
         fileName: fileName
     };
 }
@@ -564,7 +564,7 @@ function getPdfExportProperties() {
                 }
             ]
         },
-        
+
         fileName: "pdfdocument.pdf"
     };
 }
@@ -575,18 +575,18 @@ function setTreeGrid(data, dataColumns, exportFunctions = null, add = false, nam
         treeGridObj.dataSource = data;
         return;
     }
-    if(exportFunctions == null ){
+    if (exportFunctions == null) {
         exportFunctions = ['Search']
-    }else{
+    } else {
         exportFunctions.push('Search')
     }
 
-    if(add == true){
-        var dataEdit =  ['Add', 'Edit', 'Update', 'Cancel'];
+    if (add == true) {
+        var dataEdit = ['Add', 'Edit', 'Update', 'Cancel'];
         exportFunctions = exportFunctions.concat(dataEdit)
 
     }
-    
+
     treeGridObj = new ej.treegrid.TreeGrid({
         editSettings: {
             allowAdding: true,
@@ -610,9 +610,9 @@ function setTreeGrid(data, dataColumns, exportFunctions = null, add = false, nam
         rowDataBound: function (args) {
             if (args.data.childRecords.length == 0) {
                 args.row.style.backgroundColor = "#FFFFFF";
-            }else if (args.data.childRecords.length > 0 && args.data.idElementFather != null) {
+            } else if (args.data.childRecords.length > 0 && args.data.idElementFather != null) {
                 args.row.style.backgroundColor = "#A7E1FD";
-            } else{
+            } else {
                 args.row.style.backgroundColor = "#ACCBDA";
             }
         },
@@ -621,7 +621,7 @@ function setTreeGrid(data, dataColumns, exportFunctions = null, add = false, nam
         columns: dataColumns,
         dataSource: data
     });
-    treeGridObj.appendTo('#'+ nameGrid);
+    treeGridObj.appendTo('#' + nameGrid);
     treeGridObj.dataBound = () => {
         treeGridObj.autoFitColumns()
     };
@@ -632,12 +632,12 @@ function rowDragStart(args) {
     isDrag = true;
 }
 
-function ActionBegin(args){
+function ActionBegin(args) {
     if (args.requestType == 'save') {
-        if (args.action == "edit" ) {
+        if (args.action == "edit") {
             beginUpdate(args.data, args.previousData);
         }
-        if(args.action == "add" ) {
+        if (args.action == "add") {
             beginCreate(args.data);
         }
     }
@@ -645,14 +645,14 @@ function ActionBegin(args){
 
 
 
-function ActionComplete(args){
-    if(args.requestType == 'refresh'){
-        if(isDrag){
-            var dataRow= args.rows.find(x => x.data.id == idDrag)
+function ActionComplete(args) {
+    if (args.requestType == 'refresh') {
+        if (isDrag) {
+            var dataRow = args.rows.find(x => x.data.id == idDrag)
             var dataRowAdd = dataRow;
-            if(dataRow.data.parentItem){
+            if (dataRow.data.parentItem) {
                 dataRowAdd.data.idElementFather = dataRow.data.parentItem.id;
-            }else{
+            } else {
                 dataRowAdd.data.idElementFather = null
             }
             beginUpdate(dataRowAdd.data, dataRowAdd.data);
@@ -661,24 +661,24 @@ function ActionComplete(args){
     }
 }
 
-function multiSelect(){
+function multiSelect() {
     multiSelectInput = new ej.dropdowns.MultiSelect({
         placeholder: 'Seleccionar',
         query: new ej.data.Query().take(10),
-        enabled:false,
+        enabled: false,
         fields: { text: 'value', value: 'value' },
         change: valueChangeMulti,
     });
     multiSelectInput.appendTo('#multiSelect');
 }
 
-function valueChangeMulti(args){
+function valueChangeMulti(args) {
     dataArgs = args.value;
 }
 
-function aplicFilter(){
+function aplicFilter() {
     var dataSet = [];
-    if(dataArgs.length == 0){
+    if (dataArgs.length == 0) {
         grid.dataSource = dataGridSave;
         return;
     }
@@ -693,18 +693,24 @@ function aplicFilter(){
 
 var detailsData = function (args) {
     var dataHtmlList = "";
+    var idTicket = "";
     for (var key in args.rowData) {
+
         let formattedKey = key.replace(/_(\w)/g, function (_, letter) {
             return letter.toUpperCase();
         });
         formattedKey = formattedKey.charAt(0).toLowerCase() + formattedKey.slice(1);
         let value = args.rowData[key];
+
+        if (formattedKey == "idTicket") {
+            idTicket = value;
+        }
         dataHtmlList += "<ul><li style='padding: 1% 0%;'><div class='flex items-start space-x-4'><div class='flex-1 min-w-0' style='text-align: initial;'><p class='text-sm font-medium text-gray-900 truncate dark:text-white'>" + formattedKey + "</p></div></li><li><div class='flex items-start space-x-4'><div class='flex-1 min-w-0' style='text-align: initial'><p class='text-sm font-sm text-gray-900 truncate dark:text-white'>" + value + "</p></div></li></ul>"
     }
-    console.log("Entro al swal")
     Swal.fire({
         title: '<strong><u>Información</u></strong>',
-        html: '<div style="max-height: 100vh; overflow-y: auto; overflow-x: scroll;"><div style="width: 60vw;"><ul class="max-w-full divide-y divide-gray-200 dark:divide-gray-700">' + dataHtmlList + '</ul></div></div>',
+        html: '<div style="max-height: 100vh; overflow-y: auto; overflow-x: scroll;"><div style="width: fit-content;"><ul class="max-w-full divide-y divide-gray-200 dark:divide-gray-700">' + dataHtmlList + '</ul></div></div>',
+        scroll: true,
         showConfirmButton: false,
         showCloseButton: true,
         customClass: {
@@ -712,13 +718,14 @@ var detailsData = function (args) {
             content: 'max-h-full',
             popup: 'swal2-popup',
         },
-        width: 'auto',
+        width: '80vh',
         didOpen: function () {
             Swal.getContent().style.setProperty('flex-direction', 'column');
             Swal.getHtmlContainer().style.setProperty('max-width', 'none');
         },
     });
-}
+    //getImageTicket(idTicket);
+};
 /*
  var detailsData = function(args) {
     var dataHtmlList = "";
