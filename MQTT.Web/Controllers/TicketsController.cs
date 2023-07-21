@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
+using System.Linq;
 
 namespace MQTT.Web.Controllers
 {
@@ -96,13 +97,14 @@ namespace MQTT.Web.Controllers
             {
                 JiraAccess jira = new JiraAccess();
                 List<byte[]> ticket = jira.GetAttachmentImages(idTicket);
-                return Ok(ticket);
+                return new FileContentResult(ticket.SelectMany(x => x).ToArray(), "application/octet-stream");
             }
             catch (Exception ex)
             {
                 throw ex;
             }
         }
+
     }
 
 }
