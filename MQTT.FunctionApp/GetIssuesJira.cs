@@ -94,12 +94,18 @@ namespace MQTT.FunctionApp
             foreach (var item in issues.Issues)
             {
                 var fields = item.Fields;
-
+                
                 var typeSettingConfiguration = (fields.ListadoAjustesPuerta == null || fields.ListadoAjustesPuerta[0] == null) ? string.Empty : fields.ListadoAjustesPuerta[0].Value;
                 var typeSettingConfiguration2 = (fields.ListadoConfiguracionPuerta == null || fields.ListadoConfiguracionPuerta[0] == null) ? string.Empty : fields.ListadoConfiguracionPuerta[0].Value;
                 var typeSettingConfiguration3 = (fields.ListadoAjustesITS == null || fields.ListadoAjustesITS[0] == null) ? string.Empty : fields.ListadoAjustesITS[0].Value;
                 var typeSettingConfiguration4 = (fields.ListadoConfiguracionITS == null || fields.ListadoConfiguracionITS[0] == null) ? string.Empty : fields.ListadoConfiguracionITS[0].Value;
                 var typeSettingConfiguration5 = (fields.ListadoConfiguracionRFID == null || fields.ListadoConfiguracionRFID[0] == null) ? string.Empty : fields.ListadoConfiguracionRFID[0].Value;
+                Console.WriteLine(item.Key);
+                Console.WriteLine(fields.ListadoAjustesITS);
+                Console.WriteLine(fields.ListadoConfiguracionITS);
+                Console.WriteLine(fields.ListadoAjustesPuerta);
+                Console.WriteLine(fields.ListadoConfiguracionPuerta);
+                Console.WriteLine(fields.ListadoConfiguracionRFID);
 
                 Models.IssueDTO issueDTO = new Models.IssueDTO
                 {

@@ -26,7 +26,7 @@ namespace MQTT.FunctionApp.Models
         public static string ListadoConfiguracionPuerta = "customfield_10076";
         public static string ListadoAjustesITS = "customfield_10077";
         public static string ListadoConfiguracionITS = "customfield_10078";
-        public static string ListadoConfiguracionRFID = "customfield_10086";
+        public static string ListadoConfiguracionRFID = "customfield_10087";
         public static string DescripcionReparacion = "customfield_10105";
         public static string DiagnosticoCausa = "customfield_10104";
         public static string TipoCausa = "customfield_10067";
