@@ -58,6 +58,7 @@ namespace MQTT.FunctionApp.Models
         public const string ListadoConfiguracionPuerta = "customfield_10063";
         public const string ListadoAjustesITS = "customfield_10059";
         public const string ListadoConfiguracionITS = "customfield_10062";
+        public const string ListadoAjusteRFID = "customfield_10061";
         public const string ListadoConfiguracionRFID = "customfield_10064";
         public const string DescripcionReparacion = "customfield_10087";
         public const string DiagnosticoCausa = "customfield_10088";

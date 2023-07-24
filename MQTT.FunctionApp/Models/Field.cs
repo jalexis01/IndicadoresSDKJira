@@ -61,6 +61,14 @@ namespace MQTT.FunctionApp.Models
         [JsonPropertyName("customfield_10064")]
         public List<Category>? ListadoConfiguracionRFID { get; set; }
 
+       /* [JsonPropertyName("customfield_10061")] //Se supone que funciona con Manatee
+        public List<Category>? ListadoAjusteRFID { get; set; }
+
+        */
+
+        [JsonPropertyName("customfield_10061")] //FUNCIONA SOLO CON ASSAABLOY
+        public List<Category>? ListadoAjusteRFID { get; set; }
+
         [JsonPropertyName("customfield_10087")]
         public string? DescripcionReparacion { get; set; }
 

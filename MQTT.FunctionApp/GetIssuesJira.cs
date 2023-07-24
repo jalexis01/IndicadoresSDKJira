@@ -100,6 +100,7 @@ namespace MQTT.FunctionApp
                 var typeSettingConfiguration3 = (fields.ListadoAjustesITS == null || fields.ListadoAjustesITS[0] == null) ? string.Empty : fields.ListadoAjustesITS[0].Value;
                 var typeSettingConfiguration4 = (fields.ListadoConfiguracionITS == null || fields.ListadoConfiguracionITS[0] == null) ? string.Empty : fields.ListadoConfiguracionITS[0].Value;
                 var typeSettingConfiguration5 = (fields.ListadoConfiguracionRFID == null || fields.ListadoConfiguracionRFID[0] == null) ? string.Empty : fields.ListadoConfiguracionRFID[0].Value;
+                var typeSettingConfiguration6 = (fields.ListadoAjusteRFID == null || fields.ListadoAjusteRFID[0] == null) ? string.Empty : fields.ListadoAjusteRFID[0].Value;
                 Console.WriteLine(item.Key);
                 Console.WriteLine(fields.ListadoAjustesITS);
                 Console.WriteLine(fields.ListadoConfiguracionITS);
@@ -124,7 +125,7 @@ namespace MQTT.FunctionApp
                     fechaArriboLocacion = fields.FechayHoraDeLlegadaAEstacion != null ? TimeZoneInfo.ConvertTime(Convert.ToDateTime(fields.FechayHoraDeLlegadaAEstacion), TimeZoneInfo.FindSystemTimeZoneById(timeZone)) : (DateTime?)null,
                     componenteParte = (fields.DescripcionRepuesto == null || fields.DescripcionRepuesto[0] == null) || fields.DescripcionRepuesto.Equals(string.Empty) ? null : fields.DescripcionRepuesto[0].Value,
                     tipoReparacion = (fields.TipoReparacion == null || fields.TipoReparacion[0] == null) || fields.TipoReparacion.Equals(string.Empty) ? null : fields.TipoReparacion[0].Value,
-                    tipoAjusteConfiguracion = $"{typeSettingConfiguration}{typeSettingConfiguration2}{typeSettingConfiguration3}{typeSettingConfiguration4}{typeSettingConfiguration5}".Equals(string.Empty)? null: $"{typeSettingConfiguration}{typeSettingConfiguration2}{typeSettingConfiguration3}{typeSettingConfiguration4}{typeSettingConfiguration5}",
+                    tipoAjusteConfiguracion = $"{typeSettingConfiguration}{typeSettingConfiguration2}{typeSettingConfiguration3}{typeSettingConfiguration4}{typeSettingConfiguration5}{typeSettingConfiguration6}".Equals(string.Empty)? null: $"{typeSettingConfiguration}{typeSettingConfiguration2}{typeSettingConfiguration3}{typeSettingConfiguration4}{typeSettingConfiguration5}{typeSettingConfiguration6}",
                     descripcionReparacion = fields.DescripcionReparacion == null || fields.DescripcionReparacion.Equals(string.Empty) ? null : fields.DescripcionReparacion,
                     tipoCausa = fields.TipoCausa == null || fields.TipoCausa.Equals(string.Empty) ? null : fields.TipoCausa.Value,
                     diagnosticoCausa = fields.DiagnosticoCausa == null || fields.DiagnosticoCausa.Equals(string.Empty) ? null : fields.DiagnosticoCausa,
@@ -388,7 +389,7 @@ namespace MQTT.FunctionApp
                 field.ListadoConfiguracionPuerta = null;
             }
 
-            if (fieldObject.TryGetValue(Constantes.ListadoConfiguracionPuerta, out JToken customfield_10076) && customfield_10076.Type != JTokenType.Null)
+            if (fieldObject.TryGetValue(Constantes.ListadoConfiguracionPuerta, out JToken listadoConfiguracionPuerta) && listadoConfiguracionPuerta.Type != JTokenType.Null)
             {
                 var ListadoConfiguracionPuertaArray = fieldObject[Constantes.ListadoConfiguracionPuerta].Value<JArray>();
                 List<Category> ListadoConfiguracionPuerta = new List<Category>();
@@ -438,7 +439,22 @@ namespace MQTT.FunctionApp
             {
                 field.ListadoConfiguracionITS = null;
             }
-
+            if (fieldObject.TryGetValue(Constantes.ListadoAjusteRFID, out JToken listadoAjusteRfid) && listadoAjusteRfid.Type != JTokenType.Null)
+            {
+                var ListadoAjustesRFIDArray = fieldObject[Constantes.ListadoAjusteRFID].Value<JArray>();
+                List<Category> ListadoAjustesRFID = new List<Category>();
+                foreach (JObject dataItem in ListadoAjustesRFIDArray)
+                {
+                    Category temp = new Category();
+                    temp.Value = dataItem["value"].Value<string>();
+                    ListadoAjustesRFID.Add(temp);
+                }
+                field.ListadoAjusteRFID = ListadoAjustesRFID;
+            }
+            else
+            {
+                field.ListadoAjusteRFID = null;
+            }
             if (fieldObject.TryGetValue(Constantes.ListadoConfiguracionRFID, out JToken listadoConfiguracionRFID) && listadoConfiguracionRFID.Type != JTokenType.Null)
             {
                 var ListadoConfiguracionRFIDArray = fieldObject[Constantes.ListadoConfiguracionRFID].Value<JArray>();
