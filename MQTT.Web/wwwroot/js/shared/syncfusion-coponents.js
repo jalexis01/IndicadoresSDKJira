@@ -728,8 +728,8 @@ var detailsData = function (args) {
             document.getElementById('verMasBtn').addEventListener('click', async function () {                
                 var imageContent = await getImageTicket(idTicket);
                 Swal.fire({
-                    title: 'Cargando...',
-                    html: '<div class="spinner-border text-primary" role="status"><span class="sr-only">Cargando...</span></div>',
+                    title: 'Cargando imágenes...',
+                    html: '<div class="spinner-border text-primary" role="status"><span class="sr-only">Cargando imágenes...</span></div>',
                     showCancelButton: false,
                     showConfirmButton: false,
                     allowOutsideClick: false,
