@@ -712,19 +712,40 @@ var detailsData = function (args) {
         html: '<div style="max-height: 100vh; overflow-y: auto; overflow-x: scroll;"><div style="width: fit-content;"><ul class="max-w-full divide-y divide-gray-200 dark:divide-gray-700">' + dataHtmlList + '</ul></div></div>',
         scroll: true,
         showConfirmButton: false,
-        showCloseButton: true,
+        showCloseButton: false,
+        closeOnClickOutside: false,
+
+        footer: '<button id="verMasBtn" class="btn btn-primary">Ver imagen</button>', // Agregar el botón en el pie del modal
         customClass: {
             container: 'swal2-container',
             content: 'max-h-full',
             popup: 'swal2-popup',
+
         },
-        width: '80vh',
+        width: '80hv',
         didOpen: function () {
-            Swal.getContent().style.setProperty('flex-direction', 'column');
-            Swal.getHtmlContainer().style.setProperty('max-width', 'none');
+
+            document.getElementById('verMasBtn').addEventListener('click', async function () {                
+                var imageContent = await getImageTicket(idTicket);
+                Swal.fire({
+                    title: 'Cargando...',
+                    html: '<div class="spinner-border text-primary" role="status"><span class="sr-only">Cargando...</span></div>',
+                    showCancelButton: false,
+                    showConfirmButton: false,
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    customClass: {
+                        popup: 'swal2-no-close',
+                        container: 'swal2-no-close',
+                    },
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+            });
         },
     });
-    getImageTicket(idTicket);
+    //getImageTicket(idTicket);
 };
 /*
  var detailsData = function(args) {

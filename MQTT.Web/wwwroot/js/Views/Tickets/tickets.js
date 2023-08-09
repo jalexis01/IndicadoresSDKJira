@@ -105,19 +105,20 @@ function getImageTicket(idTicket) {
 
                 // Show the image directly in the Swal dialog
                 Swal.fire({
-                    title: 'Imágenes del Ticket',
+                    title: 'Imágen del Ticket: ' + idTicket,
                     html: imageElement,
                     confirmButtonText: 'Cerrar',
                     showCloseButton: true,
-                    showConfirmButton: false,
+                    showConfirmButton: true,
                     customClass: {
                         container: 'swal-wide',
                     },
-                    width: '80%',
+                    width: '50%',
                     padding: '2rem',
                     backdrop: true,
                     allowOutsideClick: true,
                     allowEscapeKey: false,
+                    buttons: ["Cancelar", "Agregar"],
                 });
             } else {
                 Swal.fire('Información', 'El ticket no tiene imágenes adjuntas', 'info');

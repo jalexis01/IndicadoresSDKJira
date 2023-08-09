@@ -328,9 +328,9 @@ namespace DashboarJira.Services
                 }
             }
 
-            List<byte[]> jpegImages = imageList.Where(imageBytes => IsJpegImage(imageBytes)).ToList();
+            
 
-            return jpegImages;
+            return imageList;
         }
 
 
