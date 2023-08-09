@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Json;
-using System.Text.Json.Nodes;
-using System.Threading.Tasks;
+﻿using System.Text.Json;
 
 namespace DashboarJira.Model
 {
@@ -32,7 +26,7 @@ namespace DashboarJira.Model
         public EstacionEntity(List<Evento> evp10PorDia, List<Evento> evp11PorDia, List<Evento> evp14PorDia, DateTime startDate, DateTime endDate)
         {
             this.endDate = endDate;
-            this.startDate  = startDate;
+            this.startDate = startDate;
             this.evp14PorDia = evp14PorDia;
             this.evp11PorDia = evp11PorDia;
             this.evp10PorDia = evp10PorDia;
@@ -45,7 +39,7 @@ namespace DashboarJira.Model
             if (tmr != 0)
                 IDM = tmr / tmr;
             else IDM = 1;
-            
+
         }
 
         public EstacionEntity(List<Evento> evp8PorDia, List<Evento> evp9PorDia, DateTime startDate, DateTime endDate, int cantidadPuertas)
@@ -78,19 +72,22 @@ namespace DashboarJira.Model
             evp8.fechaHoraEnvioDato = startDate.Date.AddHours(4).AddMinutes(30);
             Evento evp9 = new Evento();
             evp9.fechaHoraEnvioDato = endDate.Date.AddMinutes(30);
-            if (evp8PorDia.Count>0) {
+            if (evp8PorDia.Count > 0)
+            {
                 evp8 = evp8PorDia[0];
             }
-            if (evp9PorDia.Count > 0) {
+            if (evp9PorDia.Count > 0)
+            {
                 evp9 = evp9PorDia[0];
             }
             double diferencia_de_horas = (evp9.fechaHoraEnvioDato - evp8.fechaHoraEnvioDato).Value.TotalHours;
             TTOP = diferencia_de_horas * (double)cantidadPuertas;
         }
-        public void calcularIOR() {
+        public void calcularIOR()
+        {
 
             IOR = (double)cantidadEVP8 / (double)cantidadEVP9;
-        
+
         }
         public string ConvertirAJson()
         {
@@ -142,7 +139,7 @@ namespace DashboarJira.Model
                 evp10,
                 evp11,
                 evp14,
-                startDate, 
+                startDate,
                 endDate,
                 IDM
             };

@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System;
-using DashboarJira.Model;
+﻿using DashboarJira.Model;
 using DashboarJira.Services;
+using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
 
 namespace MQTT.Web.Controllers
 {
@@ -66,7 +66,7 @@ namespace MQTT.Web.Controllers
                 }
 
                 Indicadores indicadores = new Indicadores();
-               Console.WriteLine(indicadores.ObtenerIndicadores(formattedStartDate, formattedEndDate));
+                Console.WriteLine(indicadores.ObtenerIndicadores(formattedStartDate, formattedEndDate));
                 return indicadores.ObtenerIndicadores(formattedStartDate, formattedEndDate);
 
             }

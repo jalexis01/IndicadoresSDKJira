@@ -24,7 +24,7 @@
             }
             if (icpmCalculado != 0)
             {
-                return Math.Round(icpmCalculado * 100,1);
+                return Math.Round(icpmCalculado * 100, 1);
             }
             else
             {

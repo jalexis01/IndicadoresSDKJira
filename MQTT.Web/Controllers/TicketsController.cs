@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
 using System.Linq;
 
+
 namespace MQTT.Web.Controllers
 {
     [Authorize]
@@ -35,11 +36,12 @@ namespace MQTT.Web.Controllers
             DateTime startDateTime = currentDateTime.AddMonths(-1);
 
             // Formatear las fechas en el formato deseado
-           /* string startDate = startDateTime.ToString("yyyy-MM-dd");
-            string endDate = currentDateTime.ToString("yyyy-MM-dd");
-            max = 0;
-            List<Ticket> tickets = getTickets(startDate, endDate, max, componente);
-            */return View();
+            /* string startDate = startDateTime.ToString("yyyy-MM-dd");
+             string endDate = currentDateTime.ToString("yyyy-MM-dd");
+             max = 0;
+             List<Ticket> tickets = getTickets(startDate, endDate, max, componente);
+             */
+            return View();
         }
 
 

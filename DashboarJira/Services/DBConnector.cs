@@ -65,7 +65,7 @@ namespace DashboarJira.Services
                 {
                     connection.Open();
 
- 
+
                     using (SqlCommand command = new SqlCommand(query, connection))
                     {
                         using (SqlDataReader reader = command.ExecuteReader())
@@ -132,7 +132,7 @@ namespace DashboarJira.Services
         }
 
 
-        
+
 
 
 

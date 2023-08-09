@@ -1,12 +1,6 @@
 ﻿using DashboarJira.Model;
 using DashboarJira.Services;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.Json.Nodes;
-using System.Threading.Tasks;
 
 namespace DashboarJira.Controller
 {
@@ -76,7 +70,7 @@ namespace DashboarJira.Controller
                 if (ticket.fecha_apertura.HasValue && ticket.fecha_cierre.HasValue)
                 {
                     result += (ticket.fecha_cierre.Value - ticket.fecha_apertura.Value).TotalHours;
-                    
+
                 }
             }
             return result;
