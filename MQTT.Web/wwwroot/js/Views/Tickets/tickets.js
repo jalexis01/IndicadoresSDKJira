@@ -92,28 +92,38 @@ function ServiceGetTickets() {
         }
     });
 }
+
 function getImageTicket(idTicket) {
     $.ajax({
         url: '/Tickets/getImageTicket?idTicket=' + idTicket,
         data: { idTicket: idTicket },
-        success: function (base64Image) {
-            if (base64Image) {
-                // Create an image element and set its source to the base64 image data
-                var imageElement = document.createElement('img');
-                imageElement.src = 'data:image/jpeg;base64,' + base64Image;
-                imageElement.style.width = '100%';
+        success: function (base64Images) {
+            if (base64Images && base64Images.length > 0) {
+                var imageContainer = document.createElement('div');
+                imageContainer.style.display = 'flex';
+                imageContainer.style.flexWrap = 'wrap';
+                imageContainer.style.justifyContent = 'center';
+                // Iterate through the list of base64 images and create image elements
+                for (var i = 0; i < base64Images.length; i++) {
+                    var base64Image = base64Images[i];
+                    var imageElement = document.createElement('img');
+                    imageElement.src = 'data:image/jpeg;base64,' + base64Image;
+                    imageElement.style.width = '90%'; // Adjust the width as needed
+                    imageElement.style.margin = '10px';
+                    imageContainer.appendChild(imageElement);
+                }
 
-                // Show the image directly in the Swal dialog
+                // Show the image container in the Swal dialog
                 Swal.fire({
-                    title: 'Imágen del Ticket: ' + idTicket,
-                    html: imageElement,
+                    title: 'Imágenes del ' + idTicket,
+                    html: imageContainer,
                     confirmButtonText: 'Cerrar',
                     showCloseButton: true,
                     showConfirmButton: true,
                     customClass: {
                         container: 'swal-wide',
                     },
-                    width: '50%',
+                    width: '80%', // Adjust the width as needed
                     padding: '2rem',
                     backdrop: true,
                     allowOutsideClick: true,

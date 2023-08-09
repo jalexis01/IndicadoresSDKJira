@@ -100,11 +100,24 @@ namespace MQTT.Web.Controllers
                 JiraAccess jira = new JiraAccess();
                 List<byte[]> images = jira.GetAttachmentImages(idTicket);
 
+                //if (images.Count > 0)
+                //{
+                //    byte[] imageData = images[0]; // Assuming you want to return the first image
+                //    string base64Image = Convert.ToBase64String(imageData);
+                //    return Ok(base64Image);
+                //}
+
                 if (images.Count > 0)
                 {
-                    byte[] imageData = images[0]; // Assuming you want to return the first image
-                    string base64Image = Convert.ToBase64String(imageData);
-                    return Ok(base64Image);
+                    List<string> base64Images = new List<string>();
+
+                    foreach (byte[] imageData in images)
+                    {
+                        string base64Image = Convert.ToBase64String(imageData);
+                        base64Images.Add(base64Image);
+                    }
+
+                    return Ok(base64Images);
                 }
                 else
                 {
