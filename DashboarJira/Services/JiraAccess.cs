@@ -1,28 +1,18 @@
 ﻿using Atlassian.Jira;
 using DashboarJira.Model;
-using Newtonsoft.Json.Linq;
-using System;
-using System.ComponentModel;
-using System.Collections.Generic;
-using System.Net.Http;
 using System.Text;
-using System.Threading.Tasks;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.IO;
-using System.Net.Http;
+using System.Linq;
 
 namespace DashboarJira.Services
 {
     public class JiraAccess
     {
-        //string jiraUrl = "https://manateecc.atlassian.net/";
-        //string username = "desarrollocc@manateeingenieria.com";
-        //string password = "ATATT3xFfGF0ZRHIEZTEJVRnhNKviH0CGed6QXqCDMj5bCmKSEbO00UUjHUb3yDcaA4YD1SHohyDr4qnwRx2x4Tu_S_QW_xlGIcIUDvL7CFKEg47_Jcy4Dmq6YzO0dvqB3qeT-EVWfwJ2jJ-9vEUfsqXavD0IIGA7DAZHGCtIWhxgwKIbAWsmeA=038B810D";
-        string jiraUrl = "https://assaabloymda.atlassian.net/";
+        string jiraUrl = "https://manateecc.atlassian.net/";
         string username = "desarrollocc@manateeingenieria.com";
         string password = "ATATT3xFfGF0ZRHIEZTEJVRnhNKviH0CGed6QXqCDMj5bCmKSEbO00UUjHUb3yDcaA4YD1SHohyDr4qnwRx2x4Tu_S_QW_xlGIcIUDvL7CFKEg47_Jcy4Dmq6YzO0dvqB3qeT-EVWfwJ2jJ-9vEUfsqXavD0IIGA7DAZHGCtIWhxgwKIbAWsmeA=038B810D";
+        //string jiraUrl = "https://assaabloymda.atlassian.net/";
+        //string username = "desarrollocc@manateeingenieria.com";
+        //string password = "ATATT3xFfGF0ZRHIEZTEJVRnhNKviH0CGed6QXqCDMj5bCmKSEbO00UUjHUb3yDcaA4YD1SHohyDr4qnwRx2x4Tu_S_QW_xlGIcIUDvL7CFKEg47_Jcy4Dmq6YzO0dvqB3qeT-EVWfwJ2jJ-9vEUfsqXavD0IIGA7DAZHGCtIWhxgwKIbAWsmeA=038B810D";
 
         Jira jira;
 
@@ -317,6 +307,7 @@ namespace DashboarJira.Services
             var issue = jira.Issues.GetIssueAsync(id).Result;
             var attachments = issue.GetAttachmentsAsync().Result;
             List<byte[]> imageList = new List<byte[]>();
+            List<string> imageList2 = new List<string>();
 
             using (HttpClient client = new HttpClient())
             {
@@ -325,14 +316,34 @@ namespace DashboarJira.Services
 
                 foreach (var attachment in attachments)
                 {
-                    string imageUrl = $"{jiraUrl}/rest/api/2/attachment/content/{attachment.Id}";
+                    if(attachment.MimeType == "image/jpeg")
+                    {
+                        string imageUrl = $"{jiraUrl}/rest/api/2/attachment/content/{attachment.Id}";
 
-                    byte[] imageBytes = client.GetByteArrayAsync(imageUrl).Result;
-                    imageList.Add(imageBytes);
+                        byte[] imageBytes = client.GetByteArrayAsync(imageUrl).Result;
+                        imageList.Add(imageBytes);
+                        imageList2.Add(attachment.Id + "-" + attachment.MimeType);
+                    }
+
                 }
             }
 
-            return imageList;
+            List<byte[]> jpegImages = imageList.Where(imageBytes => IsJpegImage(imageBytes)).ToList();
+
+            return jpegImages;
+        }
+
+
+        private bool IsJpegImage(byte[] imageBytes)
+        {
+            if (imageBytes.Length >= 2 && imageBytes[0] == 0xFF && imageBytes[1] == 0xD8)
+            {
+                return true; // Los primeros bytes coinciden con la secuencia de inicio de un archivo JPEG
+            }
+            else
+            {
+                return false; // No es una imagen JPEG
+            }
         }
         public IssueJira convertIssueInIssueJira(Issue issue)
         {

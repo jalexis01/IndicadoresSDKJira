@@ -724,7 +724,7 @@ var detailsData = function (args) {
             Swal.getHtmlContainer().style.setProperty('max-width', 'none');
         },
     });
-    //getImageTicket(idTicket);
+    getImageTicket(idTicket);
 };
 /*
  var detailsData = function(args) {

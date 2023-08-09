@@ -124,7 +124,7 @@ function getImageTicket(idTicket) {
             }
         },
         error: function () {
-            Swal.fire('Error', 'No se pudo obtener las imágenes del ticket', 'error');
+            Swal.fire('Error', 'El ticket no tiene imágenes', 'error');
         }
     });
 }
