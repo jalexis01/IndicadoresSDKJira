@@ -705,32 +705,30 @@ var detailsData = function (args) {
         if (formattedKey == "idTicket") {
             idTicket = value;
         }
-        dataHtmlList += "<ul><li style='padding: 1% 0%;'><div class='flex items-start space-x-4'><div class='flex-1 min-w-0' style='text-align: initial;'><p class='text-sm font-medium text-gray-900 truncate dark:text-white'>" + formattedKey + "</p></div></li><li><div class='flex items-start space-x-4'><div class='flex-1 min-w-0' style='text-align: initial'><p class='text-sm font-sm text-gray-900 truncate dark:text-white'>" + value + "</p></div> </li></ul>"
+        dataHtmlList += "<ul><li style='padding: 1% 0%;'><div class='flex items-start space-x-4'><div class='flex-1 min-w-0' style='text-align: initial;'><p class='text-sm font-medium text-gray-900 truncate dark:text-white'>" + formattedKey + "</p></div></li><li><div class='flex items-start space-x-4'><div class='flex-1 min-w-0' style='text-align: initial'><p class='text-sm font-sm text-gray-900 truncate dark:text-white'>" + value +"</p></div></li></ul>"
     }
-
-
     Swal.fire({
         title: '<strong><u>Información</u></strong>',
         html: '<div style="max-height: 100vh; overflow-y: auto; overflow-x: scroll;"><div style="width: fit-content;"><ul class="max-w-full divide-y divide-gray-200 dark:divide-gray-700">' + dataHtmlList + '</ul></div></div>',
         scroll: true,
         showConfirmButton: false,
-        showCloseButton: true,
-       
+        showCloseButton: false,
+        closeOnClickOutside: false,
+
         footer: '<button id="verMasBtn" class="btn btn-primary">Ver imagen</button>', // Agregar el botón en el pie del modal
         customClass: {
             container: 'swal2-container',
             content: 'max-h-full',
             popup: 'swal2-popup',
-            
+
         },
         width: '80hv',
         didOpen: function () {
 
-            document.getElementById('verMasBtn').addEventListener('click', async function () {
-                // Obtener la imagen utilizando la función getImageTicket
+            document.getElementById('verMasBtn').addEventListener('click', async function () {                
                 var imageContent = await getImageTicket(idTicket);
                 Swal.fire({
-                    title: 'Cargando Imágen...',
+                    title: 'Cargando...',
                     html: '<div class="spinner-border text-primary" role="status"><span class="sr-only">Cargando...</span></div>',
                     showCancelButton: false,
                     showConfirmButton: false,
@@ -744,22 +742,11 @@ var detailsData = function (args) {
                         Swal.showLoading();
                     }
                 });
-                // Insertar la imagen en el HTML del Swal
-              
             });
         },
-
-
-
-
-    });  
-
-
-
-   
+    });
+    //getImageTicket(idTicket);
 };
-
-
 /*
  var detailsData = function(args) {
     var dataHtmlList = "";
