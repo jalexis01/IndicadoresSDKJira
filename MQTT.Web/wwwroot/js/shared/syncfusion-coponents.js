@@ -707,47 +707,57 @@ var detailsData = function (args) {
         }
         dataHtmlList += "<ul><li style='padding: 1% 0%;'><div class='flex items-start space-x-4'><div class='flex-1 min-w-0' style='text-align: initial;'><p class='text-sm font-medium text-gray-900 truncate dark:text-white'>" + formattedKey + "</p></div></li><li><div class='flex items-start space-x-4'><div class='flex-1 min-w-0' style='text-align: initial'><p class='text-sm font-sm text-gray-900 truncate dark:text-white'>" + value + "</p></div> </li></ul>"
     }
+
+
     Swal.fire({
         title: '<strong><u>Información</u></strong>',
         html: '<div style="max-height: 100vh; overflow-y: auto; overflow-x: scroll;"><div style="width: fit-content;"><ul class="max-w-full divide-y divide-gray-200 dark:divide-gray-700">' + dataHtmlList + '</ul></div></div>',
         scroll: true,
         showConfirmButton: false,
         showCloseButton: true,
-        footer: '<button id="verMasBtn" class="btn btn-primary">Ver imagen</button>',
+       
+        footer: '<button id="verMasBtn" class="btn btn-primary">Ver imagen</button>', // Agregar el botón en el pie del modal
         customClass: {
             container: 'swal2-container',
             content: 'max-h-full',
             popup: 'swal2-popup',
+            
         },
         width: '80hv',
-        didOpen: async function () {
+        didOpen: function () {
+
             document.getElementById('verMasBtn').addEventListener('click', async function () {
+                // Obtener la imagen utilizando la función getImageTicket
                 var imageContent = await getImageTicket(idTicket);
-                if (imageContent.length > 0) {
-                    // Crear un nuevo elemento de imagen y establecer el atributo src con la imagen base64
-                    var imageElement = document.createElement('img');
-                    imageElement.src = "data:image/jpeg;base64," + imageContent[0]; // Aquí asumo que obtienes solo una imagen
-                    imageElement.style.maxWidth = '100%';
-                    imageElement.style.height = 'auto';
-
-                    // Crear un div para contener la imagen y agregarla al HTML del Swal
-                    var imageContainer = document.createElement('div');
-                    imageContainer.appendChild(imageElement);
-
-                    // Obtener el contenido del modal Swal y reemplazar el contenido con el contenedor de la imagen
-                    var modalContent = Swal.getContent();
-                    modalContent.innerHTML = '';
-                    modalContent.appendChild(imageContainer);
-                } else {
-                    Swal.update({
-                        html: '<p>No se encontraron imágenes para este ticket.</p>',
-                    });
-                }
+                Swal.fire({
+                    title: 'Cargando Imágen...',
+                    html: '<div class="spinner-border text-primary" role="status"><span class="sr-only">Cargando...</span></div>',
+                    showCancelButton: false,
+                    showConfirmButton: false,
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    customClass: {
+                        popup: 'swal2-no-close',
+                        container: 'swal2-no-close',
+                    },
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+                // Insertar la imagen en el HTML del Swal
+              
             });
         },
-    }); 
-};
 
+
+
+
+    });  
+
+
+
+   
+};
 
 
 /*

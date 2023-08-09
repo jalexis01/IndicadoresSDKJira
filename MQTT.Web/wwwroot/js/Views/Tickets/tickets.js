@@ -93,19 +93,28 @@ function ServiceGetTickets() {
     });
 }
 function getImageTicket(idTicket) {
+    // Obtener las imágenes del ticket
     $.ajax({
         url: '/Tickets/getImageTicket?idTicket=' + idTicket,
         data: { idTicket: idTicket },
-        success: function (base64Image) {
-            if (base64Image) {
-                // Create an image element and set its source to the base64 image data
-                var imageElement = document.createElement('img');
-                imageElement.src = 'data:image/jpeg;base64,' + base64Image;
-                imageElement.style.width = '100%';
+        success: function (base64Images) {
+            if (base64Images && base64Images.length > 0) {
+                var currentImageIndex = 0; // Índice de la imagen actual
 
-                // Show the image directly in the Swal dialog
+                // Crear el elemento de imagen
+                var imageElement = document.createElement('img');
+                imageElement.src = 'data:image/jpeg;base64,' + base64Images[currentImageIndex];
+                imageElement.style.width = '50%';
+
+                // Crear botones "Anterior" y "Siguiente"
+                var prevButton = document.createElement('button');
+                prevButton.textContent = 'Anterior';
+                var nextButton = document.createElement('button');
+                nextButton.textContent = 'Siguiente';
+
+                // Mostrar el Swal con la imagen y botones
                 Swal.fire({
-                    title: 'Imágenes del Ticket',
+                    title: 'Imágenes del Ticket ' + idTicket,
                     html: imageElement,
                     confirmButtonText: 'Cerrar',
                     showCloseButton: true,
@@ -113,11 +122,28 @@ function getImageTicket(idTicket) {
                     customClass: {
                         container: 'swal-wide',
                     },
-                    width: '80%',
+                    width: '50%',
+                 
                     padding: '2rem',
                     backdrop: true,
                     allowOutsideClick: true,
                     allowEscapeKey: false,
+                    footer: prevButton.outerHTML + nextButton.outerHTML, // Agregar los botones al pie del Swal
+                });
+
+                // Agregar eventos para los botones "Anterior" y "Siguiente"
+                prevButton.addEventListener('click', function () {
+                    if (currentImageIndex > 0) {
+                        currentImageIndex--;
+                        imageElement.src = 'data:image/jpeg;base64,' + base64Images[currentImageIndex];
+                    }
+                });
+
+                nextButton.addEventListener('click', function () {
+                    if (currentImageIndex < base64Images.length - 1) {
+                        currentImageIndex++;
+                        imageElement.src = 'data:image/jpeg;base64,' + base64Images[currentImageIndex];
+                    }
                 });
             } else {
                 Swal.fire('Información', 'El ticket no tiene imágenes adjuntas', 'info');
@@ -128,6 +154,7 @@ function getImageTicket(idTicket) {
         }
     });
 }
+
 function showMoreInformation(idTicket) {
     $.ajax({
         url: '/Tickets/consultarTicket?idTicket=' + idTicket,

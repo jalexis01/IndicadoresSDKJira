@@ -321,8 +321,24 @@ namespace DashboarJira.Services
                 }
             }
 
-            return imageList;
+            List<byte[]> jpegImages = imageList.Where(imageBytes => IsJpegImage(imageBytes)).ToList();
+
+            return jpegImages;
         }
+
+
+        private bool IsJpegImage(byte[] imageBytes)
+        {
+            if (imageBytes.Length >= 2 && imageBytes[0] == 0xFF && imageBytes[1] == 0xD8)
+            {
+                return true; // Los primeros bytes coinciden con la secuencia de inicio de un archivo JPEG
+            }
+            else
+            {
+                return false; // No es una imagen JPEG
+            }
+        }
+
         public IssueJira convertIssueInIssueJira(Issue issue)
         {
             IssueJira temp = new IssueJira();
