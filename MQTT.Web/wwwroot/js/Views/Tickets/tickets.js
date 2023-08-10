@@ -128,7 +128,6 @@ function getImageTicket(idTicket) {
                     backdrop: true,
                     allowOutsideClick: true,
                     allowEscapeKey: false,
-                    buttons: ["Cancelar", "Agregar"],
                 });
             } else {
                 Swal.fire('Información', 'El ticket no tiene imágenes adjuntas', 'info');

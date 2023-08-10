@@ -715,7 +715,8 @@ var detailsData = function (args) {
         showCloseButton: false,
         closeOnClickOutside: false,
 
-        footer: '<button id="verMasBtn" class="btn btn-primary">Ver imagen</button>', // Agregar el botón en el pie del modal
+        //footer: '<button id="verMasBtn" class="btn btn-primary">Ver imagen</button>', // Agregar el botón en el pie del modal
+        footer: '<button id="verMasBtn" class= "text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" >Ver imagen</button >', // Agregar el botón en el pie del modal
         customClass: {
             container: 'swal2-container',
             content: 'max-h-full',
