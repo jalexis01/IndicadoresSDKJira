@@ -307,7 +307,6 @@ namespace DashboarJira.Services
             var issue = jira.Issues.GetIssueAsync(id).Result;
             var attachments = issue.GetAttachmentsAsync().Result;
             List<byte[]> imageList = new List<byte[]>();
-            List<string> imageList2 = new List<string>();
 
             using (HttpClient client = new HttpClient())
             {
@@ -316,28 +315,52 @@ namespace DashboarJira.Services
 
                 foreach (var attachment in attachments)
                 {
-                    if(attachment.MimeType == "image/jpeg")
+                    if (attachment.MimeType == "image/jpeg" ||
+                        attachment.MimeType == "image/png" ||
+                        attachment.MimeType == "image/gif" ||
+                        attachment.MimeType == "image/bmp" ||
+                        attachment.MimeType == "image/webp" ||
+                        attachment.MimeType == "image/tiff" ||
+                        attachment.MimeType == "image/x-icon" ||
+                        attachment.MimeType == "image/svg+xml" ||
+                        attachment.MimeType == "image/apng" ||
+                        attachment.MimeType == "image/avif" ||
+                        attachment.MimeType == "image/cgm" ||
+                        attachment.MimeType == "image/ief" ||
+                        attachment.MimeType == "image/jp2" ||
+                        attachment.MimeType == "image/jpm" ||
+                        attachment.MimeType == "image/jpx" ||
+                        attachment.MimeType == "image/ktx" ||
+                        attachment.MimeType == "image/ovtf" ||
+                        attachment.MimeType == "image/vnd.adobe.photoshop" ||
+                        attachment.MimeType == "image/vnd.microsoft.icon" ||
+                        attachment.MimeType == "image/vnd.radiance" ||
+                        attachment.MimeType == "image/x-cmu-raster" ||
+                        attachment.MimeType == "image/x-portable-anymap" ||
+                        attachment.MimeType == "image/x-portable-bitmap" ||
+                        attachment.MimeType == "image/x-portable-graymap" ||
+                        attachment.MimeType == "image/x-portable-pixmap" ||
+                        attachment.MimeType == "image/x-rgb" ||
+                        attachment.MimeType == "image/x-xbitmap" ||
+                        attachment.MimeType == "image/x-xpixmap" ||
+                        attachment.MimeType == "image/x-xwindowdump")
                     {
                         string imageUrl = $"{jiraUrl}/rest/api/2/attachment/content/{attachment.Id}";
 
                         byte[] imageBytes = client.GetByteArrayAsync(imageUrl).Result;
                         imageList.Add(imageBytes);
-                        imageList2.Add(attachment.Id + "-" + attachment.MimeType);
                     }
-
                 }
             }
 
-            
-
             return imageList;
         }
+
         public List<byte[]> GetAttachmentVideos(string id)
         {
             var issue = jira.Issues.GetIssueAsync(id).Result;
             var attachments = issue.GetAttachmentsAsync().Result;
             List<byte[]> videoList = new List<byte[]>();
-            List<string> videoList2 = new List<string>();
 
             using (HttpClient client = new HttpClient())
             {
@@ -346,13 +369,43 @@ namespace DashboarJira.Services
 
                 foreach (var attachment in attachments)
                 {
-                    if (attachment.MimeType == "video/mp4")
+                    // Check if the MIME type is one of the desired video types
+                    if (attachment.MimeType == "video/mp4" ||
+                       attachment.MimeType == "video/webm" ||
+                       attachment.MimeType == "video/avi" ||
+                       attachment.MimeType == "video/quicktime" ||  // For MOV files
+                       attachment.MimeType == "video/mpeg" ||
+                       attachment.MimeType == "video/x-mpeg" ||
+                       attachment.MimeType == "video/x-mpeg2a" ||    // For MPG/MPEG files
+                       attachment.MimeType == "video/3gpp" ||       // For 3GP files
+                       attachment.MimeType == "video/x-flv" ||      // For FLV files
+                       attachment.MimeType == "video/x-ms-wmv" ||   // For WMV files
+                       attachment.MimeType == "video/x-msvideo" ||  // For AVI files
+                       attachment.MimeType == "video/x-matroska" || // For MKV files
+                       attachment.MimeType == "video/x-theora" ||   // For OGV files
+                       attachment.MimeType == "video/vnd.rn-realvideo" || // For RMVB files
+                       attachment.MimeType == "video/ogg" ||           // For OGG files
+                       attachment.MimeType == "video/x-ms-asf" ||     // For ASF files
+                       attachment.MimeType == "video/3gpp2" ||        // For 3G2 files
+                       attachment.MimeType == "video/vnd.dvb.file" || // For DVB files
+                       attachment.MimeType == "video/x-f4v" ||        // For F4V files
+                       attachment.MimeType == "video/x-fli" ||        // For FLI files
+                       attachment.MimeType == "video/x-flv" ||        // For FLV files
+                       attachment.MimeType == "video/x-m4v" ||        // For M4V files
+                       attachment.MimeType == "video/x-ms-vob" ||     // For VOB files
+                       attachment.MimeType == "video/x-ms-wm" ||      // For WM files
+                       attachment.MimeType == "video/x-ms-wmv" ||     // For WMV files
+                       attachment.MimeType == "video/x-ms-wmx" ||     // For WMX files
+                       attachment.MimeType == "video/x-ms-wvx" ||     // For WVX files
+                       attachment.MimeType == "video/x-msvideo" ||    // For AVI files
+                       attachment.MimeType == "video/x-sgi-movie" ||  // For Movie files
+                       attachment.MimeType == "video/x-smv" ||        // For SMV files
+                       attachment.MimeType == "video/x-flv")          // For FLV files
                     {
                         string videoUrl = $"{jiraUrl}/rest/api/2/attachment/content/{attachment.Id}";
 
                         byte[] videoBytes = client.GetByteArrayAsync(videoUrl).Result;
                         videoList.Add(videoBytes);
-                        videoList2.Add(attachment.Id + "-" + attachment.MimeType);
                     }
                 }
             }
@@ -362,7 +415,6 @@ namespace DashboarJira.Services
 
 
 
-     
         public IssueJira convertIssueInIssueJira(Issue issue)
         {
             IssueJira temp = new IssueJira();

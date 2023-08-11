@@ -128,7 +128,7 @@ function getImageTicket(idTicket) {
                     backdrop: true,
                     allowOutsideClick: true,
                     allowEscapeKey: false,
-                    buttons: ["Cancelar", "Agregar"],
+                   
                 });
             } else {
                 Swal.fire('Información', 'El ticket no tiene imágenes adjuntas', 'info');
@@ -161,28 +161,47 @@ function getVideoTicket(idTicket) {
 function openVideoModal(idTicket) {
     getVideoTicket(idTicket)
         .then(function (base64Videos) {
-            var videoHtml = base64Videos.map(function (base64Video) {
-                return '<video controls><source src="data:video/mp4;base64,' + base64Video + '" type="video/mp4"></video>';
-            }).join('');
-            
-            Swal.fire({
-                title: 'Videos Adjuntos del ' +idTicket,
-                html: videoHtml,
-                showConfirmButton: false,
-                showCloseButton: true,
-                customClass: {
-                    container: 'swal2-container',
-                    content: 'max-h-full',
-                    popup: 'swal2-popup',
-                },
-                width: '80hv'
-            });
+            if (base64Videos.length > 0) {
+                var videoContainer = document.createElement('div');
+                videoContainer.style.display = 'flex';
+                videoContainer.style.flexWrap = 'wrap';
+                videoContainer.style.justifyContent = 'center';
+
+                // Iterate through the list of base64 videos and create video elements
+                for (var i = 0; i < base64Videos.length; i++) {
+                    var base64Video = base64Videos[i];
+                    var videoElement = document.createElement('video');
+                    videoElement.controls = true;
+                    videoElement.src = 'data:video/mp4;base64,' + base64Video;
+                    videoElement.style.width = '70%'; // Adjust the width as needed
+                    videoElement.style.margin = '10px';
+                    videoContainer.appendChild(videoElement);
+                }
+
+                // Show the video container in the Swal dialog
+                Swal.fire({
+                    title: 'Videos del ' + idTicket,
+                    html: videoContainer,
+                    confirmButtonText: 'Cerrar',
+                    showCloseButton: true,
+                    showConfirmButton: true,
+                    customClass: {
+                        container: 'swal-wide',
+                    },
+                    width: '50%', // Adjust the width as needed
+                    padding: '2rem',
+                    backdrop: true,
+                    allowOutsideClick: true,
+                    allowEscapeKey: false,
+                });
+            } else {
+                Swal.fire('Información', 'El ticket no tiene videos adjuntos', 'info');
+            }
         })
         .catch(function (error) {
-            console.error(error); // Maneja el error de manera adecuada
+            Swal.fire('Error', 'El ticket no tiene videos', 'error');
         });
 }
-
 
 
 

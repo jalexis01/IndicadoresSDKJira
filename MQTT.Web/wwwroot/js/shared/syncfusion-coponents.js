@@ -714,9 +714,9 @@ var detailsData = function (args) {
         showConfirmButton: false,
         showCloseButton: false,
         closeOnClickOutside: false,
-        footer: '<button id="verMasBtn" style="background: linear-gradient(to bottom right, #f66a1c, #fe9c16); color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-weight: bold;" onclick="openImageModal(\'' + idTicket + '\')">Ver imagen</button>' +
-            '<button id="verVideoBtn" style="background: linear-gradient(to bottom right, #f66a1c, #fe9c16); color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-weight: bold;" onclick="openVideoModal(\'' + idTicket + '\')">Ver video</button>',
- customClass: {
+        footer: '<button id="verMasBtn" style="background: linear-gradient(to bottom right, #f66a1c, #fe9c16); color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-weight: bold; margin-right: 5px;" onclick="openImageModal(\'' + idTicket + '\')">Ver imagen</button>' +
+                '<button id="verVideoBtn" style="background: linear-gradient(to bottom right, #f66a1c, #fe9c16); color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-weight: bold; margin-left: 5px;" onclick="openVideoModal(\'' + idTicket + '\')">Ver video</button>',
+customClass: {
             container: 'swal2-container',
             content: 'max-h-full',
             popup: 'swal2-popup',
@@ -744,7 +744,6 @@ var detailsData = function (args) {
                 });
             });
             document.getElementById('verVideoBtn').addEventListener('click', function () {
-                openVideoModal(idTicket);
                 Swal.fire({
                     title: 'Cargando videos...',
                     html: '<div class="spinner-border text-primary" role="status"><span class="sr-only">Cargando imágenes...</span></div>',
@@ -758,9 +757,11 @@ var detailsData = function (args) {
                     },
                     didOpen: () => {
                         Swal.showLoading();
+                        // Llama a openVideoModal aquí, después de mostrar el modal de carga
                     }
                 });
             });
+
         },
     });
     //getImageTicket(idTicket);
