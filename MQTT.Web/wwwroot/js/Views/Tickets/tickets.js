@@ -179,9 +179,9 @@ function getImageTicket(idTicket) {
                     downloadButton.download = 'imagen_' + (i + 1) + '.jpg';
                     downloadButton.style.display = 'block';
                     downloadButton.style.marginTop = '5px';
-                    downloadButton.style.background = '#3490dc';
+                    downloadButton.style.background = 'linear-gradient(to bottom right, #4CAF50, #66BB6A)';
                     downloadButton.style.color = 'white';
-                    downloadButton.style.border = 'none';
+                    downloadButton.style.border = '5px solid #63c267';
                     downloadButton.style.borderRadius = '4px';
                     downloadButton.style.padding = '8px 16px';
                     downloadButton.style.cursor = 'pointer';
@@ -240,6 +240,8 @@ function openVideoModal(idTicket) {
             if (base64Videos.length > 0) {
                 var videoContainer = document.createElement('div');
                 videoContainer.style.display = 'flex';
+                videoContainer.style.flexDirection = 'column';
+                    videoContainer.style.alignItems = 'center';
                 videoContainer.style.flexWrap = 'wrap';
                 videoContainer.style.justifyContent = 'center';
 
@@ -263,9 +265,9 @@ function openVideoModal(idTicket) {
                     downloadButton.textContent = 'Descargar Video';
                     downloadButton.href = 'data:video/mp4;base64,' + base64Video;
                     downloadButton.download = 'video_' + (i + 1) + '.mp4';
-                    downloadButton.style.background = '#e3342f';
+                    downloadButton.style.background = 'linear-gradient(to bottom right, #4CAF50, #66BB6A)';
                     downloadButton.style.color = 'white';
-                    downloadButton.style.border = 'none';
+                    downloadButton.style.border = '5px solid #63c267';
                     downloadButton.style.borderRadius = '4px';
                     downloadButton.style.padding = '8px 16px';
                     downloadButton.style.cursor = 'pointer';
