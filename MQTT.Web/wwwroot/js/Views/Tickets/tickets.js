@@ -103,14 +103,26 @@ function getImageTicket(idTicket) {
                 imageContainer.style.display = 'flex';
                 imageContainer.style.flexWrap = 'wrap';
                 imageContainer.style.justifyContent = 'center';
+
                 // Iterate through the list of base64 images and create image elements
                 for (var i = 0; i < base64Images.length; i++) {
                     var base64Image = base64Images[i];
+
+                    // Create the image element
                     var imageElement = document.createElement('img');
                     imageElement.src = 'data:image/jpeg;base64,' + base64Image;
                     imageElement.style.width = '90%'; // Adjust the width as needed
                     imageElement.style.margin = '10px';
                     imageContainer.appendChild(imageElement);
+
+                    // Create the download button for the image
+                    var downloadButton = document.createElement('a');
+                    downloadButton.textContent = 'Descargar Imagen';
+                    downloadButton.href = 'data:image/jpeg;base64,' + base64Image;
+                    downloadButton.download = 'imagen_' + (i + 1) + '.jpg';
+                    downloadButton.style.display = 'block';
+                    downloadButton.style.marginTop = '5px';
+                    imageContainer.appendChild(downloadButton);
                 }
 
                 // Show the image container in the Swal dialog
@@ -128,7 +140,6 @@ function getImageTicket(idTicket) {
                     backdrop: true,
                     allowOutsideClick: true,
                     allowEscapeKey: false,
-                   
                 });
             } else {
                 Swal.fire('Información', 'El ticket no tiene imágenes adjuntas', 'info');
@@ -139,6 +150,71 @@ function getImageTicket(idTicket) {
         }
     });
 }
+function getImageTicket(idTicket) {
+    $.ajax({
+        url: '/Tickets/getImageTicket?idTicket=' + idTicket,
+        data: { idTicket: idTicket },
+        success: function (base64Images) {
+            if (base64Images && base64Images.length > 0) {
+                var imageContainer = document.createElement('div');
+                imageContainer.style.display = 'flex';
+                imageContainer.style.flexWrap = 'wrap';
+                imageContainer.style.justifyContent = 'center';
+
+                // Iterate through the list of base64 images and create image elements
+                for (var i = 0; i < base64Images.length; i++) {
+                    var base64Image = base64Images[i];
+
+                    // Create the image element
+                    var imageElement = document.createElement('img');
+                    imageElement.src = 'data:image/jpeg;base64,' + base64Image;
+                    imageElement.style.width = '90%'; // Adjust the width as needed
+                    imageElement.style.margin = '10px';
+                    imageContainer.appendChild(imageElement);
+
+                    // Create the download button for the image
+                    var downloadButton = document.createElement('a');
+                    downloadButton.textContent = 'Descargar Imagen';
+                    downloadButton.href = 'data:image/jpeg;base64,' + base64Image;
+                    downloadButton.download = 'imagen_' + (i + 1) + '.jpg';
+                    downloadButton.style.display = 'block';
+                    downloadButton.style.marginTop = '5px';
+                    downloadButton.style.background = '#3490dc';
+                    downloadButton.style.color = 'white';
+                    downloadButton.style.border = 'none';
+                    downloadButton.style.borderRadius = '4px';
+                    downloadButton.style.padding = '8px 16px';
+                    downloadButton.style.cursor = 'pointer';
+                    downloadButton.style.textDecoration = 'none';
+                    imageContainer.appendChild(downloadButton);
+                }
+
+                // Show the image container in the Swal dialog
+                Swal.fire({
+                    title: 'Imágenes del ' + idTicket,
+                    html: imageContainer,
+                    confirmButtonText: 'Cerrar',
+                    showCloseButton: true,
+                    showConfirmButton: true,
+                    customClass: {
+                        container: 'swal-wide',
+                    },
+                    width: '80%', // Adjust the width as needed
+                    padding: '2rem',
+                    backdrop: true,
+                    allowOutsideClick: true,
+                    allowEscapeKey: false,
+                });
+            } else {
+                Swal.fire('Información', 'El ticket no tiene imágenes adjuntas', 'info');
+            }
+        },
+        error: function () {
+            Swal.fire('Error', 'El ticket no tiene imágenes', 'error');
+        }
+    });
+}
+
 
 function getVideoTicket(idTicket) {
     return new Promise(function (resolve, reject) {
@@ -176,6 +252,28 @@ function openVideoModal(idTicket) {
                     videoElement.style.width = '70%'; // Adjust the width as needed
                     videoElement.style.margin = '10px';
                     videoContainer.appendChild(videoElement);
+
+                    // Create a div for the download button container
+                    var downloadContainer = document.createElement('div');
+                    downloadContainer.style.textAlign = 'center';
+                    downloadContainer.style.marginTop = '5px';
+
+                    // Create the download button for the video
+                    var downloadButton = document.createElement('a');
+                    downloadButton.textContent = 'Descargar Video';
+                    downloadButton.href = 'data:video/mp4;base64,' + base64Video;
+                    downloadButton.download = 'video_' + (i + 1) + '.mp4';
+                    downloadButton.style.background = '#e3342f';
+                    downloadButton.style.color = 'white';
+                    downloadButton.style.border = 'none';
+                    downloadButton.style.borderRadius = '4px';
+                    downloadButton.style.padding = '8px 16px';
+                    downloadButton.style.cursor = 'pointer';
+                    downloadButton.style.textDecoration = 'none';
+                    downloadContainer.appendChild(downloadButton);
+
+                    // Append the download container to the video container
+                    videoContainer.appendChild(downloadContainer);
                 }
 
                 // Show the video container in the Swal dialog
@@ -202,6 +300,7 @@ function openVideoModal(idTicket) {
             Swal.fire('Error', 'El ticket no tiene videos', 'error');
         });
 }
+
 
 
 
