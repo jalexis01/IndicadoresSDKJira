@@ -139,6 +139,53 @@ function getImageTicket(idTicket) {
         }
     });
 }
+
+function getVideoTicket(idTicket) {
+    return new Promise(function (resolve, reject) {
+        $.ajax({
+            url: '/Tickets/getVideoTicket?idTicket=' + idTicket,
+            data: { idTicket: idTicket },
+            success: function (base64Videos) {
+                if (base64Videos && base64Videos.length > 0) {
+                    resolve(base64Videos);
+                } else {
+                    reject('No se encontraron videos adjuntos');
+                }
+            },
+            error: function () {
+                reject('Error al obtener los videos');
+            }
+        });
+    });
+}
+function openVideoModal(idTicket) {
+    getVideoTicket(idTicket)
+        .then(function (base64Videos) {
+            var videoHtml = base64Videos.map(function (base64Video) {
+                return '<video controls><source src="data:video/mp4;base64,' + base64Video + '" type="video/mp4"></video>';
+            }).join('');
+            
+            Swal.fire({
+                title: 'Videos Adjuntos del ' +idTicket,
+                html: videoHtml,
+                showConfirmButton: false,
+                showCloseButton: true,
+                customClass: {
+                    container: 'swal2-container',
+                    content: 'max-h-full',
+                    popup: 'swal2-popup',
+                },
+                width: '80hv'
+            });
+        })
+        .catch(function (error) {
+            console.error(error); // Maneja el error de manera adecuada
+        });
+}
+
+
+
+
 function showMoreInformation(idTicket) {
     $.ajax({
         url: '/Tickets/consultarTicket?idTicket=' + idTicket,

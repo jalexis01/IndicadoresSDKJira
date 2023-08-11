@@ -129,6 +129,36 @@ namespace MQTT.Web.Controllers
                 return StatusCode(500, ex.Message); // or handle the exception in an appropriate way
             }
         }
+        public IActionResult GetVideoTicket(string idTicket)
+        {
+            try
+            {
+                JiraAccess jira = new JiraAccess();
+                List<byte[]> videos = jira.GetAttachmentVideos(idTicket); // Modifica este método para obtener los bytes de video
+
+                if (videos.Count > 0)
+                {
+                    List<string> base64Videos = new List<string>();
+
+                    foreach (byte[] videoData in videos)
+                    {
+                        // Convierte los bytes de video a una cadena base64
+                        string base64Video = Convert.ToBase64String(videoData);
+                        base64Videos.Add(base64Video);
+                    }
+
+                    return Ok(base64Videos);
+                }
+                else
+                {
+                    return NotFound(); // o devuelve una respuesta adecuada cuando no se encuentren videos
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message); // o maneja la excepción de manera apropiada
+            }
+        }
 
 
     }

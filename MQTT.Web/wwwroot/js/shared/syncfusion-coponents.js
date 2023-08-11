@@ -714,9 +714,9 @@ var detailsData = function (args) {
         showConfirmButton: false,
         showCloseButton: false,
         closeOnClickOutside: false,
-
-        footer: '<button id="verMasBtn" class="btn btn-primary">Ver imagen</button>', // Agregar el botón en el pie del modal
-        customClass: {
+        footer: '<button id="verMasBtn" style="background: linear-gradient(to bottom right, #f66a1c, #fe9c16); color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-weight: bold;" onclick="openImageModal(\'' + idTicket + '\')">Ver imagen</button>' +
+            '<button id="verVideoBtn" style="background: linear-gradient(to bottom right, #f66a1c, #fe9c16); color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-weight: bold;" onclick="openVideoModal(\'' + idTicket + '\')">Ver video</button>',
+ customClass: {
             container: 'swal2-container',
             content: 'max-h-full',
             popup: 'swal2-popup',
@@ -743,10 +743,30 @@ var detailsData = function (args) {
                     }
                 });
             });
+            document.getElementById('verVideoBtn').addEventListener('click', function () {
+                openVideoModal(idTicket);
+                Swal.fire({
+                    title: 'Cargando videos...',
+                    html: '<div class="spinner-border text-primary" role="status"><span class="sr-only">Cargando imágenes...</span></div>',
+                    showCancelButton: false,
+                    showConfirmButton: false,
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    customClass: {
+                        popup: 'swal2-no-close',
+                        container: 'swal2-no-close',
+                    },
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+            });
         },
     });
     //getImageTicket(idTicket);
 };
+
+
 /*
  var detailsData = function(args) {
     var dataHtmlList = "";

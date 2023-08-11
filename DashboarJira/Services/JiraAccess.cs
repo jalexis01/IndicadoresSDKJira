@@ -332,19 +332,37 @@ namespace DashboarJira.Services
 
             return imageList;
         }
-
-
-        private bool IsJpegImage(byte[] imageBytes)
+        public List<byte[]> GetAttachmentVideos(string id)
         {
-            if (imageBytes.Length >= 2 && imageBytes[0] == 0xFF && imageBytes[1] == 0xD8)
+            var issue = jira.Issues.GetIssueAsync(id).Result;
+            var attachments = issue.GetAttachmentsAsync().Result;
+            List<byte[]> videoList = new List<byte[]>();
+            List<string> videoList2 = new List<string>();
+
+            using (HttpClient client = new HttpClient())
             {
-                return true; // Los primeros bytes coinciden con la secuencia de inicio de un archivo JPEG
+                string credentials = Convert.ToBase64String(Encoding.ASCII.GetBytes($"{username}:{password}"));
+                client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", credentials);
+
+                foreach (var attachment in attachments)
+                {
+                    if (attachment.MimeType == "video/mp4")
+                    {
+                        string videoUrl = $"{jiraUrl}/rest/api/2/attachment/content/{attachment.Id}";
+
+                        byte[] videoBytes = client.GetByteArrayAsync(videoUrl).Result;
+                        videoList.Add(videoBytes);
+                        videoList2.Add(attachment.Id + "-" + attachment.MimeType);
+                    }
+                }
             }
-            else
-            {
-                return false; // No es una imagen JPEG
-            }
+
+            return videoList;
         }
+
+
+
+     
         public IssueJira convertIssueInIssueJira(Issue issue)
         {
             IssueJira temp = new IssueJira();
