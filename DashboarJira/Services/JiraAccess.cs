@@ -249,6 +249,8 @@ namespace DashboarJira.Services
             temp.tipo_causa = (issue.CustomFields["Tipo de causa"] != null ? issue.CustomFields["Tipo de causa"].Values[0] : "null");
 
 
+
+
             //temp.estado_ticket = issue.Status.Name;
             
             if (issue.Status.Name == "Cerrado" || issue.Status.Name == "DESCARTADO")
@@ -263,6 +265,12 @@ namespace DashboarJira.Services
             temp.estado_ticket = (issue.Status != null ? issue.Status.Name : "null");
             
             temp.descripcion = (issue.Description != null ? issue.Description : "null");
+
+
+            temp.canal_comunicacion = (issue.CustomFields["Canal comunicacion"] != null ? issue.CustomFields["Canal comunicacion"].Values[0] : "null");
+
+
+
 
             return temp;
 
