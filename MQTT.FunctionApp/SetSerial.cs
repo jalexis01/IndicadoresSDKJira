@@ -30,7 +30,7 @@ namespace MQTT.FunctionApp
 
             var connectionString = Environment.GetEnvironmentVariable("ConnectionStringDB", EnvironmentVariableTarget.Process);
             string token = Environment.GetEnvironmentVariable("TokenJira", EnvironmentVariableTarget.Process).ToString();
-            //var connectionString = "Server=manatee.database.windows.net;Database=PuertasTransmilenioDB;User Id=administrador;Password=2022/M4n4t334zur3;";
+            //var connectionString = "Server=manatee.database.windows.net;Database=PuertasTransmilenioDBAssaabloy;User Id=administrador;Password=2022/M4n4t334zur3;";
             //string token = "ZGVzYXJyb2xsb2NjQG1hbmF0ZWVpbmdlbmllcmlhLmNvbTpoZlV0Z1o5UkZHb1F5MlNmSDdzQ0Y5QTY=";
             General DBAccess = new General(connectionString);
 
@@ -49,7 +49,7 @@ namespace MQTT.FunctionApp
                 log.LogInformation($"{guid}=== body: {requestBody}");
 
                 JObject data = JObject.Parse(requestBody);
-                string field = (string)data["issue"]["fields"]["customfield_10060"];
+                string field = (string)data["issue"]["fields"][Constantes.IdentificacionComponente];
                 string key = (string)data["issue"]["key"];
                 log.LogInformation($"{guid}=== issue Key: {key}");
                 log.LogInformation($"{guid}=== field to search: {field}");
