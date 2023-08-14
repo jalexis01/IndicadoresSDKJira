@@ -711,11 +711,15 @@ var detailsData = function (args) {
         title: '<strong><u>Información</u></strong>',
         html: '<div style="max-height: 100vh; overflow-y: auto; overflow-x: scroll;"><div style="width: fit-content;"><ul class="max-w-full divide-y divide-gray-200 dark:divide-gray-700">' + dataHtmlList + '</ul></div></div>',
         scroll: true,
+        showCancelButton: false,
         showConfirmButton: false,
-        showCloseButton: false,
+
+        showCloseButton: true,
         closeOnClickOutside: false,
-        footer: '<button id="verMasBtn" class= "text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" >Ver imagen</button >' +
-                '<button id="verVideoBtn" class= "text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" >Ver video</button >',
+        footer: '<button id="verMasBtn" style="background: linear-gradient(to bottom right, #FFD700, #FFB800); color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-weight: bold; margin-right: 5px;" onclick="openImageModal(\'' + idTicket + '\')">Ver imagen</button>' +
+            '<button id="verVideoBtn" style="background: linear-gradient(to bottom right, #f66a1c, #fe9c16); color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-weight: bold; margin-left: 5px; margin-right: 5px;" onclick="openVideoModal(\'' + idTicket + '\')">Ver video</button>' +
+            '<button id="cerrarBtn" style="background: linear-gradient(to bottom right, #ff4d4d, #ff9999); color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-weight: bold; margin-left: 5px; margin-right: 5px;" onclick="closeSwal()">Cerrar</button>',
+
         customClass: {
             container: 'swal2-container',
             content: 'max-h-full',
@@ -744,7 +748,6 @@ var detailsData = function (args) {
                 });
             });
             document.getElementById('verVideoBtn').addEventListener('click', function () {
-                openVideoModal(idTicket);
                 Swal.fire({
                     title: 'Cargando videos...',
                     html: '<div class="spinner-border text-primary" role="status"><span class="sr-only">Cargando imágenes...</span></div>',
@@ -758,13 +761,18 @@ var detailsData = function (args) {
                     },
                     didOpen: () => {
                         Swal.showLoading();
+                        // Llama a openVideoModal aquí, después de mostrar el modal de carga
                     }
                 });
             });
+
         },
     });
     //getImageTicket(idTicket);
 };
+function closeSwal() {
+    Swal.close();
+}
 
 
 function createElemntsTimesMessage() {
