@@ -96,6 +96,7 @@ function getImageTicket(idTicket) {
                 imageContainer.style.display = 'flex';
                 imageContainer.style.flexWrap = 'wrap';
                 imageContainer.style.justifyContent = 'center';
+                var footerHtml = '<button id="cerrarBtn" style="background: linear-gradient(to bottom right, #888888, #555555); color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-weight: bold; margin-left: 5px; margin-right: 5px;" onclick="closeSwal()">Cerrar</button>';
 
                 // Iterate through the list of base64 images and create image elements
                 for (var i = 0; i < base64Images.length; i++) {
@@ -129,13 +130,14 @@ function getImageTicket(idTicket) {
                 Swal.fire({
                     title: 'Imágenes del ' + idTicket,
                     html: imageContainer,
-                    confirmButtonText: 'Cerrar',
+                    //confirmButtonText: 'Cerrar',
                     showCloseButton: true,
-                    showConfirmButton: true,
+                    showConfirmButton: false,
+                    footer: footerHtml,
                     customClass: {
                         container: 'swal-wide',
                     },
-                    width: '80%', // Adjust the width as needed
+                    width: '50%', // Adjust the width as needed
                     padding: '2rem',
                     backdrop: true,
                     allowOutsideClick: true,
@@ -181,7 +183,7 @@ function openVideoModal(idTicket) {
                 videoContainer.style.alignItems = 'center';
                 videoContainer.style.flexWrap = 'wrap';
                 videoContainer.style.justifyContent = 'center';
-
+                var footerHtml = '<button id="cerrarBtn" style="background: linear-gradient(to bottom right, #888888, #555555); color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-weight: bold; margin-left: 5px; margin-right: 5px;" onclick="closeSwal()">Cerrar</button>';
                 // Iterate through the list of base64 videos and create video elements
                 for (var i = 0; i < base64Videos.length; i++) {
                     var base64Video = base64Videos[i];
@@ -222,9 +224,10 @@ function openVideoModal(idTicket) {
                 Swal.fire({
                     title: 'Videos del ' + idTicket,
                     html: videoContainer,
-                    confirmButtonText: 'Cerrar',
+                    //confirmButtonText: 'Cerrar',
                     showCloseButton: true,
-                    showConfirmButton: true,
+                    showConfirmButton: false,
+                    footer: footerHtml,
                     customClass: {
                         container: 'swal-wide',
                     },
