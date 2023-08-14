@@ -711,12 +711,16 @@ var detailsData = function (args) {
         title: '<strong><u>Información</u></strong>',
         html: '<div style="max-height: 100vh; overflow-y: auto; overflow-x: scroll;"><div style="width: fit-content;"><ul class="max-w-full divide-y divide-gray-200 dark:divide-gray-700">' + dataHtmlList + '</ul></div></div>',
         scroll: true,
+        showCancelButton: false,
         showConfirmButton: false,
-        showCloseButton: false,
+        
+        showCloseButton: true,
         closeOnClickOutside: false,
         footer: '<button id="verMasBtn" style="background: linear-gradient(to bottom right, #FFD700, #FFB800); color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-weight: bold; margin-right: 5px;" onclick="openImageModal(\'' + idTicket + '\')">Ver imagen</button>' +
-                '<button id="verVideoBtn" style="background: linear-gradient(to bottom right, #f66a1c, #fe9c16); color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-weight: bold; margin-left: 5px;" onclick="openVideoModal(\'' + idTicket + '\')">Ver video</button>',
-customClass: {
+            '<button id="verVideoBtn" style="background: linear-gradient(to bottom right, #f66a1c, #fe9c16); color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-weight: bold; margin-left: 5px; margin-right: 5px;" onclick="openVideoModal(\'' + idTicket + '\')">Ver video</button>' +
+            '<button id="cerrarBtn" style="background: linear-gradient(to bottom right, #ff4d4d, #ff9999); color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-weight: bold; margin-left: 5px; margin-right: 5px;" onclick="closeSwal()">Cerrar</button>',
+
+        customClass: {
             container: 'swal2-container',
             content: 'max-h-full',
             popup: 'swal2-popup',
@@ -766,7 +770,9 @@ customClass: {
     });
     //getImageTicket(idTicket);
 };
-
+function closeSwal() {
+    Swal.close();
+}
 
 /*
  var detailsData = function(args) {

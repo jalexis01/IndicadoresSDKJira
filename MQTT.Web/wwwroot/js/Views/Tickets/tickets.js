@@ -346,6 +346,13 @@ function showMoreInformation(idTicket) {
     });
 }
 
+
+
+function closeSwal() {
+    Swal.close();
+}
+
+
 function exportToExcel() {
     var table = document.getElementById("table");
     var headers = table.getElementsByTagName("th");
