@@ -26,7 +26,7 @@
         public string? descripcion { get; set; }
         public string? canal_comunicacion { get; set; }
         public string? quien_requiere_servicio { get; set; }
-        public string? operador_ma { get; set; }
+        //public string? operador_ma { get; set; }
         public string? codigo_plan_mantenimiento { get; set; }
         public string? descripcion_actividad_mantenimiento { get; set; }
         public string? tecnico_asignado { get; set; }

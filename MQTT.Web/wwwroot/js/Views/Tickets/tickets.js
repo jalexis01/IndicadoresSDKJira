@@ -170,6 +170,7 @@ function getVideoTicket(idTicket) {
         });
     });
 }
+
 function openVideoModal(idTicket) {
     getVideoTicket(idTicket)
         .then(function (base64Videos) {
