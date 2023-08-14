@@ -140,7 +140,7 @@ function getImageTicket(idTicket) {
                     confirmButtonText: 'Cerrar',
                     showCloseButton: true,
                     showConfirmButton: false,
-                    footer: '<button id="cerrarBtn1" style="background: linear-gradient(to bottom right, #888888, #555555); color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-weight: bold; margin-left: 5px;" onclick="regresar(\'' + idTicket + '\')">Cerrar</button>',
+                    footer: '<button id="cerrarBtn1" style="background: linear-gradient(to bottom right, #888888, #555555); color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-weight: bold; margin-left: 5px;" onclick="closeSwal();">Cerrar</button>',
                     customClass: {
                         container: 'swal-wide',
                     },
@@ -232,7 +232,7 @@ function openVideoModal(idTicket) {
                     confirmButtonText: 'Cerrar',
                     showCloseButton: false,
                     showConfirmButton: false,
-                    footer: '<button id="cerrarBtnvid" style="background: linear-gradient(to bottom right, #888888, #555555); color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-weight: bold; margin-left: 5px; margin-right: 5px;" onclick="showMoreInformation(\'' + idTicket + '\');">Cerrar</button>',
+                    footer: '<button id="cerrarBtnvid" style="background: linear-gradient(to bottom right, #888888, #555555); color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-weight: bold; margin-left: 5px; margin-right: 5px;" onclick="closeSwal();">Cerrar</button>',
 
                     customClass: {
                         container: 'swal-wide',
@@ -254,11 +254,7 @@ function openVideoModal(idTicket) {
         });
 }
 
-function regresar(idTicket) {
-    Swal.close(idTicket);
-    
 
-}
 
 function showMoreInformation(idTicket) {
     $.ajax({
