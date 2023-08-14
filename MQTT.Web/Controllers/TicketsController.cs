@@ -98,13 +98,6 @@ namespace MQTT.Web.Controllers
                 JiraAccess jira = new JiraAccess();
                 List<byte[]> images = jira.GetAttachmentImages(idTicket);
 
-                //if (images.Count > 0)
-                //{
-                //    byte[] imageData = images[0]; // Assuming you want to return the first image
-                //    string base64Image = Convert.ToBase64String(imageData);
-                //    return Ok(base64Image);
-                //}
-
                 if (images.Count > 0)
                 {
                     List<string> base64Images = new List<string>();
@@ -128,7 +121,35 @@ namespace MQTT.Web.Controllers
             }
         }
 
+        public IActionResult GetVideoTicket(string idTicket)
+        {
+            try
+            {
+                JiraAccess jira = new JiraAccess();
+                List<byte[]> videos = jira.GetAttachmentVideos(idTicket);
 
+                if (videos.Count > 0)
+                {
+                    List<string> base64Videos = new List<string>();
+
+                    foreach (byte[] videoData in videos)
+                    {
+                        string base64Video = Convert.ToBase64String(videoData);
+                        base64Videos.Add(base64Video);
+                    }
+
+                    return Ok(base64Videos);
+                }
+                else
+                {
+                    return NotFound();
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
     }
 
 }

@@ -705,7 +705,7 @@ var detailsData = function (args) {
         if (formattedKey == "idTicket") {
             idTicket = value;
         }
-        dataHtmlList += "<ul><li style='padding: 1% 0%;'><div class='flex items-start space-x-4'><div class='flex-1 min-w-0' style='text-align: initial;'><p class='text-sm font-medium text-gray-900 truncate dark:text-white'>" + formattedKey + "</p></div></li><li><div class='flex items-start space-x-4'><div class='flex-1 min-w-0' style='text-align: initial'><p class='text-sm font-sm text-gray-900 truncate dark:text-white'>" + value +"</p></div></li></ul>"
+        dataHtmlList += "<ul><li style='padding: 1% 0%;'><div class='flex items-start space-x-4'><div class='flex-1 min-w-0' style='text-align: initial;'><p class='text-sm font-medium text-gray-900 truncate dark:text-white'>" + formattedKey + "</p></div></li><li><div class='flex items-start space-x-4'><div class='flex-1 min-w-0' style='text-align: initial'><p class='text-sm font-sm text-gray-900 truncate dark:text-white'>" + value + "</p></div></li></ul>"
     }
     Swal.fire({
         title: '<strong><u>Información</u></strong>',
@@ -714,9 +714,8 @@ var detailsData = function (args) {
         showConfirmButton: false,
         showCloseButton: false,
         closeOnClickOutside: false,
-
-        //footer: '<button id="verMasBtn" class="btn btn-primary">Ver imagen</button>', // Agregar el botón en el pie del modal
-        footer: '<button id="verMasBtn" class= "text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" >Ver imagen</button >', // Agregar el botón en el pie del modal
+        footer: '<button id="verMasBtn" class= "text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" >Ver imagen</button >' +
+                '<button id="verVideoBtn" class= "text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" >Ver video</button >',
         customClass: {
             container: 'swal2-container',
             content: 'max-h-full',
@@ -726,10 +725,28 @@ var detailsData = function (args) {
         width: '80hv',
         didOpen: function () {
 
-            document.getElementById('verMasBtn').addEventListener('click', async function () {                
+            document.getElementById('verMasBtn').addEventListener('click', async function () {
                 var imageContent = await getImageTicket(idTicket);
                 Swal.fire({
                     title: 'Cargando imágenes...',
+                    html: '<div class="spinner-border text-primary" role="status"><span class="sr-only">Cargando imágenes...</span></div>',
+                    showCancelButton: false,
+                    showConfirmButton: false,
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    customClass: {
+                        popup: 'swal2-no-close',
+                        container: 'swal2-no-close',
+                    },
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+            });
+            document.getElementById('verVideoBtn').addEventListener('click', function () {
+                openVideoModal(idTicket);
+                Swal.fire({
+                    title: 'Cargando videos...',
                     html: '<div class="spinner-border text-primary" role="status"><span class="sr-only">Cargando imágenes...</span></div>',
                     showCancelButton: false,
                     showConfirmButton: false,
@@ -748,6 +765,7 @@ var detailsData = function (args) {
     });
     //getImageTicket(idTicket);
 };
+
 /*
  var detailsData = function(args) {
     var dataHtmlList = "";

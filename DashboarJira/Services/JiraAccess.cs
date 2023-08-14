@@ -179,6 +179,8 @@ namespace DashboarJira.Services
             Ticket temp = new Ticket();
             temp.id_ticket = issue.Key.Value;
 
+            temp.canal_comunicacion = (issue.CustomFields["Canal comunicacion"] != null ? issue.CustomFields["Canal comunicacion"].Values[0] : "null");
+
             temp.id_estacion = (issue.CustomFields["Estacion"] != null ? issue.CustomFields["Estacion"].Values[0] : "null");
 
 
@@ -264,6 +266,8 @@ namespace DashboarJira.Services
             
             temp.descripcion = (issue.Description != null ? issue.Description : "null");
 
+            
+
             return temp;
 
         }
@@ -316,7 +320,7 @@ namespace DashboarJira.Services
 
                 foreach (var attachment in attachments)
                 {
-                    if(attachment.MimeType == "image/jpeg")
+                    if(attachment.MimeType == "image/jpeg" || attachment.MimeType == "video/mp4")
                     {
                         string imageUrl = $"{jiraUrl}/rest/api/2/attachment/content/{attachment.Id}";
 
@@ -329,6 +333,34 @@ namespace DashboarJira.Services
             }            
 
             return imageList;
+        }
+
+        public List<byte[]> GetAttachmentVideos(string id)
+        {
+            var issue = jira.Issues.GetIssueAsync(id).Result;
+            var attachments = issue.GetAttachmentsAsync().Result;
+            List<byte[]> videoList = new List<byte[]>();
+            List<string> videoList2 = new List<string>();
+
+            using (HttpClient client = new HttpClient())
+            {
+                string credentials = Convert.ToBase64String(Encoding.ASCII.GetBytes($"{username}:{password}"));
+                client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", credentials);
+
+                foreach (var attachment in attachments)
+                {
+                    if (attachment.MimeType == "video/mp4")
+                    {
+                        string videoUrl = $"{jiraUrl}/rest/api/2/attachment/content/{attachment.Id}";
+
+                        byte[] videoBytes = client.GetByteArrayAsync(videoUrl).Result;
+                        videoList.Add(videoBytes);
+                        videoList2.Add(attachment.Id + "-" + attachment.MimeType);
+                    }
+                }
+            }
+
+            return videoList;
         }
 
         public IssueJira convertIssueInIssueJira(Issue issue)
