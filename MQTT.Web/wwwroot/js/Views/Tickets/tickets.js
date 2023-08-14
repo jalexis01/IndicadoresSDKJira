@@ -5,14 +5,6 @@ $(document).ready(function () {
     drodownDataSearch(columnsSearch, 'CustomName', 'searchParam');
 });
 
-//function exportToExcel() {
-//    var table = document.getElementById("table");
-//    var wb = XLSX.utils.table_to_book(table, { sheet: "Sheet 1" });
-//    var wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
-//    saveAs(new Blob([wbout], { type: 'application/octet-stream' }), 'tickets.xlsx');
-//}
-
-
 function validateDates() {
     var startDate = $('#dtpStart').val();
     var endDate = $('#dtpEnd').val();
@@ -93,6 +85,7 @@ function ServiceGetTickets() {
     });
 }
 
+
 function getImageTicket(idTicket) {
     $.ajax({
         url: '/Tickets/getImageTicket?idTicket=' + idTicket,
@@ -103,14 +96,33 @@ function getImageTicket(idTicket) {
                 imageContainer.style.display = 'flex';
                 imageContainer.style.flexWrap = 'wrap';
                 imageContainer.style.justifyContent = 'center';
+
                 // Iterate through the list of base64 images and create image elements
                 for (var i = 0; i < base64Images.length; i++) {
                     var base64Image = base64Images[i];
+
+                    // Create the image element
                     var imageElement = document.createElement('img');
                     imageElement.src = 'data:image/jpeg;base64,' + base64Image;
                     imageElement.style.width = '90%'; // Adjust the width as needed
                     imageElement.style.margin = '10px';
                     imageContainer.appendChild(imageElement);
+
+                    // Create the download button for the image
+                    var downloadButton = document.createElement('a');
+                    downloadButton.textContent = 'Descargar imagen';
+                    downloadButton.href = 'data:image/jpeg;base64,' + base64Image;
+                    downloadButton.download = 'imagen_' + (i + 1) + '.jpg';
+                    downloadButton.style.display = 'block';
+                    downloadButton.style.marginTop = '5px';
+                    downloadButton.style.background = 'linear-gradient(to bottom right, #4CAF50, #66BB6A)';
+                    downloadButton.style.color = 'white';
+                    downloadButton.style.border = '5px solid #63c267';
+                    downloadButton.style.borderRadius = '4px';
+                    downloadButton.style.padding = '8px 16px';
+                    downloadButton.style.cursor = 'pointer';
+                    downloadButton.style.textDecoration = 'none';
+                    imageContainer.appendChild(downloadButton);
                 }
 
                 // Show the image container in the Swal dialog
@@ -139,6 +151,7 @@ function getImageTicket(idTicket) {
     });
 }
 
+
 function getVideoTicket(idTicket) {
     return new Promise(function (resolve, reject) {
         $.ajax({
@@ -160,25 +173,72 @@ function getVideoTicket(idTicket) {
 function openVideoModal(idTicket) {
     getVideoTicket(idTicket)
         .then(function (base64Videos) {
-            var videoHtml = base64Videos.map(function (base64Video) {
-                return '<video controls><source src="data:video/mp4;base64,' + base64Video + '" type="video/mp4"></video>';
-            }).join('');
+            if (base64Videos.length > 0) {
+                var videoContainer = document.createElement('div');
+                videoContainer.style.display = 'flex';
+                videoContainer.style.flexDirection = 'column';
+                videoContainer.style.alignItems = 'center';
+                videoContainer.style.flexWrap = 'wrap';
+                videoContainer.style.justifyContent = 'center';
 
-            Swal.fire({
-                title: 'Videos Adjuntos del ' + idTicket,
-                html: videoHtml,
-                showConfirmButton: false,
-                showCloseButton: true,
-                customClass: {
-                    container: 'swal2-container',
-                    content: 'max-h-full',
-                    popup: 'swal2-popup',
-                },
-                width: '80hv'
-            });
+                // Iterate through the list of base64 videos and create video elements
+                for (var i = 0; i < base64Videos.length; i++) {
+                    var base64Video = base64Videos[i];
+                    var videoElement = document.createElement('video');
+                    videoElement.controls = true;
+                    videoElement.src = 'data:video/mp4;base64,' + base64Video;
+                    videoElement.style.width = '70%'; // Adjust the width as needed
+                    videoElement.style.margin = '10px';
+                    videoContainer.appendChild(videoElement);
+
+                    // Create a div for the download button container
+                    var downloadContainer = document.createElement('div');
+                    downloadContainer.style.textAlign = 'center';
+                    downloadContainer.style.marginTop = '5px';
+
+                    // Create the download button for the video
+                    var downloadButton = document.createElement('a');
+                    downloadButton.textContent = 'Descargar video';
+                    downloadButton.href = 'data:video/mp4;base64,' + base64Video;
+                    downloadButton.download = 'video_' + (i + 1) + '.mp4';
+                    downloadButton.style.display = 'block';
+                    downloadButton.style.marginTop = '5px';
+                    downloadButton.style.background = 'linear-gradient(to bottom right, #4CAF50, #66BB6A)';
+                    downloadButton.style.color = 'white';
+                    downloadButton.style.border = '5px solid #63c267';
+                    downloadButton.style.borderRadius = '4px';
+                    downloadButton.style.padding = '8px 16px';
+                    downloadButton.style.cursor = 'pointer';
+                    downloadButton.style.textDecoration = 'none';
+                    downloadContainer.appendChild(downloadButton);
+
+
+                    // Append the download container to the video container
+                    videoContainer.appendChild(downloadContainer);
+                }
+
+                // Show the video container in the Swal dialog
+                Swal.fire({
+                    title: 'Videos del ' + idTicket,
+                    html: videoContainer,
+                    confirmButtonText: 'Cerrar',
+                    showCloseButton: true,
+                    showConfirmButton: true,
+                    customClass: {
+                        container: 'swal-wide',
+                    },
+                    width: '50%', // Adjust the width as needed
+                    padding: '2rem',
+                    backdrop: true,
+                    allowOutsideClick: true,
+                    allowEscapeKey: false,
+                });
+            } else {
+                Swal.fire('Información', 'El ticket no tiene videos adjuntos', 'info');
+            }
         })
         .catch(function (error) {
-            console.error(error);
+            Swal.fire('Error', 'El ticket no tiene videos', 'error');
         });
 }
 
@@ -217,7 +277,7 @@ function showMoreInformation(idTicket) {
             });
         },
         error: function () {
-           
+
         }
     });
 }
@@ -258,7 +318,7 @@ function showMoreInformationTickets(idTicket) {
         data: { idTicket: idTicket },
     }).then(response => JSON.parse(JSON.stringify(response)))
         .then(data => {
-            console.log("Ticket data: "+data)
+            console.log("Ticket data: " + data)
             if (data.length == 0) {
                 noData();
                 return;
@@ -276,8 +336,6 @@ function showMoreInformationTickets(idTicket) {
         })
         .then(response => console.log('Success:', response));
 }
-
-
 
 /********************************* */
 function ServiceGetMessages() {
@@ -312,7 +370,7 @@ function ServiceGetMessages() {
             } else {
                 let dataColumns = setColums(data, null);
                 let exportFunctions = addFnctionsGrid(['Excel']);
-              
+
                 dataColumns = addCommandsGridDetails(dataColumns);
                 dataGridSave = data;
                 setGrid(data, dataColumns, exportFunctions);
@@ -327,8 +385,6 @@ function ServiceGetMessages() {
         })
         .then(response => console.log('Success:', response));
 }
-
-
 
 const targetEl = document.getElementById('dropdownInformation');
 
