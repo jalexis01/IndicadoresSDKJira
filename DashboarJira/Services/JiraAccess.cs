@@ -1,7 +1,6 @@
 ﻿using Atlassian.Jira;
 using DashboarJira.Model;
 using System.Text;
-using System.Linq;
 
 namespace DashboarJira.Services
 {
@@ -48,9 +47,9 @@ namespace DashboarJira.Services
                 }
                 //jql += " AND 'Tipo de servicio' is not empty ";
                 jql += " ORDER BY key DESC, 'Time to resolution' ASC";
-          
+
                 Task<IPagedQueryResult<Issue>> issues = null;
-               
+
                 if (max != 0)
                 {
                     issues = jira.Issues.GetIssuesFromJqlAsync(jql, max, start);
@@ -210,7 +209,7 @@ namespace DashboarJira.Services
 
 
             temp.fecha_arribo_locacion = (issue.CustomFields["Fecha y Hora de Llegada a Estacion"] != null ? DateTime.Parse(issue.CustomFields["Fecha y Hora de Llegada a Estacion"].Values[0]) : null);
-            
+
 
 
             temp.fecha_cierre = (issue.CustomFields["Fecha de solucion"] != null ? DateTime.Parse(issue.CustomFields["Fecha de solucion"].Values[0]) : null);
@@ -252,7 +251,7 @@ namespace DashboarJira.Services
 
 
             //temp.estado_ticket = issue.Status.Name;
-            
+
             if (issue.Status.Name == "Cerrado" || issue.Status.Name == "DESCARTADO")
             {
                 temp.estado_ticket = issue.Status.Name;
@@ -261,9 +260,9 @@ namespace DashboarJira.Services
             {
                 temp.estado_ticket = "Abierto";
             }
-            if(issue.Status == null)
-            temp.estado_ticket = (issue.Status != null ? issue.Status.Name : "null");
-            
+            if (issue.Status == null)
+                temp.estado_ticket = (issue.Status != null ? issue.Status.Name : "null");
+
             temp.descripcion = (issue.Description != null ? issue.Description : "null");
 
 
@@ -281,7 +280,7 @@ namespace DashboarJira.Services
             var issue = jira.Issues.GetIssueAsync(id).Result;
             var attachments = issue.GetAttachmentsAsync().Result.FirstOrDefault();
             Console.WriteLine(attachments.Id);
-            
+
             var tempFile = Path.GetTempFileName();
             return convertIssueInIssueJira(issue);
 

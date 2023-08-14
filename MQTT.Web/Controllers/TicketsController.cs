@@ -1,10 +1,9 @@
 ﻿using DashboarJira.Model;
 using DashboarJira.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
-using Microsoft.AspNetCore.Authorization;
-using System.Linq;
 
 
 namespace MQTT.Web.Controllers
