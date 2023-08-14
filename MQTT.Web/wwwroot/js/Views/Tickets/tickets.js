@@ -117,7 +117,7 @@ function getImageTicket(idTicket) {
 
                     // Create the download button for the image
                     var downloadButton = document.createElement('a');
-                    downloadButton.textContent = 'Descargar Imagen';
+                    downloadButton.textContent = 'Descargar imagen';
                     downloadButton.href = 'data:image/jpeg;base64,' + base64Image;
                     downloadButton.download = 'imagen_' + (i + 1) + '.jpg';
                     downloadButton.style.display = 'block';
@@ -174,7 +174,7 @@ function getImageTicket(idTicket) {
 
                     // Create the download button for the image
                     var downloadButton = document.createElement('a');
-                    downloadButton.textContent = 'Descargar Imagen';
+                    downloadButton.textContent = 'Descargar imagen';
                     downloadButton.href = 'data:image/jpeg;base64,' + base64Image;
                     downloadButton.download = 'imagen_' + (i + 1) + '.jpg';
                     downloadButton.style.display = 'block';
@@ -262,7 +262,7 @@ function openVideoModal(idTicket) {
 
                     // Create the download button for the video
                     var downloadButton = document.createElement('a');
-                    downloadButton.textContent = 'Descargar Video';
+                    downloadButton.textContent = 'Descargar video';
                     downloadButton.href = 'data:video/mp4;base64,' + base64Video;
                     downloadButton.download = 'video_' + (i + 1) + '.mp4';
                     downloadButton.style.background = 'linear-gradient(to bottom right, #4CAF50, #66BB6A)';
@@ -348,9 +348,7 @@ function showMoreInformation(idTicket) {
 
 
 
-function closeSwal() {
-    Swal.close();
-}
+
 
 
 function exportToExcel() {
