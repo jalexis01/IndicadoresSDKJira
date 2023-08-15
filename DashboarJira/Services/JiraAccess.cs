@@ -1,5 +1,6 @@
 ﻿using Atlassian.Jira;
 using DashboarJira.Model;
+using System.Linq;
 using System.Text;
 
 namespace DashboarJira.Services
@@ -368,7 +369,7 @@ namespace DashboarJira.Services
             var issue = jira.Issues.GetIssueAsync(id).Result;
             var attachments = issue.GetAttachmentsAsync().Result;
             List<byte[]> videoList = new List<byte[]>();
-
+         
             using (HttpClient client = new HttpClient())
             {
                 string credentials = Convert.ToBase64String(Encoding.ASCII.GetBytes($"{username}:{password}"));
@@ -420,6 +421,7 @@ namespace DashboarJira.Services
             return videoList;
         }
 
+     
 
 
         public IssueJira convertIssueInIssueJira(Issue issue)

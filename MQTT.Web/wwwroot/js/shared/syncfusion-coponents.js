@@ -695,7 +695,7 @@ var detailsData = function (args) {
     var dataHtmlList = "";
     var idTicket = "";
     for (var key in args.rowData) {
-
+        console.log("Cargando info ");
         let formattedKey = key.replace(/_(\w)/g, function (_, letter) {
             return letter.toUpperCase();
         });
@@ -763,6 +763,10 @@ var detailsData = function (args) {
                         container: 'swal2-no-close',
                     },
                     didOpen: () => {
+
+
+
+
                         Swal.showLoading();
                         // Llama a openVideoModal aquí, después de mostrar el modal de carga
                     }
@@ -775,7 +779,7 @@ var detailsData = function (args) {
 };
 
 function closeSwal() {
-
+    console.log("Cerrando Swal ");
     Swal.close();
 
 }
