@@ -161,7 +161,7 @@ function getImageTicket(idTicket) {
                     showConfirmButton: false,
                     title: 'Error',
                     text: 'El ticket no tiene imágenes',
-                    icon: 'error',
+                    icon: 'info',
                     footer: '<button id="cerrarBtn1" style="background: linear-gradient(to bottom right, #888888, #555555); color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-weight: bold; margin-left: 5px;" onclick="closeSwal();">Cerrar</button>'
                 });
 
@@ -170,9 +170,9 @@ function getImageTicket(idTicket) {
         error: function () {
             Swal.fire({
                 showConfirmButton: false,
-                title: 'Error',
+                title: 'Advertencia',
                 text: 'El ticket no tiene imágenes',
-                icon: 'error',
+                icon: 'info',
                 footer: '<button id="cerrarBtn1" style="background: linear-gradient(to bottom right, #888888, #555555); color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-weight: bold; margin-left: 5px;" onclick="closeSwal();">Cerrar</button>'
             });
 
@@ -274,7 +274,7 @@ function openVideoModal(idTicket) {
             } else {
                  Swal.fire({
                 showConfirmButton: false,
-                title: 'Error',
+                title: 'Advertencia',
                 text: 'El ticket no tiene videos',
                 icon: 'error',
                 footer: '<button id="cerrarBtn1" style="background: linear-gradient(to bottom right, #888888, #555555); color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-weight: bold; margin-left: 5px;" onclick="closeSwal();">Cerrar</button>'
@@ -284,7 +284,7 @@ function openVideoModal(idTicket) {
         .catch(function (error) {
             Swal.fire({
                 showConfirmButton: false,
-                title: 'Error',
+                title: 'Advertencia',
                 text: 'El ticket no tiene videos',
                 icon: 'error',
                 footer: '<button id="cerrarBtn1" style="background: linear-gradient(to bottom right, #888888, #555555); color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-weight: bold; margin-left: 5px;" onclick="closeSwal();">Cerrar</button>'
