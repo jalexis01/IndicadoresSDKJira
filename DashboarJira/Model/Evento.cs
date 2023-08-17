@@ -40,7 +40,7 @@ namespace DashboarJira.Model
 
         public int? modoOperacion { get; set; }
 
-        public int? numeroEventoBusEstacion  { get; set; }
+        public int? numeroEventoBusEstacion { get; set; }
         public string? idVehiculo { get; set; }
 
         public String? placaVehiculo { get; set; }

@@ -22,7 +22,7 @@
         public string? tipo_ajuste_configuracion { get; set; }
         public string? descripcion_reparacion { get; set; }
         public string? diagnostico_causa { get; set; }
-        public string? tipo_causa { get; set; }        
+        public string? tipo_causa { get; set; }
         public string? descripcion { get; set; }
         public string? canal_comunicacion { get; set; }
         public string? quien_requiere_servicio { get; set; }
@@ -30,7 +30,7 @@
         public string? codigo_plan_mantenimiento { get; set; }
         public string? descripcion_actividad_mantenimiento { get; set; }
         public string? tecnico_asignado { get; set; }
-        public string? motivo_atraso { get; set; }        
+        public string? motivo_atraso { get; set; }
         public string? otro_motivo_atraso { get; set; }
         public override string ToString()
         {

@@ -656,7 +656,7 @@ var detailsData = function (args) {
             content: 'max-h-full',
             popup: 'swal2-popup',
         },
-        width: 'auto',
+        width: '80hv',
         didOpen: function () {
             Swal.getContent().style.setProperty('flex-direction', 'column');
             Swal.getHtmlContainer().style.setProperty('max-width', 'none');

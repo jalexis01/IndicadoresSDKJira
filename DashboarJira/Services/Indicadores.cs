@@ -1,8 +1,5 @@
 ﻿using DashboarJira.Controller;
 using DashboarJira.Model;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace DashboarJira.Services
 {
@@ -93,7 +90,7 @@ namespace DashboarJira.Services
             IAIOEntity IAIONoContratista = iaio.IAIONoContratista(fechaInicio, fechaFin);
             return CrearIndicadorEntity("IAIO NO CONTRATISTA", IAIONoContratista.CalcularIndicadorIAIO(), IAIONoContratista.ToString());
         }
-        
+
         // **************************************************************************************************************************************************************************************************************************************************************************************************
         //IANO
 
@@ -125,13 +122,13 @@ namespace DashboarJira.Services
             ICPMEntity ICPMITTS = icpm.ICPM_ITTS(fechaInicio, fechaFin);
             double calculoITTS = ICPMITTS.CalcularIndicadorICPM();
             string descripcion = ICPMITTS.ToString();
-           
+
 
             return CrearIndicadorEntity("ICPM ITTS ", calculoITTS, descripcion);
         }
         private IndicadoresEntity CalcularICPMMTTO(string fechaInicio, string fechaFin)
         {
-           ICPMEntity ICPMMTTO = icpm.ICPM_MTTO(fechaInicio, fechaFin);
+            ICPMEntity ICPMMTTO = icpm.ICPM_MTTO(fechaInicio, fechaFin);
             double calculoMTTO = ICPMMTTO.CalcularIndicadorICPM();
             string descripcion = ICPMMTTO.ToString();
 

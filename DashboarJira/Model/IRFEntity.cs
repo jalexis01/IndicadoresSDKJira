@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DashboarJira.Model
+﻿namespace DashboarJira.Model
 {
     public class IRFEntity
     {
@@ -55,7 +49,7 @@ namespace DashboarJira.Model
                 sumatoria += calculo;
             }
             double indicadorIRF = (((total_puertas - totalPuertasIRF) + sumatoria) / total_puertas);
-            return Math.Round(indicadorIRF*100, 1);
+            return Math.Round(indicadorIRF * 100, 1);
         }
         public void pintar()
         {

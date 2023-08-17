@@ -5,6 +5,14 @@ $(document).ready(function () {
     drodownDataSearch(columnsSearch, 'CustomName', 'searchParam');
 });
 
+//function exportToExcel() {
+//    var table = document.getElementById("table");
+//    var wb = XLSX.utils.table_to_book(table, { sheet: "Sheet 1" });
+//    var wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+//    saveAs(new Blob([wbout], { type: 'application/octet-stream' }), 'tickets.xlsx');
+//}
+
+
 function validateDates() {
     var startDate = $('#dtpStart').val();
     var endDate = $('#dtpEnd').val();
@@ -45,7 +53,7 @@ function ServiceGetTickets() {
             Swal.close();
             var tbody = $('#table tbody');
             tbody.empty();
-
+            console.log("Cargando info ");
             $.each(response, function (index, ticket) {
                 var row = $('<tr>');
                 console.log(ticket.id_ticket)
@@ -96,7 +104,6 @@ function getImageTicket(idTicket) {
                 imageContainer.style.display = 'flex';
                 imageContainer.style.flexWrap = 'wrap';
                 imageContainer.style.justifyContent = 'center';
-                var footerHtml = '<button id="cerrarBtn" style="background: linear-gradient(to bottom right, #888888, #555555); color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-weight: bold; margin-left: 5px; margin-right: 5px;" onclick="closeSwal()">Cerrar</button>';
 
                 // Iterate through the list of base64 images and create image elements
                 for (var i = 0; i < base64Images.length; i++) {
@@ -111,44 +118,68 @@ function getImageTicket(idTicket) {
 
                     // Create the download button for the image
                     var downloadButton = document.createElement('a');
-                    downloadButton.textContent = 'Descargar imagen';
                     downloadButton.href = 'data:image/jpeg;base64,' + base64Image;
                     downloadButton.download = 'imagen_' + (i + 1) + '.jpg';
                     downloadButton.style.display = 'block';
                     downloadButton.style.marginTop = '5px';
                     downloadButton.style.background = 'linear-gradient(to bottom right, #4CAF50, #66BB6A)';
                     downloadButton.style.color = 'white';
-                    downloadButton.style.border = '5px solid #63c267';
+                    downloadButton.style.border = 'none';
                     downloadButton.style.borderRadius = '4px';
                     downloadButton.style.padding = '8px 16px';
                     downloadButton.style.cursor = 'pointer';
                     downloadButton.style.textDecoration = 'none';
+                    downloadButton.style.textAlign = 'center'; // Center the text
+
+                    // Add the icon character to the button
+                    downloadButton.textContent = '⤓ ' + 'Descargar imagen';
+
                     imageContainer.appendChild(downloadButton);
                 }
+
+
 
                 // Show the image container in the Swal dialog
                 Swal.fire({
                     title: 'Imágenes del ' + idTicket,
                     html: imageContainer,
-                    //confirmButtonText: 'Cerrar',
+                    confirmButtonText: 'Cerrar',
                     showCloseButton: true,
                     showConfirmButton: false,
-                    footer: footerHtml,
+                    footer: '<button id="cerrarBtn1" style="background: linear-gradient(to bottom right, #888888, #555555); color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-weight: bold; margin-left: 5px;" onclick="closeSwal();">Cerrar</button>',
                     customClass: {
                         container: 'swal-wide',
                     },
-                    width: '50%', // Adjust the width as needed
+                    width: '80%', // Adjust the width as needed
                     padding: '2rem',
                     backdrop: true,
                     allowOutsideClick: true,
                     allowEscapeKey: false,
                 });
             } else {
-                Swal.fire('Información', 'El ticket no tiene imágenes adjuntas', 'info');
+                Swal.fire({
+                    showConfirmButton: false,
+                    title: 'Error',
+                    text: 'El ticket no tiene imágenes',
+                    icon: 'info',
+                    footer: '<button id="cerrarBtn1" style="background: linear-gradient(to bottom right, #888888, #555555); color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-weight: bold; margin-left: 5px;" onclick="closeSwal();">Cerrar</button>'
+                });
+
             }
         },
         error: function () {
-            Swal.fire('Error', 'El ticket no tiene imágenes', 'error');
+            Swal.fire({
+                showConfirmButton: false,
+                title: 'Advertencia',
+                text: 'El ticket no tiene imágenes',
+              
+                icon: 'info',
+              
+                footer: '<button id="cerrarBtn1" style="background: linear-gradient(to bottom right, #888888, #555555); color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-weight: bold; margin-left: 5px;" onclick="closeSwal();">Cerrar</button>'
+            });
+
+
+
         }
     });
 }
@@ -172,7 +203,6 @@ function getVideoTicket(idTicket) {
         });
     });
 }
-
 function openVideoModal(idTicket) {
     getVideoTicket(idTicket)
         .then(function (base64Videos) {
@@ -180,10 +210,10 @@ function openVideoModal(idTicket) {
                 var videoContainer = document.createElement('div');
                 videoContainer.style.display = 'flex';
                 videoContainer.style.flexDirection = 'column';
-                videoContainer.style.alignItems = 'center';
+                    videoContainer.style.alignItems = 'center';
                 videoContainer.style.flexWrap = 'wrap';
                 videoContainer.style.justifyContent = 'center';
-                var footerHtml = '<button id="cerrarBtn" style="background: linear-gradient(to bottom right, #888888, #555555); color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-weight: bold; margin-left: 5px; margin-right: 5px;" onclick="closeSwal()">Cerrar</button>';
+
                 // Iterate through the list of base64 videos and create video elements
                 for (var i = 0; i < base64Videos.length; i++) {
                     var base64Video = base64Videos[i];
@@ -201,36 +231,42 @@ function openVideoModal(idTicket) {
 
                     // Create the download button for the video
                     var downloadButton = document.createElement('a');
-                    downloadButton.textContent = 'Descargar video';
                     downloadButton.href = 'data:video/mp4;base64,' + base64Video;
                     downloadButton.download = 'video_' + (i + 1) + '.mp4';
                     downloadButton.style.display = 'block';
-                    downloadButton.style.marginTop = '5px';
                     downloadButton.style.background = 'linear-gradient(to bottom right, #4CAF50, #66BB6A)';
                     downloadButton.style.color = 'white';
-                    downloadButton.style.border = '5px solid #63c267';
+                    downloadButton.style.border = 'none';
                     downloadButton.style.borderRadius = '4px';
                     downloadButton.style.padding = '8px 16px';
                     downloadButton.style.cursor = 'pointer';
                     downloadButton.style.textDecoration = 'none';
-                    downloadContainer.appendChild(downloadButton);
 
+                    // Add the icon character to the button
+                    downloadButton.textContent = '⤓ ' + 'Descargar video';
+
+                    // Append the download button to the download container
+                    downloadContainer.appendChild(downloadButton);
 
                     // Append the download container to the video container
                     videoContainer.appendChild(downloadContainer);
                 }
 
+
                 // Show the video container in the Swal dialog
                 Swal.fire({
                     title: 'Videos del ' + idTicket,
                     html: videoContainer,
-                    //confirmButtonText: 'Cerrar',
-                    showCloseButton: true,
+                    confirmButtonText: 'Cerrar',
+                    showCloseButton: false,
                     showConfirmButton: false,
-                    footer: footerHtml,
+                    footer: '<button id="cerrarBtnvid" style="background: linear-gradient(to bottom right, #888888, #555555); color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-weight: bold; margin-left: 5px; margin-right: 5px;" onclick="closeSwal();">Cerrar</button>',
+
                     customClass: {
                         container: 'swal-wide',
+                        
                     },
+                 
                     width: '50%', // Adjust the width as needed
                     padding: '2rem',
                     backdrop: true,
@@ -238,13 +274,27 @@ function openVideoModal(idTicket) {
                     allowEscapeKey: false,
                 });
             } else {
-                Swal.fire('Información', 'El ticket no tiene videos adjuntos', 'info');
+                 Swal.fire({
+                showConfirmButton: false,
+                title: 'Advertencia',
+                text: 'El ticket no tiene videos',
+                icon: 'info',
+                footer: '<button id="cerrarBtn1" style="background: linear-gradient(to bottom right, #888888, #555555); color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-weight: bold; margin-left: 5px;" onclick="closeSwal();">Cerrar</button>'
+            });
             }
         })
         .catch(function (error) {
-            Swal.fire('Error', 'El ticket no tiene videos', 'error');
+            Swal.fire({
+                showConfirmButton: false,
+                title: 'Advertencia',
+                text: 'El ticket no tiene videos',
+                icon: 'info',
+                footer: '<button id="cerrarBtn1" style="background: linear-gradient(to bottom right, #888888, #555555); color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-weight: bold; margin-left: 5px;" onclick="closeSwal();">Cerrar</button>'
+            });
         });
 }
+
+
 
 function showMoreInformation(idTicket) {
     $.ajax({
@@ -281,10 +331,15 @@ function showMoreInformation(idTicket) {
             });
         },
         error: function () {
-
+           
         }
     });
 }
+
+
+
+
+
 
 function exportToExcel() {
     var table = document.getElementById("table");
@@ -322,7 +377,7 @@ function showMoreInformationTickets(idTicket) {
         data: { idTicket: idTicket },
     }).then(response => JSON.parse(JSON.stringify(response)))
         .then(data => {
-            console.log("Ticket data: " + data)
+            console.log("Ticket data: "+data)
             if (data.length == 0) {
                 noData();
                 return;
@@ -340,6 +395,8 @@ function showMoreInformationTickets(idTicket) {
         })
         .then(response => console.log('Success:', response));
 }
+
+
 
 /********************************* */
 function ServiceGetMessages() {
@@ -374,7 +431,7 @@ function ServiceGetMessages() {
             } else {
                 let dataColumns = setColums(data, null);
                 let exportFunctions = addFnctionsGrid(['Excel']);
-
+              
                 dataColumns = addCommandsGridDetails(dataColumns);
                 dataGridSave = data;
                 setGrid(data, dataColumns, exportFunctions);
@@ -389,6 +446,8 @@ function ServiceGetMessages() {
         })
         .then(response => console.log('Success:', response));
 }
+
+
 
 const targetEl = document.getElementById('dropdownInformation');
 

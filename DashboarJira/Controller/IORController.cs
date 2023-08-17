@@ -9,7 +9,7 @@ namespace DashboarJira.Controller
         const string PETICIONEVP8 = "WHERE fechaHoraEnvioDato >= '{0}' AND fechaHoraEnvioDato <= '{1}' AND codigoEvento = 'EVP8' ORDER BY fechaHoraEnvioDato ASC";
         const string PETICIONEVP9 = "WHERE fechaHoraEnvioDato >= '{0}' AND fechaHoraEnvioDato <= '{1}' AND codigoEvento = 'EVP9' ORDER BY fechaHoraEnvioDato ASC";
         DbConnector connector;
-        public IORController( DbConnector connector)
+        public IORController(DbConnector connector)
         {
             this.connector = connector;
         }
@@ -27,8 +27,8 @@ namespace DashboarJira.Controller
             {
                 List<Evento> evp8Estacion = EVP8.Where(e => e.idEstacion == estacion["idEstacion"].GetValue<string>()).ToList();
                 List<Evento> evp9Estacion = EVP9.Where(e => e.idEstacion == estacion["idEstacion"].GetValue<string>()).ToList();
-                
-                ITTS_todas_estaciones.Add(new EstacionEntity(evp8Estacion, evp9Estacion,start,end));
+
+                ITTS_todas_estaciones.Add(new EstacionEntity(evp8Estacion, evp9Estacion, start, end));
 
             }
             return ITTS_todas_estaciones;
