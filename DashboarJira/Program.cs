@@ -20,12 +20,12 @@ ICPMController icpm = new ICPMController(jira);
 IEPMController iepm = new IEPMController(jira);
 RAIOController raio = new RAIOController(jira);
 */
-RANOController rano = new RANOController(jira);
+//RANOController rano = new RANOController(jira);
 /*
 IRFController IRF = new IRFController(jira);
 */
 var fechainicio = "2023-05-01";
-var fechaFinal = "2023-06-01";
+var fechaFinal = "2023-09-01";
 
 /*
 Console.WriteLine("IAIO: " + iaio.IAIOGeneral(fechainicio, fechaFinal).CalcularIndicadorIAIO());
@@ -55,7 +55,7 @@ Console.WriteLine("RANO contratista " + rano.RANOContratista(fechainicio, fechaF
 ///*
 //Console.WriteLine("IRF " + IRF.IRFGeneral(fechainicio, fechaFinal).calculoIRF());
 //*/
-Indicadores indicadores = new Indicadores();
+//Indicadores indicadores = new Indicadores();
 /*
 
 foreach (IndicadoresEntity indicador in indicadores.ObtenerIndicadores("2023-05-01", "2023-06-01"))
@@ -78,8 +78,12 @@ using (FileStream archivo = new FileStream(rutaCompleta, FileMode.Create))
     archivo.Write(bytes, 0, bytes.Length);
 }
 */
-Console.WriteLine("Archivo creado exitosamente.");
-byte[] bytes = jira.getIssueJira("TICKET-136").Archivos;
-jira.GetAttachmentImages("TICKET-136");
+//Console.WriteLine("Archivo creado exitosamente.");
+//byte[] bytes = jira.getIssueJira("TICKET-136").Archivos;
+//jira.GetAttachmentImages("TICKET-136");
 
-//jira.GetTikets(0, 0, fechainicio, fechaFinal, null);
+var tickets  = jira.GetTikets(0, 0, fechainicio, fechaFinal, null);
+foreach (var indicador in jira.GetTikets(0, 0, fechainicio, fechaFinal, null))
+{
+    Console.WriteLine($"Nombre: {indicador.id_ticket}");
+}
