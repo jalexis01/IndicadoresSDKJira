@@ -1,18 +1,18 @@
 ﻿using Atlassian.Jira;
 using DashboarJira.Model;
-using System.Linq;
 using System.Text;
+using System.Linq;
 
 namespace DashboarJira.Services
 {
     public class JiraAccess
     {
-        string jiraUrl = "https://manateecc.atlassian.net/";
-        string username = "desarrollocc@manateeingenieria.com";
-        string password = "ATATT3xFfGF0ZRHIEZTEJVRnhNKviH0CGed6QXqCDMj5bCmKSEbO00UUjHUb3yDcaA4YD1SHohyDr4qnwRx2x4Tu_S_QW_xlGIcIUDvL7CFKEg47_Jcy4Dmq6YzO0dvqB3qeT-EVWfwJ2jJ-9vEUfsqXavD0IIGA7DAZHGCtIWhxgwKIbAWsmeA=038B810D";
-        //string jiraUrl = "https://assaabloymda.atlassian.net/";
+        //string jiraUrl = "https://manateecc.atlassian.net/";
         //string username = "desarrollocc@manateeingenieria.com";
         //string password = "ATATT3xFfGF0ZRHIEZTEJVRnhNKviH0CGed6QXqCDMj5bCmKSEbO00UUjHUb3yDcaA4YD1SHohyDr4qnwRx2x4Tu_S_QW_xlGIcIUDvL7CFKEg47_Jcy4Dmq6YzO0dvqB3qeT-EVWfwJ2jJ-9vEUfsqXavD0IIGA7DAZHGCtIWhxgwKIbAWsmeA=038B810D";
+        string jiraUrl = "https://assaabloymda.atlassian.net/";
+        string username = "desarrollocc@manateeingenieria.com";
+        string password = "ATATT3xFfGF0ZRHIEZTEJVRnhNKviH0CGed6QXqCDMj5bCmKSEbO00UUjHUb3yDcaA4YD1SHohyDr4qnwRx2x4Tu_S_QW_xlGIcIUDvL7CFKEg47_Jcy4Dmq6YzO0dvqB3qeT-EVWfwJ2jJ-9vEUfsqXavD0IIGA7DAZHGCtIWhxgwKIbAWsmeA=038B810D";
 
         Jira jira;
 
@@ -30,7 +30,7 @@ namespace DashboarJira.Services
                 //created >= 2023-04-04 AND created <= 2023-04-13 AND issuetype = "Solicitud de Mantenimiento" AND resolution = Unresolved AND "Clase de fallo" = AIO AND "Identificacion componente" ~ 9119-WA-OR-1 ORDER BY key DESC, "Time to resolution" ASC
                 if (jiraUrl == "https://assaabloymda.atlassian.net/")
                 {
-                    jql = "project = 'Mesa de Ayuda' and issuetype = 'Solicitud de Mantenimiento'";
+                    jql = "(project = 'Mesa de Ayuda' OR project = 'Mtto Preventivo') and issuetype = 'Solicitud de Mantenimiento'";
                 }
                 else
                 {
@@ -48,9 +48,9 @@ namespace DashboarJira.Services
                 }
                 //jql += " AND 'Tipo de servicio' is not empty ";
                 jql += " ORDER BY key DESC, 'Time to resolution' ASC";
-
+          
                 Task<IPagedQueryResult<Issue>> issues = null;
-
+               
                 if (max != 0)
                 {
                     issues = jira.Issues.GetIssuesFromJqlAsync(jql, max, start);
@@ -81,7 +81,7 @@ namespace DashboarJira.Services
             try
             {
                 //created >= 2023-04-04 AND created <= 2023-04-13 AND issuetype = "Solicitud de Mantenimiento" AND resolution = Unresolved AND "Clase de fallo" = AIO AND "Identificacion componente" ~ 9119-WA-OR-1 ORDER BY key DESC, "Time to resolution" ASC
-                var jql = "project = 'Mesa de Ayuda' and issuetype = 'Solicitud de Mantenimiento'";
+                var jql = "(project = 'Mesa de Ayuda' OR project = 'Mtto Preventivo') and issuetype = 'Solicitud de Mantenimiento'";
                 if (startDate != null && endDate != null)
                 {
                     jql += " AND " + "created >= " + startDate + " AND " + "created <= " + endDate;
@@ -268,10 +268,10 @@ namespace DashboarJira.Services
             //Se adciona nuevos campos
 
             temp.canal_comunicacion = (issue.CustomFields["Canal comunicacion"] != null ? issue.CustomFields["Canal comunicacion"].Values[0] : "");
-            temp.quien_requiere_servicio = (issue.CustomFields["¿Quién requiere el servicio?"] != null ? issue.CustomFields["¿Quién requiere el servicio?"].Values[0] : "");
+            temp.quien_requiere_servicio = (issue.CustomFields["¿Quien requiere el servicio?"] != null ? issue.CustomFields["¿Quien requiere el servicio?"].Values[0] : "");
             //temp.operador_ma = (issue.CustomFields["Operador MA"] != null ? issue.CustomFields["Operador MA"].Values[0] : "");
-            temp.codigo_plan_mantenimiento = (issue.CustomFields["Codigo plan de mantenimiento"] != null ? issue.CustomFields["Codigo plan de mantenimiento"].Values[0] : "");
-            temp.descripcion_actividad_mantenimiento = (issue.CustomFields["Descripcion de la actividad de mantenimiento"] != null ? issue.CustomFields["Descripcion de la actividad de mantenimiento"].Values[0] : "");
+            temp.codigo_plan_mantenimiento = (issue.CustomFields["Codigo plan de MTTO"] != null ? issue.CustomFields["Codigo plan de MTTO"].Values[0] : "");
+            temp.descripcion_actividad_mantenimiento = (issue.CustomFields["Descripcion de la actividad de MTTO"] != null ? issue.CustomFields["Descripcion de la actividad de MTTO"].Values[0] : "");
             temp.tecnico_asignado = (issue.CustomFields["Tecnico Asignado"] != null ? issue.CustomFields["Tecnico Asignado"].Values[0] : "");
             temp.motivo_atraso = (issue.CustomFields["Motivo de atraso"] != null ? issue.CustomFields["Motivo de atraso"].Values[0] : "");
             temp.otro_motivo_atraso = (issue.CustomFields["Otro motivo de atraso"] != null ? issue.CustomFields["Otro motivo de atraso"].Values[0] : "");
@@ -279,13 +279,12 @@ namespace DashboarJira.Services
             return temp;
 
         }
-
         public IssueJira getIssueJira(string id)
         {
             var issue = jira.Issues.GetIssueAsync(id).Result;
             var attachments = issue.GetAttachmentsAsync().Result.FirstOrDefault();
             Console.WriteLine(attachments.Id);
-
+            
             var tempFile = Path.GetTempFileName();
             return convertIssueInIssueJira(issue);
 
@@ -319,7 +318,6 @@ namespace DashboarJira.Services
             var issue = jira.Issues.GetIssueAsync(id).Result;
             var attachments = issue.GetAttachmentsAsync().Result;
             List<byte[]> imageList = new List<byte[]>();
-            int attachmentCount = 0; // Contador para los adjuntos válidos
 
             using (HttpClient client = new HttpClient())
             {
@@ -328,39 +326,45 @@ namespace DashboarJira.Services
 
                 foreach (var attachment in attachments)
                 {
-                    if (IsValidImageMimeType(attachment.MimeType))
+                    if (attachment.MimeType == "image/jpeg" ||
+                        attachment.MimeType == "image/png" ||
+                        attachment.MimeType == "image/gif" ||
+                        attachment.MimeType == "image/bmp" ||
+                        attachment.MimeType == "image/webp" ||
+                        attachment.MimeType == "image/tiff" ||
+                        attachment.MimeType == "image/x-icon" ||
+                        attachment.MimeType == "image/svg+xml" ||
+                        attachment.MimeType == "image/apng" ||
+                        attachment.MimeType == "image/avif" ||
+                        attachment.MimeType == "image/cgm" ||
+                        attachment.MimeType == "image/ief" ||
+                        attachment.MimeType == "image/jp2" ||
+                        attachment.MimeType == "image/jpm" ||
+                        attachment.MimeType == "image/jpx" ||
+                        attachment.MimeType == "image/ktx" ||
+                        attachment.MimeType == "image/ovtf" ||
+                        attachment.MimeType == "image/vnd.adobe.photoshop" ||
+                        attachment.MimeType == "image/vnd.microsoft.icon" ||
+                        attachment.MimeType == "image/vnd.radiance" ||
+                        attachment.MimeType == "image/x-cmu-raster" ||
+                        attachment.MimeType == "image/x-portable-anymap" ||
+                        attachment.MimeType == "image/x-portable-bitmap" ||
+                        attachment.MimeType == "image/x-portable-graymap" ||
+                        attachment.MimeType == "image/x-portable-pixmap" ||
+                        attachment.MimeType == "image/x-rgb" ||
+                        attachment.MimeType == "image/x-xbitmap" ||
+                        attachment.MimeType == "image/x-xpixmap" ||
+                        attachment.MimeType == "image/x-xwindowdump")
                     {
                         string imageUrl = $"{jiraUrl}/rest/api/2/attachment/content/{attachment.Id}";
 
                         byte[] imageBytes = client.GetByteArrayAsync(imageUrl).Result;
                         imageList.Add(imageBytes);
-
-                        attachmentCount++; // Incrementar el contador
                     }
                 }
             }
 
-            Console.WriteLine($"Cantidad de imagenes adjuntas del {id}: {attachmentCount}");
-
             return imageList;
-        }
-
-        private bool IsValidImageMimeType(string mimeType)
-        {
-            string[] validMimeTypes = new string[]
-            {
-        "image/jpeg", "image/png", "image/gif", "image/bmp", "image/webp",
-        "image/tiff", "image/x-icon", "image/svg+xml", "image/apng",
-        "image/avif", "image/cgm", "image/ief", "image/jp2", "image/jpm",
-        "image/jpx", "image/ktx", "image/ovtf", "image/vnd.adobe.photoshop",
-        "image/vnd.microsoft.icon", "image/vnd.radiance", "image/x-cmu-raster",
-        "image/x-portable-anymap", "image/x-portable-bitmap",
-        "image/x-portable-graymap", "image/x-portable-pixmap",
-        "image/x-rgb", "image/x-xbitmap", "image/x-xpixmap",
-        "image/x-xwindowdump"
-            };
-
-            return validMimeTypes.Contains(mimeType);
         }
 
         public List<byte[]> GetAttachmentVideos(string id)
@@ -368,7 +372,7 @@ namespace DashboarJira.Services
             var issue = jira.Issues.GetIssueAsync(id).Result;
             var attachments = issue.GetAttachmentsAsync().Result;
             List<byte[]> videoList = new List<byte[]>();
-            int attachmentCountVideo = 0;
+
             using (HttpClient client = new HttpClient())
             {
                 string credentials = Convert.ToBase64String(Encoding.ASCII.GetBytes($"{username}:{password}"));
@@ -377,55 +381,47 @@ namespace DashboarJira.Services
                 foreach (var attachment in attachments)
                 {
                     // Check if the MIME type is one of the desired video types
-                    if (IsDesiredVideoMimeType(attachment.MimeType))
+                    if (attachment.MimeType == "video/mp4" ||
+                       attachment.MimeType == "video/webm" ||
+                       attachment.MimeType == "video/avi" ||
+                       attachment.MimeType == "video/quicktime" ||  // For MOV files
+                       attachment.MimeType == "video/mpeg" ||
+                       attachment.MimeType == "video/x-mpeg" ||
+                       attachment.MimeType == "video/x-mpeg2a" ||    // For MPG/MPEG files
+                       attachment.MimeType == "video/3gpp" ||       // For 3GP files
+                       attachment.MimeType == "video/x-flv" ||      // For FLV files
+                       attachment.MimeType == "video/x-ms-wmv" ||   // For WMV files
+                       attachment.MimeType == "video/x-msvideo" ||  // For AVI files
+                       attachment.MimeType == "video/x-matroska" || // For MKV files
+                       attachment.MimeType == "video/x-theora" ||   // For OGV files
+                       attachment.MimeType == "video/vnd.rn-realvideo" || // For RMVB files
+                       attachment.MimeType == "video/ogg" ||           // For OGG files
+                       attachment.MimeType == "video/x-ms-asf" ||     // For ASF files
+                       attachment.MimeType == "video/3gpp2" ||        // For 3G2 files
+                       attachment.MimeType == "video/vnd.dvb.file" || // For DVB files
+                       attachment.MimeType == "video/x-f4v" ||        // For F4V files
+                       attachment.MimeType == "video/x-fli" ||        // For FLI files
+                       attachment.MimeType == "video/x-flv" ||        // For FLV files
+                       attachment.MimeType == "video/x-m4v" ||        // For M4V files
+                       attachment.MimeType == "video/x-ms-vob" ||     // For VOB files
+                       attachment.MimeType == "video/x-ms-wm" ||      // For WM files
+                       attachment.MimeType == "video/x-ms-wmv" ||     // For WMV files
+                       attachment.MimeType == "video/x-ms-wmx" ||     // For WMX files
+                       attachment.MimeType == "video/x-ms-wvx" ||     // For WVX files
+                       attachment.MimeType == "video/x-msvideo" ||    // For AVI files
+                       attachment.MimeType == "video/x-sgi-movie" ||  // For Movie files
+                       attachment.MimeType == "video/x-smv" ||        // For SMV files
+                       attachment.MimeType == "video/x-flv")          // For FLV files
                     {
                         string videoUrl = $"{jiraUrl}/rest/api/2/attachment/content/{attachment.Id}";
+
                         byte[] videoBytes = client.GetByteArrayAsync(videoUrl).Result;
                         videoList.Add(videoBytes);
-                        attachmentCountVideo++;
                     }
                 }
             }
 
-            Console.WriteLine($"Cantidad de videos adjuntos del {id}: {attachmentCountVideo}");
             return videoList;
-        }
-
-        public bool IsDesiredVideoMimeType(string mimeType)
-        {
-            string[] desiredMimeTypes = new string[]
-            {
-        "video/mp4",
-        "video/webm",
-        "video/avi",
-        "video/quicktime",
-        "video/mpeg",
-        "video/x-mpeg",
-        "video/x-mpeg2a",
-        "video/3gpp",
-        "video/x-flv",
-        "video/x-ms-wmv",
-        "video/x-msvideo",
-        "video/x-matroska",
-        "video/x-theora",
-        "video/vnd.rn-realvideo",
-        "video/ogg",
-        "video/x-ms-asf",
-        "video/3gpp2",
-        "video/vnd.dvb.file",
-        "video/x-f4v",
-        "video/x-fli",
-        "video/x-m4v",
-        "video/x-ms-vob",
-        "video/x-ms-wm",
-        "video/x-ms-wmx",
-        "video/x-ms-wvx",
-        "video/x-sgi-movie",
-        "video/x-smv",
-        "video/vnd.mpegurl"
-            };
-
-            return desiredMimeTypes.Contains(mimeType);
         }
 
         public IssueJira convertIssueInIssueJira(Issue issue)
@@ -433,7 +429,7 @@ namespace DashboarJira.Services
             IssueJira temp = new IssueJira();
             temp.Id = issue.Key.Value;
             temp.Archivos = (issue.GetAttachmentsAsync() != null ? issue.GetAttachmentsAsync().Result.First().DownloadData() : null);
-            temp.FechaCreacion = issue.Created;
+            temp.FechaCreacion = (issue.CustomFields["Fecha de creacion"] != null ? DateTime.Parse(issue.CustomFields["Fecha de creacion"].Values[0]) : null); ;
             temp.Descripcion = (issue.Description != null ? issue.Description : "null");
             temp.Resumen = issue.Summary;
             temp.QuienRequiereServicio = (issue.CustomFields["¿Quién requiere el servicio?"] != null ? issue.CustomFields["¿Quién requiere el servicio?"].Values[0] : null);

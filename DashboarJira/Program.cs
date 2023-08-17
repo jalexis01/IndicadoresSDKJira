@@ -1,5 +1,6 @@
 ﻿// See https://aka.ms/new-console-template for more information
 using DashboarJira.Controller;
+using DashboarJira.Model;
 using DashboarJira.Services;
 
 JiraAccess jira = new JiraAccess();

@@ -24,7 +24,7 @@
         {
             double suma_pano = pano();
             double iaio = Convert.ToDouble(((total_puertas - (double)AIO_POR_PUERTA.Count) * 100 + (double)suma_pano) / total_puertas);
-            return Math.Round(iaio, 1);
+            return Math.Round(iaio,1);
         }
 
         public double pano()

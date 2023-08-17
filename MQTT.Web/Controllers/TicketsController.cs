@@ -1,10 +1,10 @@
 ﻿using DashboarJira.Model;
 using DashboarJira.Services;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
-
+using Microsoft.AspNetCore.Authorization;
+using System.Linq;
 
 namespace MQTT.Web.Controllers
 {
@@ -35,12 +35,11 @@ namespace MQTT.Web.Controllers
             DateTime startDateTime = currentDateTime.AddMonths(-1);
 
             // Formatear las fechas en el formato deseado
-            /* string startDate = startDateTime.ToString("yyyy-MM-dd");
-             string endDate = currentDateTime.ToString("yyyy-MM-dd");
-             max = 0;
-             List<Ticket> tickets = getTickets(startDate, endDate, max, componente);
-             */
-            return View();
+           /* string startDate = startDateTime.ToString("yyyy-MM-dd");
+            string endDate = currentDateTime.ToString("yyyy-MM-dd");
+            max = 0;
+            List<Ticket> tickets = getTickets(startDate, endDate, max, componente);
+            */return View();
         }
 
 
@@ -108,9 +107,8 @@ namespace MQTT.Web.Controllers
                         string base64Image = Convert.ToBase64String(imageData);
                         base64Images.Add(base64Image);
                     }
-                   
-                    return Ok(base64Images);
 
+                    return Ok(base64Images);
                 }
                 else
                 {
@@ -120,36 +118,6 @@ namespace MQTT.Web.Controllers
             catch (Exception ex)
             {
                 return StatusCode(500, ex.Message); // or handle the exception in an appropriate way
-            }
-        }
-        public IActionResult GetVideoTicket(string idTicket)
-        {
-            try
-            {
-                JiraAccess jira = new JiraAccess();
-                List<byte[]> videos = jira.GetAttachmentVideos(idTicket); // Modifica este método para obtener los bytes de video
-
-                if (videos.Count > 0)
-                {
-                    List<string> base64Videos = new List<string>();
-
-                    foreach (byte[] videoData in videos)
-                    {
-                        // Convierte los bytes de video a una cadena base64
-                        string base64Video = Convert.ToBase64String(videoData);
-                        base64Videos.Add(base64Video);
-                    }
-
-                    return Ok(base64Videos);
-                }
-                else
-                {
-                    return NotFound(); // o devuelve una respuesta adecuada cuando no se encuentren videos
-                }
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message); // o maneja la excepción de manera apropiada
             }
         }
 
