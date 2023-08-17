@@ -115,8 +115,9 @@ namespace MQTT.Web.Controllers
                         string base64Image = Convert.ToBase64String(imageData);
                         base64Images.Add(base64Image);
                     }
-
+                   
                     return Ok(base64Images);
+
                 }
                 else
                 {
