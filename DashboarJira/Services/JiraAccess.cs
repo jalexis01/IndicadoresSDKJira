@@ -206,7 +206,7 @@ namespace DashboarJira.Services
             temp.codigo_falla = (issue.CustomFields["Descripcion de fallo"] != null ? issue.CustomFields["Descripcion de fallo"].Values[0] : "");
 
 
-            temp.fecha_apertura = issue.Created == null ? null : DateTime.Parse(issue.Created.Value.ToString());
+            temp.fecha_apertura = (issue.CustomFields["Fecha de creacion"] != null ? DateTime.Parse(issue.CustomFields["Fecha de creacion"].Values[0]) : null); ;
 
 
             temp.fecha_arribo_locacion = (issue.CustomFields["Fecha y Hora de Llegada a Estacion"] != null ? DateTime.Parse(issue.CustomFields["Fecha y Hora de Llegada a Estacion"].Values[0]) : null);
@@ -429,7 +429,7 @@ namespace DashboarJira.Services
             IssueJira temp = new IssueJira();
             temp.Id = issue.Key.Value;
             temp.Archivos = (issue.GetAttachmentsAsync() != null ? issue.GetAttachmentsAsync().Result.First().DownloadData() : null);
-            temp.FechaCreacion = (issue.CustomFields["Fecha de creacion"] != null ? DateTime.Parse(issue.CustomFields["Fecha de creacion"].Values[0]) : null); ;
+            temp.FechaCreacion = (issue.CustomFields["Fecha de creacion"] != null ? DateTime.Parse(issue.CustomFields["Fecha de creacion"].Values[0]) : null);
             temp.Descripcion = (issue.Description != null ? issue.Description : "null");
             temp.Resumen = issue.Summary;
             temp.QuienRequiereServicio = (issue.CustomFields["¿Quién requiere el servicio?"] != null ? issue.CustomFields["¿Quién requiere el servicio?"].Values[0] : null);

@@ -85,5 +85,5 @@ using (FileStream archivo = new FileStream(rutaCompleta, FileMode.Create))
 var tickets  = jira.GetTikets(0, 0, fechainicio, fechaFinal, null);
 foreach (var indicador in jira.GetTikets(0, 0, fechainicio, fechaFinal, null))
 {
-    Console.WriteLine($"Nombre: {indicador.id_ticket}");
+    Console.WriteLine($"Nombre: {indicador.fecha_apertura.ToString()}");
 }
