@@ -89,7 +89,7 @@ function setGrid(data, dataColumns, exportFunctions = null, nameGrid = "Grid"){
         height: '100%',
         queryCellInfo: customiseCell,
         dataSource: data,
-        columns: dataColumns,
+        columns: dataColumns,        
     });
 
     grid.dataBound = () => {
@@ -139,8 +139,15 @@ function createColumnsEditing(dataColumns, columnsHide = null, columnInEdit = nu
         if (typeKey == 'object') {
             arr.push({
                 field: key, headerText: title, textAlign: 'Center', headerTextAlign: 'Center', visible: false
+
             })
-        }else if(typeKey == 'boolean'){
+
+
+        }
+        if (typeKey === 'cantidadImagen' || key === 'cantidadVideos') {
+            continue; // Skip the 'cantidadImagen' column
+        }
+        else if (typeKey == 'boolean') {
             arr.push({
                 field: key, headerText: title, textAlign: 'Center', headerTextAlign: 'Center', visible: dataVisible, allowEditing: dataEditinBool, validationRules: {required: validationRuleRequerid}, editType: 'dropdownedit', 
                 edit: {  
@@ -169,6 +176,7 @@ function setColums(dataColumns, columnsHide = null){
         let formattedKey = key.replace(/_(\w)/g, function (_, letter) {
             return letter.toUpperCase();
         });
+
         let typeKey =  dataColumns[0][key] == null ? null : typeof dataColumns[0][key];
 
         let dataVisible = true;
@@ -177,13 +185,16 @@ function setColums(dataColumns, columnsHide = null){
             dataVisible = columnsHide.filter(x => x.name == key).length == 0 ? true : false; 
         }
         
+        if (key === 'cantidadImagen' || key === 'cantidadVideos') {
+            continue; // Skip the 'cantidadImagen' column
+        }
 
         if (typeKey == 'object') {
 
             arr.push({
                 field: key, headerText: formattedKey, textAlign: 'Center', headerTextAlign: 'Center', visible: false
             })
-        } else {
+        }else {
 
             arr.push({
                 field: key,
@@ -672,14 +683,15 @@ var detailsData = function (args) {
         if (formattedKey == "cantidadVideos") {
             cantidadVideos = value;
         }
+
+       // dataHtmlList += "<ul><li style='padding: 1% 0%;'><div class='flex items-start space-x-4'><div class='flex-1 min-w-0' style='text-align: initial;'><p class='text-sm font-medium text-gray-900 truncate dark:text-white'>" + formattedKey + "</p></div></li><li><div class='flex items-start space-x-4'><div class='flex-1 min-w-0' style='text-align: initial'><p class='text-sm font-sm text-gray-900 truncate dark:text-white'>" + value + "</p></div></li></ul>"
         
-        dataHtmlList += "<ul><li style='padding: 1% 0%;'><div class='flex items-start space-x-4'><div class='flex-1 min-w-0' style='text-align: initial;'><p class='text-sm font-medium text-gray-900 truncate dark:text-white'>" + formattedKey + "</p></div></li><li><div class='flex items-start space-x-4'><div class='flex-1 min-w-0' style='text-align: initial'><p class='text-sm font-sm text-gray-900 truncate dark:text-white'>" + value + "</p></div></li></ul>"
+        if (formattedKey !== "cantidadImagen" && formattedKey !== "cantidadVideos") {
+            dataHtmlList += "<ul><li style='padding: 1% 0%;'><div class='flex items-start space-x-4'><div class='flex-1 min-w-0' style='text-align: initial;'><p class='text-sm font-medium text-gray-900 truncate dark:text-white'>" + formattedKey + "</p></div></li><li><div class='flex items-start space-x-4'><div class='flex-1 min-w-0' style='text-align: initial'><p class='text-sm font-sm text-gray-900 truncate dark:text-white'>" + value + "</p></div></li></ul>"
+        }
 
         var footerHtml = '<button id="cerrarBtn" style="background: linear-gradient(to bottom right, #888888, #555555); color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-weight: bold; margin-left: 5px; margin-right: 5px;" onclick="closeSwal()">Cerrar</button>';
         if (idTicket !== "") {
-
-            
-            
 
             footerHtml = '<button id="verMasBtn" style="background: linear-gradient(to bottom, #0071A1, #00BFFF); color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-weight: bold; margin-right: 5px;" onclick="openImageModal(\'' + idTicket + '\')">Ver imagen (' + cantImagenes + ')</button>' +
                 '<button id="verVideoBtn" style="background: linear-gradient(to bottom right, #ff4d4d, #ff9999); color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-weight: bold; margin-left: 5px; margin-right: 5px;" onclick="openVideoModal(\'' + idTicket + '\')">Ver video (' + cantidadVideos + ')</button>' +
@@ -687,7 +699,7 @@ var detailsData = function (args) {
         }
     }
     Swal.fire({
-        title: '<strong><u>Información </u></strong>',
+        title: '<strong><u>Información</u></strong>',
         html: '<div style="max-height: 100vh; overflow-y: auto; overflow-x: scroll;"><div style="width: fit-content;"><ul class="max-w-full divide-y divide-gray-200 dark:divide-gray-700">' + dataHtmlList + '</ul></div></div>',
         scroll: true,
         showCancelButton: false,
