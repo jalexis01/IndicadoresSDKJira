@@ -2,6 +2,8 @@
 {
     public class Ticket
     {
+        public int? cantidadImagen { get; set; }
+        public int? cantidadVideos { get; set; }
         public string? id_ticket { get; set; }
         public string? id_estacion { get; set; }
         public string? id_vagon { get; set; }

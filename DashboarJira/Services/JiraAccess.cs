@@ -176,9 +176,34 @@ namespace DashboarJira.Services
 
         }
 
+        static bool IsImage(Attachment attachment)
+        {
+            // Implementa la lógica para determinar si un archivo adjunto es una imagen
+            // Puede ser por extensión del archivo (jpg, png, etc.) o mediante análisis de contenido
+            // Aquí hay un ejemplo sencillo basado en extensión:
+            string[] imageExtensions = { ".jpg", ".jpeg", ".png", ".gif" };
+            string fileExtension = System.IO.Path.GetExtension(attachment.FileName);
+
+            return imageExtensions.Contains(fileExtension, StringComparer.OrdinalIgnoreCase);
+        }
+        static bool IsVideo(Attachment attachment)
+        {
+            // Implementa la lógica para determinar si un archivo adjunto es un video
+            // Puede ser por extensión del archivo (mp4, avi, etc.) o mediante análisis de contenido
+            // Aquí hay un ejemplo sencillo basado en extensión:
+            string[] videoExtensions = { ".mp4", ".avi", ".mov", ".mkv" };
+            string fileExtension = System.IO.Path.GetExtension(attachment.FileName);
+
+            return videoExtensions.Contains(fileExtension, StringComparer.OrdinalIgnoreCase);
+        }
         public Ticket converIssueInTicket(Issue issue)
         {
             Ticket temp = new Ticket();
+            var attachments = issue.GetAttachmentsAsync().Result;
+            var imageAttachmentsCount = attachments.Count(attachment => IsImage(attachment));
+            var videoAttachmentsCount = attachments.Count(attachment => IsVideo(attachment));
+            temp.cantidadImagen = imageAttachmentsCount;
+            temp.cantidadVideos = videoAttachmentsCount;
             temp.id_ticket = issue.Key.Value;
 
             temp.id_estacion = (issue.CustomFields["Estacion"] != null ? issue.CustomFields["Estacion"].Values[0] : "");
