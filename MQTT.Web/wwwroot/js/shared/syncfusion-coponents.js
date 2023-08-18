@@ -2,11 +2,6 @@ var grid = null, multiSelectInput,columns, dataArgs, treeGridObj = null, dropdow
 datepickerEndModal=null, dateDocuments =  new Date(Date.now()).toUTCString(), valueFild,beginUpdate, beginCreate;
 var listFunctionalitiesExportGrid = ['ExcelExport','PdfExport', 'CsvExport'];
 
-
-
-
-
-
 $(document).ready(function(){
     var indicatortypes = [
         { id: 'Shimmer', type: 'Shimmer' },
@@ -112,7 +107,6 @@ function setGrid(data, dataColumns, exportFunctions = null, nameGrid = "Grid"){
             grid.csvExport();
         }
     };
-
 
     grid.commandClick = detailsData;
     
@@ -223,43 +217,7 @@ function customiseCell(args) {
         args.cell.textContent = value.Name; 
     } 
 }
-/*
-function createElemntsTimes() {
-    if (datepicker != null) {
-        return;
-    }
-    document.getElementById("dtpStart")
-    datepicker = new ej.calendars.DatePicker({
-        placeholder: 'Ingrese fecha de inicio',
-        format: 'yyyy-MM-dd',
-        close: selectDateStar,
-        cleared: clean
-    });
-    datepicker.appendTo('#dtpStart');
 
-    datepickerEnd = new ej.calendars.DatePicker({
-        placeholder: 'Ingrese fecha fin',
-        enabled: false,
-        format: 'yyyy-MM-dd',
-    });
-    datepickerEnd.appendTo('#dtpEnd');
-   
-    datepickerMessage = new ej.calendars.DateTimePicker({
-        placeholder: 'Ingrese fecha de inicio',
-        format: 'yyyy-MM-dd HH:mm',
-        close: selectDateStarMessage,
-        cleared: clean
-    });
-    datepickerMessage.appendTo('#dtpStartMessage');
-
-    datepickerEnd = new ej.calendars.DateTimePicker({
-        placeholder: 'Ingrese fecha fin',
-        enabled: false,
-        format: 'yyyy-MM-dd HH:mm',
-    });
-    datepickerEnd.appendTo('#dtpEndMessage');
-}
-*/
 function createElemntsTimes() {
     if (datepicker != null) {
         return;
@@ -284,6 +242,7 @@ function createElemntsTimes() {
 
     }
 }
+
 function createElemntsTimesBackup() {
     if (datepickerModal != null) {
         return;
@@ -694,6 +653,9 @@ function aplicFilter(){
 var detailsData = function (args) {
     var dataHtmlList = "";
     var idTicket = "";
+
+    var cantImagenes = "";
+
     for (var key in args.rowData) {
         let formattedKey = key.replace(/_(\w)/g, function (_, letter) {
             return letter.toUpperCase();
@@ -704,17 +666,23 @@ var detailsData = function (args) {
         if (formattedKey == "idTicket") {
             idTicket = value;
         }
+        
         dataHtmlList += "<ul><li style='padding: 1% 0%;'><div class='flex items-start space-x-4'><div class='flex-1 min-w-0' style='text-align: initial;'><p class='text-sm font-medium text-gray-900 truncate dark:text-white'>" + formattedKey + "</p></div></li><li><div class='flex items-start space-x-4'><div class='flex-1 min-w-0' style='text-align: initial'><p class='text-sm font-sm text-gray-900 truncate dark:text-white'>" + value + "</p></div></li></ul>"
 
         var footerHtml = '<button id="cerrarBtn" style="background: linear-gradient(to bottom right, #888888, #555555); color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-weight: bold; margin-left: 5px; margin-right: 5px;" onclick="closeSwal()">Cerrar</button>';
         if (idTicket !== "") {
-            footerHtml = '<button id="verMasBtn" style="background: linear-gradient(to bottom, #0071A1, #00BFFF); color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-weight: bold; margin-right: 5px;" onclick="openImageModal(\'' + idTicket + '\')">Ver imagen</button>' +
+
+            
+            getContImageTicket(idTicket);
+            
+
+            footerHtml = '<button id="verMasBtn" style="background: linear-gradient(to bottom, #0071A1, #00BFFF); color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-weight: bold; margin-right: 5px;" onclick="openImageModal(\'' + idTicket + '\')">Ver imagen (' + cantImagenes + ')</button>' +
                 '<button id="verVideoBtn" style="background: linear-gradient(to bottom right, #ff4d4d, #ff9999); color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-weight: bold; margin-left: 5px; margin-right: 5px;" onclick="openVideoModal(\'' + idTicket + '\')">Ver video</button>' +
                 '<button id="cerrarBtn" style="background: linear-gradient(to bottom right, #888888, #555555); color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-weight: bold; margin-left: 5px; margin-right: 5px;" onclick="closeSwal()">Cerrar</button>';
         }
     }
     Swal.fire({
-        title: '<strong><u>Información</u></strong>',
+        title: '<strong><u>Información </u></strong>',
         html: '<div style="max-height: 100vh; overflow-y: auto; overflow-x: scroll;"><div style="width: fit-content;"><ul class="max-w-full divide-y divide-gray-200 dark:divide-gray-700">' + dataHtmlList + '</ul></div></div>',
         scroll: true,
         showCancelButton: false,

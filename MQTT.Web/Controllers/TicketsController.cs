@@ -97,7 +97,7 @@ namespace MQTT.Web.Controllers
             {
                 JiraAccess jira = new JiraAccess();
                 List<byte[]> images = jira.GetAttachmentImages(idTicket);
-
+                //Console.WriteLine("la cantidad de imagenes del " + idTicket + " es : " + images.Count);
                 if (images.Count > 0)
                 {
                     List<string> base64Images = new List<string>();
@@ -120,6 +120,69 @@ namespace MQTT.Web.Controllers
                 return StatusCode(500, ex.Message); // or handle the exception in an appropriate way
             }
         }
+
+        //public IActionResult GetContadorImagenes(string idTicket)
+        //{
+        //    try
+        //    {
+        //        JiraAccess jira = new JiraAccess();
+        //        var cantidadImagenes = 0;
+        //        List<byte[]> images = jira.GetAttachmentImages(idTicket);
+        //        Console.WriteLine("la cantidad de imagenes del " + idTicket + " es : " + images.Count);
+        //        if (images.Count > 0)
+        //        {
+        //            List<string> base64Videos = new List<string>();
+
+        //            foreach (byte[] imageData in images)
+        //            {
+
+        //                cantidadImagenes++;
+        //            }
+
+        //            return Ok(cantidadImagenes);
+        //        }
+        //        else
+        //        {
+        //            return NotFound();
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return StatusCode(500, ex.Message);
+        //    }
+        //}
+
+        public IActionResult getContadorImagenes(string idTicket)
+        {
+            try
+            {
+                JiraAccess jira = new JiraAccess();
+                var cantidadImagenes = 0;
+                List<byte[]> images = jira.GetAttachmentImages(idTicket);
+                Console.WriteLine("la cantidad de imagenes del " + idTicket + " es : " + images.Count);
+
+                if (images.Count > 0)
+                {
+                    List<string> base64Videos = new List<string>();
+
+                    foreach (byte[] imageData in images)
+                    {
+                        cantidadImagenes++;
+                    }
+
+                    return Json(cantidadImagenes); // Return the counter value as JSON
+                }
+                else
+                {
+                    return NotFound();
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
 
         public IActionResult GetVideoTicket(string idTicket)
         {
