@@ -20,7 +20,9 @@ namespace DashboarJira.Services
         {
             jira = Jira.CreateRestClient(jiraUrl, username, password);
         }
-
+        const string proyectAssa = "project = 'Mesa de Ayuda'";
+        //const string proytect = "(project = 'Mesa de Ayuda' OR project = 'Mtto Preventivo')";
+        const string proyectManatee = "project = 'Centro de Control'";
         /*TODO*/
         public List<Ticket> GetTikets(int start, int max, string startDate, string endDate, string idComponente)
         {
@@ -30,11 +32,11 @@ namespace DashboarJira.Services
                 //created >= 2023-04-04 AND created <= 2023-04-13 AND issuetype = "Solicitud de Mantenimiento" AND resolution = Unresolved AND "Clase de fallo" = AIO AND "Identificacion componente" ~ 9119-WA-OR-1 ORDER BY key DESC, "Time to resolution" ASC
                 if (jiraUrl == "https://assaabloymda.atlassian.net/")
                 {
-                    jql = "(project = 'Mesa de Ayuda' OR project = 'Mtto Preventivo') and issuetype = 'Solicitud de Mantenimiento'";
+                    jql = $"{proyectAssa} and issuetype = 'Solicitud de Mantenimiento'";
                 }
                 else
                 {
-                    jql = "project = 'Centro de Control' and issuetype = 'Solicitud de Mantenimiento'";
+                    jql = $"{proyectManatee} and issuetype = 'Solicitud de Mantenimiento'";
                 }
 
                 if (startDate != null && endDate != null)
