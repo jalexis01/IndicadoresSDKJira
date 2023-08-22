@@ -199,11 +199,11 @@ namespace DashboarJira.Services
         public Ticket converIssueInTicket(Issue issue)
         {
             Ticket temp = new Ticket();
-            var attachments = issue.GetAttachmentsAsync().Result;
-            var imageAttachmentsCount = attachments.Count(attachment => IsImage(attachment));
-            var videoAttachmentsCount = attachments.Count(attachment => IsVideo(attachment));
-            temp.cantidadImagen = imageAttachmentsCount;
-            temp.cantidadVideos = videoAttachmentsCount;
+            //var attachments = issue.GetAttachmentsAsync().Result;
+            //var imageAttachmentsCount = attachments.Count(attachment => IsImage(attachment));
+            //var videoAttachmentsCount = attachments.Count(attachment => IsVideo(attachment));
+            //temp.cantidadImagen = imageAttachmentsCount;
+            //temp.cantidadVideos = videoAttachmentsCount;
             temp.id_ticket = issue.Key.Value;
 
             temp.id_estacion = (issue.CustomFields["Estacion"] != null ? issue.CustomFields["Estacion"].Values[0] : "");
