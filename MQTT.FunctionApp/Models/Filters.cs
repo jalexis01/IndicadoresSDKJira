@@ -71,7 +71,7 @@ namespace MQTT.FunctionApp.Models
 
             if (!string.IsNullOrEmpty(this.issueType))
             {
-                resultQuery = $"jql=issuetype in ('{this.issueType}') AND status not in ('Descartado')";
+                resultQuery = $"jql={Constantes.Proyecto} AND issuetype in ('{this.issueType}') AND status not in ('Descartado')";
             }
 
             if (!string.IsNullOrEmpty(this.tipoFecha))
@@ -79,7 +79,7 @@ namespace MQTT.FunctionApp.Models
                 switch (this.tipoFecha)
                 {
                     case "fechaApertura":
-                        resultQuery += $" AND created >= {this.fechaInicialRango} and created <= {this.fechaFinalRango}";
+                        resultQuery += $" AND {Constantes.TipoFechaBusqueda} >= {this.fechaInicialRango} and created <= {this.fechaFinalRango}";
                         break;
                     case "fechaCierre":
                         resultQuery += $" AND \"Fecha de solucion[Time stamp]\" >= {this.fechaInicialRango} and \"Fecha de solucion[Time stamp]\" <= {this.fechaFinalRango}";

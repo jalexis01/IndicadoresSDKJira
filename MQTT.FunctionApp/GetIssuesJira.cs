@@ -310,7 +310,7 @@ namespace MQTT.FunctionApp
                 field.DescripcionDeFallo = null;
             }
 
-            if (fieldObject[Constantes.Created].Value<DateTime>() != null)
+            if (fieldObject.TryGetValue(Constantes.Created, out JToken Created) && Created.Type != JTokenType.Null)
             {
                 DateTime created = fieldObject[Constantes.Created].Value<DateTime>();
                 field.created = created;
