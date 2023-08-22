@@ -90,22 +90,40 @@ function getImageTicket(idTicket) {
 function getContImageTicket(idTicket) {
     $.ajax({
         url: '/Tickets/getContadorImagenes?idTicket=' + idTicket,
+        
         success: function (response) {
             var cantImagenes = response;
 
             // Call the function to update the UI with the new value
-            updateButtonLabel(idTicket, cantImagenes);
+            updateButtonLabelImagen(idTicket, cantImagenes);
         },
         error: function () {
             // If there's an error, disable the button
-            updateButtonLabel(idTicket, 0);
+            updateButtonLabelImagen(idTicket, 0);
+        }
+    });
+}
+
+function getContVideoTicket(idTicket) {
+    $.ajax({
+        url: '/Tickets/getContadorVideos?idTicket=' + idTicket,
+
+        success: function (response) {
+            var cantVideos = response;
+
+            // Call the function to update the UI with the new value
+            updateButtonLabelVideo(idTicket, cantVideos);
+        },
+        error: function () {
+            // If there's an error, disable the button
+            updateButtonLabelVideo(idTicket, 0);
         }
     });
 }
 
 
-function updateButtonLabel(idTicket, cantImagenes) {
-    var verImagenButton = document.getElementById('verMasBtn');
+function updateButtonLabelImagen(idTicket, cantImagenes) {
+    var verImagenButton = document.getElementById('verMasBtn');    
     if (verImagenButton) {
         if (cantImagenes > 0) {
             verImagenButton.innerHTML = 'Ver imagen (' + cantImagenes + ')';
@@ -113,8 +131,25 @@ function updateButtonLabel(idTicket, cantImagenes) {
         } else {
             verImagenButton.innerHTML = 'Ver imagen (0)';
             verImagenButton.disabled = true; // Disable the button
+            verImagenButton.setAttribute('title', 'No hay imágenes adjuntas');
         }
     }
+    
+}
+
+function updateButtonLabelVideo(idTicket, cantVideos) {
+    var verVideoButton = document.getElementById('verMasBtn');
+    if (cantVideos) {
+        if (cantVideos > 0) {
+            verImagenButton.innerHTML = 'Ver video (' + cantVideos + ')';
+            verImagenButton.disabled = false; // Enable the button
+        } else {
+            verVideoButton.innerHTML = 'Ver video (0)';
+            verVideoButton.disabled = true; // Disable the button
+            verVideoButton.setAttribute('title', 'No hay videos adjuntos');
+        }
+    }
+
 }
 
 

@@ -159,23 +159,57 @@ namespace MQTT.Web.Controllers
                 JiraAccess jira = new JiraAccess();
                 var cantidadImagenes = 0;
                 List<byte[]> images = jira.GetAttachmentImages(idTicket);
-                Console.WriteLine("la cantidad de imagenes del " + idTicket + " es : " + images.Count);
+                Console.WriteLine("la cantidad de imágenes del " + idTicket + " es : " + images.Count);
+                cantidadImagenes=images.Count;
+                return Json(cantidadImagenes);
 
-                if (images.Count > 0)
-                {
-                    List<string> base64Videos = new List<string>();
+                //if (images.Count > 0)
+                //{
+                //    List<string> base64Image = new List<string>();
 
-                    foreach (byte[] imageData in images)
-                    {
-                        cantidadImagenes++;
-                    }
+                //    foreach (byte[] imageData in images)
+                //    {
+                //        cantidadImagenes++;
+                //    }
 
-                    return Json(cantidadImagenes); // Return the counter value as JSON
-                }
-                else
-                {
-                    return NotFound();
-                }
+                //    return Json(cantidadImagenes); // Return the counter value as JSON
+                //}
+                //else
+                //{
+                //    return NotFound();
+                //}
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        public IActionResult getContadorVideos(string idTicket)
+        {
+            try
+            {
+                JiraAccess jira = new JiraAccess();
+                var cantidadVideos = 0;
+                List<byte[]> videos = jira.GetAttachmentVideos(idTicket);
+                Console.WriteLine("la cantidad de videos del " + idTicket + " es : " + videos.Count);
+                cantidadVideos = videos.Count;
+                return Json(cantidadVideos);
+                //if (videos.Count > 0)
+                //{
+                //    List<string> base64Videos = new List<string>();
+
+                //    foreach (byte[] videoData in videos)
+                //    {
+                //        cantidadVideos++;
+                //    }
+
+                //    return Json(cantidadVideos); // Return the counter value as JSON
+                //}
+                //else
+                //{
+                //    return NotFound();
+                //}
             }
             catch (Exception ex)
             {
@@ -213,6 +247,8 @@ namespace MQTT.Web.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
+
+        
     }
 
 }
