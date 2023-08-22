@@ -162,22 +162,6 @@ namespace MQTT.Web.Controllers
                 Console.WriteLine("la cantidad de imágenes del " + idTicket + " es : " + images.Count);
                 cantidadImagenes=images.Count;
                 return Json(cantidadImagenes);
-
-                //if (images.Count > 0)
-                //{
-                //    List<string> base64Image = new List<string>();
-
-                //    foreach (byte[] imageData in images)
-                //    {
-                //        cantidadImagenes++;
-                //    }
-
-                //    return Json(cantidadImagenes); // Return the counter value as JSON
-                //}
-                //else
-                //{
-                //    return NotFound();
-                //}
             }
             catch (Exception ex)
             {
@@ -195,21 +179,6 @@ namespace MQTT.Web.Controllers
                 Console.WriteLine("la cantidad de videos del " + idTicket + " es : " + videos.Count);
                 cantidadVideos = videos.Count;
                 return Json(cantidadVideos);
-                //if (videos.Count > 0)
-                //{
-                //    List<string> base64Videos = new List<string>();
-
-                //    foreach (byte[] videoData in videos)
-                //    {
-                //        cantidadVideos++;
-                //    }
-
-                //    return Json(cantidadVideos); // Return the counter value as JSON
-                //}
-                //else
-                //{
-                //    return NotFound();
-                //}
             }
             catch (Exception ex)
             {

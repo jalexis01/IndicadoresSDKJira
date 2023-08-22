@@ -107,15 +107,15 @@ function getContImageTicket(idTicket) {
 function getContVideoTicket(idTicket) {
     $.ajax({
         url: '/Tickets/getContadorVideos?idTicket=' + idTicket,
-
         success: function (response) {
-            var cantVideos = response;
+            cantVideos = response; // Update the variable value
 
             // Call the function to update the UI with the new value
             updateButtonLabelVideo(idTicket, cantVideos);
         },
         error: function () {
-            // If there's an error, disable the button
+            //cantVideos = 0; // Update the variable value on error
+            // Call the function to update the UI with the new value
             updateButtonLabelVideo(idTicket, 0);
         }
     });
@@ -138,22 +138,18 @@ function updateButtonLabelImagen(idTicket, cantImagenes) {
 }
 
 function updateButtonLabelVideo(idTicket, cantVideos) {
-    var verVideoButton = document.getElementById('verMasBtn');
+    var verVideoButton = document.getElementById('verVideoBtn');
     if (cantVideos) {
         if (cantVideos > 0) {
-            verImagenButton.innerHTML = 'Ver video (' + cantVideos + ')';
-            verImagenButton.disabled = false; // Enable the button
+            verVideoButton.innerHTML = 'Ver video (' + cantVideos + ')';
+            verVideoButton.disabled = false; // Enable the button
         } else {
             verVideoButton.innerHTML = 'Ver video (0)';
             verVideoButton.disabled = true; // Disable the button
             verVideoButton.setAttribute('title', 'No hay videos adjuntos');
         }
     }
-
 }
-
-
-
 
 function getVideoTicket(idTicket) {
     return new Promise(function (resolve, reject) {
