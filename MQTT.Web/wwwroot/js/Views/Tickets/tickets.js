@@ -102,11 +102,23 @@ function getImageTicket(idTicket) {
 
 
             } else {
-                Swal.fire('Información', 'El ticket no tiene imágenes adjuntas', 'info');
+                Swal.fire({
+                    showConfirmButton: false,
+                    title: 'Advertencia',
+                    text: 'El ticket no tiene imagenes',
+                    icon: 'info',
+                    footer: '<button id="cerrarBtn1" style="background: linear-gradient(to bottom right, #888888, #555555); color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-weight: bold; margin-left: 5px;" onclick="closeSwal();">Cerrar</button>'
+                });
             }
         },
         error: function () {
-            Swal.fire('Error', 'El ticket no tiene imágenes', 'error');
+            Swal.fire({
+                showConfirmButton: false,
+                title: 'Advertencia',
+                text: 'El ticket no tiene imagenes',
+                icon: 'info',
+                footer: '<button id="cerrarBtn1" style="background: linear-gradient(to bottom right, #888888, #555555); color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-weight: bold; margin-left: 5px;" onclick="closeSwal();">Cerrar</button>'
+            });
         }
     });
 }
@@ -252,11 +264,23 @@ function openVideoModal(idTicket) {
 
 
             } else {
-                Swal.fire('Información', 'El ticket no tiene videos adjuntos', 'info');
+                Swal.fire({
+                    showConfirmButton: false,
+                    title: 'Advertencia',
+                    text: 'El ticket no tiene videos',
+                    icon: 'info',
+                    footer: '<button id="cerrarBtn1" style="background: linear-gradient(to bottom right, #888888, #555555); color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-weight: bold; margin-left: 5px;" onclick="closeSwal();">Cerrar</button>'
+                });
             }
         })
         .catch(function (error) {
-            Swal.fire('Error', 'El ticket no tiene videos', 'error');
+            Swal.fire({
+                showConfirmButton: false,
+                title: 'Advertencia',
+                text: 'El ticket no tiene videos',
+                icon: 'info',
+                footer: '<button id="cerrarBtn1" style="background: linear-gradient(to bottom right, #888888, #555555); color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-weight: bold; margin-left: 5px;" onclick="closeSwal();">Cerrar</button>'
+            });
         });
 }
 
