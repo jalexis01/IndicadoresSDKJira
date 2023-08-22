@@ -24,14 +24,14 @@ function getImageTicket(idTicket) {
     $.ajax({
         url: '/Tickets/getImageTicket?idTicket=' + idTicket,
         data: { idTicket: idTicket },
-        success: function (base64Images) {
+        success: function (base64Images) { 
             if (base64Images && base64Images.length > 0) {
                 var imageContainer = document.createElement('div');
                 imageContainer.style.display = 'flex';
                 imageContainer.style.flexWrap = 'wrap';
                 imageContainer.style.justifyContent = 'center';
-                var footerHtml = '<button id="cerrarBtn" style="background: linear-gradient(to bottom right, #888888, #555555); color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-weight: bold; margin-left: 5px; margin-right: 5px;" onclick="closeSwal()">Cerrar</button>';
-
+                var footerHtml =  '<button id="verVideoBtn" style="background: linear-gradient(to bottom right, #ff4d4d, #ff9999); color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-weight: bold; margin-left: 5px; margin-right: 5px;" onclick="openVideoModal(\'' + idTicket + '\')">Ver video</button>' +
+                    '<button id="cerrarBtn" style="background: linear-gradient(to bottom right, #888888, #555555); color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-weight: bold; margin-left: 5px; margin-right: 5px;" onclick="closeSwal()">Cerrar</button>';
                 // Iterate through the list of base64 images and create image elements
                 for (var i = 0; i < base64Images.length; i++) {
                     var base64Image = base64Images[i];
@@ -76,7 +76,31 @@ function getImageTicket(idTicket) {
                     backdrop: true,
                     allowOutsideClick: true,
                     allowEscapeKey: false,
+
                 });
+
+
+                document.getElementById('verVideoBtn').addEventListener('click', function () {
+                    Swal.fire({
+                        title: 'Cargando videos...',
+                        html: '<div class="spinner-border text-primary" role="status"><span class="sr-only">Cargando imágenes...</span></div>',
+                        showCancelButton: false,
+                        showConfirmButton: false,
+                        allowOutsideClick: false,
+                        allowEscapeKey: false,
+                        customClass: {
+                            popup: 'swal2-no-close',
+                            container: 'swal2-no-close',
+                        },
+                        didOpen: () => {
+                            Swal.showLoading();
+                            // Llama a openVideoModal aquí, después de mostrar el modal de carga
+                        }
+                    });
+                });
+
+
+
             } else {
                 Swal.fire('Información', 'El ticket no tiene imágenes adjuntas', 'info');
             }
@@ -149,8 +173,10 @@ function openVideoModal(idTicket) {
                 videoContainer.style.alignItems = 'center';
                 videoContainer.style.flexWrap = 'wrap';
                 videoContainer.style.justifyContent = 'center';
-                var footerHtml = '<button id="cerrarBtn" style="background: linear-gradient(to bottom right, #888888, #555555); color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-weight: bold; margin-left: 5px; margin-right: 5px;" onclick="closeSwal()">Cerrar</button>';
-                // Iterate through the list of base64 videos and create video elements
+                var footerHtml = '<button id="verMasBtn" style="background: linear-gradient(to bottom, #0071A1, #00BFFF); color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-weight: bold; margin-right: 5px;" onclick="getImageTicket(\'' + idTicket + '\')">Ver imagen</button>' +
+                    '<button id="cerrarBtn" style="background: linear-gradient(to bottom right, #888888, #555555); color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-weight: bold; margin-left: 5px; margin-right: 5px;" onclick="closeSwal()">Cerrar</button>';
+                   
+
                 for (var i = 0; i < base64Videos.length; i++) {
                     var base64Video = base64Videos[i];
                     var videoElement = document.createElement('video');
@@ -203,6 +229,28 @@ function openVideoModal(idTicket) {
                     allowOutsideClick: true,
                     allowEscapeKey: false,
                 });
+
+                document.getElementById('verMasBtn').addEventListener('click', async function () {
+                    // var imageContent = await getImageTicket(idTicket);
+                    Swal.fire({
+                        title: 'Cargando imágenes...',
+                        html: '<div class="spinner-border text-primary" role="status"><span class="sr-only">Cargando imágenes...</span></div>',
+                        showCancelButton: false,
+                        showConfirmButton: false,
+                        allowOutsideClick: false,
+                        allowEscapeKey: false,
+                        customClass: {
+                            popup: 'swal2-no-close',
+                            container: 'swal2-no-close',
+                        },
+                        didOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
+                });
+
+
+
             } else {
                 Swal.fire('Información', 'El ticket no tiene videos adjuntos', 'info');
             }
