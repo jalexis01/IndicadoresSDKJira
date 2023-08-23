@@ -226,7 +226,8 @@ function getAdjuntoTicket(idTicket) {
     else if (cantVideos > 0) {
         openVideoModal(idTicket);
     }
-    else if (cantImagenes === 0 && cantVideos === 0) {
+    else {
+        console.log("Entra al swal");
         Swal.fire({
             showConfirmButton: false,
             title: 'Advertencia',
@@ -250,7 +251,7 @@ function openVideoModal(idTicket) {
 
                 var verImagenButtonHtml = '';
                 if (cantImagenes > 0) {
-                    verImagenButtonHtml = '<button id="verMasBtn" style="background: linear-gradient(to bottom right, #ff4d4d, #ff9999); color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-weight: bold; margin-left: 5px; margin-right: 5px;" onclick="openVideoModal(\'' + idTicket + '\')">Ver imagen (' + cantImagenes + ')</button>';
+                    verImagenButtonHtml = '<button id="verMasBtn" style="background: linear-gradient(to bottom right, #ff4d4d, #ff9999); color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-weight: bold; margin-left: 5px; margin-right: 5px;" onclick="getImageTicket(\'' + idTicket + '\')">Ver imagen (' + cantImagenes + ')</button>';
                 } else {
                     verImagenButtonHtml = '<button id="verMasBtn" style="background: linear-gradient(to bottom right, #ff4d4d, #ff9999); color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: not-allowed; font-weight: bold; margin-left: 5px; margin-right: 5px;" disabled title="No tiene imagenes adjuntos">Ver imagen (0)</button>';
                 }

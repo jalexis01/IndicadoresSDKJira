@@ -666,7 +666,7 @@ var detailsData = function (args) {
         if (formattedKey === "idTicket") {
             idTicket = value;
             getContImageTicket(idTicket);
-            getContVideoTicket(idTicket);
+            //getContVideoTicket(idTicket);
         }
         
         dataHtmlList += "<ul><li style='padding: 1% 0%;'><div class='flex items-start space-x-4'><div class='flex-1 min-w-0' style='text-align: initial;'><p class='text-sm font-medium text-gray-900 truncate dark:text-white'>" + formattedKey + "</p></div></li><li><div class='flex items-start space-x-4'><div class='flex-1 min-w-0' style='text-align: initial'><p class='text-sm font-sm text-gray-900 truncate dark:text-white'>" + value + "</p></div></li></ul>"
