@@ -32,8 +32,19 @@ function getImageTicket(idTicket) {
                 imageContainer.style.display = 'flex';
                 imageContainer.style.flexWrap = 'wrap';
                 imageContainer.style.justifyContent = 'center';
-                var footerHtml = '<button id="verVideoBtn" style="background: linear-gradient(to bottom right, #ff4d4d, #ff9999); color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-weight: bold; margin-left: 5px; margin-right: 5px;" onclick="openVideoModal(\'' + idTicket + '\')">Ver video (' + cantVideos + ')</button>' +
-                    '<button id="cerrarBtn" style="background: linear-gradient(to bottom right, #888888, #555555); color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-weight: bold; margin-left: 5px; margin-right: 5px;" onclick="closeSwal()">Cerrar</button>';
+
+                var verVideoButtonHtml = '';
+                if (cantVideos > 0) {
+                    verVideoButtonHtml = '<button id="verVideoBtn" style="background: linear-gradient(to bottom right, #ff4d4d, #ff9999); color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-weight: bold; margin-left: 5px; margin-right: 5px;" onclick="openVideoModal(\'' + idTicket + '\')">Ver video (' + cantVideos + ')</button>';
+                } else {
+                    verVideoButtonHtml = '<button id="verVideoBtn" style="background: linear-gradient(to bottom right, #ff4d4d, #ff9999); color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: not-allowed; font-weight: bold; margin-left: 5px; margin-right: 5px;" disabled title="No tiene videos adjuntos">Ver video (0)</button>';
+                }
+
+                var footerHtml = verVideoButtonHtml + '<button id="cerrarBtn" style="background: linear-gradient(to bottom right, #888888, #555555); color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-weight: bold; margin-left: 5px; margin-right: 5px;" onclick="closeSwal()">Cerrar</button>';
+
+
+                //var footerHtml = '<button id="verVideoBtn" style="background: linear-gradient(to bottom right, #ff4d4d, #ff9999); color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-weight: bold; margin-left: 5px; margin-right: 5px;" onclick="openVideoModal(\'' + idTicket + '\')">Ver video (' + cantVideos + ')</button>' +
+                //    '<button id="cerrarBtn" style="background: linear-gradient(to bottom right, #888888, #555555); color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-weight: bold; margin-left: 5px; margin-right: 5px;" onclick="closeSwal()">Cerrar</button>';
                 // Iterate through the list of base64 images and create image elements
                 for (var i = 0; i < base64Images.length; i++) {
                     var base64Image = base64Images[i];
@@ -214,7 +225,16 @@ function getAdjuntoTicket(idTicket) {
     }
     else if (cantVideos > 0) {
         openVideoModal(idTicket);
-    }        
+    }
+    else if (cantImagenes === 0 && cantVideos === 0) {
+        Swal.fire({
+            showConfirmButton: false,
+            title: 'Advertencia',
+            text: 'El ticket no tiene adjuntos',
+            icon: 'info',
+            footer: '<button id="cerrarBtn1" style="background: linear-gradient(to bottom right, #888888, #555555); color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-weight: bold; margin-left: 5px;" onclick="closeSwal();">Cerrar</button>'
+        });
+    }
 }
 
 function openVideoModal(idTicket) {
@@ -227,8 +247,18 @@ function openVideoModal(idTicket) {
                 videoContainer.style.alignItems = 'center';
                 videoContainer.style.flexWrap = 'wrap';
                 videoContainer.style.justifyContent = 'center';
-                var footerHtml = '<button id="verMasBtn" style="background: linear-gradient(to bottom, #0071A1, #00BFFF); color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-weight: bold; margin-right: 5px;" onclick="getImageTicket(\'' + idTicket + '\')">Ver imagen (' + cantImagenes + ')</button>' +
-                    '<button id="cerrarBtn" style="background: linear-gradient(to bottom right, #888888, #555555); color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-weight: bold; margin-left: 5px; margin-right: 5px;" onclick="closeSwal()">Cerrar</button>';
+
+                var verImagenButtonHtml = '';
+                if (cantImagenes > 0) {
+                    verImagenButtonHtml = '<button id="verMasBtn" style="background: linear-gradient(to bottom right, #ff4d4d, #ff9999); color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-weight: bold; margin-left: 5px; margin-right: 5px;" onclick="openVideoModal(\'' + idTicket + '\')">Ver imagen (' + cantImagenes + ')</button>';
+                } else {
+                    verImagenButtonHtml = '<button id="verMasBtn" style="background: linear-gradient(to bottom right, #ff4d4d, #ff9999); color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: not-allowed; font-weight: bold; margin-left: 5px; margin-right: 5px;" disabled title="No tiene imagenes adjuntos">Ver imagen (0)</button>';
+                }
+
+                var footerHtml = verImagenButtonHtml + '<button id="cerrarBtn" style="background: linear-gradient(to bottom right, #888888, #555555); color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-weight: bold; margin-left: 5px; margin-right: 5px;" onclick="closeSwal()">Cerrar</button>';
+
+                //var footerHtml = '<button id="verMasBtn" style="background: linear-gradient(to bottom, #0071A1, #00BFFF); color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-weight: bold; margin-right: 5px;" onclick="getImageTicket(\'' + idTicket + '\')">Ver imagen (' + cantImagenes + ')</button>' +
+                //    '<button id="cerrarBtn" style="background: linear-gradient(to bottom right, #888888, #555555); color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-weight: bold; margin-left: 5px; margin-right: 5px;" onclick="closeSwal()">Cerrar</button>';
                    
 
                 for (var i = 0; i < base64Videos.length; i++) {
@@ -268,7 +298,7 @@ function openVideoModal(idTicket) {
 
                 // Show the video container in the Swal dialog
                 Swal.fire({
-                    title: 'Videos del ' + idTicket + ' Total imagenes ' + cantImagenes,
+                    title: 'Videos del ' + idTicket,
                     html: videoContainer,
                     //confirmButtonText: 'Cerrar',
                     showCloseButton: true,
