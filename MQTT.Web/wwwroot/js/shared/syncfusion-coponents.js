@@ -1,6 +1,8 @@
 var grid = null, multiSelectInput,columns, dataArgs, treeGridObj = null, dropdowns = null, idDrag, dropdownsModal = null, isDrag =false, datepicker=null, datepickerEnd=null, datepickerModal=null, 
 datepickerEndModal=null, dateDocuments =  new Date(Date.now()).toUTCString(), valueFild,beginUpdate, beginCreate;
 var listFunctionalitiesExportGrid = ['ExcelExport','PdfExport', 'CsvExport'];
+var cantImagenes = "";
+var cantVideos = "";
 
 $(document).ready(function(){
     var indicatortypes = [
@@ -652,9 +654,7 @@ function aplicFilter(){
 
 var detailsData = function (args) {
     var dataHtmlList = "";
-    var idTicket = "";
-
-    var cantImagenes = "";
+    var idTicket = "";    
 
     for (var key in args.rowData) {
         let formattedKey = key.replace(/_(\w)/g, function (_, letter) {
@@ -663,7 +663,7 @@ var detailsData = function (args) {
         formattedKey = formattedKey.charAt(0).toLowerCase() + formattedKey.slice(1);
         let value = args.rowData[key];
 
-        if (formattedKey == "idTicket") {
+        if (formattedKey === "idTicket") {
             idTicket = value;
             getContImageTicket(idTicket);
             getContVideoTicket(idTicket);
@@ -671,11 +671,11 @@ var detailsData = function (args) {
         
         dataHtmlList += "<ul><li style='padding: 1% 0%;'><div class='flex items-start space-x-4'><div class='flex-1 min-w-0' style='text-align: initial;'><p class='text-sm font-medium text-gray-900 truncate dark:text-white'>" + formattedKey + "</p></div></li><li><div class='flex items-start space-x-4'><div class='flex-1 min-w-0' style='text-align: initial'><p class='text-sm font-sm text-gray-900 truncate dark:text-white'>" + value + "</p></div></li></ul>"
 
-        if (idTicket !== "") {            
-          //  getContImageTicket(idTicket);            
+        if (idTicket !== "") {
 
-            footerHtml = '<button id="verMasBtn" style="background: linear-gradient(to bottom, #0071A1, #00BFFF); color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-weight: bold; margin-right: 5px;" onclick="getImageTicket(\'' + idTicket + '\')">Ver imagen (' + cantImagenes + ')</button>' +
-                '<button id="verVideoBtn" style="background: linear-gradient(to bottom right, #ff4d4d, #ff9999); color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-weight: bold; margin-left: 5px; margin-right: 5px;" onclick="openVideoModal(\'' + idTicket + '\')">Ver video (' + cantImagenes + ')</button>' +
+            footerHtml = '<button id="verAdjuntoBtn" style="background: linear-gradient(to bottom, #0071A1, #00BFFF); color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-weight: bold; margin-right: 5px;" onclick="getAdjuntoTicket(\'' + idTicket + '\')">Ver adjuntos </button>' +
+                //'<button id="verMasBtn" style="background: linear-gradient(to bottom, #0071A1, #00BFFF); color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-weight: bold; margin-right: 5px;" onclick="getImageTicket(\'' + idTicket + '\')">Ver imagen (' + cantImagenes + ')</button>' +
+                //'<button id="verVideoBtn" style="background: linear-gradient(to bottom right, #ff4d4d, #ff9999); color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-weight: bold; margin-left: 5px; margin-right: 5px;" onclick="openVideoModal(\'' + idTicket + '\')">Ver video (' + cantVideos + ')</button>' +
                 '<button id="cerrarBtn" style="background: linear-gradient(to bottom right, #888888, #555555); color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-weight: bold; margin-left: 5px; margin-right: 5px;" onclick="closeSwal()">Cerrar</button>';
         }
     }
@@ -698,11 +698,45 @@ var detailsData = function (args) {
         width: '80hv',
         didOpen: function () {
 
-            document.getElementById('verMasBtn').addEventListener('click', async function () {
-               // var imageContent = await getImageTicket(idTicket);
+            //document.getElementById('verMasBtn').addEventListener('click', async function () {
+            //    Swal.fire({
+            //        title: 'Cargando imágenes...',
+            //        html: '<div class="spinner-border text-primary" role="status"><span class="sr-only">Cargando imágenes...</span></div>',
+            //        showCancelButton: false,
+            //        showConfirmButton: false,
+            //        allowOutsideClick: false,
+            //        allowEscapeKey: false,
+            //        customClass: {
+            //            popup: 'swal2-no-close',
+            //            container: 'swal2-no-close',
+            //        },
+            //        didOpen: () => {
+            //            Swal.showLoading();
+            //        }
+            //    });
+            //});
+            //document.getElementById('verVideoBtn').addEventListener('click', function () {
+            //    Swal.fire({
+            //        title: 'Cargando videos...',
+            //        html: '<div class="spinner-border text-primary" role="status"><span class="sr-only">Cargando imágenes...</span></div>',
+            //        showCancelButton: false,
+            //        showConfirmButton: false,
+            //        allowOutsideClick: false,
+            //        allowEscapeKey: false,
+            //        customClass: {
+            //            popup: 'swal2-no-close',
+            //            container: 'swal2-no-close',
+            //        },
+            //        didOpen: () => {
+            //            Swal.showLoading();
+            //        }
+            //    });
+            //});
+
+            document.getElementById('verAdjuntoBtn').addEventListener('click', function () {
                 Swal.fire({
-                    title: 'Cargando imágenes...',
-                    html: '<div class="spinner-border text-primary" role="status"><span class="sr-only">Cargando imágenes...</span></div>',
+                    title: 'Cargando adjuntos...',
+                    html: '<div class="spinner-border text-primary" role="status"><span class="sr-only">Cargando adjuntos...</span></div>',
                     showCancelButton: false,
                     showConfirmButton: false,
                     allowOutsideClick: false,
@@ -713,32 +747,15 @@ var detailsData = function (args) {
                     },
                     didOpen: () => {
                         Swal.showLoading();
-                    }
-                });
-            });
-            document.getElementById('verVideoBtn').addEventListener('click', function () {
-                Swal.fire({
-                    title: 'Cargando videos...',
-                    html: '<div class="spinner-border text-primary" role="status"><span class="sr-only">Cargando imágenes...</span></div>',
-                    showCancelButton: false,
-                    showConfirmButton: false,
-                    allowOutsideClick: false,
-                    allowEscapeKey: false,
-                    customClass: {
-                        popup: 'swal2-no-close',
-                        container: 'swal2-no-close',
-                    },
-                    didOpen: () => {
-                        Swal.showLoading();
-                        // Llama a openVideoModal aquí, después de mostrar el modal de carga
                     }
                 });
             });
 
         },
     });
-    //getImageTicket(idTicket);
+
 };
+
 function closeSwal() {
     Swal.close();
 }

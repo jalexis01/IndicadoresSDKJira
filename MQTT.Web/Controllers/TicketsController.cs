@@ -97,7 +97,7 @@ namespace MQTT.Web.Controllers
             {
                 JiraAccess jira = new JiraAccess();
                 List<byte[]> images = jira.GetAttachmentImages(idTicket);
-                //Console.WriteLine("la cantidad de imagenes del " + idTicket + " es : " + images.Count);
+                Console.WriteLine("la cantidad de imagenes del " + idTicket + " son : " + images.Count);
                 if (images.Count > 0)
                 {
                     List<string> base64Images = new List<string>();
@@ -120,6 +120,38 @@ namespace MQTT.Web.Controllers
                 return StatusCode(500, ex.Message); // or handle the exception in an appropriate way
             }
         }
+
+        //public IActionResult getAdjuntoTicket(string idTicket)
+        //{
+        //    try
+        //    {
+        //        JiraAccess jira = new JiraAccess();
+        //        List<byte[]> images = jira.GetAttachmentImages(idTicket);
+        //        List<byte[]> videos = jira.GetAttachmentVideos(idTicket);
+        //        Console.WriteLine("la cantidad de imagenesss del " + idTicket + " es : " + images.Count);
+        //        Console.WriteLine("la cantidad de videosss del " + idTicket + " es : " + videos.Count);
+        //        if (images.Count > 0)
+        //        {
+        //            List<string> base64Images = new List<string>();
+
+        //            foreach (byte[] imageData in images)
+        //            {
+        //                string base64Image = Convert.ToBase64String(imageData);
+        //                base64Images.Add(base64Image);
+        //            }
+
+        //            return Ok(base64Images);
+        //        }
+        //        else
+        //        {
+        //            return NotFound(); // or return some appropriate response when no images are found
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return StatusCode(500, ex.Message); // or handle the exception in an appropriate way
+        //    }
+        //}
 
         //public IActionResult GetContadorImagenes(string idTicket)
         //{

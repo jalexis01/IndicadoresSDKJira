@@ -1,4 +1,6 @@
 ﻿var dataHideColums, dataSearchColumns;
+var cantImagenes;
+var cantVideos;
 $(document).ready(function () {
     createElemntsTimes();
     multiSelect();
@@ -30,7 +32,7 @@ function getImageTicket(idTicket) {
                 imageContainer.style.display = 'flex';
                 imageContainer.style.flexWrap = 'wrap';
                 imageContainer.style.justifyContent = 'center';
-                var footerHtml =  '<button id="verVideoBtn" style="background: linear-gradient(to bottom right, #ff4d4d, #ff9999); color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-weight: bold; margin-left: 5px; margin-right: 5px;" onclick="openVideoModal(\'' + idTicket + '\')">Ver video</button>' +
+                var footerHtml = '<button id="verVideoBtn" style="background: linear-gradient(to bottom right, #ff4d4d, #ff9999); color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-weight: bold; margin-left: 5px; margin-right: 5px;" onclick="openVideoModal(\'' + idTicket + '\')">Ver video (' + cantVideos + ')</button>' +
                     '<button id="cerrarBtn" style="background: linear-gradient(to bottom right, #888888, #555555); color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-weight: bold; margin-left: 5px; margin-right: 5px;" onclick="closeSwal()">Cerrar</button>';
                 // Iterate through the list of base64 images and create image elements
                 for (var i = 0; i < base64Images.length; i++) {
@@ -128,7 +130,7 @@ function getContImageTicket(idTicket) {
         url: '/Tickets/getContadorImagenes?idTicket=' + idTicket,
         
         success: function (response) {
-            var cantImagenes = response;
+            cantImagenes = response;
 
             // Call the function to update the UI with the new value
             updateButtonLabelImagen(idTicket, cantImagenes);
@@ -150,9 +152,9 @@ function getContVideoTicket(idTicket) {
             updateButtonLabelVideo(idTicket, cantVideos);
         },
         error: function () {
-            //cantVideos = 0; // Update the variable value on error
+            var cantVideos = 0; // Update the variable value on error
             // Call the function to update the UI with the new value
-            updateButtonLabelVideo(idTicket, 0);
+            updateButtonLabelVideo(idTicket, cantVideos);
         }
     });
 }
@@ -206,6 +208,15 @@ function getVideoTicket(idTicket) {
     });
 }
 
+function getAdjuntoTicket(idTicket) {
+    if (cantImagenes > 0) {
+        getImageTicket(idTicket);
+    }
+    else if (cantVideos > 0) {
+        openVideoModal(idTicket);
+    }        
+}
+
 function openVideoModal(idTicket) {
     getVideoTicket(idTicket)
         .then(function (base64Videos) {
@@ -216,7 +227,7 @@ function openVideoModal(idTicket) {
                 videoContainer.style.alignItems = 'center';
                 videoContainer.style.flexWrap = 'wrap';
                 videoContainer.style.justifyContent = 'center';
-                var footerHtml = '<button id="verMasBtn" style="background: linear-gradient(to bottom, #0071A1, #00BFFF); color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-weight: bold; margin-right: 5px;" onclick="getImageTicket(\'' + idTicket + '\')">Ver imagen</button>' +
+                var footerHtml = '<button id="verMasBtn" style="background: linear-gradient(to bottom, #0071A1, #00BFFF); color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-weight: bold; margin-right: 5px;" onclick="getImageTicket(\'' + idTicket + '\')">Ver imagen (' + cantImagenes + ')</button>' +
                     '<button id="cerrarBtn" style="background: linear-gradient(to bottom right, #888888, #555555); color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-weight: bold; margin-left: 5px; margin-right: 5px;" onclick="closeSwal()">Cerrar</button>';
                    
 
@@ -257,7 +268,7 @@ function openVideoModal(idTicket) {
 
                 // Show the video container in the Swal dialog
                 Swal.fire({
-                    title: 'Videos del ' + idTicket,
+                    title: 'Videos del ' + idTicket + ' Total imagenes ' + cantImagenes,
                     html: videoContainer,
                     //confirmButtonText: 'Cerrar',
                     showCloseButton: true,
