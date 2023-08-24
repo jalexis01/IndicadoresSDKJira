@@ -121,68 +121,22 @@ namespace MQTT.Web.Controllers
             }
         }
 
-        //public IActionResult getAdjuntoTicket(string idTicket)
-        //{
-        //    try
-        //    {
-        //        JiraAccess jira = new JiraAccess();
-        //        List<byte[]> images = jira.GetAttachmentImages(idTicket);
-        //        List<byte[]> videos = jira.GetAttachmentVideos(idTicket);
-        //        Console.WriteLine("la cantidad de imagenesss del " + idTicket + " es : " + images.Count);
-        //        Console.WriteLine("la cantidad de videosss del " + idTicket + " es : " + videos.Count);
-        //        if (images.Count > 0)
-        //        {
-        //            List<string> base64Images = new List<string>();
-
-        //            foreach (byte[] imageData in images)
-        //            {
-        //                string base64Image = Convert.ToBase64String(imageData);
-        //                base64Images.Add(base64Image);
-        //            }
-
-        //            return Ok(base64Images);
-        //        }
-        //        else
-        //        {
-        //            return NotFound(); // or return some appropriate response when no images are found
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return StatusCode(500, ex.Message); // or handle the exception in an appropriate way
-        //    }
-        //}
-
-        //public IActionResult GetContadorImagenes(string idTicket)
-        //{
-        //    try
-        //    {
-        //        JiraAccess jira = new JiraAccess();
-        //        var cantidadImagenes = 0;
-        //        List<byte[]> images = jira.GetAttachmentImages(idTicket);
-        //        Console.WriteLine("la cantidad de imagenes del " + idTicket + " es : " + images.Count);
-        //        if (images.Count > 0)
-        //        {
-        //            List<string> base64Videos = new List<string>();
-
-        //            foreach (byte[] imageData in images)
-        //            {
-
-        //                cantidadImagenes++;
-        //            }
-
-        //            return Ok(cantidadImagenes);
-        //        }
-        //        else
-        //        {
-        //            return NotFound();
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return StatusCode(500, ex.Message);
-        //    }
-        //}
+        public IActionResult getContadorImagenes(string idTicket)
+        {
+            try
+            {
+                JiraAccess jira = new JiraAccess();
+                var cantidadImagenes = 0;
+                List<byte[]> images = jira.GetAttachmentImages(idTicket);
+                Console.WriteLine("la cantidad de imágenes del " + idTicket + " es : " + images.Count);
+                cantidadImagenes = images.Count;
+                return Json(cantidadImagenes);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
 
         //public IActionResult getContadorImagenes(string idTicket)
         //{
@@ -190,42 +144,25 @@ namespace MQTT.Web.Controllers
         //    {
         //        JiraAccess jira = new JiraAccess();
         //        var cantidadImagenes = 0;
-        //        List<byte[]> images = jira.GetAttachmentImages(idTicket);
-        //        Console.WriteLine("la cantidad de imágenes del " + idTicket + " es : " + images.Count);
-        //        cantidadImagenes=images.Count;
-        //        return Json(cantidadImagenes);
+        //        var cantidadVideos = 0;
+        //        Tuple<List<byte[]>, List<byte[]>> adjuntos = jira.GetAttachmentAdjuntos(idTicket);
+        //        Console.WriteLine("la cantidad de imágenes del " + idTicket + " son : " + adjuntos.Item1.Count);
+        //        Console.WriteLine("la cantidad de Videos del " + idTicket + " son : " + adjuntos.Item2.Count);
+        //        cantidadImagenes = adjuntos.Item1.Count;
+        //        cantidadVideos = adjuntos.Item2.Count;
+                
+        //        var cantAdjuntos = new
+        //        {
+        //            CantidadImagenes = cantidadImagenes,
+        //            CantidadVideos = cantidadVideos
+        //        };
+        //        return Json(cantAdjuntos);
         //    }
         //    catch (Exception ex)
         //    {
         //        return StatusCode(500, ex.Message);
         //    }
         //}
-
-        public IActionResult getContadorImagenes(string idTicket)
-        {
-            try
-            {
-                JiraAccess jira = new JiraAccess();
-                var cantidadImagenes = 0;
-                var cantidadVideos = 0;
-                Tuple<List<byte[]>, List<byte[]>> adjuntos = jira.GetAttachmentAdjuntos(idTicket);
-                Console.WriteLine("la cantidad de imágenes del " + idTicket + " son : " + adjuntos.Item1.Count);
-                Console.WriteLine("la cantidad de Videos del " + idTicket + " son : " + adjuntos.Item2.Count);
-                cantidadImagenes = adjuntos.Item1.Count;
-                cantidadVideos = adjuntos.Item2.Count;
-                
-                var cantAdjuntos = new
-                {
-                    CantidadImagenes = cantidadImagenes,
-                    CantidadVideos = cantidadVideos
-                };
-                return Json(cantAdjuntos);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
-        }
 
         public IActionResult getContadorVideos(string idTicket)
         {

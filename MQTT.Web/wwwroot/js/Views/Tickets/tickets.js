@@ -140,7 +140,7 @@ function getContImageTicket(idTicket) {
     $.ajax({
         url: '/Tickets/getContadorImagenes?idTicket=' + idTicket,
         
-        success: function (response) {
+        success: function (response) {            
             cantImagenes = response;
 
             // Call the function to update the UI with the new value
@@ -225,16 +225,6 @@ function getAdjuntoTicket(idTicket) {
     }
     else if (cantVideos > 0) {
         openVideoModal(idTicket);
-    }
-    else {
-        console.log("Entra al swal");
-        Swal.fire({
-            showConfirmButton: false,
-            title: 'Advertencia',
-            text: 'El ticket no tiene adjuntos',
-            icon: 'info',
-            footer: '<button id="cerrarBtn1" style="background: linear-gradient(to bottom right, #888888, #555555); color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-weight: bold; margin-left: 5px;" onclick="closeSwal();">Cerrar</button>'
-        });
     }
 }
 
@@ -333,8 +323,6 @@ function openVideoModal(idTicket) {
                         }
                     });
                 });
-
-
 
             } else {
                 Swal.fire({
@@ -449,8 +437,8 @@ function ServiceGetMessages() {
         .then(data => {
 
             Swal.close();
-            console.log("Tickets")
-            console.log(data)
+            //console.log("Tickets")
+            //console.log(data)
             if (data.length == 0) {
                 noData();
                 return;

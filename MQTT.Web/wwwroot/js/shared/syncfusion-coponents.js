@@ -656,7 +656,25 @@ var detailsData = function (args) {
     var dataHtmlList = "";
     var idTicket = "";    
 
+    Swal.fire({
+        title: 'Cargando...',
+        allowOutsideClick: false,
+        showConfirmButton: false,
+        onBeforeOpen: (modal) => {
+            modal.showLoading();
+            modal.disableCloseButton();
+        }
+    });
+    
+    var contPrueba = 0;
+    console.log("Ticketttt: " + args.rowData["id_ticket"]);
+    var test = getContImageTicket(args.rowData["id_ticket"]);
+    var test2 = getContVideoTicket(args.rowData["id_ticket"]);
+    console.log("Valor imagenes: ", test);
+    console.log("Valor videos: ", test);
+
     for (var key in args.rowData) {
+
         let formattedKey = key.replace(/_(\w)/g, function (_, letter) {
             return letter.toUpperCase();
         });
@@ -665,11 +683,13 @@ var detailsData = function (args) {
 
         if (formattedKey === "idTicket") {
             idTicket = value;
-            getContImageTicket(idTicket);
+            //getContImageTicket(idTicket);
+
+            //Swal.close();
             //getContVideoTicket(idTicket);
         }
-        
-        dataHtmlList += "<ul><li style='padding: 1% 0%;'><div class='flex items-start space-x-4'><div class='flex-1 min-w-0' style='text-align: initial;'><p class='text-sm font-medium text-gray-900 truncate dark:text-white'>" + formattedKey + "</p></div></li><li><div class='flex items-start space-x-4'><div class='flex-1 min-w-0' style='text-align: initial'><p class='text-sm font-sm text-gray-900 truncate dark:text-white'>" + value + "</p></div></li></ul>"
+        contPrueba++;
+       dataHtmlList += "<ul><li style='padding: 1% 0%;'><div class='flex items-start space-x-4'><div class='flex-1 min-w-0' style='text-align: initial;'><p class='text-sm font-medium text-gray-900 truncate dark:text-white'>" + formattedKey + "</p></div></li><li><div class='flex items-start space-x-4'><div class='flex-1 min-w-0' style='text-align: initial'><p class='text-sm font-sm text-gray-900 truncate dark:text-white'>" + value + "</p></div></li></ul>"
 
         if (idTicket !== "") {
 
@@ -679,6 +699,7 @@ var detailsData = function (args) {
                 '<button id="cerrarBtn" style="background: linear-gradient(to bottom right, #888888, #555555); color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-weight: bold; margin-left: 5px; margin-right: 5px;" onclick="closeSwal()">Cerrar</button>';
         }
     }
+
     Swal.fire({
         title: '<strong><u>Información </u></strong>',
         html: '<div style="max-height: 100vh; overflow-y: auto; overflow-x: scroll;"><div style="width: fit-content;"><ul class="max-w-full divide-y divide-gray-200 dark:divide-gray-700">' + dataHtmlList + '</ul></div></div>',
@@ -697,41 +718,6 @@ var detailsData = function (args) {
         },
         width: '80hv',
         didOpen: function () {
-
-            //document.getElementById('verMasBtn').addEventListener('click', async function () {
-            //    Swal.fire({
-            //        title: 'Cargando imágenes...',
-            //        html: '<div class="spinner-border text-primary" role="status"><span class="sr-only">Cargando imágenes...</span></div>',
-            //        showCancelButton: false,
-            //        showConfirmButton: false,
-            //        allowOutsideClick: false,
-            //        allowEscapeKey: false,
-            //        customClass: {
-            //            popup: 'swal2-no-close',
-            //            container: 'swal2-no-close',
-            //        },
-            //        didOpen: () => {
-            //            Swal.showLoading();
-            //        }
-            //    });
-            //});
-            //document.getElementById('verVideoBtn').addEventListener('click', function () {
-            //    Swal.fire({
-            //        title: 'Cargando videos...',
-            //        html: '<div class="spinner-border text-primary" role="status"><span class="sr-only">Cargando imágenes...</span></div>',
-            //        showCancelButton: false,
-            //        showConfirmButton: false,
-            //        allowOutsideClick: false,
-            //        allowEscapeKey: false,
-            //        customClass: {
-            //            popup: 'swal2-no-close',
-            //            container: 'swal2-no-close',
-            //        },
-            //        didOpen: () => {
-            //            Swal.showLoading();
-            //        }
-            //    });
-            //});
 
             document.getElementById('verAdjuntoBtn').addEventListener('click', function () {
                 Swal.fire({
@@ -753,7 +739,6 @@ var detailsData = function (args) {
 
         },
     });
-
 };
 
 function closeSwal() {
