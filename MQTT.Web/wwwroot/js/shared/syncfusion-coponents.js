@@ -650,11 +650,10 @@ function aplicFilter(){
     grid.dataSource = dataSet;
 }
 
-// dataHtmlList += "<li style='padding: 1% 0%;'><div class='flex items-center space-x-4'><div class='flex-1 min-w-0' style='text-align: initial;'><p class='text-sm font-small text-gray-900 truncate dark:text-white' style=''>" + key + "</p></div><div class='inline-flex items-center text-sm font-small text-gray-900 truncate dark:text-white' style='''>" + args.rowData[key] + "</div></div></li>"
 
 var detailsData = function (args) {
     var dataHtmlList = "";
-    var idTicket = "";    
+    var idTicket = "";
 
     Swal.fire({
         title: 'Cargando...',
@@ -665,64 +664,74 @@ var detailsData = function (args) {
             modal.disableCloseButton();
         }
     });
-    
-    var contPrueba = 0;
-    console.log("Ticketttt: " + args.rowData["id_ticket"]);
-    var test = getContImageTicket(args.rowData["id_ticket"]);
-    var test2 = getContVideoTicket(args.rowData["id_ticket"]);
-    console.log("Valor imagenes: ", test);
-    console.log("Valor videos: ", test);
+        
+    //console.log("Ticketttt: " + args.rowData["id_ticket"]);
+    var test = getContImageTicket(args.rowData["id_ticket"], function (adjuntos) {
+        test = adjuntos;
+        //cantImagenes = adjuntos.cantImagenes;
+        //cantVideos = adjuntos.cantVideos;
+        console.log("Cantidad de imagenes: ", cantImagenes);
+        console.log("Cantidad de videos: ", cantVideos);
+        for (var key in args.rowData) {
+            let formattedKey = key.replace(/_(\w)/g, function (_, letter) {
+                return letter.toUpperCase();
+            });
+            formattedKey = formattedKey.charAt(0).toLowerCase() + formattedKey.slice(1);
+            let value = args.rowData[key];
 
-    for (var key in args.rowData) {
+            if (formattedKey === "idTicket") {
+                idTicket = value;                
+            }
 
-        let formattedKey = key.replace(/_(\w)/g, function (_, letter) {
-            return letter.toUpperCase();
-        });
-        formattedKey = formattedKey.charAt(0).toLowerCase() + formattedKey.slice(1);
-        let value = args.rowData[key];
+            dataHtmlList += "<ul><li style='padding: 1% 0%;'><div class='flex items-start space-x-4'><div class='flex-1 min-w-0' style='text-align: initial;'><p class='text-sm font-medium text-gray-900 truncate dark:text-white'>" + formattedKey + "</p></div></li><li><div class='flex items-start space-x-4'><div class='flex-1 min-w-0' style='text-align: initial'><p class='text-sm font-sm text-gray-900 truncate dark:text-white'>" + value + "</p></div></li></ul>"
 
-        if (formattedKey === "idTicket") {
-            idTicket = value;
-            //getContImageTicket(idTicket);
+            if (idTicket !== "") {
 
-            //Swal.close();
-            //getContVideoTicket(idTicket);
+                let verImagenesBtn = '';
+                let verVideosBtn = '';
+                let cerrarBtn = '';
+
+                if (cantImagenes === 0) {
+                    verImagenesBtn = '<button id="verMasBtn" style="background: linear-gradient(to bottom, #0071A1, #00BFFF); color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: not-allowed; font-weight: bold; margin-right: 5px;" title="No hay imágenes disponibles">Ver imagen (' + cantImagenes + ')</button>';
+                } else {
+                    verImagenesBtn = '<button id="verMasBtn" style="background: linear-gradient(to bottom, #0071A1, #00BFFF); color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-weight: bold; margin-right: 5px;" onclick="getImageTicket(\'' + idTicket + '\')">Ver imagen (' + cantImagenes + ')</button>';
+                }
+
+                if (cantVideos === 0) {
+                    verVideosBtn = '<button id="verVideoBtn" style="background: linear-gradient(to bottom right, #ff4d4d, #ff9999); color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: not-allowed; font-weight: bold; margin-left: 5px; margin-right: 5px;" title="No hay Videos disponibles">Ver video (' + cantVideos + ')</button>';
+                } else {
+                    verVideosBtn = '<button id="verVideoBtn" style="background: linear-gradient(to bottom right, #ff4d4d, #ff9999); color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-weight: bold; margin-left: 5px; margin-right: 5px;" onclick="openVideoModal(\'' + idTicket + '\')">Ver video (' + cantVideos + ')</button>';
+                }
+                               
+                cerrarBtn = '<button id="cerrarBtn" style="background: linear-gradient(to bottom right, #888888, #555555); color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-weight: bold; margin-left: 5px; margin-right: 5px;" onclick="closeSwal()">Cerrar</button>';
+
+                footerHtml = verImagenesBtn + verVideosBtn + cerrarBtn;  
+            }
         }
-        contPrueba++;
-       dataHtmlList += "<ul><li style='padding: 1% 0%;'><div class='flex items-start space-x-4'><div class='flex-1 min-w-0' style='text-align: initial;'><p class='text-sm font-medium text-gray-900 truncate dark:text-white'>" + formattedKey + "</p></div></li><li><div class='flex items-start space-x-4'><div class='flex-1 min-w-0' style='text-align: initial'><p class='text-sm font-sm text-gray-900 truncate dark:text-white'>" + value + "</p></div></li></ul>"
 
-        if (idTicket !== "") {
+        Swal.fire({
+            title: '<strong><u>Información </u></strong>',
+            html: '<div style="max-height: 100vh; overflow-y: auto; overflow-x: scroll;"><div style="width: fit-content;"><ul class="max-w-full divide-y divide-gray-200 dark:divide-gray-700">' + dataHtmlList + '</ul></div></div>',
+            scroll: true,
+            showCancelButton: false,
+            showConfirmButton: false,
 
-            footerHtml = '<button id="verAdjuntoBtn" style="background: linear-gradient(to bottom, #0071A1, #00BFFF); color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-weight: bold; margin-right: 5px;" onclick="getAdjuntoTicket(\'' + idTicket + '\')">Ver adjuntos </button>' +
-                //'<button id="verMasBtn" style="background: linear-gradient(to bottom, #0071A1, #00BFFF); color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-weight: bold; margin-right: 5px;" onclick="getImageTicket(\'' + idTicket + '\')">Ver imagen (' + cantImagenes + ')</button>' +
-                //'<button id="verVideoBtn" style="background: linear-gradient(to bottom right, #ff4d4d, #ff9999); color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-weight: bold; margin-left: 5px; margin-right: 5px;" onclick="openVideoModal(\'' + idTicket + '\')">Ver video (' + cantVideos + ')</button>' +
-                '<button id="cerrarBtn" style="background: linear-gradient(to bottom right, #888888, #555555); color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-weight: bold; margin-left: 5px; margin-right: 5px;" onclick="closeSwal()">Cerrar</button>';
-        }
-    }
+            showCloseButton: true,
+            closeOnClickOutside: false,
+            footer: footerHtml,
+            customClass: {
+                container: 'swal2-container',
+                content: 'max-h-full',
+                popup: 'swal2-popup',
 
-    Swal.fire({
-        title: '<strong><u>Información </u></strong>',
-        html: '<div style="max-height: 100vh; overflow-y: auto; overflow-x: scroll;"><div style="width: fit-content;"><ul class="max-w-full divide-y divide-gray-200 dark:divide-gray-700">' + dataHtmlList + '</ul></div></div>',
-        scroll: true,
-        showCancelButton: false,
-        showConfirmButton: false,
+            },
+            width: '80hv',
+            didOpen: function () {
 
-        showCloseButton: true,
-        closeOnClickOutside: false,
-        footer: footerHtml,
-        customClass: {
-            container: 'swal2-container',
-            content: 'max-h-full',
-            popup: 'swal2-popup',
-
-        },
-        width: '80hv',
-        didOpen: function () {
-
-            document.getElementById('verAdjuntoBtn').addEventListener('click', function () {
+                document.getElementById('verMasBtn').addEventListener('click', async function () {
                 Swal.fire({
-                    title: 'Cargando adjuntos...',
-                    html: '<div class="spinner-border text-primary" role="status"><span class="sr-only">Cargando adjuntos...</span></div>',
+                    title: 'Cargando imágenes...',
+                    html: '<div class="spinner-border text-primary" role="status"><span class="sr-only">Cargando imágenes...</span></div>',
                     showCancelButton: false,
                     showConfirmButton: false,
                     allowOutsideClick: false,
@@ -736,8 +745,25 @@ var detailsData = function (args) {
                     }
                 });
             });
-
-        },
+            document.getElementById('verVideoBtn').addEventListener('click', function () {
+                Swal.fire({
+                    title: 'Cargando videos...',
+                    html: '<div class="spinner-border text-primary" role="status"><span class="sr-only">Cargando imágenes...</span></div>',
+                    showCancelButton: false,
+                    showConfirmButton: false,
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    customClass: {
+                        popup: 'swal2-no-close',
+                        container: 'swal2-no-close',
+                    },
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+            });
+            },
+        });
     });
 };
 

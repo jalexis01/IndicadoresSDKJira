@@ -136,19 +136,51 @@ function getImageTicket(idTicket) {
     });
 }
 
-function getContImageTicket(idTicket) {
+//function getContImageTicket(idTicket, callback) {
+//    $.ajax({
+//        url: '/Tickets/getContadorImagenes?idTicket=' + idTicket,
+        
+//        success: function (response) {            
+//            cantImagenes = response;
+//            callback(cantImagenes);
+//            // Call the function to update the UI with the new value
+//            updateButtonLabelImagen(idTicket, cantImagenes);
+//        },
+//        error: function () {
+//            callback(0);
+//            // If there's an error, disable the button
+//            updateButtonLabelImagen(idTicket, 0);
+//        }
+//    });
+//}
+
+function getContImageTicket(idTicket, callback) {
+    var adjuntos = null;
+    
     $.ajax({
         url: '/Tickets/getContadorImagenes?idTicket=' + idTicket,
-        
-        success: function (response) {            
-            cantImagenes = response;
-
+        async: false,
+        success: function (response) {
+            cantImagenes = response.cantidadImagenes;
+            cantVideos = response.cantidadVideos;
+            adjuntos = {
+                cantImagenes,
+                cantVideos
+            }
+            callback(adjuntos);
+            //return response;
+            //callback(cantImagenes);
             // Call the function to update the UI with the new value
-            updateButtonLabelImagen(idTicket, cantImagenes);
+            //updateButtonLabelImagen(idTicket, cantImagenes);
+            //updateButtonLabelVideo(idTicket, cantVideos);
         },
         error: function () {
+            //return obj;
+            callback(0);
+
             // If there's an error, disable the button
-            updateButtonLabelImagen(idTicket, 0);
+            //updateButtonLabelImagen(idTicket, 0);
+            //updateButtonLabelVideo(idTicket, 0);
         }
     });
 }
@@ -219,7 +251,7 @@ function getVideoTicket(idTicket) {
     });
 }
 
-function getAdjuntoTicket(idTicket) {
+function getAdjuntoTicket(idTicket) {    
     if (cantImagenes > 0) {
         getImageTicket(idTicket);
     }
