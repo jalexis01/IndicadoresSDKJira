@@ -3,6 +3,9 @@ datepickerEndModal=null, dateDocuments =  new Date(Date.now()).toUTCString(), va
 var listFunctionalitiesExportGrid = ['ExcelExport','PdfExport', 'CsvExport'];
 var cantImagenes = "";
 var cantVideos = "";
+let verImagenesBtn = '';
+let verVideosBtn = '';
+let cerrarBtn = '';
 
 $(document).ready(function(){
     var indicatortypes = [
@@ -663,15 +666,10 @@ var detailsData = function (args) {
             modal.showLoading();
             modal.disableCloseButton();
         }
-    });
-        
-    //console.log("Ticketttt: " + args.rowData["id_ticket"]);
-    var test = getContImageTicket(args.rowData["id_ticket"], function (adjuntos) {
-        test = adjuntos;
-        //cantImagenes = adjuntos.cantImagenes;
-        //cantVideos = adjuntos.cantVideos;
-        console.log("Cantidad de imagenes: ", cantImagenes);
-        console.log("Cantidad de videos: ", cantVideos);
+    });    
+    
+    var test= getContAdjuntosTicket(args.rowData["id_ticket"], function (adjuntos) {
+               
         for (var key in args.rowData) {
             let formattedKey = key.replace(/_(\w)/g, function (_, letter) {
                 return letter.toUpperCase();
@@ -685,11 +683,7 @@ var detailsData = function (args) {
 
             dataHtmlList += "<ul><li style='padding: 1% 0%;'><div class='flex items-start space-x-4'><div class='flex-1 min-w-0' style='text-align: initial;'><p class='text-sm font-medium text-gray-900 truncate dark:text-white'>" + formattedKey + "</p></div></li><li><div class='flex items-start space-x-4'><div class='flex-1 min-w-0' style='text-align: initial'><p class='text-sm font-sm text-gray-900 truncate dark:text-white'>" + value + "</p></div></li></ul>"
 
-            if (idTicket !== "") {
-
-                let verImagenesBtn = '';
-                let verVideosBtn = '';
-                let cerrarBtn = '';
+            if (idTicket !== "") {                
 
                 if (cantImagenes === 0) {
                     verImagenesBtn = '<button id="verMasBtn" style="background: linear-gradient(to bottom, #0071A1, #00BFFF); color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: not-allowed; font-weight: bold; margin-right: 5px;" title="No hay imágenes disponibles">Ver imagen (' + cantImagenes + ')</button>';

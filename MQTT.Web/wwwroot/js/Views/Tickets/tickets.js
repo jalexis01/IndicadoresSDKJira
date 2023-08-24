@@ -136,30 +136,30 @@ function getImageTicket(idTicket) {
     });
 }
 
-//function getContImageTicket(idTicket, callback) {
-//    $.ajax({
-//        url: '/Tickets/getContadorImagenes?idTicket=' + idTicket,
-        
-//        success: function (response) {            
-//            cantImagenes = response;
-//            callback(cantImagenes);
-//            // Call the function to update the UI with the new value
-//            updateButtonLabelImagen(idTicket, cantImagenes);
-//        },
-//        error: function () {
-//            callback(0);
-//            // If there's an error, disable the button
-//            updateButtonLabelImagen(idTicket, 0);
-//        }
-//    });
-//}
-
 function getContImageTicket(idTicket, callback) {
+    $.ajax({
+        url: '/Tickets/getContadorImagenes?idTicket=' + idTicket,
+        
+        success: function (response) {            
+            cantImagenes = response;
+            callback(cantImagenes);
+            // Call the function to update the UI with the new value
+            //updateButtonLabelImagen(idTicket, cantImagenes);
+        },
+        error: function () {
+            callback(0);
+            // If there's an error, disable the button
+            //updateButtonLabelImagen(idTicket, 0);
+        }
+    });
+}
+
+function getContAdjuntosTicket(idTicket, callback) {
     var adjuntos = null;
     
     $.ajax({
-        url: '/Tickets/getContadorImagenes?idTicket=' + idTicket,
-        async: false,
+        url: '/Tickets/getContadorAdjuntos?idTicket=' + idTicket,
+        //async: false,
         success: function (response) {
             cantImagenes = response.cantidadImagenes;
             cantVideos = response.cantidadVideos;
@@ -168,11 +168,7 @@ function getContImageTicket(idTicket, callback) {
                 cantVideos
             }
             callback(adjuntos);
-            //return response;
-            //callback(cantImagenes);
-            // Call the function to update the UI with the new value
-            //updateButtonLabelImagen(idTicket, cantImagenes);
-            //updateButtonLabelVideo(idTicket, cantVideos);
+            //return response;            
         },
         error: function () {
             //return obj;

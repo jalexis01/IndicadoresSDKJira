@@ -121,24 +121,24 @@ namespace MQTT.Web.Controllers
             }
         }
 
-        //public IActionResult getContadorImagenes(string idTicket)
-        //{
-        //    try
-        //    {
-        //        JiraAccess jira = new JiraAccess();
-        //        var cantidadImagenes = 0;
-        //        List<byte[]> images = jira.GetAttachmentImages(idTicket);
-        //        Console.WriteLine("la cantidad de imágenes del " + idTicket + " es : " + images.Count);
-        //        cantidadImagenes = images.Count;
-        //        return Json(cantidadImagenes);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return StatusCode(500, ex.Message);
-        //    }
-        //}
-
         public IActionResult getContadorImagenes(string idTicket)
+        {
+            try
+            {
+                JiraAccess jira = new JiraAccess();
+                var cantidadImagenes = 0;
+                List<byte[]> images = jira.GetAttachmentImages(idTicket);
+                Console.WriteLine("la cantidad de imágenes del " + idTicket + " es : " + images.Count);
+                cantidadImagenes = images.Count;
+                return Json(cantidadImagenes);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        public IActionResult getContadorAdjuntos(string idTicket)
         {
             try
             {
