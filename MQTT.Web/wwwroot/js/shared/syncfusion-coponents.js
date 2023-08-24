@@ -686,13 +686,13 @@ var detailsData = function (args) {
             if (idTicket !== "") {                
 
                 if (cantImagenes === 0) {
-                    verImagenesBtn = '<button id="verMasBtn" style="background: linear-gradient(to bottom, #0071A1, #00BFFF); color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: not-allowed; font-weight: bold; margin-right: 5px;" title="No hay imágenes disponibles">Ver imagen (' + cantImagenes + ')</button>';
+                    verImagenesBtn = '<button id="verMasBtn" style="background: linear-gradient(to bottom, #0071A1, #00BFFF); color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: not-allowed; font-weight: bold; margin-right: 5px;" title="No hay imágenes disponibles" disabled>Ver imagen (' + cantImagenes + ')</button>';
                 } else {
                     verImagenesBtn = '<button id="verMasBtn" style="background: linear-gradient(to bottom, #0071A1, #00BFFF); color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-weight: bold; margin-right: 5px;" onclick="getImageTicket(\'' + idTicket + '\')">Ver imagen (' + cantImagenes + ')</button>';
                 }
 
                 if (cantVideos === 0) {
-                    verVideosBtn = '<button id="verVideoBtn" style="background: linear-gradient(to bottom right, #ff4d4d, #ff9999); color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: not-allowed; font-weight: bold; margin-left: 5px; margin-right: 5px;" title="No hay Videos disponibles">Ver video (' + cantVideos + ')</button>';
+                    verVideosBtn = '<button id="verVideoBtn" style="background: linear-gradient(to bottom right, #ff4d4d, #ff9999); color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: not-allowed; font-weight: bold; margin-left: 5px; margin-right: 5px;" title="No hay Videos disponibles" disabled >Ver video (' + cantVideos + ')</button>';
                 } else {
                     verVideosBtn = '<button id="verVideoBtn" style="background: linear-gradient(to bottom right, #ff4d4d, #ff9999); color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-weight: bold; margin-left: 5px; margin-right: 5px;" onclick="openVideoModal(\'' + idTicket + '\')">Ver video (' + cantVideos + ')</button>';
                 }
