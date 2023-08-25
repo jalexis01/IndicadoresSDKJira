@@ -42,21 +42,15 @@ function getImageTicket(idTicket) {
 
                 var footerHtml = verVideoButtonHtml + '<button id="cerrarBtn" style="background: linear-gradient(to bottom right, #888888, #555555); color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-weight: bold; margin-left: 5px; margin-right: 5px;" onclick="closeSwal()">Cerrar</button>';
 
-
-                //var footerHtml = '<button id="verVideoBtn" style="background: linear-gradient(to bottom right, #ff4d4d, #ff9999); color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-weight: bold; margin-left: 5px; margin-right: 5px;" onclick="openVideoModal(\'' + idTicket + '\')">Ver video (' + cantVideos + ')</button>' +
-                //    '<button id="cerrarBtn" style="background: linear-gradient(to bottom right, #888888, #555555); color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-weight: bold; margin-left: 5px; margin-right: 5px;" onclick="closeSwal()">Cerrar</button>';
-                // Iterate through the list of base64 images and create image elements
                 for (var i = 0; i < base64Images.length; i++) {
                     var base64Image = base64Images[i];
 
-                    // Create the image element
                     var imageElement = document.createElement('img');
                     imageElement.src = 'data:image/jpeg;base64,' + base64Image;
-                    imageElement.style.width = '90%'; // Adjust the width as needed
+                    imageElement.style.width = '90%';
                     imageElement.style.margin = '10px';
                     imageContainer.appendChild(imageElement);
 
-                    // Create the download button for the image
                     var downloadButton = document.createElement('a');
                     downloadButton.textContent = 'Descargar imagen';
                     downloadButton.href = 'data:image/jpeg;base64,' + base64Image;
@@ -73,25 +67,22 @@ function getImageTicket(idTicket) {
                     imageContainer.appendChild(downloadButton);
                 }
 
-                // Show the image container in the Swal dialog
                 Swal.fire({
                     title: 'Imágenes del ' + idTicket,
                     html: imageContainer,
-                    //confirmButtonText: 'Cerrar',
                     showCloseButton: true,
                     showConfirmButton: false,
                     footer: footerHtml,
                     customClass: {
                         container: 'swal-wide',
                     },
-                    width: '50%', // Adjust the width as needed
+                    width: '50%',
                     padding: '2rem',
                     backdrop: true,
                     allowOutsideClick: true,
                     allowEscapeKey: false,
 
                 });
-
 
                 document.getElementById('verVideoBtn').addEventListener('click', function () {
                     Swal.fire({
@@ -107,12 +98,9 @@ function getImageTicket(idTicket) {
                         },
                         didOpen: () => {
                             Swal.showLoading();
-                            // Llama a openVideoModal aquí, después de mostrar el modal de carga
                         }
                     });
                 });
-
-
 
             } else {
                 Swal.fire({
@@ -143,13 +131,9 @@ function getContImageTicket(idTicket, callback) {
         success: function (response) {            
             cantImagenes = response;
             callback(cantImagenes);
-            // Call the function to update the UI with the new value
-            //updateButtonLabelImagen(idTicket, cantImagenes);
         },
         error: function () {
             callback(0);
-            // If there's an error, disable the button
-            //updateButtonLabelImagen(idTicket, 0);
         }
     });
 }
@@ -159,7 +143,6 @@ function getContAdjuntosTicket(idTicket, callback) {
     
     $.ajax({
         url: '/Tickets/getContadorAdjuntos?idTicket=' + idTicket,
-        //async: false,
         success: function (response) {
             cantImagenes = response.cantidadImagenes;
             cantVideos = response.cantidadVideos;
@@ -167,16 +150,11 @@ function getContAdjuntosTicket(idTicket, callback) {
                 cantImagenes,
                 cantVideos
             }
-            callback(adjuntos);
-            //return response;            
+            callback(adjuntos);          
         },
         error: function () {
-            //return obj;
             callback(0);
 
-            // If there's an error, disable the button
-            //updateButtonLabelImagen(idTicket, 0);
-            //updateButtonLabelVideo(idTicket, 0);
         }
     });
 }
@@ -185,19 +163,15 @@ function getContVideoTicket(idTicket) {
     $.ajax({
         url: '/Tickets/getContadorVideos?idTicket=' + idTicket,
         success: function (response) {
-            cantVideos = response; // Update the variable value
-
-            // Call the function to update the UI with the new value
+            cantVideos = response;
             updateButtonLabelVideo(idTicket, cantVideos);
         },
         error: function () {
-            var cantVideos = 0; // Update the variable value on error
-            // Call the function to update the UI with the new value
+            var cantVideos = 0;
             updateButtonLabelVideo(idTicket, cantVideos);
         }
     });
 }
-
 
 function updateButtonLabelImagen(idTicket, cantImagenes) {
     var verImagenButton = document.getElementById('verMasBtn');    
@@ -219,10 +193,10 @@ function updateButtonLabelVideo(idTicket, cantVideos) {
     if (cantVideos) {
         if (cantVideos > 0) {
             verVideoButton.innerHTML = 'Ver video (' + cantVideos + ')';
-            verVideoButton.disabled = false; // Enable the button
+            verVideoButton.disabled = false;
         } else {
             verVideoButton.innerHTML = 'Ver video (0)';
-            verVideoButton.disabled = true; // Disable the button
+            verVideoButton.disabled = true; 
             verVideoButton.setAttribute('title', 'No hay videos adjuntos');
         }
     }
@@ -275,26 +249,20 @@ function openVideoModal(idTicket) {
                 }
 
                 var footerHtml = verImagenButtonHtml + '<button id="cerrarBtn" style="background: linear-gradient(to bottom right, #888888, #555555); color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-weight: bold; margin-left: 5px; margin-right: 5px;" onclick="closeSwal()">Cerrar</button>';
-
-                //var footerHtml = '<button id="verMasBtn" style="background: linear-gradient(to bottom, #0071A1, #00BFFF); color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-weight: bold; margin-right: 5px;" onclick="getImageTicket(\'' + idTicket + '\')">Ver imagen (' + cantImagenes + ')</button>' +
-                //    '<button id="cerrarBtn" style="background: linear-gradient(to bottom right, #888888, #555555); color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-weight: bold; margin-left: 5px; margin-right: 5px;" onclick="closeSwal()">Cerrar</button>';
-                   
-
+                
                 for (var i = 0; i < base64Videos.length; i++) {
                     var base64Video = base64Videos[i];
                     var videoElement = document.createElement('video');
                     videoElement.controls = true;
                     videoElement.src = 'data:video/mp4;base64,' + base64Video;
-                    videoElement.style.width = '70%'; // Adjust the width as needed
+                    videoElement.style.width = '70%'; 
                     videoElement.style.margin = '10px';
                     videoContainer.appendChild(videoElement);
 
-                    // Create a div for the download button container
                     var downloadContainer = document.createElement('div');
                     downloadContainer.style.textAlign = 'center';
                     downloadContainer.style.marginTop = '5px';
 
-                    // Create the download button for the video
                     var downloadButton = document.createElement('a');
                     downloadButton.textContent = 'Descargar video';
                     downloadButton.href = 'data:video/mp4;base64,' + base64Video;
@@ -310,23 +278,19 @@ function openVideoModal(idTicket) {
                     downloadButton.style.textDecoration = 'none';
                     downloadContainer.appendChild(downloadButton);
 
-
-                    // Append the download container to the video container
                     videoContainer.appendChild(downloadContainer);
                 }
 
-                // Show the video container in the Swal dialog
                 Swal.fire({
                     title: 'Videos del ' + idTicket,
                     html: videoContainer,
-                    //confirmButtonText: 'Cerrar',
                     showCloseButton: true,
                     showConfirmButton: false,
                     footer: footerHtml,
                     customClass: {
                         container: 'swal-wide',
                     },
-                    width: '50%', // Adjust the width as needed
+                    width: '50%', 
                     padding: '2rem',
                     backdrop: true,
                     allowOutsideClick: true,
@@ -334,7 +298,7 @@ function openVideoModal(idTicket) {
                 });
 
                 document.getElementById('verMasBtn').addEventListener('click', async function () {
-                    // var imageContent = await getImageTicket(idTicket);
+                    
                     Swal.fire({
                         title: 'Cargando imágenes...',
                         html: '<div class="spinner-border text-primary" role="status"><span class="sr-only">Cargando imágenes...</span></div>',
@@ -465,8 +429,6 @@ function ServiceGetMessages() {
         .then(data => {
 
             Swal.close();
-            //console.log("Tickets")
-            //console.log(data)
             if (data.length == 0) {
                 noData();
                 return;
@@ -491,10 +453,8 @@ function ServiceGetMessages() {
 
 const targetEl = document.getElementById('dropdownInformation');
 
-// set the element that trigger the dropdown menu on click
 const triggerEl = document.getElementById('dropdownInformationButton');
 
-// options with default values
 const options = {
     placement: 'bottom',
     onHide: () => {
