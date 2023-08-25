@@ -207,22 +207,19 @@ namespace DashboarJira.Services
 
             temp.codigo_falla = (issue.CustomFields["Descripcion de fallo"] != null ? issue.CustomFields["Descripcion de fallo"].Values[0] : "");
 
-            if (jiraUrl == "https://assaabloymda.atlassian.net/")
-            {
-                temp.fecha_apertura = (issue.Created != null ? issue.Created.Value : null);
-                //temp.fecha_apertura = (issue.Created != null ? DateTime.Parse(issue.CustomFields["Fecha de creacion"].Values[0]) : null);
-            }
-            else
-            {
-                temp.fecha_apertura = (issue.Created != null ? issue.Created.Value : null);
-            }
-           
+            //if (jiraUrl == "https://assaabloymda.atlassian.net/")
+            //{                
+            //    //temp.fecha_apertura = (issue.Created != null ? DateTime.Parse(issue.CustomFields["Fecha de creacion"].Values[0]) : null);
+            //}
+            //else
+            //{
+            //    temp.fecha_apertura = issue.Created == null ? null : DateTime.Parse(issue.Created.Value.ToString());
+            //}
 
-            
+
+            temp.fecha_apertura = issue.Created == null ? null : DateTime.Parse(issue.Created.Value.ToString());
 
             temp.fecha_arribo_locacion = (issue.CustomFields["Fecha y Hora de Llegada a Estacion"] != null ? DateTime.Parse(issue.CustomFields["Fecha y Hora de Llegada a Estacion"].Values[0]) : null);
-
-
 
             temp.fecha_cierre = (issue.CustomFields["Fecha de solucion"] != null ? DateTime.Parse(issue.CustomFields["Fecha de solucion"].Values[0]) : null);
 
