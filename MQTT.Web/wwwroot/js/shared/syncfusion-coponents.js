@@ -632,6 +632,7 @@ function multiSelect(){
         enabled:false,
         fields: { text: 'value', value: 'value' },
         change: valueChangeMulti,
+        noRecordsTemplate: '<div class="no-records-found-message">No hay registros</div>',
     });
     multiSelectInput.appendTo('#multiSelect');
 }
