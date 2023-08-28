@@ -628,7 +628,7 @@ function ActionComplete(args){
 function multiSelect(){
     multiSelectInput = new ej.dropdowns.MultiSelect({
         placeholder: 'Seleccionar',
-        query: new ej.data.Query().take(10),
+        query: new ej.data.Query().take(20),
         enabled:false,
         fields: { text: 'value', value: 'value' },
         change: valueChangeMulti,
