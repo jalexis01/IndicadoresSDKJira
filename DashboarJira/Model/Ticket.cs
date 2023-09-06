@@ -4,6 +4,7 @@
     {
         public string? id_ticket { get; set; }
         public string? id_estacion { get; set; }
+        public string? nombre_estacion { get; set; }
         public string? id_vagon { get; set; }
         public string? id_puerta { get; set; }
         public string? id_componente { get; set; }

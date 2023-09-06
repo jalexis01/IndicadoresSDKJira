@@ -179,10 +179,33 @@ namespace DashboarJira.Services
         public Ticket converIssueInTicket(Issue issue)
         {
             Ticket temp = new Ticket();
+
             temp.id_ticket = issue.Key.Value;
 
             temp.id_estacion = (issue.CustomFields["Estacion"] != null ? issue.CustomFields["Estacion"].Values[0] : "");
 
+            Dictionary<string, string> estacionMap = new Dictionary<string, string>
+            {
+                { "9115", "Calle 34" },
+                { "9116", "Av. 39" },
+                { "9117", "Calle 45" },
+                { "9119", "Calle 57" },
+                { "9120", "Calle 63" },
+                { "9121", "Flores" },
+                { "2300", "Calle 100" },
+                { "2304", "Heroes" },
+            };
+
+            string estacionValue = (issue.CustomFields["Estacion"] != null ? issue.CustomFields["Estacion"].Values[0] : "");
+                        
+            if (estacionMap.ContainsKey(estacionValue))
+            {
+                temp.nombre_estacion = estacionMap[estacionValue];
+            }
+            else
+            {
+                temp.nombre_estacion = "Estación sin configurar";
+            }
 
             temp.id_vagon = (issue.CustomFields["Vagon"] != null ? issue.CustomFields["Vagon"].Values[0] : "");
 

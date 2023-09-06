@@ -139,18 +139,6 @@ namespace MQTT.Web.Controllers
             {
                 DBAccess = new General(_connectionString);
                 DataTable dtResult = MessagesDAL.SearchMessages(DBAccess, startDate, endDate);
-
-
-                //foreach (DataColumn item in dtResult.Columns)
-                //{
-                //    var customName = _validFields.Where(v => v.Name.Equals(item.ColumnName)).Select(v => v.CustomName).FirstOrDefault();
-                //    if (!string.IsNullOrEmpty(customName))
-                //    {
-
-                //        item.ColumnName = customName.Replace(" ","");
-                //    }
-                //}
-
                 return dtResult;
             }
             catch (Exception ex)
