@@ -2,6 +2,7 @@
 using DashboarJira.Controller;
 using DashboarJira.Model;
 using DashboarJira.Services;
+using System.Data;
 
 JiraAccess jira = new JiraAccess();
 //DbConnector dbConnector = new DbConnector();
@@ -82,8 +83,30 @@ using (FileStream archivo = new FileStream(rutaCompleta, FileMode.Create))
 //byte[] bytes = jira.getIssueJira("TICKET-136").Archivos;
 //jira.GetAttachmentImages("TICKET-136");
 
-var tickets  = jira.GetTikets(0, 0, fechainicio, fechaFinal, null);
-foreach (var indicador in jira.GetTikets(0, 0, fechainicio, fechaFinal, null))
+//var tickets  = jira.GetTikets(0, 0, fechainicio, fechaFinal, null);
+//foreach (var indicador in jira.GetTikets(0, 0, fechainicio, fechaFinal, null))
+//{
+//    Console.WriteLine($"Nombre: {indicador.fecha_apertura.ToString()}");
+//}
+// Llamar a la función para obtener la DataTable
+DataTable dataTable = jira.getEstaciones();
+
+// Verificar si la DataTable contiene datos
+if (dataTable.Rows.Count > 0)
 {
-    Console.WriteLine($"Nombre: {indicador.fecha_apertura.ToString()}");
+    // Iterar a través de las filas de la DataTable
+    foreach (DataRow row in dataTable.Rows)
+    {
+        // Acceder a los valores de las columnas por nombre o índice
+        int id = (int)row["Id"];
+        int idEstacion = (int)row["idEstacion"];
+        string nombreEstacion = row["nombreEstacion"].ToString();
+
+        // Imprimir los valores en la consola
+        Console.WriteLine($"Id: {id}, Id Estación: {idEstacion}, Nombre Estación: {nombreEstacion}");
+    }
+}
+else
+{
+    Console.WriteLine("La tabla no contiene datos.");
 }
