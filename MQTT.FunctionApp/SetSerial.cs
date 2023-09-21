@@ -37,7 +37,9 @@ namespace MQTT.FunctionApp
             try
             {
                 string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-
+                
+                Console.WriteLine("Datos que recibe: "+requestBody);
+                log.LogInformation("Datos que recibe: " + requestBody);
                 log.LogInformation($"{guid}=== Log request in...");
                 logRequestIn.DataQuery = string.IsNullOrEmpty(req.QueryString.ToString()) ? null : req.QueryString.ToString();
                 logRequestIn.DataBody = string.IsNullOrEmpty(requestBody) ? null : requestBody;
@@ -49,8 +51,10 @@ namespace MQTT.FunctionApp
                 log.LogInformation($"{guid}=== body: {requestBody}");
 
                 JObject data = JObject.Parse(requestBody);
-                string field = (string)data["issue"]["fields"]["customfield_10060"];
-                //string field = (string)data["issue"]["fields"][Constantes.IdentificacionComponente];
+
+                Console.WriteLine("Data: " + data);
+                //string field = (string)data["issue"]["fields"]["customfield_10060"];
+                string field = (string)data["issue"]["fields"][Constantes.IdentificacionComponente];
                 string key = (string)data["issue"]["key"];
                 log.LogInformation($"{guid}=== issue Key: {key}");
                 log.LogInformation($"{guid}=== field to search: {field}");
