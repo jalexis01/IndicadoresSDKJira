@@ -32,7 +32,7 @@ namespace MQTT.FunctionApp.Models
         //public static string FechaSolucion = "customfield_10101";
         //public static string Status = "status";
 
-        //public const string Proyecto = "(project = 'Pruebas') ";
+        //public const string Proyecto = "(project = 'Centro de Control') ";
         //public static string URI = "https://manateecc.atlassian.net/rest/api/2";
         //public const string TipoFechaBusqueda = "'created'";
 
