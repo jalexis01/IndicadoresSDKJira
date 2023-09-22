@@ -50,7 +50,7 @@ namespace MQTT.FunctionApp.Models
         public const string TipoDeServicio = "customfield_10072";
         public const string ClaseDeFallo = "customfield_10046";
         public const string DescripcionDeFallo = "customfield_10048";
-        public const string Created = "customfield_10090";
+        public const string Created = "created";
         public const string StatusCategoryChangeDate = "statuscategorychangedate";
         public const string FechayHoraDeLlegadaAEstacion = "customfield_10056";
         public const string DescripcionRepuesto = "customfield_10050";
@@ -71,6 +71,10 @@ namespace MQTT.FunctionApp.Models
         public const string Proyecto = "(project = 'Mesa de Ayuda') ";
         public const string URI = "https://assaabloymda.atlassian.net/rest/api/2";
         public const string TipoFechaBusqueda = "'created'";
+        internal const string ProyectoMTO = "(project = 'Mtto Preventivo')";
+        internal const string TipoFechaBusquedaMTO = "'Fecha de creacion'";
+
+        public const string FechaCreacion = "customfield_10090";
         //public const string TipoFechaBusqueda = "'Fecha de creacion'";
     }
 }

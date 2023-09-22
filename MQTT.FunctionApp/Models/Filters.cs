@@ -24,6 +24,7 @@ namespace MQTT.FunctionApp.Models
         public string idTicket { get; set; }
         public string issueType { get; set; }
         public string resultQuery { get; set; }
+        public string resultQueryMTO { get; set; }
         public List<EquivalenceDTO> equivalenceServiceType { get; set; }
 
         public void GetAllEquivalences(General DBAccess)
@@ -72,6 +73,7 @@ namespace MQTT.FunctionApp.Models
             if (!string.IsNullOrEmpty(this.issueType))
             {
                 resultQuery = $"jql={Constantes.Proyecto} AND issuetype in ('{this.issueType}') AND status not in ('Descartado')";
+                resultQueryMTO = $"jql={Constantes.ProyectoMTO} AND issuetype in ('{this.issueType}') AND status not in ('Descartado')";
             }
 
             if (!string.IsNullOrEmpty(this.tipoFecha))
@@ -80,12 +82,15 @@ namespace MQTT.FunctionApp.Models
                 {
                     case "fechaApertura":
                         resultQuery += $" AND {Constantes.TipoFechaBusqueda} >= {this.fechaInicialRango} and created <= {this.fechaFinalRango}";
+                        resultQueryMTO += $" AND {Constantes.TipoFechaBusquedaMTO} >= {this.fechaInicialRango} and created <= {this.fechaFinalRango}";
                         break;
                     case "fechaCierre":
                         resultQuery += $" AND \"Fecha de solucion[Time stamp]\" >= {this.fechaInicialRango} and \"Fecha de solucion[Time stamp]\" <= {this.fechaFinalRango}";
+                        resultQueryMTO += $" AND \"Fecha de solucion[Time stamp]\" >= {this.fechaInicialRango} and \"Fecha de solucion[Time stamp]\" <= {this.fechaFinalRango}";
                         break;
                     case "fechaArriboLocacion":
                         resultQuery += $" AND \"Fecha y Hora de Llegada a Estacion[Time stamp]\" >= {this.fechaInicialRango} and \"Fecha y Hora de Llegada a Estacion[Time stamp]\" <= {this.fechaFinalRango}";
+                        resultQueryMTO += $" AND \"Fecha y Hora de Llegada a Estacion[Time stamp]\" >= {this.fechaInicialRango} and \"Fecha y Hora de Llegada a Estacion[Time stamp]\" <= {this.fechaFinalRango}";
                         break;
                     default:
                         results.Add(new ValidationResult("El parámetro tipoFecha no es valido"));
@@ -99,9 +104,11 @@ namespace MQTT.FunctionApp.Models
                 {
                     case "Abierto":
                         resultQuery += $" AND status NOT IN(Cerrado, DESCARTADO)";
+                        resultQueryMTO += $" AND status NOT IN(Cerrado, DESCARTADO)";
                         break;
                     case "Cerrado":
                         resultQuery += $" AND status IN (Cerrado)";
+                        resultQueryMTO += $" AND status IN (Cerrado)";
                         break;
                     
                     default:
@@ -115,18 +122,22 @@ namespace MQTT.FunctionApp.Models
             if (!string.IsNullOrEmpty(this.nivelFalla))
             {
                 resultQuery += $" AND \"Clase de fallo[Dropdown]\" = '{this.nivelFalla}'";
+                resultQueryMTO += $" AND \"Clase de fallo[Dropdown]\" = '{this.nivelFalla}'";
             }
 
             if (!string.IsNullOrEmpty(this.codigoFalla))
             {
                 resultQuery += $" AND \"Descripcion de fallo[Select List (multiple choices)]\" = '{this.codigoFalla}'";
+                resultQueryMTO += $" AND \"Descripcion de fallo[Select List (multiple choices)]\" = '{this.codigoFalla}'";
             }
 
             if (!string.IsNullOrEmpty(this.idTicket))
             {
                 resultQuery += $" AND key = {this.idTicket}";
+                resultQueryMTO += $" AND key = {this.idTicket}";
             }
             resultQuery += " AND 'Tipo de servicio' is not empty ";
+            resultQueryMTO += " AND 'Tipo de servicio' is not empty ";
 
             return results;
         }
