@@ -35,7 +35,7 @@ namespace MQTT.FunctionApp
             var connectionString = Environment.GetEnvironmentVariable("ConnectionStringDB", EnvironmentVariableTarget.Process);
             string token = Environment.GetEnvironmentVariable("TokenJira", EnvironmentVariableTarget.Process).ToString();
             string timeZone = Environment.GetEnvironmentVariable("TimeZone", EnvironmentVariableTarget.Process).ToString();
-            //var connectionString = "Server=manatee.database.windows.net;Database=PuertasTransmilenioDB;User Id=administrador;Password=2022/M4n4t334zur3;";
+            //var connectionString = "Server=manatee.database.windows.net;Database=PuertasTransmilenioDBAssaabloy;User Id=administrador;Password=2022/M4n4t334zur3;";
             //string token = "ZGVzYXJyb2xsb2NjQG1hbmF0ZWVpbmdlbmllcmlhLmNvbTpoZlV0Z1o5UkZHb1F5MlNmSDdzQ0Y5QTY=";
             //string timeZone = "SA Pacific Standard Time";
             General DBAccess = new General(connectionString);
@@ -63,9 +63,8 @@ namespace MQTT.FunctionApp
                 }
                 int start = 0;
                 int max = 100;
-                List<Models.IssueDTO> result = getTicketsFromJira(start, max, token, filters, timeZone, log, guid, msgError).OrderByDescending(issue => issue.fechaApertura).ToList(); ;
-
-
+                List<Models.IssueDTO> result = getTicketsFromJira(start, max, token, filters, timeZone, log, guid, msgError);
+                result = result.Concat(getTicketsFromJiraMTO(start, max, token, filters, timeZone, log, guid, msgError)).ToList().OrderByDescending(issue => issue.fechaApertura).ToList();
 
                 log.LogInformation($"{guid}==== END PROCESS ======");
 				logRequestIn.Processed = true;
@@ -251,7 +250,6 @@ namespace MQTT.FunctionApp
             if (max + start < total) {
                 result = result.Concat(getTicketsFromJira(start + max, max, token, filters, timeZone, log, guid, msgError)).ToList();
             }
-            result = result.Concat(getTicketsFromJiraMTO(start, max, token, filters, timeZone, log, guid, msgError)).ToList();
             return result;
 
         }
@@ -754,7 +752,7 @@ namespace MQTT.FunctionApp
 
             if (fieldObject.TryGetValue(Constantes.FechaCreacion, out JToken Created) && Created.Type != JTokenType.Null)
             {
-                DateTime created = fieldObject[Constantes.Created].Value<DateTime>();
+                DateTime created = fieldObject[Constantes.FechaCreacion].Value<DateTime>();
                 field.created = created;
             }
             else

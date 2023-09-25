@@ -82,7 +82,7 @@ namespace MQTT.FunctionApp.Models
                 {
                     case "fechaApertura":
                         resultQuery += $" AND {Constantes.TipoFechaBusqueda} >= {this.fechaInicialRango} and created <= {this.fechaFinalRango}";
-                        resultQueryMTO += $" AND {Constantes.TipoFechaBusquedaMTO} >= {this.fechaInicialRango} and created <= {this.fechaFinalRango}";
+                        resultQueryMTO += $" AND {Constantes.TipoFechaBusquedaMTO} >= {this.fechaInicialRango} and {Constantes.TipoFechaBusquedaMTO} <= {this.fechaFinalRango}";
                         break;
                     case "fechaCierre":
                         resultQuery += $" AND \"Fecha de solucion[Time stamp]\" >= {this.fechaInicialRango} and \"Fecha de solucion[Time stamp]\" <= {this.fechaFinalRango}";
