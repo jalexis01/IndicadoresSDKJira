@@ -33,7 +33,7 @@ namespace DashboarJira.Services
         public List<Ticket> GetTikets(int start, int max, string startDate, string endDate, string idComponente)
         {
             List<Ticket> result = GetTiketsCC(start , max, startDate, endDate, idComponente);
-            result = result.Concat(GetTiketsMTO(start, max, startDate, endDate, idComponente)).ToList();
+            result = result.Concat(GetTiketsMTO(start, max, startDate, endDate, idComponente)).ToList().OrderByDescending(issue => issue.fecha_apertura).ToList();
             return result;
 
         }
@@ -132,7 +132,7 @@ namespace DashboarJira.Services
                 List<Ticket> result = ConvertIssusInTicketsMTO(issues);
                 if (total > max + start)
                 {
-                    result = result.Concat(GetTikets(start + max, max, startDate, endDate, idComponente)).ToList();
+                    result = result.Concat(GetTiketsMTO(start + max, max, startDate, endDate, idComponente)).ToList();
                 }
                 return result;
             }
