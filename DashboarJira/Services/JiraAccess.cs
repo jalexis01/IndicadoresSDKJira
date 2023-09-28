@@ -206,8 +206,10 @@ namespace DashboarJira.Services
         public Ticket getTicket(string id)
         {
             var ticket = jira.Issues.GetIssueAsync(id).Result;
+            var estacionMap = getEstaciones().AsEnumerable()
+                .ToDictionary(row => row[1].ToString(), row => row[2].ToString());
 
-            return converIssueInTicket(ticket);
+            return converIssueInTicket(ticket, estacionMap);
         }
 
         public List<IssueJira> ConvertIssusInIssuesJira(Task<IPagedQueryResult<Issue>> issues)
@@ -233,48 +235,41 @@ namespace DashboarJira.Services
         public List<Ticket> ConvertIssusInTickets(Task<IPagedQueryResult<Issue>> issues)
         {
 
-            List<Ticket> result = new List<Ticket>();
+            var result = new List<Ticket>();
+            var estacionMap = getEstaciones().AsEnumerable()
+                .ToDictionary(row => row[1].ToString(), row => row[2].ToString());
+
             foreach (var issue in issues.Result)
             {
-
-                result.Add(converIssueInTicket(issue));
+                result.Add(converIssueInTicket(issue, estacionMap));
             }
+
             return result;
 
         }
         public List<Ticket> ConvertIssusInTicketsMTO(Task<IPagedQueryResult<Issue>> issues)
         {
 
-            List<Ticket> result = new List<Ticket>();
+            var result = new List<Ticket>();
+            var estacionMap = getEstaciones().AsEnumerable()
+                .ToDictionary(row => row[1].ToString(), row => row[2].ToString());
+
             foreach (var issue in issues.Result)
             {
-
-                result.Add(converIssueInTicketMTO(issue));
+                result.Add(converIssueInTicketMTO(issue, estacionMap));
             }
+
             return result;
 
         }
 
-        public Ticket converIssueInTicket(Issue issue)
+        public Ticket converIssueInTicket(Issue issue, Dictionary<string, string> estacionMap)
         {
             Ticket temp = new Ticket();
 
             temp.id_ticket = issue.Key.Value;
 
             temp.id_estacion = (issue.CustomFields["Estacion"] != null ? issue.CustomFields["Estacion"].Values[0] : "");
-
-            
-            Dictionary<string, string> estacionMap = new Dictionary<string, string>();
-
-            foreach (DataRow row in getEstaciones().Rows)
-            {
-                // Obtén el valor de la columna "Codigo" y "Nombre" de cada fila
-                string codigo = row[1].ToString();
-                string nombre = row[2].ToString();
-
-                // Agrega los datos al diccionario
-                estacionMap.Add(codigo, nombre);
-            }
 
             string estacionValue = (issue.CustomFields["Estacion"] != null ? issue.CustomFields["Estacion"].Values[0] : "");
                         
@@ -390,26 +385,13 @@ namespace DashboarJira.Services
             return temp;
 
         }
-        public Ticket converIssueInTicketMTO(Issue issue)
+        public Ticket converIssueInTicketMTO(Issue issue, Dictionary<string, string> estacionMap)
         {
             Ticket temp = new Ticket();
 
             temp.id_ticket = issue.Key.Value;
 
             temp.id_estacion = (issue.CustomFields["Estacion"] != null ? issue.CustomFields["Estacion"].Values[0] : "");
-
-
-            Dictionary<string, string> estacionMap = new Dictionary<string, string>();
-
-            foreach (DataRow row in getEstaciones().Rows)
-            {
-                // Obtén el valor de la columna "Codigo" y "Nombre" de cada fila
-                string codigo = row[1].ToString();
-                string nombre = row[2].ToString();
-
-                // Agrega los datos al diccionario
-                estacionMap.Add(codigo, nombre);
-            }
 
             string estacionValue = (issue.CustomFields["Estacion"] != null ? issue.CustomFields["Estacion"].Values[0] : "");
 
