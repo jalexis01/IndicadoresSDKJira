@@ -9,12 +9,12 @@ namespace DashboarJira.Services
 {
     public class JiraAccess
     {
-        //string jiraUrl = "https://manateecc.atlassian.net/";
-        //string username = "desarrollocc@manateeingenieria.com";
-        //string password = "ATATT3xFfGF0ZRHIEZTEJVRnhNKviH0CGed6QXqCDMj5bCmKSEbO00UUjHUb3yDcaA4YD1SHohyDr4qnwRx2x4Tu_S_QW_xlGIcIUDvL7CFKEg47_Jcy4Dmq6YzO0dvqB3qeT-EVWfwJ2jJ-9vEUfsqXavD0IIGA7DAZHGCtIWhxgwKIbAWsmeA=038B810D";
-        string jiraUrl = "https://assaabloymda.atlassian.net/";
+        string jiraUrl = "https://manateecc.atlassian.net/";
         string username = "desarrollocc@manateeingenieria.com";
         string password = "ATATT3xFfGF0ZRHIEZTEJVRnhNKviH0CGed6QXqCDMj5bCmKSEbO00UUjHUb3yDcaA4YD1SHohyDr4qnwRx2x4Tu_S_QW_xlGIcIUDvL7CFKEg47_Jcy4Dmq6YzO0dvqB3qeT-EVWfwJ2jJ-9vEUfsqXavD0IIGA7DAZHGCtIWhxgwKIbAWsmeA=038B810D";
+        //string jiraUrl = "https://assaabloymda.atlassian.net/";
+        //string username = "desarrollocc@manateeingenieria.com";
+        //string password = "ATATT3xFfGF0ZRHIEZTEJVRnhNKviH0CGed6QXqCDMj5bCmKSEbO00UUjHUb3yDcaA4YD1SHohyDr4qnwRx2x4Tu_S_QW_xlGIcIUDvL7CFKEg47_Jcy4Dmq6YzO0dvqB3qeT-EVWfwJ2jJ-9vEUfsqXavD0IIGA7DAZHGCtIWhxgwKIbAWsmeA=038B810D";
 
         Jira jira;
         private DbConnector connector;
@@ -28,7 +28,8 @@ namespace DashboarJira.Services
         const string proyectAssaMTO = "project = 'Mtto Preventivo'";
         //const string proytect = "(project = 'Mesa de Ayuda' OR project = 'Mtto Preventivo')";
         const string proyectManatee = "project = 'Centro de Control'";
-        const string proyectManateeMTO = "project = 'Mtto Preventivo'";
+
+        const string proyectManateeMTO = "(project = 'TICKETMP' OR project = 'TICKETDRV')";
         /*TODO*/
         public List<Ticket> GetTikets(int start, int max, string startDate, string endDate, string idComponente)
         {
@@ -102,7 +103,7 @@ namespace DashboarJira.Services
                 }
                 else
                 {
-                    jql = $"{proyectManatee} and issuetype = 'Solicitud de Mantenimiento'";
+                    jql = $"{proyectManateeMTO} and issuetype = 'Solicitud de Mantenimiento'";
                 }
 
                 if (startDate != null && endDate != null)
