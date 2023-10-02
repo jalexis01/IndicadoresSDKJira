@@ -64,7 +64,7 @@ namespace MQTT.FunctionApp
                 int start = 0;
                 int max = 100;
                 List<Models.IssueDTO> result = getTicketsFromJira(start, max, token, filters, timeZone, log, guid, msgError);
-                result = result.Concat(getTicketsFromJiraMTO(start, max, token, filters, timeZone, log, guid, msgError)).ToList().OrderByDescending(issue => issue.fechaApertura).ToList();
+                //result = result.Concat(getTicketsFromJiraMTO(start, max, token, filters, timeZone, log, guid, msgError)).ToList().OrderByDescending(issue => issue.fechaApertura).ToList();
 
                 log.LogInformation($"{guid}==== END PROCESS ======");
 				logRequestIn.Processed = true;
