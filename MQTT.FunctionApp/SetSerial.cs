@@ -49,7 +49,7 @@ namespace MQTT.FunctionApp
                 log.LogInformation($"{guid}=== body: {requestBody}");
 
                 JObject data = JObject.Parse(requestBody);
-                string field = (string)data["issue"]["fields"]["customfield_10060"];
+                string field = (string)data["issue"]["fields"][Constantes.IdentificacionComponente];
                 //string field = (string)data["issue"]["fields"][Constantes.IdentificacionComponente];
                 string key = (string)data["issue"]["key"];
                 log.LogInformation($"{guid}=== issue Key: {key}");
