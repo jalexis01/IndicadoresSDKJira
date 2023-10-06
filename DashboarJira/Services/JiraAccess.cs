@@ -29,12 +29,17 @@ namespace DashboarJira.Services
         //const string proytect = "(project = 'Mesa de Ayuda' OR project = 'Mtto Preventivo')";
         const string proyectManatee = "project = 'Centro de Control'";
 
-        const string proyectManateeMTO = "(project = 'TICKETMP' OR project = 'TICKETDRV')";
+        const string proyectManateeMTO = " project = 'TICKETDRV'";
+        const string proyectManateeMP = "(project = 'TICKETMP')";
         /*TODO*/
         public List<Ticket> GetTikets(int start, int max, string startDate, string endDate, string idComponente)
         {
             List<Ticket> result = GetTiketsCC(start , max, startDate, endDate, idComponente);
-            result = result.Concat(GetTiketsMTO(start, max, startDate, endDate, idComponente)).ToList().OrderByDescending(issue => issue.fecha_apertura).ToList();
+            result = result.Concat(GetTiketsMTO(start, max, startDate, endDate, idComponente)).ToList();
+            if (jiraUrl != "https://assaabloymda.atlassian.net/") {
+                result = result.Concat(GetTicketsMP(start, max, startDate, endDate, idComponente)).ToList();
+            }
+            result = result.OrderByDescending(issue => issue.fecha_apertura).ToList();
             return result;
 
         }
@@ -134,6 +139,54 @@ namespace DashboarJira.Services
                 if (total > max + start)
                 {
                     result = result.Concat(GetTiketsMTO(start + max, max, startDate, endDate, idComponente)).ToList();
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+
+            }
+            return null;
+        }
+        public List<Ticket> GetTicketsMP(int start, int max, string startDate, string endDate, string idComponente)
+        {
+            try
+            {
+                var jql = "";
+                //created >= 2023-04-04 AND created <= 2023-04-13 AND issuetype = "Solicitud de Mantenimiento" AND resolution = Unresolved AND "Clase de fallo" = AIO AND "Identificacion componente" ~ 9119-WA-OR-1 ORDER BY key DESC, "Time to resolution" ASC
+                
+                jql = $"{proyectManateeMP} and issuetype = 'Solicitud de Mantenimiento' and status = Cerrado";
+                
+
+                if (startDate != null && endDate != null)
+                {
+                    jql += " AND " + "'Fecha de creacion' >= " + startDate + " AND " + "'Fecha de creacion' <= " + endDate;
+                }
+                if (idComponente != null)
+                {
+
+                    jql += " AND " + "'Identificacion componente' ~ " + idComponente;
+                }
+                //jql += " AND 'Tipo de servicio' is not empty ";
+                jql += " ORDER BY key DESC, 'Time to resolution' ASC";
+
+                Task<IPagedQueryResult<Issue>> issues = null;
+
+                if (max != 0)
+                {
+                    issues = jira.Issues.GetIssuesFromJqlAsync(jql, max, start);
+                }
+                else if (max == 0)
+                {
+                    max = 100;
+                    issues = jira.Issues.GetIssuesFromJqlAsync(jql, max, start);
+                }
+                int total = totalITem(issues);
+                List<Ticket> result = ConvertIssusInTicketsMTO(issues);
+                if (total > max + start)
+                {
+                    result = result.Concat(GetTicketsMP(start + max, max, startDate, endDate, idComponente)).ToList();
                 }
                 return result;
             }
