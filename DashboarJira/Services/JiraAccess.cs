@@ -32,170 +32,196 @@ namespace DashboarJira.Services
         const string proyectManateeMTO = " project = 'TICKETDRV'";
         const string proyectManateeMP = "(project = 'TICKETMP')";
         /*TODO*/
-        public List<Ticket> GetTikets(int start, int max, string startDate, string endDate, string idComponente)
+        public async Task<List<Ticket>> GetTikets(int start, int max, string startDate, string endDate, string idComponente)
         {
-            List<Ticket> result = GetTiketsCC(start , max, startDate, endDate, idComponente);
-            result = result.Concat(GetTiketsMTO(start, max, startDate, endDate, idComponente)).ToList();
-            if (jiraUrl != "https://assaabloymda.atlassian.net/") {
-                result = result.Concat(GetTicketsMP(start, max, startDate, endDate, idComponente)).ToList();
+            Task<List<Ticket>> taskCC = GetTiketsCCAsync(start, max, startDate, endDate, idComponente);
+            Task<List<Ticket>> taskMTO = GetTiketsMTOAsync(start, max, startDate, endDate, idComponente);
+            Task<List<Ticket>> taskMP = null;
+
+            if (jiraUrl != "https://assaabloymda.atlassian.net/")
+            {
+                taskMP = GetTicketsMPAsync(start, max, startDate, endDate, idComponente);
             }
+
+            await Task.WhenAll(taskCC, taskMTO, taskMP);
+
+            List<Ticket> resultCC = taskCC.Result;
+            List<Ticket> resultMTO = taskMTO.Result;
+            List<Ticket> resultMP = taskMP?.Result;
+
+            List<Ticket> result = resultCC.Concat(resultMTO).ToList();
+            if (resultMP != null)
+            {
+                result = result.Concat(resultMP).ToList();
+            }
+
             result = result.OrderByDescending(issue => issue.fecha_apertura).ToList();
+
             return result;
-
         }
-        public List<Ticket> GetTiketsCC(int start, int max, string startDate, string endDate, string idComponente)
+        public async Task<List<Ticket>> GetTiketsCCAsync(int start, int max, string startDate, string endDate, string idComponente)
         {
             try
             {
-                var jql = "";
-                //created >= 2023-04-04 AND created <= 2023-04-13 AND issuetype = "Solicitud de Mantenimiento" AND resolution = Unresolved AND "Clase de fallo" = AIO AND "Identificacion componente" ~ 9119-WA-OR-1 ORDER BY key DESC, "Time to resolution" ASC
-                if (jiraUrl == "https://assaabloymda.atlassian.net/")
+                var jql = GetJqlForCC(startDate, endDate, idComponente);
+
+                var issues = GetIssuesAsync(jql, start, max);
+
+                var result = ConvertIssusInTickets(issues);
+
+                if (HasMoreItems(issues, start, max))
                 {
-                    jql = $"{proyectAssa} and issuetype = 'Solicitud de Mantenimiento'";
-                }
-                else
-                {
-                    jql = $"{proyectManatee} and issuetype = 'Solicitud de Mantenimiento'";
+                    result = result.Concat(await GetTiketsCCAsync(start + max, max, startDate, endDate, idComponente)).ToList();
                 }
 
-                if (startDate != null && endDate != null)
-                {
-                    jql += " AND " + "created >= " + startDate + " AND " + "created <= " + endDate;
-                }
-                if (idComponente != null)
-                {
-
-                    jql += " AND " + "'Identificacion componente' ~ " + idComponente;
-                }
-                //jql += " AND 'Tipo de servicio' is not empty ";
-                jql += " ORDER BY key DESC, 'Time to resolution' ASC";
-          
-                Task<IPagedQueryResult<Issue>> issues = null;
-               
-                if (max != 0)
-                {
-                    issues = jira.Issues.GetIssuesFromJqlAsync(jql, max, start);
-                }
-                else if (max == 0)
-                {
-                    max = 100;
-                    issues = jira.Issues.GetIssuesFromJqlAsync(jql, max, start);
-                }
-                int total = totalITem(issues);
-                List<Ticket> result = ConvertIssusInTickets(issues);
-                if (total > max + start)
-                {
-                    result = result.Concat(GetTiketsCC(start + max, max, startDate, endDate, idComponente)).ToList();
-                }
                 return result;
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
-
             }
+
             return null;
         }
-        public List<Ticket> GetTiketsMTO(int start, int max, string startDate, string endDate, string idComponente)
+
+        public async Task<List<Ticket>> GetTiketsMTOAsync(int start, int max, string startDate, string endDate, string idComponente)
         {
             try
             {
-                var jql = "";
-                //created >= 2023-04-04 AND created <= 2023-04-13 AND issuetype = "Solicitud de Mantenimiento" AND resolution = Unresolved AND "Clase de fallo" = AIO AND "Identificacion componente" ~ 9119-WA-OR-1 ORDER BY key DESC, "Time to resolution" ASC
-                if (jiraUrl == "https://assaabloymda.atlassian.net/")
+                var jql = GetJqlForMTO(startDate, endDate, idComponente);
+
+                var issues = GetIssuesAsync(jql, start, max);
+
+                var result = ConvertIssusInTicketsMTO(issues);
+
+                if (HasMoreItems(issues, start, max))
                 {
-                    jql = $"{proyectAssaMTO} and issuetype = 'Solicitud de Mantenimiento'";
-                }
-                else
-                {
-                    jql = $"{proyectManateeMTO} and issuetype = 'Solicitud de Mantenimiento'";
+                    result = result.Concat(await GetTiketsMTOAsync(start + max, max, startDate, endDate, idComponente)).ToList();
                 }
 
-                if (startDate != null && endDate != null)
-                {
-                    jql += " AND " + "'Fecha de creacion' >= " + startDate + " AND " + "'Fecha de creacion' <= " + endDate;
-                }
-                if (idComponente != null)
-                {
-
-                    jql += " AND " + "'Identificacion componente' ~ " + idComponente;
-                }
-                //jql += " AND 'Tipo de servicio' is not empty ";
-                jql += " ORDER BY key DESC, 'Time to resolution' ASC";
-
-                Task<IPagedQueryResult<Issue>> issues = null;
-
-                if (max != 0)
-                {
-                    issues = jira.Issues.GetIssuesFromJqlAsync(jql, max, start);
-                }
-                else if (max == 0)
-                {
-                    max = 100;
-                    issues = jira.Issues.GetIssuesFromJqlAsync(jql, max, start);
-                }
-                int total = totalITem(issues);
-                List<Ticket> result = ConvertIssusInTicketsMTO(issues);
-                if (total > max + start)
-                {
-                    result = result.Concat(GetTiketsMTO(start + max, max, startDate, endDate, idComponente)).ToList();
-                }
                 return result;
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
-
             }
+
             return null;
         }
-        public List<Ticket> GetTicketsMP(int start, int max, string startDate, string endDate, string idComponente)
+
+        public async Task<List<Ticket>> GetTicketsMPAsync(int start, int max, string startDate, string endDate, string idComponente)
         {
             try
             {
-                var jql = "";
-                //created >= 2023-04-04 AND created <= 2023-04-13 AND issuetype = "Solicitud de Mantenimiento" AND resolution = Unresolved AND "Clase de fallo" = AIO AND "Identificacion componente" ~ 9119-WA-OR-1 ORDER BY key DESC, "Time to resolution" ASC
-                
-                jql = $"{proyectManateeMP} and issuetype = 'Solicitud de Mantenimiento' and status = Cerrado";
-                
+                var jql = GetJqlForMP(startDate, endDate, idComponente);
 
-                if (startDate != null && endDate != null)
-                {
-                    jql += " AND " + "'Fecha de creacion' >= " + startDate + " AND " + "'Fecha de creacion' <= " + endDate;
-                }
-                if (idComponente != null)
-                {
+                var issues = GetIssuesAsync(jql, start, max);
 
-                    jql += " AND " + "'Identificacion componente' ~ " + idComponente;
-                }
-                //jql += " AND 'Tipo de servicio' is not empty ";
-                jql += " ORDER BY key DESC, 'Time to resolution' ASC";
+                var result = ConvertIssusInTicketsMTO(issues);
 
-                Task<IPagedQueryResult<Issue>> issues = null;
+                if (HasMoreItems(issues, start, max))
+                {
+                    result = result.Concat(await GetTicketsMPAsync(start + max, max, startDate, endDate, idComponente)).ToList();
+                }
 
-                if (max != 0)
-                {
-                    issues = jira.Issues.GetIssuesFromJqlAsync(jql, max, start);
-                }
-                else if (max == 0)
-                {
-                    max = 100;
-                    issues = jira.Issues.GetIssuesFromJqlAsync(jql, max, start);
-                }
-                int total = totalITem(issues);
-                List<Ticket> result = ConvertIssusInTicketsMTO(issues);
-                if (total > max + start)
-                {
-                    result = result.Concat(GetTicketsMP(start + max, max, startDate, endDate, idComponente)).ToList();
-                }
                 return result;
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
-
             }
+
             return null;
+        }
+
+        private async Task<IPagedQueryResult<Issue>> GetIssuesAsync(string jql, int start, int max)
+        {
+            if (max == 0)
+            {
+                max = 100;
+            }
+
+            return await jira.Issues.GetIssuesFromJqlAsync(jql, max, start);
+        }
+
+        private bool HasMoreItems(Task<IPagedQueryResult<Issue>> issues, int start, int max)
+        {
+            return totalITem(issues) > max + start;
+        }
+
+        private string GetJqlForCC(string startDate, string endDate, string idComponente)
+        {
+            var jql = "";
+
+            if (jiraUrl == "https://assaabloymda.atlassian.net/")
+            {
+                jql = $"{proyectAssa} and issuetype = 'Solicitud de Mantenimiento'";
+            }
+            else
+            {
+                jql = $"{proyectManatee} and issuetype = 'Solicitud de Mantenimiento'";
+            }
+
+            if (startDate != null && endDate != null)
+            {
+                jql += $" AND created >= {startDate} AND created <= {endDate}";
+            }
+
+            if (idComponente != null)
+            {
+                jql += $" AND 'Identificacion componente' ~ {idComponente}";
+            }
+
+            jql += " ORDER BY key DESC, 'Time to resolution' ASC";
+
+            return jql;
+        }
+
+        private string GetJqlForMTO(string startDate, string endDate, string idComponente)
+        {
+            var jql = "";
+
+            if (jiraUrl == "https://assaabloymda.atlassian.net/")
+            {
+                jql = $"{proyectAssaMTO} and issuetype = 'Solicitud de Mantenimiento'";
+            }
+            else
+            {
+                jql = $"{proyectManateeMTO} and issuetype = 'Solicitud de Mantenimiento'";
+            }
+
+            if (startDate != null && endDate != null)
+            {
+                jql += $" AND 'Fecha de creacion' >= {startDate} AND 'Fecha de creacion' <= {endDate}";
+            }
+
+            if (idComponente != null)
+            {
+                jql += $" AND 'Identificacion componente' ~ {idComponente}";
+            }
+
+            jql += " ORDER BY key DESC, 'Time to resolution' ASC";
+
+            return jql;
+        }
+
+        private string GetJqlForMP(string startDate, string endDate, string idComponente)
+        {
+            var jql = $"{proyectManateeMP} and issuetype = 'Solicitud de Mantenimiento' and status = Cerrado";
+
+            if (startDate != null && endDate != null)
+            {
+                jql += $" AND 'Fecha de creacion' >= {startDate} AND 'Fecha de creacion' <= {endDate}";
+            }
+
+            if (idComponente != null)
+            {
+                jql += $" AND 'Identificacion componente' ~ {idComponente}";
+            }
+
+            jql += " ORDER BY key DESC, 'Time to resolution' ASC";
+
+            return jql;
         }
 
         /*TODO*/
@@ -288,19 +314,12 @@ namespace DashboarJira.Services
 
         public List<Ticket> ConvertIssusInTickets(Task<IPagedQueryResult<Issue>> issues)
         {
-
-            var result = new List<Ticket>();
             var estacionMap = getEstaciones().AsEnumerable()
                 .ToDictionary(row => row[1].ToString(), row => row[2].ToString());
 
-            foreach (var issue in issues.Result)
-            {
-                result.Add(converIssueInTicket(issue, estacionMap));
-            }
-
-            return result;
-
+            return issues.Result.Select(issue => converIssueInTicket(issue, estacionMap)).ToList();
         }
+
         public List<Ticket> ConvertIssusInTicketsMTO(Task<IPagedQueryResult<Issue>> issues)
         {
 
@@ -322,244 +341,107 @@ namespace DashboarJira.Services
             Ticket temp = new Ticket();
 
             temp.id_ticket = issue.Key.Value;
+            temp.id_estacion = GetCustomFieldValue(issue, "Estacion");
+            temp.nombre_estacion = estacionMap.TryGetValue(temp.id_estacion, out var estacion) ? estacion : "Estación sin configurar";
+            temp.id_vagon = GetCustomFieldValue(issue, "Vagon");
+            temp.tipoComponente = GetCustomFieldValue(issue, "Tipo de componente");
+            temp.id_puerta = temp.tipoComponente == "Puerta" ? GetCustomFieldValue(issue, "Identificacion componente") : "";
+            temp.id_componente = GetCustomFieldValue(issue, "Identificacion componente");
+            temp.identificacion = GetCustomFieldValue(issue, "Identificacion (serial)");
+            temp.tipo_mantenimiento = GetFieldValueOrDefault(issue, "Tipo de servicio") == "Mantenimiento Preventivo" ? "Preventivo" : "Correctivo";
+            temp.nivel_falla = GetCustomFieldValue(issue, "Clase de fallo");
+            temp.codigo_falla = GetCustomFieldValue(issue, "Descripcion de fallo");
+            temp.fecha_apertura = GetCustomFieldDateTimeValue(issue, "Fecha de creacion");
+            temp.fecha_arribo_locacion = GetCustomFieldDateTimeValue(issue, "Fecha y Hora de Llegada a Estacion");
+            temp.fecha_cierre = GetCustomFieldDateTimeValue(issue, "Fecha de solucion");
+            temp.cantidad_repuesto_utilizado = GetCustomFieldValue(issue, "Cantidad(es) repuesto(s) utilizado(s)");
+            temp.componente_Parte = GetCustomFieldValue(issue, "Descripcion de repuesto");
+            temp.tipo_reparacion = GetCustomFieldValue(issue, "Tipo de reparacion");
+            temp.tipo_ajuste_configuracion = GetCustomFieldValue(issue, "Listado de ajustes ITS") + "\n";
+            temp.tipo_ajuste_configuracion += GetCustomFieldValue(issue, "Listado de configuracion ITS") + "\n";
+            temp.tipo_ajuste_configuracion += GetCustomFieldValue(issue, "Listado de ajustes Puerta") + "\n";
+            temp.tipo_ajuste_configuracion += GetCustomFieldValue(issue, "Listado de configuracion Puerta") + "\n";
+            temp.tipo_ajuste_configuracion += GetCustomFieldValue(issue, "Listado de ajustes RFID") + "\n";
+            temp.tipo_ajuste_configuracion += GetCustomFieldValue(issue, "Listado de configuracion RFID") + "\n";
+            temp.descripcion_reparacion = GetCustomFieldValue(issue, "Descripcion de la reparacion");
+            temp.diagnostico_causa = GetCustomFieldValue(issue, "Diagnostico de la causa");
+            temp.tipo_causa = GetCustomFieldValue(issue, "Tipo de causa");
+            temp.estado_ticket = GetIssueStatus(issue);
+            temp.descripcion = issue.Description ?? "";
 
-            temp.id_estacion = (issue.CustomFields["Estacion"] != null ? issue.CustomFields["Estacion"].Values[0] : "");
-
-            string estacionValue = (issue.CustomFields["Estacion"] != null ? issue.CustomFields["Estacion"].Values[0] : "");
-                        
-            if (estacionMap.ContainsKey(estacionValue))
-            {
-                temp.nombre_estacion = estacionMap[estacionValue];
-            }
-            else
-            {
-                temp.nombre_estacion = "Estación sin configurar";
-            }
-
-            temp.id_vagon = (issue.CustomFields["Vagon"] != null ? issue.CustomFields["Vagon"].Values[0] : "");
-
-
-            temp.tipoComponente = (issue.CustomFields["Tipo de componente"] != null ? issue.CustomFields["Tipo de componente"].Values[0] : "");
-
-
-            temp.id_puerta = (temp.tipoComponente == "Puerta" && temp.tipoComponente != "null" && issue.CustomFields["Identificacion componente"] != null && issue.CustomFields["Identificacion componente"].Values[0] != null ? issue.CustomFields["Identificacion componente"].Values[0] : "");
-
-
-            temp.id_componente = (issue.CustomFields["Identificacion componente"] != null ? issue.CustomFields["Identificacion componente"].Values[0] : "");
-
-
-            temp.identificacion = (issue.CustomFields["Identificacion (serial)"] != null ? issue.CustomFields["Identificacion (serial)"].Values[0] : "");
-
-
-            temp.tipo_mantenimiento = (issue.CustomFields["Tipo de servicio"] != null ? (issue.CustomFields["Tipo de servicio"].Values[0] == "Mantenimiento Preventivo" ? "Preventivo" : "Correctivo") : "");
-
-
-            temp.nivel_falla = (issue.CustomFields["Clase de fallo"] != null ? issue.CustomFields["Clase de fallo"].Values[0] : "");
-
-
-            temp.codigo_falla = (issue.CustomFields["Descripcion de fallo"] != null ? issue.CustomFields["Descripcion de fallo"].Values[0] : "");
-
-            //if (jiraUrl == "https://assaabloymda.atlassian.net/")
-            //{                
-            //    //temp.fecha_apertura = (issue.Created != null ? DateTime.Parse(issue.CustomFields["Fecha de creacion"].Values[0]) : null);
-            //}
-            //else
-            //{
-            //    temp.fecha_apertura = issue.Created == null ? null : DateTime.Parse(issue.Created.Value.ToString());
-            //}
-
-
-            temp.fecha_apertura = issue.Created == null ? null : DateTime.Parse(issue.Created.Value.ToString());
-
-            temp.fecha_arribo_locacion = (issue.CustomFields["Fecha y Hora de Llegada a Estacion"] != null ? DateTime.Parse(issue.CustomFields["Fecha y Hora de Llegada a Estacion"].Values[0]) : null);
-
-            temp.fecha_cierre = (issue.CustomFields["Fecha de solucion"] != null ? DateTime.Parse(issue.CustomFields["Fecha de solucion"].Values[0]) : null);
-
-            temp.cantidad_repuesto_utilizado = (issue.CustomFields["Cantidad(es) repuesto(s) utilizado(s)"] != null ? issue.CustomFields["Cantidad(es) repuesto(s) utilizado(s)"].Values[0] : "");
-
-            temp.componente_Parte = (issue.CustomFields["Descripcion de repuesto"] != null ? issue.CustomFields["Descripcion de repuesto"].Values[0] : "");
-
-
-            temp.tipo_reparacion = (issue.CustomFields["Tipo de reparacion"] != null ? issue.CustomFields["Tipo de reparacion"].Values[0] : "");
-
-
-            temp.tipo_ajuste_configuracion = (issue.CustomFields["Listado de ajustes ITS"] != null ? issue.CustomFields["Listado de ajustes ITS"].Values[0] + "\n" : "");
-
-
-            temp.tipo_ajuste_configuracion += (issue.CustomFields["Listado de configuracion ITS"] != null ? issue.CustomFields["Listado de configuracion ITS"].Values[0] + "\n" : "");
-
-
-            temp.tipo_ajuste_configuracion += (issue.CustomFields["Listado de ajustes Puerta"] != null ? issue.CustomFields["Listado de ajustes Puerta"].Values[0] + "\n" : "");
-
-
-            temp.tipo_ajuste_configuracion += (issue.CustomFields["Listado de configuracion Puerta"] != null ? issue.CustomFields["Listado de configuracion Puerta"].Values[0] + "\n" : "");
-
-
-            temp.tipo_ajuste_configuracion += (issue.CustomFields["Listado de ajustes RFID"] != null ? issue.CustomFields["Listado de ajustes RFID"].Values[0] + "\n" : "");
-
-
-            temp.tipo_ajuste_configuracion += (issue.CustomFields["Listado de configuracion RFID"] != null ? issue.CustomFields["Listado de configuracion RFID"].Values[0] + "\n" : "");
-
-
-            temp.descripcion_reparacion = (issue.CustomFields["Descripcion de la reparacion"] != null ? issue.CustomFields["Descripcion de la reparacion"].Values[0] : "");
-
-
-            temp.diagnostico_causa = (issue.CustomFields["Diagnostico de la causa"] != null ? issue.CustomFields["Diagnostico de la causa"].Values[0] : "");
-
-
-            temp.tipo_causa = (issue.CustomFields["Tipo de causa"] != null ? issue.CustomFields["Tipo de causa"].Values[0] : "");
-
-
-            //temp.estado_ticket = issue.Status.Name;
-
-            if (issue.Status.Name == "Cerrado" || issue.Status.Name == "DESCARTADO")
-            {
-                temp.estado_ticket = issue.Status.Name;
-            }
-            else
-            {
-                temp.estado_ticket = "Abierto";
-            }
-            if (issue.Status == null)
-                temp.estado_ticket = (issue.Status != null ? issue.Status.Name : "");
-
-            temp.descripcion = (issue.Description != null ? issue.Description : "");
-
-            //Se adciona nuevos campos
-
-            temp.canal_comunicacion = (issue.CustomFields["Canal comunicacion"] != null ? issue.CustomFields["Canal comunicacion"].Values[0] : "");
-            temp.quien_requiere_servicio = (issue.CustomFields["¿Quien requiere el servicio?"] != null ? issue.CustomFields["¿Quien requiere el servicio?"].Values[0] : "");
-            //temp.operador_ma = (issue.CustomFields["Operador MA"] != null ? issue.CustomFields["Operador MA"].Values[0] : "");
-            temp.codigo_plan_mantenimiento = (issue.CustomFields["Codigo plan de mantenimiento"] != null ? issue.CustomFields["Codigo plan de mantenimiento"].Values[0] : "");
-            temp.descripcion_actividad_mantenimiento = (issue.CustomFields["Descripcion de la actividad de mantenimiento"] != null ? issue.CustomFields["Descripcion de la actividad de mantenimiento"].Values[0] : "");
-            temp.tecnico_asignado = (issue.CustomFields["Tecnico Asignado"] != null ? issue.CustomFields["Tecnico Asignado"].Values[0] : "");
-            temp.motivo_atraso = (issue.CustomFields["Motivo de atraso"] != null ? issue.CustomFields["Motivo de atraso"].Values[0] : "");
-            temp.otro_motivo_atraso = (issue.CustomFields["Otro motivo de atraso"] != null ? issue.CustomFields["Otro motivo de atraso"].Values[0] : "");
+            // Se adcionan nuevos campos
+            temp.canal_comunicacion = GetCustomFieldValue(issue, "Canal comunicacion");
+            temp.quien_requiere_servicio = GetCustomFieldValue(issue, "¿Quien requiere el servicio?");
+            temp.codigo_plan_mantenimiento = GetCustomFieldValue(issue, "Codigo plan de mantenimiento");
+            temp.descripcion_actividad_mantenimiento = GetCustomFieldValue(issue, "Descripcion de la actividad de mantenimiento");
+            temp.tecnico_asignado = GetCustomFieldValue(issue, "Tecnico Asignado");
+            temp.motivo_atraso = GetCustomFieldValue(issue, "Motivo de atraso");
+            temp.otro_motivo_atraso = GetCustomFieldValue(issue, "Otro motivo de atraso");
 
             return temp;
-
         }
         public Ticket converIssueInTicketMTO(Issue issue, Dictionary<string, string> estacionMap)
         {
             Ticket temp = new Ticket();
 
             temp.id_ticket = issue.Key.Value;
+            temp.id_estacion = GetCustomFieldValue(issue, "Estacion");
+            temp.nombre_estacion = estacionMap.TryGetValue(temp.id_estacion, out var estacion) ? estacion : "Estación sin configurar";
+            temp.id_vagon = GetCustomFieldValue(issue, "Vagon");
+            temp.tipoComponente = GetCustomFieldValue(issue, "Tipo de componente");
+            temp.id_puerta = temp.tipoComponente == "Puerta" ? GetCustomFieldValue(issue, "Identificacion componente") : "";
+            temp.id_componente = GetCustomFieldValue(issue, "Identificacion componente");
+            temp.identificacion = GetCustomFieldValue(issue, "Identificacion (serial)");
+            temp.tipo_mantenimiento = GetFieldValueOrDefault(issue, "Tipo de servicio") == "Mantenimiento Preventivo" ? "Preventivo" : "Correctivo";
+            temp.nivel_falla = GetCustomFieldValue(issue, "Clase de fallo");
+            temp.codigo_falla = GetCustomFieldValue(issue, "Descripcion de fallo");
+            temp.fecha_apertura = GetCustomFieldDateTimeValue(issue, "Fecha de creacion");
+            temp.fecha_arribo_locacion = GetCustomFieldDateTimeValue(issue, "Fecha y Hora de Llegada a Estacion");
+            temp.fecha_cierre = GetCustomFieldDateTimeValue(issue, "Fecha de solucion");
+            temp.cantidad_repuesto_utilizado = GetCustomFieldValue(issue, "Cantidad(es) repuesto(s) utilizado(s)");
+            temp.componente_Parte = GetCustomFieldValue(issue, "Descripcion de repuesto");
+            temp.tipo_reparacion = GetCustomFieldValue(issue, "Tipo de reparacion");
+            temp.tipo_ajuste_configuracion = GetCustomFieldValue(issue, "Listado de ajustes ITS") + "\n";
+            temp.tipo_ajuste_configuracion += GetCustomFieldValue(issue, "Listado de configuracion ITS") + "\n";
+            temp.tipo_ajuste_configuracion += GetCustomFieldValue(issue, "Listado de ajustes Puerta") + "\n";
+            temp.tipo_ajuste_configuracion += GetCustomFieldValue(issue, "Listado de configuracion Puerta") + "\n";
+            temp.tipo_ajuste_configuracion += GetCustomFieldValue(issue, "Listado de ajustes RFID") + "\n";
+            temp.tipo_ajuste_configuracion += GetCustomFieldValue(issue, "Listado de configuracion RFID") + "\n";
+            temp.descripcion_reparacion = GetCustomFieldValue(issue, "Descripcion de la reparacion");
+            temp.diagnostico_causa = GetCustomFieldValue(issue, "Diagnostico de la causa");
+            temp.tipo_causa = GetCustomFieldValue(issue, "Tipo de causa");
+            temp.estado_ticket = GetIssueStatus(issue);
+            temp.descripcion = issue.Description ?? "";
 
-            temp.id_estacion = (issue.CustomFields["Estacion"] != null ? issue.CustomFields["Estacion"].Values[0] : "");
-
-            string estacionValue = (issue.CustomFields["Estacion"] != null ? issue.CustomFields["Estacion"].Values[0] : "");
-
-            if (estacionMap.ContainsKey(estacionValue))
-            {
-                temp.nombre_estacion = estacionMap[estacionValue];
-            }
-            else
-            {
-                temp.nombre_estacion = "Estación sin configurar";
-            }
-
-            temp.id_vagon = (issue.CustomFields["Vagon"] != null ? issue.CustomFields["Vagon"].Values[0] : "");
-
-
-            temp.tipoComponente = (issue.CustomFields["Tipo de componente"] != null ? issue.CustomFields["Tipo de componente"].Values[0] : "");
-
-
-            temp.id_puerta = (temp.tipoComponente == "Puerta" && temp.tipoComponente != "null" && issue.CustomFields["Identificacion componente"] != null && issue.CustomFields["Identificacion componente"].Values[0] != null ? issue.CustomFields["Identificacion componente"].Values[0] : "");
-
-
-            temp.id_componente = (issue.CustomFields["Identificacion componente"] != null ? issue.CustomFields["Identificacion componente"].Values[0] : "");
-
-
-            temp.identificacion = (issue.CustomFields["Identificacion (serial)"] != null ? issue.CustomFields["Identificacion (serial)"].Values[0] : "");
-
-
-            temp.tipo_mantenimiento = (issue.CustomFields["Tipo de servicio"] != null ? (issue.CustomFields["Tipo de servicio"].Values[0] == "Mantenimiento Preventivo" ? "Preventivo" : "Correctivo") : "");
-
-
-            temp.nivel_falla = (issue.CustomFields["Clase de fallo"] != null ? issue.CustomFields["Clase de fallo"].Values[0] : "");
-
-
-            temp.codigo_falla = (issue.CustomFields["Descripcion de fallo"] != null ? issue.CustomFields["Descripcion de fallo"].Values[0] : "");
-
-            //if (jiraUrl == "https://assaabloymda.atlassian.net/")
-            //{                
-            //    //temp.fecha_apertura = (issue.Created != null ? DateTime.Parse(issue.CustomFields["Fecha de creacion"].Values[0]) : null);
-            //}
-            //else
-            //{
-            //    temp.fecha_apertura = issue.Created == null ? null : DateTime.Parse(issue.Created.Value.ToString());
-            //}
-
-
-            temp.fecha_apertura = issue.CustomFields["Fecha de creacion"] == null ? null : DateTime.Parse(issue.CustomFields["Fecha de creacion"].Values[0].ToString());
-
-            temp.fecha_arribo_locacion = (issue.CustomFields["Fecha y Hora de Llegada a Estacion"] != null ? DateTime.Parse(issue.CustomFields["Fecha y Hora de Llegada a Estacion"].Values[0]) : null);
-
-            temp.fecha_cierre = (issue.CustomFields["Fecha de solucion"] != null ? DateTime.Parse(issue.CustomFields["Fecha de solucion"].Values[0]) : null);
-
-            temp.cantidad_repuesto_utilizado = (issue.CustomFields["Cantidad(es) repuesto(s) utilizado(s)"] != null ? issue.CustomFields["Cantidad(es) repuesto(s) utilizado(s)"].Values[0] : "");
-
-            temp.componente_Parte = (issue.CustomFields["Descripcion de repuesto"] != null ? issue.CustomFields["Descripcion de repuesto"].Values[0] : "");
-
-
-            temp.tipo_reparacion = (issue.CustomFields["Tipo de reparacion"] != null ? issue.CustomFields["Tipo de reparacion"].Values[0] : "");
-
-
-            temp.tipo_ajuste_configuracion = (issue.CustomFields["Listado de ajustes ITS"] != null ? issue.CustomFields["Listado de ajustes ITS"].Values[0] + "\n" : "");
-
-
-            temp.tipo_ajuste_configuracion += (issue.CustomFields["Listado de configuracion ITS"] != null ? issue.CustomFields["Listado de configuracion ITS"].Values[0] + "\n" : "");
-
-
-            temp.tipo_ajuste_configuracion += (issue.CustomFields["Listado de ajustes Puerta"] != null ? issue.CustomFields["Listado de ajustes Puerta"].Values[0] + "\n" : "");
-
-
-            temp.tipo_ajuste_configuracion += (issue.CustomFields["Listado de configuracion Puerta"] != null ? issue.CustomFields["Listado de configuracion Puerta"].Values[0] + "\n" : "");
-
-
-            temp.tipo_ajuste_configuracion += (issue.CustomFields["Listado de ajustes RFID"] != null ? issue.CustomFields["Listado de ajustes RFID"].Values[0] + "\n" : "");
-
-
-            temp.tipo_ajuste_configuracion += (issue.CustomFields["Listado de configuracion RFID"] != null ? issue.CustomFields["Listado de configuracion RFID"].Values[0] + "\n" : "");
-
-
-            temp.descripcion_reparacion = (issue.CustomFields["Descripcion de la reparacion"] != null ? issue.CustomFields["Descripcion de la reparacion"].Values[0] : "");
-
-
-            temp.diagnostico_causa = (issue.CustomFields["Diagnostico de la causa"] != null ? issue.CustomFields["Diagnostico de la causa"].Values[0] : "");
-
-
-            temp.tipo_causa = (issue.CustomFields["Tipo de causa"] != null ? issue.CustomFields["Tipo de causa"].Values[0] : "");
-
-
-            //temp.estado_ticket = issue.Status.Name;
-
-            if (issue.Status.Name == "Cerrado" || issue.Status.Name == "DESCARTADO")
-            {
-                temp.estado_ticket = issue.Status.Name;
-            }
-            else
-            {
-                temp.estado_ticket = "Abierto";
-            }
-            if (issue.Status == null)
-                temp.estado_ticket = (issue.Status != null ? issue.Status.Name : "");
-
-            temp.descripcion = (issue.Description != null ? issue.Description : "");
-
-            //Se adciona nuevos campos
-
-            temp.canal_comunicacion = (issue.CustomFields["Canal comunicacion"] != null ? issue.CustomFields["Canal comunicacion"].Values[0] : "");
-            temp.quien_requiere_servicio = (issue.CustomFields["¿Quien requiere el servicio?"] != null ? issue.CustomFields["¿Quien requiere el servicio?"].Values[0] : "");
-            //temp.operador_ma = (issue.CustomFields["Operador MA"] != null ? issue.CustomFields["Operador MA"].Values[0] : "");
-            temp.codigo_plan_mantenimiento = (issue.CustomFields["Codigo plan de mantenimiento"] != null ? issue.CustomFields["Codigo plan de mantenimiento"].Values[0] : "");
-            temp.descripcion_actividad_mantenimiento = (issue.CustomFields["Descripcion de la actividad de mantenimiento"] != null ? issue.CustomFields["Descripcion de la actividad de mantenimiento"].Values[0] : "");
-            temp.tecnico_asignado = (issue.CustomFields["Tecnico Asignado"] != null ? issue.CustomFields["Tecnico Asignado"].Values[0] : "");
-            temp.motivo_atraso = (issue.CustomFields["Motivo de atraso"] != null ? issue.CustomFields["Motivo de atraso"].Values[0] : "");
-            temp.otro_motivo_atraso = (issue.CustomFields["Otro motivo de atraso"] != null ? issue.CustomFields["Otro motivo de atraso"].Values[0] : "");
+            // Se adcionan nuevos campos
+            temp.canal_comunicacion = GetCustomFieldValue(issue, "Canal comunicacion");
+            temp.quien_requiere_servicio = GetCustomFieldValue(issue, "¿Quien requiere el servicio?");
+            temp.codigo_plan_mantenimiento = GetCustomFieldValue(issue, "Codigo plan de mantenimiento");
+            temp.descripcion_actividad_mantenimiento = GetCustomFieldValue(issue, "Descripcion de la actividad de mantenimiento");
+            temp.tecnico_asignado = GetCustomFieldValue(issue, "Tecnico Asignado");
+            temp.motivo_atraso = GetCustomFieldValue(issue, "Motivo de atraso");
+            temp.otro_motivo_atraso = GetCustomFieldValue(issue, "Otro motivo de atraso");
 
             return temp;
+        }
+        private string GetCustomFieldValue(Issue issue, string fieldName)
+        {
+            return (issue.CustomFields[fieldName] != null ? issue.CustomFields[fieldName].Values[0] : "");
+        }
 
+        private DateTime? GetCustomFieldDateTimeValue(Issue issue, string fieldName)
+        {
+           return (issue.CustomFields[fieldName] != null ? DateTime.Parse(issue.CustomFields[fieldName].Values[0]) : null);
+        }
+
+        private string GetIssueStatus(Issue issue)
+        {
+            return issue.Status?.Name ?? "";
+        }
+
+        private string GetFieldValueOrDefault(Issue issue, string fieldName, string defaultValue = "")
+        {
+            return (issue.CustomFields[fieldName] != null ? issue.CustomFields[fieldName].Values[0] : "");
         }
         public IssueJira getIssueJira(string id)
         {
