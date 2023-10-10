@@ -69,7 +69,7 @@ namespace MQTT.Web.Controllers
 
                 JiraAccess jiraAccess = new JiraAccess();
                 max = 0;
-                return jiraAccess.GetTikets(start, max, formattedStartDate, formattedEndDate, componente);
+                return jiraAccess.GetTikets(start, max, formattedStartDate, formattedEndDate, componente).Result;
             }
             catch (Exception ex)
             {

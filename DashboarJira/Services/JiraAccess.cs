@@ -34,35 +34,48 @@ namespace DashboarJira.Services
         /*TODO*/
         public async Task<List<Ticket>> GetTikets(int start, int max, string startDate, string endDate, string idComponente)
         {
-            Task<List<Ticket>> taskCC = GetTiketsCCAsync(start, max, startDate, endDate, idComponente);
-            Task<List<Ticket>> taskMTO = GetTiketsMTOAsync(start, max, startDate, endDate, idComponente);
-            Task<List<Ticket>> taskMP = null;
+            // Crear tareas sin ejecutarlas inmediatamente
+            var taskCC = GetTiketsCCAsync(start, max, startDate, endDate, idComponente);
+            var taskMTO = GetTiketsMTOAsync(start, max, startDate, endDate, idComponente);
+            var taskMP = jiraUrl != "https://assaabloymda.atlassian.net/"
+                ? GetTicketsMPAsync(start, max, startDate, endDate, idComponente)
+                : null;
 
-            if (jiraUrl != "https://assaabloymda.atlassian.net/")
+            // Iniciar todas las tareas simultáneamente
+            var allTasks = new List<Task<List<Ticket>>> { taskCC, taskMTO };
+            if (taskMP != null)
             {
-                taskMP = GetTicketsMPAsync(start, max, startDate, endDate, idComponente);
+                allTasks.Add(taskMP);
             }
 
-            await Task.WhenAll(taskCC, taskMTO, taskMP);
+            await Task.WhenAll(allTasks);
 
-            List<Ticket> resultCC = taskCC.Result;
-            List<Ticket> resultMTO = taskMTO.Result;
-            List<Ticket> resultMP = taskMP?.Result;
+            // Obtener los resultados de las tareas completadas
+            var resultCC = taskCC.Result;
+            var resultMTO = taskMTO.Result;
+            var resultMP = taskMP?.Result;
 
-            List<Ticket> result = resultCC.Concat(resultMTO).ToList();
+            // Combinar los resultados
+            var result = resultCC.Concat(resultMTO).ToList();
             if (resultMP != null)
             {
-                result = result.Concat(resultMP).ToList();
+                result.AddRange(resultMP);
             }
 
+            // Ordenar la lista resultante
             result = result.OrderByDescending(issue => issue.fecha_apertura).ToList();
 
             return result;
         }
+
         public async Task<List<Ticket>> GetTiketsCCAsync(int start, int max, string startDate, string endDate, string idComponente)
         {
             try
             {
+                if (max == 0)
+                {
+                    max = 100;
+                }
                 var jql = GetJqlForCC(startDate, endDate, idComponente);
 
                 var issues = GetIssuesAsync(jql, start, max);
@@ -88,6 +101,10 @@ namespace DashboarJira.Services
         {
             try
             {
+                if (max == 0)
+                {
+                    max = 100;
+                }
                 var jql = GetJqlForMTO(startDate, endDate, idComponente);
 
                 var issues = GetIssuesAsync(jql, start, max);
@@ -113,6 +130,10 @@ namespace DashboarJira.Services
         {
             try
             {
+                if (max == 0)
+                {
+                    max = 100;
+                }
                 var jql = GetJqlForMP(startDate, endDate, idComponente);
 
                 var issues = GetIssuesAsync(jql, start, max);
@@ -136,10 +157,7 @@ namespace DashboarJira.Services
 
         private async Task<IPagedQueryResult<Issue>> GetIssuesAsync(string jql, int start, int max)
         {
-            if (max == 0)
-            {
-                max = 100;
-            }
+            
 
             return await jira.Issues.GetIssuesFromJqlAsync(jql, max, start);
         }
