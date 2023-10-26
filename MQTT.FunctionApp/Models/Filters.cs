@@ -73,7 +73,7 @@ namespace MQTT.FunctionApp.Models
             if (!string.IsNullOrEmpty(this.issueType))
             {
                 resultQuery = $"jql={Constantes.Proyecto} AND issuetype in ('{this.issueType}') AND status not in ('Descartado')";
-                resultQueryMTO = $"jql={Constantes.ProyectoMTO} AND issuetype in ('{this.issueType}') AND status not in ('Descartado')";
+                resultQueryMTO = $"jql={Constantes.ProyectoMTO} AND issuetype in ('{this.issueType}') AND status not in ('Descartado') AND status = Cerrado";
             }
 
             if (!string.IsNullOrEmpty(this.tipoFecha))
