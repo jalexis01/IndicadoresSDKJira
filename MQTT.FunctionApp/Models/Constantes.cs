@@ -78,5 +78,6 @@ namespace MQTT.FunctionApp.Models
 
         public const string FechaCreacion = "customfield_10090";
         //public const string TipoFechaBusqueda = "'Fecha de creacion'";
+        //prueba
     }
 }
