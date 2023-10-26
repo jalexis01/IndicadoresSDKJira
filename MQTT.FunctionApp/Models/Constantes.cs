@@ -73,7 +73,7 @@ namespace MQTT.FunctionApp.Models
         public const string Proyecto = "(project = 'Mesa de Ayuda') ";
         public const string URI = "https://assaabloymda.atlassian.net/rest/api/2";
         public const string TipoFechaBusqueda = "'created'";
-        internal const string ProyectoMTO = "(project = 'Mtto Preventivo')";
+        internal const string ProyectoMTO = "(project = 'Mesa de Ayuda-MP')";
         internal const string TipoFechaBusquedaMTO = "'Fecha de creacion'";
 
         public const string FechaCreacion = "customfield_10090";
