@@ -4,6 +4,7 @@ using Microsoft.Data.SqlClient;
 using System.Text;
 using System.Linq;
 using System.Data;
+using OfficeOpenXml;
 
 namespace DashboarJira.Services
 {
@@ -33,7 +34,7 @@ namespace DashboarJira.Services
         /*TODO*/
         public List<Ticket> GetTikets(int start, int max, string startDate, string endDate, string idComponente)
         {
-            List<Ticket> result = GetTiketsCC(start , max, startDate, endDate, idComponente);
+            List<Ticket> result = GetTiketsCC(start, max, startDate, endDate, idComponente);
             result = result.Concat(GetTiketsMTO(start, max, startDate, endDate, idComponente)).ToList().OrderByDescending(issue => issue.fecha_apertura).ToList();
             return result;
 
@@ -64,9 +65,9 @@ namespace DashboarJira.Services
                 }
                 //jql += " AND 'Tipo de servicio' is not empty ";
                 jql += " ORDER BY key DESC, 'Time to resolution' ASC";
-          
+
                 Task<IPagedQueryResult<Issue>> issues = null;
-               
+
                 if (max != 0)
                 {
                     issues = jira.Issues.GetIssuesFromJqlAsync(jql, max, start);
@@ -273,7 +274,7 @@ namespace DashboarJira.Services
             temp.id_estacion = (issue.CustomFields["Estacion"] != null ? issue.CustomFields["Estacion"].Values[0] : "");
 
             string estacionValue = (issue.CustomFields["Estacion"] != null ? issue.CustomFields["Estacion"].Values[0] : "");
-                        
+
             if (estacionMap.ContainsKey(estacionValue))
             {
                 temp.nombre_estacion = estacionMap[estacionValue];
@@ -513,12 +514,12 @@ namespace DashboarJira.Services
             var issue = jira.Issues.GetIssueAsync(id).Result;
             var attachments = issue.GetAttachmentsAsync().Result.FirstOrDefault();
             Console.WriteLine(attachments.Id);
-            
+
             var tempFile = Path.GetTempFileName();
             return convertIssueInIssueJira(issue);
 
         }
-        
+
 
         public Tuple<List<byte[]>, List<byte[]>> GetAttachmentAdjuntos(string id)
         {
@@ -566,7 +567,7 @@ namespace DashboarJira.Services
             return !string.IsNullOrEmpty(extension) && supportedExtensions.Contains(extension);
         }
 
-        
+
 
         public List<byte[]> GetAttachmentImages(string id)
         {
@@ -617,7 +618,7 @@ namespace DashboarJira.Services
 
                 foreach (var attachment in attachments)
                 {
-                    if (IsExtensionSupported( attachment.FileName,videoExtensions))
+                    if (IsExtensionSupported(attachment.FileName, videoExtensions))
                     {
                         string videoUrl = $"{jiraUrl}/rest/api/2/attachment/content/{attachment.Id}";
 
@@ -736,10 +737,11 @@ namespace DashboarJira.Services
             Console.WriteLine(temp.CantidadRepuestosUtilizados);
             return temp;
         }
-        public DataTable getEstaciones() {
-        
+        public DataTable getEstaciones()
+        {
+
             return connector.GetEstaciones();
-        
+
         }
         //Implementacion de la hoja de vida
         public List<TicketHV> GetTicketHVs(int start, int max, string idComponente)
@@ -1119,6 +1121,88 @@ namespace DashboarJira.Services
 
             return result;
 
+        }
+        //------------------------------------DESCARGAR EL EXCEL------------------------------
+        public async Task ExportTicketsToExcel(List<TicketHV> tickets)
+        {
+            try
+            {
+                var downloadsFolder = @"C:\Users\DesarrolloJC\Downloads";
+                var filePath = Path.Combine(downloadsFolder, "TicketsHV.xlsx");
+                ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+                using (var package = new ExcelPackage(new FileInfo(filePath)))
+                {
+
+                    var worksheet = package.Workbook.Worksheets.Add("TicketsHV");
+
+                    // Headers
+                    var properties = typeof(TicketHV).GetProperties();
+                    for (int i = 0; i < properties.Length; i++)
+                    {
+                        worksheet.Cells[1, i + 1].Value = properties[i].Name;
+                    }
+
+                    // Data
+                    for (int i = 0; i < tickets.Count; i++)
+                    {
+                        var ticket = tickets[i];
+                        for (int j = 0; j < properties.Length; j++)
+                        {
+                            var value = properties[j].GetValue(ticket);
+                            worksheet.Cells[i + 2, j + 1].Value = value;
+
+                            // If the property is Attachments, add hyperlinks
+                            if (properties[j].Name == "Attachments" && value is List<Attachment> attachments)
+                            {
+                                int attachmentColumn = j + 2; // Assuming Attachments property is the next column
+
+                                foreach (var attachment in attachments)
+                                {
+                                    string attachmentUrl = $"./{filePath}/{attachment.FileName}";
+
+
+                                    // Create a hyperlink
+                                    worksheet.Cells[i + 2, attachmentColumn].Hyperlink = new ExcelHyperLink(attachmentUrl, attachment.FileName);
+                                    worksheet.Cells[i + 2, attachmentColumn].Style.Font.Color.SetColor(System.Drawing.Color.Blue);
+
+                                    // Download image and save
+                                    await DownloadAttachmentAsync(attachment, $"{filePath}_Attachments", attachment.FileName);
+                                }
+                            }
+                        }
+                    }
+
+                    package.Save();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+            }
+
+        }
+
+        private async Task DownloadAttachmentAsync(Attachment attachment, string folderPath, string fileName)
+        {
+            try
+            {
+                if (!Directory.Exists(folderPath))
+                {
+                    Directory.CreateDirectory(folderPath);
+                }
+                using (HttpClient client = new HttpClient())
+                {
+                    byte[] attachmentBytes = attachment.DownloadData();
+
+                    // Save the attachment
+                    string filePath = Path.Combine(folderPath, fileName);
+                    File.WriteAllBytes(filePath, attachmentBytes);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error downloading attachment: {ex.Message}");
+            }
         }
     }
 }

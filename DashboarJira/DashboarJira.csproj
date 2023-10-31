@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <PackageReference Include="Atlassian.SDK" Version="13.0.0" />
+    <PackageReference Include="EPPlus" Version="7.0.0" />
   </ItemGroup>
 
   <ItemGroup>
