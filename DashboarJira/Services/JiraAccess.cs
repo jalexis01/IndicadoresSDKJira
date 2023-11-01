@@ -1127,60 +1127,74 @@ namespace DashboarJira.Services
         {
             try
             {
-                var downloadsFolder = @"C:\Users\DesarrolloJC\Downloads";
-                var filePath = Path.Combine(downloadsFolder, "TicketsHV.xlsx");
+                string downloadsFolder = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+                downloadsFolder = Path.Combine(downloadsFolder, "Downloads");
+
                 ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
-                using (var package = new ExcelPackage(new FileInfo(filePath)))
+
+                foreach (var ticket in tickets)
                 {
+                    string ticketFolder = Path.Combine(downloadsFolder, ticket.id_componente); // Carpeta del ticket
+                    Directory.CreateDirectory(ticketFolder);
 
-                    var worksheet = package.Workbook.Worksheets.Add("TicketsHV");
+                    var excelFilePath = Path.Combine(ticketFolder, "TicketsHV.xlsx");
 
-                    // Headers
-                    var properties = typeof(TicketHV).GetProperties();
-                    for (int i = 0; i < properties.Length; i++)
+                    using (var package = new ExcelPackage(new FileInfo(excelFilePath)))
                     {
-                        worksheet.Cells[1, i + 1].Value = properties[i].Name;
-                    }
+                        var worksheet = package.Workbook.Worksheets.Add("TicketsHV");
 
-                    // Data
-                    for (int i = 0; i < tickets.Count; i++)
-                    {
-                        var ticket = tickets[i];
-                        for (int j = 0; j < properties.Length; j++)
+                        // Headers
+                        var properties = typeof(TicketHV).GetProperties();
+                        for (int i = 0; i < properties.Length; i++)
                         {
-                            var value = properties[j].GetValue(ticket);
-                            worksheet.Cells[i + 2, j + 1].Value = value;
+                            worksheet.Cells[1, i + 1].Value = properties[i].Name;
+                        }
 
-                            // If the property is Attachments, add hyperlinks
-                            if (properties[j].Name == "Attachments" && value is List<Attachment> attachments)
+                        // Data
+                        for (int i = 0; i < tickets.Count; i++)
+                        {
+                            var currentTicket = tickets[i];
+                            for (int j = 0; j < properties.Length; j++)
                             {
-                                int attachmentColumn = j + 2; // Assuming Attachments property is the next column
+                                var value = properties[j].GetValue(currentTicket);
+                                worksheet.Cells[i + 2, j + 1].Value = value;
 
-                                foreach (var attachment in attachments)
+                                // If the property is Attachments, add hyperlinks
+                                if (properties[j].Name == "Attachments" && value is List<Attachment> attachments)
                                 {
-                                    string attachmentUrl = $"./{filePath}/{attachment.FileName}";
+                                    int attachmentColumn = j + 2; // Assuming Attachments property is the next column
+                                    string attachmentFolder = Path.Combine(ticketFolder, "Adjuntos");
+                                    Directory.CreateDirectory(attachmentFolder);
 
+                                    foreach (var attachment in attachments)
+                                    {
+                                        string attachmentFilePath = Path.Combine(attachmentFolder, attachment.FileName);
 
-                                    // Create a hyperlink
-                                    worksheet.Cells[i + 2, attachmentColumn].Hyperlink = new ExcelHyperLink(attachmentUrl, attachment.FileName);
-                                    worksheet.Cells[i + 2, attachmentColumn].Style.Font.Color.SetColor(System.Drawing.Color.Blue);
+                                        // Save the attachment
+                                        using (HttpClient client = new HttpClient())
+                                        {
+                                            byte[] attachmentBytes = attachment.DownloadData();
+                                            File.WriteAllBytes(attachmentFilePath, attachmentBytes);
+                                        }
 
-                                    // Download image and save
-                                    await DownloadAttachmentAsync(attachment, $"{filePath}_Attachments", attachment.FileName);
+                                        // Create a hyperlink
+                                        worksheet.Cells[i + 2, attachmentColumn].Hyperlink = new ExcelHyperLink($"./Adjuntos/{attachment.FileName}", attachment.FileName);
+                                        worksheet.Cells[i + 2, attachmentColumn].Style.Font.Color.SetColor(System.Drawing.Color.Blue);
+                                    }
                                 }
                             }
                         }
-                    }
 
-                    package.Save();
+                        package.Save();
+                    }
                 }
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error: {ex.Message}");
             }
-
         }
+
 
         private async Task DownloadAttachmentAsync(Attachment attachment, string folderPath, string fileName)
         {
