@@ -576,9 +576,13 @@ namespace DashboarJira.Services
             List<byte[]> imageList = new List<byte[]>();
 
             var imageExtensions = new List<string>
-    {
-        ".jpg", ".jpeg", ".png", ".gif", ".bmp", ".webp", ".tiff", // ... (add more as needed)
-    };
+{
+    ".jpg", ".jpeg", ".png", ".gif", ".bmp", ".webp", ".tiff", ".svg", ".ico", ".raw", ".psd", ".ai", ".eps", ".pdf",
+    ".tga", ".exif", ".jfif", ".heif", ".bat", ".indd", ".indt", ".indb", ".pct", ".dng", ".arw", ".cr2", ".nef", ".orf",
+    ".rw2", ".rw1", ".dcr", ".mrw", ".raf", ".x3f", ".erf", ".sr2", ".srw", ".pef", ".mef", ".xpm", ".emf", ".wmf",
+
+};
+
 
             using (HttpClient client = new HttpClient())
             {
@@ -607,9 +611,11 @@ namespace DashboarJira.Services
             List<byte[]> videoList = new List<byte[]>();
 
             var videoExtensions = new List<string>
-    {
-        ".mp4", ".webm", ".avi", ".mov", // ... (add more as needed)
-    };
+{
+    ".mp4", ".webm", ".avi", ".mov", ".mkv", ".flv", ".wmv", ".m4v", ".3gp", ".ogg", ".ogv", ".mpg", ".mpeg", ".mp3", ".wav", ".ogg", ".wma",
+  
+};
+
 
             using (HttpClient client = new HttpClient())
             {
