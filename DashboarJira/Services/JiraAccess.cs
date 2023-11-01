@@ -1164,6 +1164,7 @@ namespace DashboarJira.Services
                                 {
                                     int attachmentColumn = j + 2; // Assuming Attachments property is the next column
                                     string attachmentFolder = Path.Combine(ticketFolder, "Adjuntos");
+
                                     Directory.CreateDirectory(attachmentFolder);
 
                                     foreach (var attachment in attachments)
@@ -1177,8 +1178,8 @@ namespace DashboarJira.Services
                                             File.WriteAllBytes(attachmentFilePath, attachmentBytes);
                                         }
 
-                                        // Create a hyperlink
-                                        worksheet.Cells[i + 2, attachmentColumn].Hyperlink = new ExcelHyperLink($"./Adjuntos/{attachment.FileName}", attachment.FileName);
+                                        // Create a hyperlink using the file path
+                                        worksheet.Cells[i + 2, attachmentColumn].Hyperlink = new Uri($"file:///{attachmentFilePath}");
                                         worksheet.Cells[i + 2, attachmentColumn].Style.Font.Color.SetColor(System.Drawing.Color.Blue);
                                     }
                                 }
@@ -1194,6 +1195,7 @@ namespace DashboarJira.Services
                 Console.WriteLine($"Error: {ex.Message}");
             }
         }
+
 
 
         private async Task DownloadAttachmentAsync(Attachment attachment, string folderPath, string fileName)
