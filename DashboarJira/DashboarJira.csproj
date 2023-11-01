@@ -16,4 +16,8 @@
     <ProjectReference Include="..\MQTT.Infrastructure\MQTT.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="PlantillasExcel\" />
+  </ItemGroup>
+
 </Project>
