@@ -1163,18 +1163,19 @@ namespace DashboarJira.Services
                         }
 
                         // Data
-                        
-                            var k = tickets.IndexOf(ticket);
+                        for (int i = 0; i < tickets.Count; i++)
+                        {
+                            var currentTicket = tickets[i];
 
                             for (int j = 0; j < properties.Length; j++)
                             {
                                 if (properties[j].Name != "Attachments")
                                 {
-                                    var columnValue = properties[j].GetValue(ticket);
-                                    worksheet.Cells[k + 2, j + 1].Value = columnValue;
+                                    var columnValue = properties[j].GetValue(currentTicket);
+                                    worksheet.Cells[i + 2, j + 1].Value = columnValue;
                                 }
-                                var value = properties[j].GetValue(ticket);
-                                worksheet.Cells[k + 2, j + 1].Value = value;
+                                var value = properties[j].GetValue(currentTicket);
+                                worksheet.Cells[i + 2, j + 1].Value = value;
 
                                 
 
@@ -1200,11 +1201,11 @@ namespace DashboarJira.Services
                                           
 
                                         // Create a hyperlink using the file path
-                                        worksheet.Cells[k + 2, attachmentColumn].Hyperlink = new Uri($"file:///{attachmentFilePath}");
-                                        worksheet.Cells[k + 2, attachmentColumn].Style.Font.Color.SetColor(System.Drawing.Color.Blue);
+                                        worksheet.Cells[i + 2, attachmentColumn].Hyperlink = new Uri($"file:///{attachmentFilePath}");
+                                        worksheet.Cells[i + 2, attachmentColumn].Style.Font.Color.SetColor(System.Drawing.Color.Blue);
                                     }
                                 }
-                            
+                            }
                         }
 
                         package.Save();
