@@ -1217,17 +1217,17 @@ namespace DashboarJira.Services
             List<byte[]> videoList = new List<byte[]>();
 
             var videoExtensions = new List<string>
-{
-    ".mp4", ".webm", ".avi", ".mov", ".mkv", ".flv", ".wmv", ".m4v", ".3gp", ".ogg", ".ogv", ".mpg", ".mpeg", ".mp3", ".wav", ".ogg", ".wma",
+                {
+                    ".mp4", ".webm", ".avi", ".mov", ".mkv", ".flv", ".wmv", ".m4v", ".3gp", ".ogg", ".ogv", ".mpg", ".mpeg", ".mp3", ".wav", ".ogg", ".wma",
 
-};
+                };
             var imageExtensions = new List<string>
-{
-    ".jpg", ".jpeg", ".png", ".gif", ".bmp", ".webp", ".tiff", ".svg", ".ico", ".raw", ".psd", ".ai", ".eps", ".pdf",
-    ".tga", ".exif", ".jfif", ".heif", ".bat", ".indd", ".indt", ".indb", ".pct", ".dng", ".arw", ".cr2", ".nef", ".orf",
-    ".rw2", ".rw1", ".dcr", ".mrw", ".raf", ".x3f", ".erf", ".sr2", ".srw", ".pef", ".mef", ".xpm", ".emf", ".wmf",
+                {
+                    ".jpg", ".jpeg", ".png", ".gif", ".bmp", ".webp", ".tiff", ".svg", ".ico", ".raw", ".psd", ".ai", ".eps", ".pdf",
+                    ".tga", ".exif", ".jfif", ".heif", ".bat", ".indd", ".indt", ".indb", ".pct", ".dng", ".arw", ".cr2", ".nef", ".orf",
+                    ".rw2", ".rw1", ".dcr", ".mrw", ".raf", ".x3f", ".erf", ".sr2", ".srw", ".pef", ".mef", ".xpm", ".emf", ".wmf",
 
-};
+                };
 
 
 
