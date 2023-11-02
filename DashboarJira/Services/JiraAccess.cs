@@ -1221,6 +1221,14 @@ namespace DashboarJira.Services
     ".mp4", ".webm", ".avi", ".mov", ".mkv", ".flv", ".wmv", ".m4v", ".3gp", ".ogg", ".ogv", ".mpg", ".mpeg", ".mp3", ".wav", ".ogg", ".wma",
 
 };
+            var imageExtensions = new List<string>
+{
+    ".jpg", ".jpeg", ".png", ".gif", ".bmp", ".webp", ".tiff", ".svg", ".ico", ".raw", ".psd", ".ai", ".eps", ".pdf",
+    ".tga", ".exif", ".jfif", ".heif", ".bat", ".indd", ".indt", ".indb", ".pct", ".dng", ".arw", ".cr2", ".nef", ".orf",
+    ".rw2", ".rw1", ".dcr", ".mrw", ".raf", ".x3f", ".erf", ".sr2", ".srw", ".pef", ".mef", ".xpm", ".emf", ".wmf",
+
+};
+
 
 
             using (HttpClient client = new HttpClient())
@@ -1228,14 +1236,20 @@ namespace DashboarJira.Services
                 string credentials = Convert.ToBase64String(Encoding.ASCII.GetBytes($"{username}:{password}"));
                 client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", credentials);
 
-                
-                    if (IsExtensionSupported(attachment.FileName, videoExtensions))
-                    {
-                        string videoUrl = $"{jiraUrl}/rest/api/2/attachment/content/{attachment.Id}";
 
-                        byte[] videoBytes = client.GetByteArrayAsync(videoUrl).Result;
+                if (IsExtensionSupported(attachment.FileName, videoExtensions))
+                {
+                    string videoUrl = $"{jiraUrl}/rest/api/2/attachment/content/{attachment.Id}";
+
+                    byte[] videoBytes = client.GetByteArrayAsync(videoUrl).Result;
                     string filePath = Path.Combine(folderPath, attachment.FileName);
-                                File.WriteAllBytes(filePath, videoBytes);
+                    File.WriteAllBytes(filePath, videoBytes);
+                }
+                else if (IsExtensionSupported(attachment.FileName, imageExtensions)) {
+                    string imageUrl = $"{jiraUrl}/rest/api/2/attachment/content/{attachment.Id}";
+                    string filePath = Path.Combine(folderPath, attachment.FileName);
+                    byte[] imageBytes = client.GetByteArrayAsync(imageUrl).Result;
+                    File.WriteAllBytes(filePath, imageBytes);
                 }
 
             }

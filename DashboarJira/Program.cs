@@ -32,7 +32,7 @@ var fechaFinal = "2023-11-02";
 
 // Llamar a la función para obtener la DataTable
 DataTable dataTable = jira.getEstaciones();
-List<TicketHV> tickets = jira.GetTicketHVs(0,0, "9110-WA-OR-2");
+List<TicketHV> tickets = jira.GetTicketHVs(0,0, "9110-WA-OR-3");
  jira.ExportTicketsToExcel(tickets);
 
 
