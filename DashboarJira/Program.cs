@@ -14,17 +14,7 @@ using System.Data;
 // Retrieve messages as string representation
 //string messagesString = dbConnector.GetMessagesAsString();
 //Console.WriteLine(messagesString);
-/*
-IAIOController iaio = new IAIOController(jira);
-IANOController iano = new IANOController(jira);
-ICPMController icpm = new ICPMController(jira);
-IEPMController iepm = new IEPMController(jira);
-RAIOController raio = new RAIOController(jira);
-*/
-//RANOController rano = new RANOController(jira);
-/*
-IRFController IRF = new IRFController(jira);
-*/
+
 JiraAccess jira = new JiraAccess();
 var fechainicio = "2023-10-01";
 var fechaFinal = "2023-11-02";
