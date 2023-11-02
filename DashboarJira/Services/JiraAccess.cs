@@ -1174,13 +1174,9 @@ namespace DashboarJira.Services
                                     var columnValue = properties[j].GetValue(currentTicket);
                                     worksheet.Cells[i + 2, j + 1].Value = columnValue;
                                 }
-                                var value = properties[j].GetValue(currentTicket);
-                                worksheet.Cells[i + 2, j + 1].Value = value;
-
-                                
 
                                 // If the property is Attachments, add hyperlinks
-                                if (properties[j].Name == "Attachments" && value is List<Attachment> attachments)
+                                if (properties[j].Name == "Attachments" && properties[j].GetValue(currentTicket) is List<Attachment> attachments)
                                 {
                                     int attachmentColumn = j + 2; // Assuming Attachments property is the next column
                                     string attachmentFolder = Path.Combine(ticketFolder, "Adjuntos");
