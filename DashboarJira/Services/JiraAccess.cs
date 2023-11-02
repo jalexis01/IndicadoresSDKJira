@@ -1166,11 +1166,18 @@ namespace DashboarJira.Services
                         for (int i = 0; i < tickets.Count; i++)
                         {
                             var currentTicket = tickets[i];
+
                             for (int j = 0; j < properties.Length; j++)
                             {
+                                if (properties[j].Name != "Attachments")
+                                {
+                                    var columnValue = properties[j].GetValue(currentTicket);
+                                    worksheet.Cells[i + 2, j + 1].Value = columnValue;
+                                }
                                 var value = properties[j].GetValue(currentTicket);
                                 worksheet.Cells[i + 2, j + 1].Value = value;
 
+                                
 
                                 // If the property is Attachments, add hyperlinks
                                 if (properties[j].Name == "Attachments" && value is List<Attachment> attachments)
