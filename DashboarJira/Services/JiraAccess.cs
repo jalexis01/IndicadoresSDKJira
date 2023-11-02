@@ -1145,9 +1145,15 @@ namespace DashboarJira.Services
 
                     var excelFilePath = Path.Combine(ticketFolder, "TicketsHV.xlsx");
 
+                    var templateDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "PlantillasExcel");
+                    var templateFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "PlantillasExcel", "HVTICKET.xlsx");
+
+
+                    File.Copy(templateFilePath, excelFilePath, true);
+
                     using (var package = new ExcelPackage(new FileInfo(excelFilePath)))
                     {
-                        var worksheet = package.Workbook.Worksheets.Add("TicketsHV");
+                        var worksheet = package.Workbook.Worksheets[0];
 
                         // Headers
                         var properties = typeof(TicketHV).GetProperties();
