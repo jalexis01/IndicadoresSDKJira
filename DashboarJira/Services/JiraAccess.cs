@@ -1187,9 +1187,11 @@ namespace DashboarJira.Services
 
                                     Directory.CreateDirectory(attachmentFolder);
                                     int fileCounter = 1;
+
                                     foreach (var attachment in attachments)
                                     {
-                                        string attachmentFilePath = Path.Combine(attachmentFolder, $"{fileCounter}_{attachment.FileName}");
+                                        string attachmentFilePath = Path.Combine(attachmentFolder, $"{ticket.id_ticket}");
+                                        Directory.CreateDirectory(attachmentFilePath);
                                         fileCounter++; // Incrementamos el contador
                                         Console.WriteLine("Iterando en el archivo adjunto: " + attachment.FileName);
                                         Console.WriteLine("-----");
