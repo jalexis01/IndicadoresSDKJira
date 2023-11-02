@@ -1213,23 +1213,33 @@ namespace DashboarJira.Services
 
         private async Task DownloadAttachmentAsync(Attachment attachment, string folderPath)
         {
-            try
-            {
-                if (!Directory.Exists(folderPath))
-                {
-                    Directory.CreateDirectory(folderPath);
-                }
-                using (HttpClient client = new HttpClient())
-                {
-                    attachment.Download(folderPath);
+            
+            List<byte[]> videoList = new List<byte[]>();
 
-                    
-                }
-            }
-            catch (Exception ex)
+            var videoExtensions = new List<string>
+{
+    ".mp4", ".webm", ".avi", ".mov", ".mkv", ".flv", ".wmv", ".m4v", ".3gp", ".ogg", ".ogv", ".mpg", ".mpeg", ".mp3", ".wav", ".ogg", ".wma",
+
+};
+
+
+            using (HttpClient client = new HttpClient())
             {
-                Console.WriteLine($"Error downloading attachment: {ex.Message}");
+                string credentials = Convert.ToBase64String(Encoding.ASCII.GetBytes($"{username}:{password}"));
+                client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", credentials);
+
+                
+                    if (IsExtensionSupported(attachment.FileName, videoExtensions))
+                    {
+                        string videoUrl = $"{jiraUrl}/rest/api/2/attachment/content/{attachment.Id}";
+
+                        byte[] videoBytes = client.GetByteArrayAsync(videoUrl).Result;
+                    string filePath = Path.Combine(folderPath, attachment.FileName);
+                                File.WriteAllBytes(filePath, videoBytes);
+                }
+
             }
+
         }
     }
 }
