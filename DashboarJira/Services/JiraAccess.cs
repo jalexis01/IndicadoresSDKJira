@@ -1186,15 +1186,10 @@ namespace DashboarJira.Services
                                         fileCounter++; // Incrementamos el contador
                                         Console.WriteLine("Iterando en el archivo adjunto: " + attachment.FileName);
                                         Console.WriteLine("-----");
-                                        // Save the attachment
-                                        using (HttpClient client = new HttpClient())
-                                        {
+                                        await DownloadAttachmentAsync(attachment, attachmentFilePath);
 
-
-                                            byte[] attachmentBytes = attachment.DownloadData();
-                                            Console.WriteLine($"Bytes del archivo adjunto '{attachment.FileName}': {attachmentBytes.Length} bytes"); // Imprime la longitud de los bytes
-                                            File.WriteAllBytes(attachmentFilePath, attachmentBytes);
-                                        }
+                                            Console.WriteLine($"Bytes del archivo adjunto '{attachment.FileName}': {attachment.DownloadData().Length} bytes"); // Imprime la longitud de los bytes
+                                          
 
                                         // Create a hyperlink using the file path
                                         worksheet.Cells[i + 2, attachmentColumn].Hyperlink = new Uri($"file:///{attachmentFilePath}");
@@ -1216,27 +1211,25 @@ namespace DashboarJira.Services
 
 
 
-        //private async Task DownloadAttachmentAsync(Attachment attachment, string folderPath, string fileName)
-        //{
-        //    try
-        //    {
-        //        if (!Directory.Exists(folderPath))
-        //        {
-        //            Directory.CreateDirectory(folderPath);
-        //        }
-        //        using (HttpClient client = new HttpClient())
-        //        {
-        //            byte[] attachmentBytes = attachment.DownloadData();
+        private async Task DownloadAttachmentAsync(Attachment attachment, string folderPath)
+        {
+            try
+            {
+                if (!Directory.Exists(folderPath))
+                {
+                    Directory.CreateDirectory(folderPath);
+                }
+                using (HttpClient client = new HttpClient())
+                {
+                    attachment.Download(folderPath);
 
-        //            // Save the attachment
-        //            string filePath = Path.Combine(folderPath, fileName);
-        //            File.WriteAllBytes(filePath, attachmentBytes);
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Console.WriteLine($"Error downloading attachment: {ex.Message}");
-        //    }
-        //}
+                    
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error downloading attachment: {ex.Message}");
+            }
+        }
     }
 }
