@@ -1157,7 +1157,7 @@ namespace DashboarJira.Services
 
                         // Headers
                         var properties = typeof(TicketHV).GetProperties();
-                        for (int i = 0; i < properties.Length; i++)
+                        for (int i = 1; i < properties.Length; i++)
                         {
                             worksheet.Cells[1, i + 1].Value = properties[i].Name;
                         }
