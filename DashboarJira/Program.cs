@@ -26,8 +26,8 @@ RAIOController raio = new RAIOController(jira);
 IRFController IRF = new IRFController(jira);
 */
 JiraAccess jira = new JiraAccess();
-var fechainicio = "2023-05-01";
-var fechaFinal = "2023-09-01";
+var fechainicio = "2023-10-01";
+var fechaFinal = "2023-11-02";
 
 
 // Llamar a la función para obtener la DataTable

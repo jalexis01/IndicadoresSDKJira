@@ -1171,6 +1171,7 @@ namespace DashboarJira.Services
                                 var value = properties[j].GetValue(currentTicket);
                                 worksheet.Cells[i + 2, j + 1].Value = value;
 
+
                                 // If the property is Attachments, add hyperlinks
                                 if (properties[j].Name == "Attachments" && value is List<Attachment> attachments)
                                 {
@@ -1178,15 +1179,20 @@ namespace DashboarJira.Services
                                     string attachmentFolder = Path.Combine(ticketFolder, "Adjuntos");
 
                                     Directory.CreateDirectory(attachmentFolder);
-
+                                    int fileCounter = 1;
                                     foreach (var attachment in attachments)
                                     {
-                                        string attachmentFilePath = Path.Combine(attachmentFolder, attachment.FileName);
-
+                                        string attachmentFilePath = Path.Combine(attachmentFolder, $"{fileCounter}_{attachment.FileName}");
+                                        fileCounter++; // Incrementamos el contador
+                                        Console.WriteLine("Iterando en el archivo adjunto: " + attachment.FileName);
+                                        Console.WriteLine("-----");
                                         // Save the attachment
                                         using (HttpClient client = new HttpClient())
                                         {
+
+
                                             byte[] attachmentBytes = attachment.DownloadData();
+                                            Console.WriteLine($"Bytes del archivo adjunto '{attachment.FileName}': {attachmentBytes.Length} bytes"); // Imprime la longitud de los bytes
                                             File.WriteAllBytes(attachmentFilePath, attachmentBytes);
                                         }
 
@@ -1210,27 +1216,27 @@ namespace DashboarJira.Services
 
 
 
-        private async Task DownloadAttachmentAsync(Attachment attachment, string folderPath, string fileName)
-        {
-            try
-            {
-                if (!Directory.Exists(folderPath))
-                {
-                    Directory.CreateDirectory(folderPath);
-                }
-                using (HttpClient client = new HttpClient())
-                {
-                    byte[] attachmentBytes = attachment.DownloadData();
+        //private async Task DownloadAttachmentAsync(Attachment attachment, string folderPath, string fileName)
+        //{
+        //    try
+        //    {
+        //        if (!Directory.Exists(folderPath))
+        //        {
+        //            Directory.CreateDirectory(folderPath);
+        //        }
+        //        using (HttpClient client = new HttpClient())
+        //        {
+        //            byte[] attachmentBytes = attachment.DownloadData();
 
-                    // Save the attachment
-                    string filePath = Path.Combine(folderPath, fileName);
-                    File.WriteAllBytes(filePath, attachmentBytes);
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error downloading attachment: {ex.Message}");
-            }
-        }
+        //            // Save the attachment
+        //            string filePath = Path.Combine(folderPath, fileName);
+        //            File.WriteAllBytes(filePath, attachmentBytes);
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Console.WriteLine($"Error downloading attachment: {ex.Message}");
+        //    }
+        //}
     }
 }

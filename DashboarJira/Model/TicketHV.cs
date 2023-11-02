@@ -9,6 +9,6 @@ namespace DashboarJira.Model
 {
     public class TicketHV : Ticket
     {
-        public List<Attachment> Attachments {  get; set; }
+        public List<Attachment>? Attachments {  get; set; }
     }
 }
