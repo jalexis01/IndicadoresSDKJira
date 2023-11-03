@@ -1148,17 +1148,25 @@ namespace DashboarJira.Services
                     var templateDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "PlantillasExcel");
                     var templateFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "PlantillasExcel", "HVTICKET.xlsx");
 
-                    File.Copy(templateFilePath, excelFilePath, true);
+                    if (!File.Exists(excelFilePath))
+                    {
+                        File.Copy(templateFilePath, excelFilePath, true);
+                    }
 
                     using (var package = new ExcelPackage(new FileInfo(excelFilePath)))
                     {
                         var worksheet = package.Workbook.Worksheets[0];
 
-                        // Headers
-                        var properties = typeof(TicketHV).GetProperties();
-                        for (int i = 1; i < properties.Length; i++)
+                        int lastRow = worksheet.Dimension.End.Row + 1; // Obtiene la última fila utilizada
+
+                        // Headers (solo si es la primera vez)
+                        if (lastRow == 2)
                         {
-                            worksheet.Cells[1, i + 1].Value = properties[i].Name;
+                            var properties1 = typeof(TicketHV).GetProperties();
+                            for (int i = 1; i < properties1.Length; i++)
+                            {
+                                worksheet.Cells[1, i + 1].Value = properties1[i].Name;
+                            }
                         }
 
                         // Data
@@ -1179,18 +1187,19 @@ namespace DashboarJira.Services
                             Console.WriteLine($"Bytes del archivo adjunto '{attachment.FileName}': {attachment.DownloadData().Length} bytes");
 
                             // Crear un hipervínculo utilizando la ruta del archivo
-                            worksheet.Cells[2, attachmentColumn].Hyperlink = new Uri($"file:///{attachmentFilePath}");
-                            worksheet.Cells[2, attachmentColumn].Style.Font.Color.SetColor(System.Drawing.Color.Blue);
+                            worksheet.Cells[lastRow, attachmentColumn].Hyperlink = new Uri($"file:///{attachmentFilePath}");
+                            worksheet.Cells[lastRow, attachmentColumn].Style.Font.Color.SetColor(System.Drawing.Color.Blue);
 
                             attachmentColumn++;
                             fileCounter++;
                         }
 
                         // Datos del ticket (excluyendo Attachments)
+                        var properties = typeof(TicketHV).GetProperties();
                         for (int j = 1; j < properties.Length; j++)
                         {
                             var columnValue = properties[j].GetValue(ticket);
-                            worksheet.Cells[2, j + 1].Value = columnValue;
+                            worksheet.Cells[lastRow, j + 1].Value = columnValue;
                         }
 
                         package.Save();
