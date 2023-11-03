@@ -35,10 +35,10 @@ namespace DashboarJira.Services
         {
             try
             {
-                List<Ticket> result = GetTiketsCC(start, max, startDate, endDate, idComponente) ?? new List<Ticket>();
-                result = result.Concat(GetTiketsMP(start, max, startDate, endDate, idComponente) ?? new List<Ticket>()).ToList().OrderByDescending(issue => issue.fecha_apertura).ToList();
+                List<Ticket> result = GetTiketsCC(start, max, startDate, endDate, idComponente);
+                result = result.Concat(GetTiketsMP(start, max, startDate, endDate, idComponente)).ToList().OrderByDescending(issue => issue.fecha_apertura).ToList();
                 if (jiraUrl == "https://manateecc.atlassian.net/") {
-                    result = result.Concat(GetTiketsDRV(start, max, startDate, endDate, idComponente) ?? new List<Ticket>()).ToList().OrderByDescending(issue => issue.fecha_apertura).ToList();
+                    result = result.Concat(GetTiketsDRV(start, max, startDate, endDate, idComponente)).ToList().OrderByDescending(issue => issue.fecha_apertura).ToList();
                 }
                 return result;
             }
