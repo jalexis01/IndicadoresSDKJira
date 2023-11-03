@@ -33,9 +33,13 @@ namespace DashboarJira.Services
         /*TODO*/
         public List<Ticket> GetTikets(int start, int max, string startDate, string endDate, string idComponente)
         {
-            List<Ticket> result = GetTiketsCC(start , max, startDate, endDate, idComponente);
-            result = result.Concat(GetTiketsMTO(start, max, startDate, endDate, idComponente)).ToList().OrderByDescending(issue => issue.fecha_apertura).ToList();
-            return result;
+            try
+            {
+                List<Ticket> result = GetTiketsCC(start, max, startDate, endDate, idComponente) ?? new List<Ticket>();
+                result = result.Concat(GetTiketsMTO(start, max, startDate, endDate, idComponente) ?? new List<Ticket>()).ToList().OrderByDescending(issue => issue.fecha_apertura).ToList();
+                return result;
+            }
+            catch (Exception ex) { return new List<Ticket>(); }
 
         }
         public List<Ticket> GetTiketsCC(int start, int max, string startDate, string endDate, string idComponente)
@@ -99,7 +103,7 @@ namespace DashboarJira.Services
                 //created >= 2023-04-04 AND created <= 2023-04-13 AND issuetype = "Solicitud de Mantenimiento" AND resolution = Unresolved AND "Clase de fallo" = AIO AND "Identificacion componente" ~ 9119-WA-OR-1 ORDER BY key DESC, "Time to resolution" ASC
                 if (jiraUrl == "https://assaabloymda.atlassian.net/")
                 {
-                    jql = $"{proyectAssaMTO} and issuetype = 'Solicitud de Mantenimiento'";
+                    jql = $"{proyectAssaMTO} and issuetype = 'Solicitud de Mantenimiento' and status = cerrado";
                 }
                 else
                 {
@@ -108,7 +112,7 @@ namespace DashboarJira.Services
 
                 if (startDate != null && endDate != null)
                 {
-                    jql += " AND " + "'Fecha de creacion' >= " + startDate + " AND " + "'Fecha de creacion' <= " + endDate;
+                    jql += " AND " + "'Fecha de creacion' >= '" + startDate + "' AND " + "'Fecha de creacion' <= '" + endDate +"'";
                 }
                 if (idComponente != null)
                 {

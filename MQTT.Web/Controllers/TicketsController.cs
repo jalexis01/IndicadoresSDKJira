@@ -56,10 +56,10 @@ namespace MQTT.Web.Controllers
                 {
                     //max = 10;
                     DateTime startDateTime = DateTime.Parse(startDate);
-                    DateTime endDateTime = DateTime.Parse(endDate).AddDays(1); //agrega 1 día y resta 1 segundo para obtener el final del día
+                    DateTime endDateTime = DateTime.Parse(endDate);//.AddDays(1); //agrega 1 día y resta 1 segundo para obtener el final del día
 
-                    formattedStartDate = startDateTime.ToString("yyyy-MM-dd");
-                    formattedEndDate = endDateTime.ToString("yyyy-MM-dd");
+                    formattedStartDate = startDateTime.ToString("yyyy-MM-dd 00:00");
+                    formattedEndDate = endDateTime.ToString("yyyy-MM-dd 23:59");
                 }
                 else
                 {
@@ -69,7 +69,8 @@ namespace MQTT.Web.Controllers
 
                 JiraAccess jiraAccess = new JiraAccess();
                 max = 0;
-                return jiraAccess.GetTikets(start, max, formattedStartDate, formattedEndDate, componente);
+                List<Ticket> tickets = jiraAccess.GetTikets(start, max, formattedStartDate, formattedEndDate, componente);
+                return tickets;
             }
             catch (Exception ex)
             {

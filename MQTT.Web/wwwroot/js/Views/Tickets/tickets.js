@@ -458,6 +458,87 @@ async function ServiceGetMessages() {
     var endDate = $('#dtpEnd').val();
     console.log("Hora final seleccionada: " + endDate);
     var max = 0;
+    var fechaInicial = new Date(startDate);
+    console.log("Fecha inicial: " + fechaInicial);
+    var fechaFinal = new Date(endDate);
+    console.log("Fecha final: " + fechaFinal);
+    var totalDatos = [];
+    var componente = $('#componente').val();
+    console.log("idComponente: " + componente);
+    console.log("Max: " + max);
+    //Swal.fire({
+    //    title: 'Cargando...',
+    //    allowOutsideClick: false,
+    //    showConfirmButton: false,
+    //    onBeforeOpen: (modal) => {
+    //        modal.showLoading();
+    //        modal.disableCloseButton();
+    //    }
+    //});
+    //Restar fechas y diferencia nos da el ciclo final de peticiones
+    var fechaInicio = new Date(fechaInicial);
+    //fechaInicio = fechaInicio.toUTCString();
+    var fechaFin = new Date(fechaFinal);
+    //fechaFin = fechaFin.toUTCString();
+
+    $("#cargando").html("Cargando...");
+    while (fechaInicio <= fechaFin) {
+        // Imprime la fecha actual
+        console.log(fechaInicio.toUTCString());
+        const año = fechaInicio.getUTCFullYear();
+        const mes = String(fechaInicio.getUTCMonth() + 1).padStart(2, '0'); // El mes es 0-indexado, por lo que sumamos 1
+        const dia = String(fechaInicio.getUTCDate()).padStart(2, '0');
+        const fechaFormateada = `${año}-${mes}-${dia}`;
+        console.log(fechaFormateada);
+        $("#cargando").html("Cargando..." + fechaFormateada);
+        try {
+            const respuesta = await realizarSolicitudAjax(fechaFormateada);
+            totalDatos.push(respuesta);
+        } catch (error) {
+            console.error("Error en la solicitud:", error);
+        }
+        // Incrementa la fecha en 1 día
+        fechaInicio.setDate(fechaInicio.getDate() + 1);
+    }
+    $("#cargando").html("");
+    if (totalDatos.length == 0) {
+        noData();
+        return;
+    } else {
+        const arregloSimple = totalDatos.reduce((acumulador, arreglo) => {
+            return acumulador.concat(arreglo);
+        }, []);
+        console.log(arregloSimple);
+        let dataColumns = setColums(arregloSimple, null);
+        let exportFunctions = addFnctionsGrid(['Excel']);
+        dataColumns = addCommandsGridDetails(dataColumns);
+        dataGridSave = arregloSimple;
+        setGrid(arregloSimple, dataColumns, exportFunctions);
+    }
+}
+function realizarSolicitudAjax(fecha, max, componente) {
+    return new Promise((resolve, reject) => {
+        $.ajax({
+            type: "GET",
+            url: "/Tickets/GetTickets",
+            data: { startDate: fecha, endDate: fecha, max: max, componente: componente },
+            success: function (data) {
+                resolve(JSON.parse(JSON.stringify(data))); // Resuelve la promesa con la respuesta de la solicitud
+            },
+            error: function (xhr, status, error) {
+                reject(error); // Rechaza la promesa en caso de error
+            }
+        });
+    });
+}
+
+//Alexis
+async function ServiceGetMessagesAlexis() {
+    var startDate = $('#dtpStart').val();
+    console.log("Hora inicial seleccionada: " + startDate);
+    var endDate = $('#dtpEnd').val();
+    console.log("Hora final seleccionada: " + endDate);
+    var max = 0;
 
     var fechaInicial = new Date(startDate);
     fechaInicial.setHours(fechaInicial.getHours() + 5); // Sumar 5 horas
