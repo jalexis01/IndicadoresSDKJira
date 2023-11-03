@@ -25,7 +25,7 @@ namespace DashboarJira.Services
             jira = Jira.CreateRestClient(jiraUrl, username, password);
         }
         const string proyectAssa = "project = 'Mesa de Ayuda'";
-        const string proyectAssaMTO = "project = 'Mtto Preventivo'";
+        const string proyectAssaMTO = "project = 'Mesa de Ayuda-MP'";
         //const string proytect = "(project = 'Mesa de Ayuda' OR project = 'Mtto Preventivo')";
         const string proyectManatee = "project = 'Centro de Control'";
 
