@@ -481,8 +481,13 @@ async function ServiceGetMessages() {
     var fechaFin = new Date(fechaFinal);
     //fechaFin = fechaFin.toUTCString();
 
+    // Calcula el número total de días entre la fecha de inicio y la fecha de final
+    var totalDays = Math.ceil((fechaFinal - fechaInicial) / (1000 * 60 * 60 * 24));
+    var currentDay = -1;
+
     $("#cargando").html("Cargando...");
-    while (fechaInicio <= fechaFin) {
+    while (fechaInicio <= fechaFin) {       
+
         // Imprime la fecha actual
         console.log(fechaInicio.toUTCString());
         const año = fechaInicio.getUTCFullYear();
@@ -490,7 +495,15 @@ async function ServiceGetMessages() {
         const dia = String(fechaInicio.getUTCDate()).padStart(2, '0');
         const fechaFormateada = `${año}-${mes}-${dia}`;
         console.log(fechaFormateada);
-        $("#cargando").html("Cargando..." + fechaFormateada);
+
+        currentDay++;
+        // Calcula el progreso en porcentaje
+        var progressPercentage = (currentDay / totalDays) * 100;
+
+        // Muestra el porcentaje de carga en lugar de la fecha
+        $("#cargando").html("Cargando... " + progressPercentage.toFixed(0) + "%");
+
+        //$("#cargando").html("Cargando..." + fechaFormateada);
         try {
             const respuesta = await realizarSolicitudAjax(fechaFormateada);
             totalDatos.push(respuesta);
