@@ -1148,7 +1148,6 @@ namespace DashboarJira.Services
                     var templateDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "PlantillasExcel");
                     var templateFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "PlantillasExcel", "HVTICKET.xlsx");
 
-
                     File.Copy(templateFilePath, excelFilePath, true);
 
                     using (var package = new ExcelPackage(new FileInfo(excelFilePath)))
@@ -1163,49 +1162,35 @@ namespace DashboarJira.Services
                         }
 
                         // Data
-                        for (int i = 0; i < tickets.Count; i++)
+                        int attachmentColumn = 2; // Columna para los adjuntos
+                        int fileCounter = 1;
+                        string attachmentFolder = Path.Combine(ticketFolder, "Adjuntos");
+
+                        Directory.CreateDirectory(attachmentFolder);
+                        foreach (var attachment in ticket.Attachments)
                         {
-                            var currentTicket = tickets[i];
+                            string attachmentFilePath = Path.Combine(attachmentFolder, $"{ticket.id_ticket}");
+                            Directory.CreateDirectory(attachmentFilePath);
 
-                            for (int j = 0; j < properties.Length; j++)
-                            {
-                                if (properties[j].Name != "Attachments")
-                                {
-                                    var columnValue = properties[j].GetValue(currentTicket);
-                                    worksheet.Cells[i + 2, j + 1].Value = columnValue;
-                                }
-                                var value = properties[j].GetValue(currentTicket);
-                                worksheet.Cells[i + 2, j + 1].Value = value;
+                            Console.WriteLine("Iterando en el archivo adjunto: " + attachment.FileName);
+                            Console.WriteLine("-----");
+                            await DownloadAttachmentAsync(attachment, attachmentFilePath);
 
-                                
+                            Console.WriteLine($"Bytes del archivo adjunto '{attachment.FileName}': {attachment.DownloadData().Length} bytes");
 
-                                // If the property is Attachments, add hyperlinks
-                                if (properties[j].Name == "Attachments" && value is List<Attachment> attachments)
-                                {
-                                    int attachmentColumn = j + 2; // Assuming Attachments property is the next column
-                                    string attachmentFolder = Path.Combine(ticketFolder, "Adjuntos");
+                            // Crear un hipervínculo utilizando la ruta del archivo
+                            worksheet.Cells[2, attachmentColumn].Hyperlink = new Uri($"file:///{attachmentFilePath}");
+                            worksheet.Cells[2, attachmentColumn].Style.Font.Color.SetColor(System.Drawing.Color.Blue);
 
-                                    Directory.CreateDirectory(attachmentFolder);
-                                    int fileCounter = 1;
+                            attachmentColumn++;
+                            fileCounter++;
+                        }
 
-                                    foreach (var attachment in attachments)
-                                    {
-                                        string attachmentFilePath = Path.Combine(attachmentFolder, $"{ticket.id_ticket}");
-                                        Directory.CreateDirectory(attachmentFilePath);
-                                        fileCounter++; // Incrementamos el contador
-                                        Console.WriteLine("Iterando en el archivo adjunto: " + attachment.FileName);
-                                        Console.WriteLine("-----");
-                                        await DownloadAttachmentAsync(attachment, attachmentFilePath);
-
-                                            Console.WriteLine($"Bytes del archivo adjunto '{attachment.FileName}': {attachment.DownloadData().Length} bytes"); // Imprime la longitud de los bytes
-                                          
-
-                                        // Create a hyperlink using the file path
-                                        worksheet.Cells[i + 2, attachmentColumn].Hyperlink = new Uri($"file:///{attachmentFilePath}");
-                                        worksheet.Cells[i + 2, attachmentColumn].Style.Font.Color.SetColor(System.Drawing.Color.Blue);
-                                    }
-                                }
-                            }
+                        // Datos del ticket (excluyendo Attachments)
+                        for (int j = 1; j < properties.Length; j++)
+                        {
+                            var columnValue = properties[j].GetValue(ticket);
+                            worksheet.Cells[2, j + 1].Value = columnValue;
                         }
 
                         package.Save();
@@ -1217,6 +1202,7 @@ namespace DashboarJira.Services
                 Console.WriteLine($"Error: {ex.Message}");
             }
         }
+
 
 
 
