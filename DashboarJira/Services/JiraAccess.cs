@@ -1185,9 +1185,11 @@ namespace DashboarJira.Services
                             await DownloadAttachmentAsync(attachment, attachmentFilePath);
 
                             Console.WriteLine($"Bytes del archivo adjunto '{attachment.FileName}': {attachment.DownloadData().Length} bytes");
+                            // Ruta relativa al archivo dentro de la carpeta de adjuntos del ticket actual
+                            string attachmentRelativePath = Path.Combine("Adjuntos", ticket.id_ticket,  attachment.FileName);
 
-                            // Crear un hipervínculo utilizando la ruta del archivo
-                            worksheet.Cells[lastRow, attachmentColumn].Hyperlink = new Uri($"file:///{attachmentFilePath}");
+                            // Establecer la ruta de archivo relativa como hipervínculo
+                            worksheet.Cells[lastRow, attachmentColumn].Hyperlink = new Uri(attachmentRelativePath, UriKind.Relative);
                             worksheet.Cells[lastRow, attachmentColumn].Style.Font.Color.SetColor(System.Drawing.Color.Blue);
 
                             attachmentColumn++;
