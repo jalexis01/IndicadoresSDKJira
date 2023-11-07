@@ -64,7 +64,7 @@ namespace DashboarJira.Services
 
                 if (startDate != null && endDate != null)
                 {
-                    jql += " AND " + "created >= " + startDate + " AND " + "created <= " + endDate;
+                    jql += " AND " + "created >= '" + startDate + "' AND " + "created <= '" + endDate + "'";
                 }
                 if (idComponente != null)
                 {
