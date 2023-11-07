@@ -483,7 +483,7 @@ async function ServiceGetMessages() {
 
     var totalDays = Math.ceil((fechaFinal - fechaInicial) / (1000 * 60 * 60 * 24));
     var currentDay = -1;
-
+    
     //$("#cargando").html("Cargando...");
     while (fechaInicio <= fechaFin) {       
 
@@ -496,8 +496,12 @@ async function ServiceGetMessages() {
         console.log(fechaFormateada);
 
         currentDay++;
+        if (totalDays === 0) {
+            var progressPercentage =  100;
+        } else {
+            var progressPercentage = (currentDay / totalDays) * 100;
+        }
         
-        var progressPercentage = (currentDay / totalDays) * 100;
                 
         Swal.update({
             text: `${progressPercentage.toFixed(0)}%`
