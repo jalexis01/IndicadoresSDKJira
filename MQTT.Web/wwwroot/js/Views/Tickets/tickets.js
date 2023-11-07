@@ -466,26 +466,25 @@ async function ServiceGetMessages() {
     var componente = $('#componente').val();
     console.log("idComponente: " + componente);
     console.log("Max: " + max);
-    //Swal.fire({
-    //    title: 'Cargando...',
-    //    allowOutsideClick: false,
-    //    showConfirmButton: false,
-    //    onBeforeOpen: (modal) => {
-    //        modal.showLoading();
-    //        modal.disableCloseButton();
-    //    }
-    //});
-    //Restar fechas y diferencia nos da el ciclo final de peticiones
-    var fechaInicio = new Date(fechaInicial);
-    //fechaInicio = fechaInicio.toUTCString();
-    var fechaFin = new Date(fechaFinal);
-    //fechaFin = fechaFin.toUTCString();
 
-    // Calcula el número total de días entre la fecha de inicio y la fecha de final
+    const dynamicText = "%";
+
+    Swal.fire({
+        title: 'Cargando...',
+        allowOutsideClick: false,
+        showConfirmButton: false,
+        onBeforeOpen: (modal) => {
+            modal.showLoading();
+            modal.disableCloseButton();
+        }, text: dynamicText
+    });
+    var fechaInicio = new Date(fechaInicial);
+    var fechaFin = new Date(fechaFinal);
+
     var totalDays = Math.ceil((fechaFinal - fechaInicial) / (1000 * 60 * 60 * 24));
     var currentDay = -1;
 
-    $("#cargando").html("Cargando...");
+    //$("#cargando").html("Cargando...");
     while (fechaInicio <= fechaFin) {       
 
         // Imprime la fecha actual
@@ -497,11 +496,14 @@ async function ServiceGetMessages() {
         console.log(fechaFormateada);
 
         currentDay++;
-        // Calcula el progreso en porcentaje
+        
         var progressPercentage = (currentDay / totalDays) * 100;
+                
+        Swal.update({
+            text: `${progressPercentage.toFixed(0)}%`
+        });
 
-        // Muestra el porcentaje de carga en lugar de la fecha
-        $("#cargando").html("Cargando... " + progressPercentage.toFixed(0) + "%");
+        //$("#cargando").html("Cargando... " + progressPercentage.toFixed(0) + "%");
 
         //$("#cargando").html("Cargando..." + fechaFormateada);
         try {
@@ -513,7 +515,8 @@ async function ServiceGetMessages() {
         // Incrementa la fecha en 1 día
         fechaInicio.setDate(fechaInicio.getDate() + 1);
     }
-    $("#cargando").html("");
+    //$("#cargando").html("");
+
     if (totalDatos.length == 0) {
         noData();
         return;
@@ -528,6 +531,7 @@ async function ServiceGetMessages() {
         dataGridSave = arregloSimple;
         setGrid(arregloSimple, dataColumns, exportFunctions);
     }
+    Swal.close();
 }
 function realizarSolicitudAjax(fecha, max, componente) {
     return new Promise((resolve, reject) => {
