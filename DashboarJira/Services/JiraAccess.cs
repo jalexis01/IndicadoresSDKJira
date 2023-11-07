@@ -42,7 +42,7 @@ namespace DashboarJira.Services
                 {
                     result = result.Concat(GetTiketsDRV(start, max, startDate, endDate, idComponente) ?? new List<Ticket>()).ToList().OrderByDescending(issue => issue.fecha_apertura).ToList();
                 }
-                return result;
+                return result.OrderByDescending(issue => issue.fecha_apertura).ToList();
             }
             catch (Exception ex) { return new List<Ticket>(); }
 
