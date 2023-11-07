@@ -25,9 +25,9 @@ RAIOController raio = new RAIOController(jira);
 /*
 IRFController IRF = new IRFController(jira);
 */
-var fechainicio = "2023-05-01";
-var fechaFinal = "2023-09-01";
-jira.GetTikets(0,0,fechainicio,fechaFinal,null);
+var fechainicio = "2023-02-01";
+var fechaFinal = "2023-02-28";
+Console.WriteLine( jira.GetTikets(0,0,fechainicio,fechaFinal,null));
 /*
 Console.WriteLine("IAIO: " + iaio.IAIOGeneral(fechainicio, fechaFinal).CalcularIndicadorIAIO());
 Console.WriteLine("IAIO CONTRATISTA: " + iaio.IAIOContratista(fechainicio, fechaFinal).CalcularIndicadorIAIO());
