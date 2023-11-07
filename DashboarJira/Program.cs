@@ -27,7 +27,7 @@ IRFController IRF = new IRFController(jira);
 */
 var fechainicio = "2023-05-01";
 var fechaFinal = "2023-09-01";
-
+jira.GetTikets(0,0,fechainicio,fechaFinal,null);
 /*
 Console.WriteLine("IAIO: " + iaio.IAIOGeneral(fechainicio, fechaFinal).CalcularIndicadorIAIO());
 Console.WriteLine("IAIO CONTRATISTA: " + iaio.IAIOContratista(fechainicio, fechaFinal).CalcularIndicadorIAIO());
@@ -89,24 +89,24 @@ using (FileStream archivo = new FileStream(rutaCompleta, FileMode.Create))
 //    Console.WriteLine($"Nombre: {indicador.fecha_apertura.ToString()}");
 //}
 // Llamar a la función para obtener la DataTable
-DataTable dataTable = jira.getEstaciones();
+//DataTable dataTable = jira.getEstaciones();
 
-// Verificar si la DataTable contiene datos
-if (dataTable.Rows.Count > 0)
-{
-    // Iterar a través de las filas de la DataTable
-    foreach (DataRow row in dataTable.Rows)
-    {
-        // Acceder a los valores de las columnas por nombre o índice
-        int id = (int)row["Id"];
-        int idEstacion = (int)row["idEstacion"];
-        string nombreEstacion = row["nombreEstacion"].ToString();
+//// Verificar si la DataTable contiene datos
+//if (dataTable.Rows.Count > 0)
+//{
+//    // Iterar a través de las filas de la DataTable
+//    foreach (DataRow row in dataTable.Rows)
+//    {
+//        // Acceder a los valores de las columnas por nombre o índice
+//        int id = (int)row["Id"];
+//        int idEstacion = (int)row["idEstacion"];
+//        string nombreEstacion = row["nombreEstacion"].ToString();
 
-        // Imprimir los valores en la consola
-        Console.WriteLine($"Id: {id}, Id Estación: {idEstacion}, Nombre Estación: {nombreEstacion}");
-    }
-}
-else
-{
-    Console.WriteLine("La tabla no contiene datos.");
-}
+//        // Imprimir los valores en la consola
+//        Console.WriteLine($"Id: {id}, Id Estación: {idEstacion}, Nombre Estación: {nombreEstacion}");
+//    }
+//}
+//else
+//{
+//    Console.WriteLine("La tabla no contiene datos.");
+//}

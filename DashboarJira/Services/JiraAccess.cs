@@ -28,15 +28,19 @@ namespace DashboarJira.Services
         const string proyectAssaMTO = "project = 'Mesa de Ayuda-MP'";
         //const string proytect = "(project = 'Mesa de Ayuda' OR project = 'Mtto Preventivo')";
         const string proyectManatee = "project = 'Centro de Control'";
-
-        const string proyectManateeMTO = "(project = 'TICKETMP' OR project = 'TICKETDRV')";
+        const string proyectManateeMP = "project = 'TICKETMP";
+        const string proyectManateeDRV = " project = 'TICKETDRV'";
         /*TODO*/
         public List<Ticket> GetTikets(int start, int max, string startDate, string endDate, string idComponente)
         {
             try
             {
-                List<Ticket> result = GetTiketsCC(start, max, startDate, endDate, idComponente) ?? new List<Ticket>();
-                result = result.Concat(GetTiketsMTO(start, max, startDate, endDate, idComponente) ?? new List<Ticket>()).ToList().OrderByDescending(issue => issue.fecha_apertura).ToList();
+                List<Ticket> result = GetTiketsCC(start, max, startDate, endDate, idComponente);
+                result = result.Concat(GetTiketsMP(start, max, startDate, endDate, idComponente)).ToList().OrderByDescending(issue => issue.fecha_apertura).ToList();
+                if (jiraUrl == "https://manateecc.atlassian.net/")
+                {
+                    result = result.Concat(GetTiketsDRV(start, max, startDate, endDate, idComponente)).ToList().OrderByDescending(issue => issue.fecha_apertura).ToList();
+                }
                 return result;
             }
             catch (Exception ex) { return new List<Ticket>(); }
@@ -68,9 +72,9 @@ namespace DashboarJira.Services
                 }
                 //jql += " AND 'Tipo de servicio' is not empty ";
                 jql += " ORDER BY key DESC, 'Time to resolution' ASC";
-          
+
                 Task<IPagedQueryResult<Issue>> issues = null;
-               
+
                 if (max != 0)
                 {
                     issues = jira.Issues.GetIssuesFromJqlAsync(jql, max, start);
@@ -95,7 +99,7 @@ namespace DashboarJira.Services
             }
             return null;
         }
-        public List<Ticket> GetTiketsMTO(int start, int max, string startDate, string endDate, string idComponente)
+        public List<Ticket> GetTiketsDRV(int start, int max, string startDate, string endDate, string idComponente)
         {
             try
             {
@@ -103,16 +107,16 @@ namespace DashboarJira.Services
                 //created >= 2023-04-04 AND created <= 2023-04-13 AND issuetype = "Solicitud de Mantenimiento" AND resolution = Unresolved AND "Clase de fallo" = AIO AND "Identificacion componente" ~ 9119-WA-OR-1 ORDER BY key DESC, "Time to resolution" ASC
                 if (jiraUrl == "https://assaabloymda.atlassian.net/")
                 {
-                    jql = $"{proyectAssaMTO} and issuetype = 'Solicitud de Mantenimiento' and status = cerrado";
+                    jql = $"{proyectAssaMTO} and issuetype = 'Solicitud de Mantenimiento'";
                 }
                 else
                 {
-                    jql = $"{proyectManateeMTO} and issuetype = 'Solicitud de Mantenimiento'";
+                    jql = $"{proyectManateeDRV} and issuetype = 'Solicitud de Mantenimiento'";
                 }
 
                 if (startDate != null && endDate != null)
                 {
-                    jql += " AND " + "'Fecha de creacion' >= '" + startDate + "' AND " + "'Fecha de creacion' <= '" + endDate +"'";
+                    jql += " AND " + "'Fecha de creacion' >= '" + startDate + "' AND " + "'Fecha de creacion' <= '" + endDate + "'";
                 }
                 if (idComponente != null)
                 {
@@ -137,7 +141,60 @@ namespace DashboarJira.Services
                 List<Ticket> result = ConvertIssusInTicketsMTO(issues);
                 if (total > max + start)
                 {
-                    result = result.Concat(GetTiketsMTO(start + max, max, startDate, endDate, idComponente)).ToList();
+                    result = result.Concat(GetTiketsDRV(start + max, max, startDate, endDate, idComponente)).ToList();
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+
+            }
+            return null;
+        }
+        public List<Ticket> GetTiketsMP(int start, int max, string startDate, string endDate, string idComponente)
+        {
+            try
+            {
+                var jql = "";
+                //created >= 2023-04-04 AND created <= 2023-04-13 AND issuetype = "Solicitud de Mantenimiento" AND resolution = Unresolved AND "Clase de fallo" = AIO AND "Identificacion componente" ~ 9119-WA-OR-1 ORDER BY key DESC, "Time to resolution" ASC
+                if (jiraUrl == "https://assaabloymda.atlassian.net/")
+                {
+                    jql = $"{proyectAssaMTO} and issuetype = 'Solicitud de Mantenimiento' and status = cerrado";
+                }
+                else
+                {
+                    jql = $"{proyectManateeMP} and issuetype = 'Solicitud de Mantenimiento' and status = cerrado";
+                }
+
+                if (startDate != null && endDate != null)
+                {
+                    jql += " AND " + "'Fecha de creacion' >= '" + startDate + "' AND " + "'Fecha de creacion' <= '" + endDate + "'";
+                }
+                if (idComponente != null)
+                {
+
+                    jql += " AND " + "'Identificacion componente' ~ " + idComponente;
+                }
+                //jql += " AND 'Tipo de servicio' is not empty ";
+                jql += " ORDER BY key DESC, 'Time to resolution' ASC";
+
+                Task<IPagedQueryResult<Issue>> issues = null;
+
+                if (max != 0)
+                {
+                    issues = jira.Issues.GetIssuesFromJqlAsync(jql, max, start);
+                }
+                else if (max == 0)
+                {
+                    max = 100;
+                    issues = jira.Issues.GetIssuesFromJqlAsync(jql, max, start);
+                }
+                int total = totalITem(issues);
+                List<Ticket> result = ConvertIssusInTicketsMTO(issues);
+                if (total > max + start)
+                {
+                    result = result.Concat(GetTiketsMP(start + max, max, startDate, endDate, idComponente)).ToList();
                 }
                 return result;
             }
@@ -277,7 +334,7 @@ namespace DashboarJira.Services
             temp.id_estacion = (issue.CustomFields["Estacion"] != null ? issue.CustomFields["Estacion"].Values[0] : "");
 
             string estacionValue = (issue.CustomFields["Estacion"] != null ? issue.CustomFields["Estacion"].Values[0] : "");
-                        
+
             if (estacionMap.ContainsKey(estacionValue))
             {
                 temp.nombre_estacion = estacionMap[estacionValue];
@@ -517,12 +574,12 @@ namespace DashboarJira.Services
             var issue = jira.Issues.GetIssueAsync(id).Result;
             var attachments = issue.GetAttachmentsAsync().Result.FirstOrDefault();
             Console.WriteLine(attachments.Id);
-            
+
             var tempFile = Path.GetTempFileName();
             return convertIssueInIssueJira(issue);
 
         }
-        
+
 
         public Tuple<List<byte[]>, List<byte[]>> GetAttachmentAdjuntos(string id)
         {
@@ -570,7 +627,7 @@ namespace DashboarJira.Services
             return !string.IsNullOrEmpty(extension) && supportedExtensions.Contains(extension);
         }
 
-        
+
 
         public List<byte[]> GetAttachmentImages(string id)
         {
@@ -621,7 +678,7 @@ namespace DashboarJira.Services
 
                 foreach (var attachment in attachments)
                 {
-                    if (IsExtensionSupported( attachment.FileName,videoExtensions))
+                    if (IsExtensionSupported(attachment.FileName, videoExtensions))
                     {
                         string videoUrl = $"{jiraUrl}/rest/api/2/attachment/content/{attachment.Id}";
 
@@ -740,10 +797,11 @@ namespace DashboarJira.Services
             Console.WriteLine(temp.CantidadRepuestosUtilizados);
             return temp;
         }
-        public DataTable getEstaciones() {
-        
+        public DataTable getEstaciones()
+        {
+
             return connector.GetEstaciones();
-        
+
         }
     }
 }
