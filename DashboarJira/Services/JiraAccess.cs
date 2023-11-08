@@ -1290,7 +1290,7 @@ namespace DashboarJira.Services
                 ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
                 // Obtén los datos del componente utilizando el método GetComponenteHV
-                ComponenteHV componente = GetComponenteHV(idComponente);
+                ComponenteHV componente = connector.GetComponenteHV(idComponente);
 
                 if (componente != null)
                 {
