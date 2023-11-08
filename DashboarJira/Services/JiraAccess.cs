@@ -5,6 +5,8 @@ using System.Text;
 using System.Linq;
 using System.Data;
 using OfficeOpenXml;
+using Microsoft.EntityFrameworkCore.Metadata;
+using System.Net.Sockets;
 
 namespace DashboarJira.Services
 {
@@ -1128,6 +1130,15 @@ namespace DashboarJira.Services
             return result;
 
         }
+
+
+       
+
+
+
+
+
+
         //------------------------------------DESCARGAR EL EXCEL------------------------------
         public async Task ExportTicketsToExcel(List<TicketHV> tickets)
         {
@@ -1205,6 +1216,8 @@ namespace DashboarJira.Services
                         }
 
                         package.Save();
+
+                        
                     }
                 }
             }
@@ -1261,5 +1274,73 @@ namespace DashboarJira.Services
             }
 
         }
+
+        
+
+
+
+
+        public async Task ExportComponenteToExcel(int idComponente)
+        {
+            try
+            {
+                string downloadsFolder = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+                downloadsFolder = Path.Combine(downloadsFolder, "Downloads");
+
+                ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+
+                // Obtén los datos del componente utilizando el método GetComponenteHV
+                ComponenteHV componente = GetComponenteHV(idComponente);
+
+                if (componente != null)
+                {
+                    string ticketFolder = Path.Combine(downloadsFolder, componente.Serial); // Carpeta del componente
+                    Directory.CreateDirectory(ticketFolder);
+
+                    var excelFilePath = Path.Combine(ticketFolder, "ComponenteHV.xlsx");
+                    var templateDirectory = Path.Combine(downloadsFolder, "ExcelTemplates"); // Carpeta de plantillas
+                    var templateFilePath = Path.Combine(templateDirectory, "ComponenteTemplate.xlsx");
+
+                    if (!File.Exists(excelFilePath))
+                    {
+                        File.Copy(templateFilePath, excelFilePath, true);
+                    }
+
+                    using (var package = new ExcelPackage(new FileInfo(excelFilePath)))
+                    {
+                        var worksheet = package.Workbook.Worksheets[0];
+
+                        int row = 7; // La fila en la que quieres comenzar a escribir datos en la hoja de trabajo
+                        int columnInicio = 4;
+                        int currentRow = row;
+                        
+                        worksheet.Cells[currentRow + 1, columnInicio].Value = componente.Modelo;
+                       
+                        worksheet.Cells[currentRow + 3, columnInicio].Value = componente.FechaInicio;
+
+                        worksheet.Cells[row, columnInicio + 7].Value = componente.IdComponente;
+                        worksheet.Cells[row + 1, columnInicio + 7].Value = componente.Serial;
+                        worksheet.Cells[row + 2, columnInicio + 7].Value = componente.AnioFabricacion;
+
+
+
+
+                        //worksheet.Cells[row + 3, columnInicio + 7].Value = componente.HorasDeOperacion;
+
+                        package.Save();
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("El componente no se encontró en la base de datos.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+            }
+        }
+
+        
     }
 }
