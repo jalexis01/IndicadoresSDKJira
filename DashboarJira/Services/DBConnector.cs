@@ -14,6 +14,7 @@ namespace DashboarJira.Services
 
         private string connectionString;
 
+
         public DbConnector()
         {
             // Set the connection string Manatee
@@ -84,7 +85,7 @@ namespace DashboarJira.Services
             return messagesTable;
         }
 
-        public ComponenteHV GetComponenteHV(int idComponente)
+        public ComponenteHV GetComponenteHV(string idComponente)
         {
             ComponenteHV componente = null;
 
@@ -94,7 +95,7 @@ namespace DashboarJira.Services
                 {
                     connection.Open();
 
-                    string query = "SELECT [IdComponente], [Serial], [AnioFabricacion], [Modelo], [FechaInicio] " +
+                    string query = "SELECT [IdComponente], [Serial], [aniofabricacion], [Modelo], [fechaInicio] " +
                                    "FROM [dbo].[registroHV] " +
                                    "WHERE [IdComponente] = @IdComponente";
 
@@ -111,9 +112,9 @@ namespace DashboarJira.Services
                                 {
                                     IdComponente = reader.GetInt32(reader.GetOrdinal("IdComponente")),
                                     Serial = reader.GetString(reader.GetOrdinal("Serial")),
-                                    AnioFabricacion = reader.GetInt32(reader.GetOrdinal("AnioFabricacion")),
+                                    AnioFabricacion = reader.GetInt32(reader.GetOrdinal("aniofabricacion")),
                                     Modelo = reader.GetString(reader.GetOrdinal("Modelo")),
-                                    FechaInicio = reader.GetDateTime(reader.GetOrdinal("FechaInicio"))
+                                    FechaInicio = reader.GetDateTime(reader.GetOrdinal("fechaInicio"))
                                 };
                             }
                         }

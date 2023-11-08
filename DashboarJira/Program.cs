@@ -25,6 +25,5 @@ var fechaFinal = "2023-11-02";
 List<TicketHV> tickets = jira.GetTicketHVs(0,0, "9110-WA-OR-2");
  jira.ExportTicketsToExcel(tickets);
 
-jira.ExportComponenteToExcel(tickets);
 
-
+jira.ExportComponenteToExcel("9110-WA-OR-2");

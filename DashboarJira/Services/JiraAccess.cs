@@ -1280,7 +1280,7 @@ namespace DashboarJira.Services
 
 
 
-        public async Task ExportComponenteToExcel(int idComponente)
+        public async Task ExportComponenteToExcel(string idComponente)
         {
             try
             {
