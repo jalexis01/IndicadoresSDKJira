@@ -483,6 +483,8 @@ async function ServiceGetMessages() {
 
     var totalDays = Math.ceil((fechaFinal - fechaInicial) / (1000 * 60 * 60 * 24));
     var currentDay = -1;
+
+    var progressPercentage = "";
     
     //$("#cargando").html("Cargando...");
     while (fechaInicio <= fechaFin) {       
@@ -497,9 +499,9 @@ async function ServiceGetMessages() {
 
         currentDay++;
         if (totalDays === 0) {
-            var progressPercentage =  100;
+            progressPercentage =  0;
         } else {
-            var progressPercentage = (currentDay / totalDays) * 100;
+            progressPercentage = (currentDay / totalDays) * 100;
         }
         
                 
@@ -513,6 +515,7 @@ async function ServiceGetMessages() {
         try {
             const respuesta = await realizarSolicitudAjax(fechaFormateada);
             totalDatos.push(respuesta);
+
         } catch (error) {
             console.error("Error en la solicitud:", error);
         }
@@ -528,6 +531,10 @@ async function ServiceGetMessages() {
         const arregloSimple = totalDatos.reduce((acumulador, arreglo) => {
             return acumulador.concat(arreglo);
         }, []);
+
+        // Ordena los tickets por fecha de creación o inicio de forma descendente
+        arregloSimple.sort((a, b) => new Date(b.fecha_apertura) - new Date(a.fecha_apertura));
+
         console.log(arregloSimple);
         let dataColumns = setColums(arregloSimple, null);
         let exportFunctions = addFnctionsGrid(['Excel']);
