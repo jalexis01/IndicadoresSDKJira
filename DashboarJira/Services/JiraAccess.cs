@@ -1140,7 +1140,7 @@ namespace DashboarJira.Services
 
                 foreach (var ticket in tickets)
                 {
-                    string ticketFolder = Path.Combine(downloadsFolder, ticket.id_componente);
+                    string ticketFolder = Path.Combine(downloadsFolder, ticket.id_componente); // Carpeta del ticket
                     Directory.CreateDirectory(ticketFolder);
 
                     var excelFilePath = Path.Combine(ticketFolder, "TicketsHV.xlsx");
@@ -1157,7 +1157,7 @@ namespace DashboarJira.Services
                     {
                         var worksheet = package.Workbook.Worksheets[0];
 
-                        int lastRow = worksheet.Dimension?.End.Row + 1 ?? 2; // Si la hoja está vacía, establece la última fila en 2
+                        int lastRow = worksheet.Dimension.End.Row + 1; // Obtiene la última fila utilizada
 
                         // Headers (solo si es la primera vez)
                         if (lastRow == 2)
@@ -1169,41 +1169,39 @@ namespace DashboarJira.Services
                             }
                         }
 
-                        // Datos del ticket (excluyendo Attachments)
-                        var properties = typeof(TicketHV).GetProperties();
-                        for (int j = 1; j < properties.Length; j++)
-                        {
-                            var columnValue = properties[j].GetValue(ticket);
-                            worksheet.Cells[lastRow, j + 1].Value = columnValue;
-                        }
-
-                        // Incrementa lastRow antes de procesar los adjuntos
-                        lastRow++;
-
-                        // Data de adjuntos
-                        int attachmentColumn = 2;
+                        // Data
+                        int attachmentColumn = 2; // Columna para los adjuntos
                         int fileCounter = 1;
                         string attachmentFolder = Path.Combine(ticketFolder, "Adjuntos");
 
                         Directory.CreateDirectory(attachmentFolder);
                         foreach (var attachment in ticket.Attachments)
                         {
-                            string attachmentFilePath = Path.Combine(attachmentFolder, $"{ticket.id_ticket}_{fileCounter}");
+                            string attachmentFilePath = Path.Combine(attachmentFolder, $"{ticket.id_ticket}");
                             Directory.CreateDirectory(attachmentFilePath);
 
                             Console.WriteLine("Iterando en el archivo adjunto: " + attachment.FileName);
                             Console.WriteLine("-----");
                             await DownloadAttachmentAsync(attachment, attachmentFilePath);
 
-                            Console.WriteLine($"Bytes del archivo adjunto '{attachment.FileName}': {attachment.DownloadData().Length}");
+                            Console.WriteLine($"Bytes del archivo adjunto '{attachment.FileName}': {attachment.DownloadData().Length} bytes");
+                            // Ruta relativa al archivo dentro de la carpeta de adjuntos del ticket actual
+                            string attachmentRelativePath = Path.Combine("Adjuntos", ticket.id_ticket,  attachment.FileName);
 
-                            string attachmentRelativePath = Path.Combine("Adjuntos", ticket.id_ticket, $"{ticket.id_ticket}_{fileCounter}_{attachment.FileName}");
-
+                            // Establecer la ruta de archivo relativa como hipervínculo
                             worksheet.Cells[lastRow, attachmentColumn].Hyperlink = new Uri(attachmentRelativePath, UriKind.Relative);
                             worksheet.Cells[lastRow, attachmentColumn].Style.Font.Color.SetColor(System.Drawing.Color.Blue);
 
                             attachmentColumn++;
                             fileCounter++;
+                        }
+
+                        // Datos del ticket (excluyendo Attachments)
+                        var properties = typeof(TicketHV).GetProperties();
+                        for (int j = 1; j < properties.Length; j++)
+                        {
+                            var columnValue = properties[j].GetValue(ticket);
+                            worksheet.Cells[lastRow, j + 1].Value = columnValue;
                         }
 
                         package.Save();
@@ -1215,8 +1213,6 @@ namespace DashboarJira.Services
                 Console.WriteLine($"Error: {ex.Message}");
             }
         }
-
-
 
 
 
