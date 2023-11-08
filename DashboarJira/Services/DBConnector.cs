@@ -95,7 +95,7 @@ namespace DashboarJira.Services
                 {
                     connection.Open();
 
-                    string query = "SELECT [IdComponente], [Serial], [aniofabricacion], [Modelo], [fechaInicio] " +
+                    string query = "SELECT [IdComponente], [Serial], [aniodefabricacion], [Modelo], [fechaInicio] " +
                                    "FROM [dbo].[registroHV] " +
                                    "WHERE [IdComponente] = @IdComponente";
 
@@ -112,7 +112,7 @@ namespace DashboarJira.Services
                                 {
                                     IdComponente = reader.GetInt32(reader.GetOrdinal("IdComponente")),
                                     Serial = reader.GetString(reader.GetOrdinal("Serial")),
-                                    AnioFabricacion = reader.GetInt32(reader.GetOrdinal("aniofabricacion")),
+                                    AnioFabricacion = reader.GetInt32(reader.GetOrdinal("aniodefabricacion")),
                                     Modelo = reader.GetString(reader.GetOrdinal("Modelo")),
                                     FechaInicio = reader.GetDateTime(reader.GetOrdinal("fechaInicio"))
                                 };

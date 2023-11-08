@@ -1148,9 +1148,11 @@ namespace DashboarJira.Services
                 downloadsFolder = Path.Combine(downloadsFolder, "Downloads");
 
                 ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+              
 
                 foreach (var ticket in tickets)
                 {
+
                     string ticketFolder = Path.Combine(downloadsFolder, ticket.id_componente); // Carpeta del ticket
                     Directory.CreateDirectory(ticketFolder);
 
@@ -1275,10 +1277,6 @@ namespace DashboarJira.Services
 
         }
 
-        
-
-
-
 
         public async Task ExportComponenteToExcel(string idComponente)
         {
@@ -1292,20 +1290,20 @@ namespace DashboarJira.Services
                 // Obtén los datos del componente utilizando el método GetComponenteHV
                 ComponenteHV componente = connector.GetComponenteHV(idComponente);
 
-                if (componente != null)
-                {
-                    string ticketFolder = Path.Combine(downloadsFolder, componente.Serial); // Carpeta del componente
-                    Directory.CreateDirectory(ticketFolder);
 
-                    var excelFilePath = Path.Combine(ticketFolder, "ComponenteHV.xlsx");
-                    var templateDirectory = Path.Combine(downloadsFolder, "ExcelTemplates"); // Carpeta de plantillas
-                    var templateFilePath = Path.Combine(templateDirectory, "ComponenteTemplate.xlsx");
+                if (componente == null)
+                {
+                    string ticketFolder = Path.Combine(downloadsFolder, idComponente); // Cambiado a idComponente en lugar de componente.Serial
+                    Directory.CreateDirectory(ticketFolder);
+                    var excelFilePath = Path.Combine(ticketFolder, "ComponenteHV.xlsx"); // Cambia el nombre del archivo
+
+                    var templateDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "PlantillasExcel");
+                    var templateFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "PlantillasExcel", "Plantilla MTE-MT-22 Assa.xlsx");
 
                     if (!File.Exists(excelFilePath))
                     {
                         File.Copy(templateFilePath, excelFilePath, true);
                     }
-
                     using (var package = new ExcelPackage(new FileInfo(excelFilePath)))
                     {
                         var worksheet = package.Workbook.Worksheets[0];
@@ -1313,19 +1311,13 @@ namespace DashboarJira.Services
                         int row = 7; // La fila en la que quieres comenzar a escribir datos en la hoja de trabajo
                         int columnInicio = 4;
                         int currentRow = row;
-                        
-                        worksheet.Cells[currentRow + 1, columnInicio].Value = componente.Modelo;
-                       
-                        worksheet.Cells[currentRow + 3, columnInicio].Value = componente.FechaInicio;
 
-                        worksheet.Cells[row, columnInicio + 7].Value = componente.IdComponente;
-                        worksheet.Cells[row + 1, columnInicio + 7].Value = componente.Serial;
-                        worksheet.Cells[row + 2, columnInicio + 7].Value = componente.AnioFabricacion;
+                        worksheet.Cells[currentRow + 1, columnInicio].Value = componente?.Modelo;
+                        worksheet.Cells[currentRow + 3, columnInicio].Value = componente?.FechaInicio;
 
-
-
-
-                        //worksheet.Cells[row + 3, columnInicio + 7].Value = componente.HorasDeOperacion;
+                        worksheet.Cells[row, columnInicio + 7].Value = componente?.IdComponente;
+                        worksheet.Cells[row + 1, columnInicio + 7].Value = componente?.Serial;
+                        worksheet.Cells[row + 2, columnInicio + 7].Value = componente?.AnioFabricacion;
 
                         package.Save();
                     }
@@ -1341,6 +1333,9 @@ namespace DashboarJira.Services
             }
         }
 
-        
+
+
+
+
     }
 }
