@@ -1289,9 +1289,26 @@ namespace DashboarJira.Services
 
                 // Obtén los datos del componente utilizando el método GetComponenteHV
                 ComponenteHV componente = connector.GetComponenteHV(idComponente);
+           
 
 
-                if (componente == null)
+
+                //if (componente != null)
+                //{
+                //    Console.WriteLine($"IdComponente: {componente?.IdComponente}");
+                //    Console.WriteLine($"Serial: {componente?.Serial}");
+                //    Console.WriteLine($"AnioFabricacion: {componente?.AnioFabricacion}");
+                //    Console.WriteLine($"Modelo: {componente?.Modelo}");
+                //    Console.WriteLine($"FechaInicio: {componente?.FechaInicio}");
+                //}
+                //else
+                //{
+                //    Console.WriteLine("El componente es null.");
+                //}
+
+
+
+                if (componente  != null)
                 {
                     string ticketFolder = Path.Combine(downloadsFolder, idComponente); // Cambiado a idComponente en lugar de componente.Serial
                     Directory.CreateDirectory(ticketFolder);
@@ -1304,8 +1321,9 @@ namespace DashboarJira.Services
                     {
                         File.Copy(templateFilePath, excelFilePath, true);
                     }
-                    using (var package = new ExcelPackage(new FileInfo(excelFilePath)))
+                    if (componente != null)
                     {
+                        var package = new ExcelPackage(new FileInfo(excelFilePath));
                         var worksheet = package.Workbook.Worksheets[0];
 
                         int row = 7; // La fila en la que quieres comenzar a escribir datos en la hoja de trabajo
@@ -1314,17 +1332,16 @@ namespace DashboarJira.Services
 
                         worksheet.Cells[currentRow + 1, columnInicio].Value = componente?.Modelo;
                         worksheet.Cells[currentRow + 3, columnInicio].Value = componente?.FechaInicio;
-
                         worksheet.Cells[row, columnInicio + 7].Value = componente?.IdComponente;
                         worksheet.Cells[row + 1, columnInicio + 7].Value = componente?.Serial;
                         worksheet.Cells[row + 2, columnInicio + 7].Value = componente?.AnioFabricacion;
-
+                      
                         package.Save();
                     }
-                }
-                else
-                {
-                    Console.WriteLine("El componente no se encontró en la base de datos.");
+                    else
+                    {
+                        Console.WriteLine("El componente no se encontró en la base de datos.");
+                    }
                 }
             }
             catch (Exception ex)
