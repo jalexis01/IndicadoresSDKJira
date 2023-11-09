@@ -404,7 +404,7 @@ function showMoreInformationTickets(idTicket) {
 }
 
 /********************************* */
-function ServiceGetMessages() {
+function ServiceGetMessagesOriginal() {
     var startDate = $('#dtpStart').val();
     var endDate = $('#dtpEnd').val();
     var max = 0;
@@ -449,6 +449,223 @@ function ServiceGetMessages() {
             });
         })
         .then(response => console.log('Success:', response));
+}
+
+//Patricia
+async function ServiceGetMessages() {
+    var startDate = $('#dtpStart').val();
+    console.log("Hora inicial seleccionada: " + startDate);
+    var endDate = $('#dtpEnd').val();
+    console.log("Hora final seleccionada: " + endDate);
+    var max = 0;
+    var fechaInicial = new Date(startDate);
+    console.log("Fecha inicial: " + fechaInicial);
+    var fechaFinal = new Date(endDate);
+    console.log("Fecha final: " + fechaFinal);
+    var totalDatos = [];
+    var componente = $('#componente').val();
+    console.log("idComponente: " + componente);
+    console.log("Max: " + max);
+
+    const dynamicText = "%";
+
+    Swal.fire({
+        title: 'Cargando...',
+        allowOutsideClick: false,
+        showConfirmButton: false,
+        onBeforeOpen: (modal) => {
+            modal.showLoading();
+            modal.disableCloseButton();
+        }, text: dynamicText
+    });
+    var fechaInicio = new Date(fechaInicial);
+    var fechaFin = new Date(fechaFinal);
+
+    var totalDays = Math.ceil((fechaFinal - fechaInicial) / (1000 * 60 * 60 * 24));
+    var currentDay = -1;
+
+    var progressPercentage = "";
+    
+    //$("#cargando").html("Cargando...");
+    while (fechaInicio <= fechaFin) {       
+
+        // Imprime la fecha actual
+        console.log(fechaInicio.toUTCString());
+        const año = fechaInicio.getUTCFullYear();
+        const mes = String(fechaInicio.getUTCMonth() + 1).padStart(2, '0'); // El mes es 0-indexado, por lo que sumamos 1
+        const dia = String(fechaInicio.getUTCDate()).padStart(2, '0');
+        const fechaFormateada = `${año}-${mes}-${dia}`;
+        console.log(fechaFormateada);
+
+        currentDay++;
+        if (totalDays === 0) {
+            progressPercentage =  0;
+        } else {
+            progressPercentage = (currentDay / totalDays) * 100;
+        }
+        
+                
+        Swal.update({
+            text: `${progressPercentage.toFixed(0)}%`
+        });
+
+        //$("#cargando").html("Cargando... " + progressPercentage.toFixed(0) + "%");
+
+        //$("#cargando").html("Cargando..." + fechaFormateada);
+        try {
+            const respuesta = await realizarSolicitudAjax(fechaFormateada);
+            totalDatos.push(respuesta);
+
+        } catch (error) {
+            console.error("Error en la solicitud:", error);
+        }
+        // Incrementa la fecha en 1 día
+        fechaInicio.setDate(fechaInicio.getDate() + 1);
+    }
+    //$("#cargando").html("");
+
+    if (totalDatos.length == 0) {
+        noData();
+        return;
+    } else {
+        const arregloSimple = totalDatos.reduce((acumulador, arreglo) => {
+            return acumulador.concat(arreglo);
+        }, []);
+
+        // Ordena los tickets por fecha de creación o inicio de forma descendente
+        arregloSimple.sort((a, b) => new Date(b.fecha_apertura) - new Date(a.fecha_apertura));
+
+        console.log(arregloSimple);
+        let dataColumns = setColums(arregloSimple, null);
+        let exportFunctions = addFnctionsGrid(['Excel']);
+        dataColumns = addCommandsGridDetails(dataColumns);
+        dataGridSave = arregloSimple;
+        setGrid(arregloSimple, dataColumns, exportFunctions);
+    }
+    Swal.close();
+}
+function realizarSolicitudAjax(fecha, max, componente) {
+    return new Promise((resolve, reject) => {
+        $.ajax({
+            type: "GET",
+            url: "/Tickets/GetTickets",
+            data: { startDate: fecha, endDate: fecha, max: max, componente: componente },
+            success: function (data) {
+                resolve(JSON.parse(JSON.stringify(data))); // Resuelve la promesa con la respuesta de la solicitud
+            },
+            error: function (xhr, status, error) {
+                reject(error); // Rechaza la promesa en caso de error
+            }
+        });
+    });
+}
+
+//Alexis
+async function ServiceGetMessagesAlexis() {
+    var startDate = $('#dtpStart').val();
+    console.log("Hora inicial seleccionada: " + startDate);
+    var endDate = $('#dtpEnd').val();
+    console.log("Hora final seleccionada: " + endDate);
+    var max = 0;
+
+    var fechaInicial = new Date(startDate);
+    fechaInicial.setHours(fechaInicial.getHours() + 5); // Sumar 5 horas
+    fechaInicial.toISOString().slice(0, 10); // Formatear como 'YYYY-MM-DD'
+    console.log("Fecha inicial P: " + fechaInicial);
+
+    var fechaFinal = new Date(endDate);
+    fechaFinal.setDate(fechaFinal.getDate() + 1); // Sumar 1 día
+    //fechaInicial.setHours(fechaFinal.getHours() + 29); // Sumar 5 horas
+    fechaFinal = fechaFinal.toISOString().slice(0, 10); // Formatear como 'YYYY-MM-DD'
+    console.log("Fecha final P: " + fechaFinal);
+    var totalDatos = [];
+
+    var componente = $('#componente').val();
+    console.log("idComponente: " + componente);
+    console.log("Max: " + max);
+    //Swal.fire({
+    //    title: 'Cargando...',
+    //    allowOutsideClick: false,
+    //    showConfirmButton: false,
+    //    onBeforeOpen: (modal) => {
+    //        modal.showLoading();
+    //        modal.disableCloseButton();
+    //    }
+    //});
+
+    //Restar fechas y diferencia nos da el ciclo final de peticiones
+    var fechaInicio = new Date(fechaInicial);
+
+    var fechaFin = new Date(fechaFinal);
+
+    // Calcular el número total de días entre fechaInicio y fechaFin
+    var totalDays = Math.ceil((fechaFin - fechaInicio) / (1000 * 60 * 60 * 24));
+    var dayCount = 0;
+
+    $("#cargando").html("Cargando...");
+    while (fechaInicio <= fechaFin) {
+
+        // Calcular el progreso en términos de porcentaje
+        dayCount++;
+        var progressPercentage = (dayCount / totalDays) * 100;
+
+        // Actualizar el texto en #cargando con el progreso
+        $("#cargando").html("Cargando... " + progressPercentage.toFixed(0) + "%");
+
+
+        // Imprime la fecha actual
+        const año = fechaInicio.getFullYear();
+        const mes = String(fechaInicio.getMonth() + 1).padStart(2, '0'); // El mes es 0-indexado, por lo que sumamos 1
+        const dia = String(fechaInicio.getDate()).padStart(2, '0');
+        const fechaFormateada = `${año}-${mes}-${dia}`;
+
+        console.log(fechaFormateada);
+        //$("#cargando").html("Cargando..." + fechaFormateada);
+        try {
+            const respuesta = await realizarSolicitudAjax(fechaFormateada);
+            totalDatos.push(respuesta);
+        } catch (error) {
+            console.error("Error en la solicitud:", error);
+        }
+        // Incrementa la fecha en 1 día
+        fechaInicio.setDate(fechaInicio.getDate() + 1);
+    }
+    $("#cargando").html("");
+    if (totalDatos.length == 0) {
+        noData();
+        return;
+    } else {
+        const arregloSimple = totalDatos.reduce((acumulador, arreglo) => {
+            return acumulador.concat(arreglo);
+        }, []);
+
+        // Ordenar el arreglo por la propiedad de fecha
+        arregloSimple.sort((a, b) => new Date(a.fecha) - new Date(b.fecha));
+
+        console.log(arregloSimple);
+
+        let dataColumns = setColums(arregloSimple, null);
+        let exportFunctions = addFnctionsGrid(['Excel']);
+
+        dataColumns = addCommandsGridDetails(dataColumns);
+        dataGridSave = arregloSimple;
+        setGrid(arregloSimple, dataColumns, exportFunctions);
+    }
+}
+function realizarSolicitudAjax(fecha, max, componente) {
+    return new Promise((resolve, reject) => {
+        $.ajax({
+            type: "GET",
+            url: "/Tickets/GetTickets",
+            data: { startDate: fecha, endDate: fecha, max: max, componente: componente },
+            success: function (data) {
+                resolve(JSON.parse(JSON.stringify(data))); // Resuelve la promesa con la respuesta de la solicitud
+            },
+            error: function (xhr, status, error) {
+                reject(error); // Rechaza la promesa en caso de error
+            }
+        });
+    });
 }
 
 const targetEl = document.getElementById('dropdownInformation');
