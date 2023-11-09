@@ -1289,33 +1289,16 @@ namespace DashboarJira.Services
 
                 // Obtén los datos del componente utilizando el método GetComponenteHV
                 ComponenteHV componente = connector.GetComponenteHV(idComponente);
-           
-
-
-
-                //if (componente != null)
-                //{
-                //    Console.WriteLine($"IdComponente: {componente?.IdComponente}");
-                //    Console.WriteLine($"Serial: {componente?.Serial}");
-                //    Console.WriteLine($"AnioFabricacion: {componente?.AnioFabricacion}");
-                //    Console.WriteLine($"Modelo: {componente?.Modelo}");
-                //    Console.WriteLine($"FechaInicio: {componente?.FechaInicio}");
-                //}
-                //else
-                //{
-                //    Console.WriteLine("El componente es null.");
-                //}
-
 
 
                 if (componente  != null)
                 {
                     string ticketFolder = Path.Combine(downloadsFolder, idComponente); // Cambiado a idComponente en lugar de componente.Serial
                     Directory.CreateDirectory(ticketFolder);
-                    var excelFilePath = Path.Combine(ticketFolder, "ComponenteHV.xlsx"); // Cambia el nombre del archivo
-
+                    var excelFilePath = Path.Combine(ticketFolder, "ComponenteHV.xlsx");
+                    var plantilla = componente.GetTemplateFileName(jiraUrl);
                     var templateDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "PlantillasExcel");
-                    var templateFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "PlantillasExcel", "Plantilla MTE-MT-22 Assa.xlsx");
+                    var templateFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "PlantillasExcel", plantilla);
 
                     if (!File.Exists(excelFilePath))
                     {
@@ -1349,7 +1332,7 @@ namespace DashboarJira.Services
                 Console.WriteLine($"Error: {ex.Message}");
             }
         }
-
+        
 
 
 
