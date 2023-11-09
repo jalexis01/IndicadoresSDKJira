@@ -815,7 +815,11 @@ namespace DashboarJira.Services
         {
             List<TicketHV> result = GetTiketsHVCC(start, max, idComponente);
             result = result.Concat(GetTiketsHVMTO(start, max, idComponente)).ToList().OrderByDescending(issue => issue.fecha_apertura).ToList();
-            return result;
+            if (jiraUrl == "https://manateecc.atlassian.net/")
+            {
+                result = result.Concat(GetTiketsHVDRV(start, max, idComponente)).ToList().OrderByDescending(issue => issue.fecha_apertura).ToList();
+            }
+                return result;
         }
         public List<TicketHV> GetTiketsHVCC(int start, int max, string idComponente)
         {
@@ -877,7 +881,7 @@ namespace DashboarJira.Services
                 }
                 else
                 {
-                    jql = $"{proyectManateeMTO} and issuetype = 'Solicitud de Mantenimiento'";
+                    jql = $"{proyectManateeMTO} and issuetype = 'Solicitud de Mantenimiento' and status = cerrado";
                 }
 
 
@@ -905,6 +909,56 @@ namespace DashboarJira.Services
                 if (total > max + start)
                 {
                     result = result.Concat(GetTiketsHVMTO(start + max, max, idComponente)).ToList();
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+
+            }
+            return null;
+        }
+        public List<TicketHV> GetTiketsHVDRV(int start, int max, string idComponente)
+        {
+            try
+            {
+                var jql = "";
+                //created >= 2023-04-04 AND created <= 2023-04-13 AND issuetype = "Solicitud de Mantenimiento" AND resolution = Unresolved AND "Clase de fallo" = AIO AND "Identificacion componente" ~ 9119-WA-OR-1 ORDER BY key DESC, "Time to resolution" ASC
+                if (jiraUrl == "https://assaabloymda.atlassian.net/")
+                {
+                    jql = $"{proyectAssaMTO} and issuetype = 'Solicitud de Mantenimiento' and status = cerrado";
+                }
+                else
+                {
+                    jql = $"{proyectManateeDRV} and issuetype = 'Solicitud de Mantenimiento' and status = cerrado";
+                }
+
+
+                if (idComponente != null)
+                {
+
+                    jql += " AND " + "'Identificacion componente' ~ " + idComponente;
+                }
+                //jql += " AND 'Tipo de servicio' is not empty ";
+                jql += " ORDER BY key DESC, 'Time to resolution' ASC";
+
+                Task<IPagedQueryResult<Issue>> issues = null;
+
+                if (max != 0)
+                {
+                    issues = jira.Issues.GetIssuesFromJqlAsync(jql, max, start);
+                }
+                else if (max == 0)
+                {
+                    max = 100;
+                    issues = jira.Issues.GetIssuesFromJqlAsync(jql, max, start);
+                }
+                int total = totalITem(issues);
+                List<TicketHV> result = ConvertIssusInTicketsHVMTO(issues);
+                if (total > max + start)
+                {
+                    result = result.Concat(GetTiketsHVDRV(start + max, max, idComponente)).ToList();
                 }
                 return result;
             }
@@ -1340,9 +1394,9 @@ namespace DashboarJira.Services
         {
             try
             {
+
                 string downloadsFolder = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
                 downloadsFolder = Path.Combine(downloadsFolder, "Downloads");
-
                 ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
                 // Obtén los datos del componente utilizando el método GetComponenteHV

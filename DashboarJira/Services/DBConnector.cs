@@ -129,6 +129,50 @@ namespace DashboarJira.Services
             return componente;
         }
 
+        public List<ComponenteHV> GetComponentesHV()
+        {
+            List<ComponenteHV> componentes = new List<ComponenteHV>();
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                try
+                {
+                    connection.Open();
+
+                    string query = "SELECT [IdComponente], [Serial], [aniodefabricacion], [Modelo], [fechaInicio] FROM [dbo].[registroHV] ";
+
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        // ExecuteReader para obtener un conjunto de resultados
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                ComponenteHV componente = new ComponenteHV
+                                {
+                                    IdComponente = reader.GetString(reader.GetOrdinal("IdComponente")),
+                                    Serial = reader.GetString(reader.GetOrdinal("Serial")),
+                                    AnioFabricacion = reader.GetInt32(reader.GetOrdinal("aniodefabricacion")),
+                                    Modelo = reader.GetString(reader.GetOrdinal("Modelo")),
+                                    FechaInicio = reader.GetDateTime(reader.GetOrdinal("fechaInicio"))
+                                };
+
+                                componentes.Add(componente);
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // Manejo de excepciones
+                    Console.WriteLine("An error occurred: " + ex.Message);
+                    throw; // Puedes lanzar la excepción nuevamente para propagarla hacia arriba.
+                }
+            }
+
+            return componentes;
+        }
+
 
         public List<Evento> GetEventos(string peticion)
         {
