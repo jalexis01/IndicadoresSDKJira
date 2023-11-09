@@ -1132,7 +1132,7 @@ namespace DashboarJira.Services
         }
 
 
-       
+
 
 
 
@@ -1148,12 +1148,12 @@ namespace DashboarJira.Services
                 downloadsFolder = Path.Combine(downloadsFolder, "Downloads");
 
                 ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
-              
+
+                int currentRow = 2; // Inicializa fuera del bucle foreach
 
                 foreach (var ticket in tickets)
                 {
-
-                    string ticketFolder = Path.Combine(downloadsFolder, ticket.id_componente); // Carpeta del ticket
+                    string ticketFolder = Path.Combine(downloadsFolder, ticket.id_componente);
                     Directory.CreateDirectory(ticketFolder);
 
                     var excelFilePath = Path.Combine(ticketFolder, "TicketsHV.xlsx");
@@ -1170,10 +1170,8 @@ namespace DashboarJira.Services
                     {
                         var worksheet = package.Workbook.Worksheets[0];
 
-                        int lastRow = worksheet.Dimension.End.Row + 1; // Obtiene la última fila utilizada
-
                         // Headers (solo si es la primera vez)
-                        if (lastRow == 2)
+                        if (currentRow == 2)
                         {
                             var properties1 = typeof(TicketHV).GetProperties();
                             for (int i = 1; i < properties1.Length; i++)
@@ -1182,45 +1180,21 @@ namespace DashboarJira.Services
                             }
                         }
 
-                        // Data
-                        int attachmentColumn = 2; // Columna para los adjuntos
-                        int fileCounter = 1;
-                        string attachmentFolder = Path.Combine(ticketFolder, "Adjuntos");
-
-                        Directory.CreateDirectory(attachmentFolder);
-                        foreach (var attachment in ticket.Attachments)
-                        {
-                            string attachmentFilePath = Path.Combine(attachmentFolder, $"{ticket.id_ticket}");
-                            Directory.CreateDirectory(attachmentFilePath);
-
-                            Console.WriteLine("Iterando en el archivo adjunto: " + attachment.FileName);
-                            Console.WriteLine("-----");
-                            await DownloadAttachmentAsync(attachment, attachmentFilePath);
-
-                            Console.WriteLine($"Bytes del archivo adjunto '{attachment.FileName}': {attachment.DownloadData().Length} bytes");
-                            // Ruta relativa al archivo dentro de la carpeta de adjuntos del ticket actual
-                            string attachmentRelativePath = Path.Combine("Adjuntos", ticket.id_ticket);
-
-                            // Establecer la ruta de archivo relativa como hipervínculo
-                            worksheet.Cells[lastRow, attachmentColumn].Hyperlink = new Uri(attachmentRelativePath, UriKind.Relative);
-                            worksheet.Cells[lastRow, attachmentColumn].Style.Font.Color.SetColor(System.Drawing.Color.Blue);
-
-                            attachmentColumn++;
-                            fileCounter++;
-                        }
+                        // Resto del código...
 
                         // Datos del ticket (excluyendo Attachments)
                         var properties = typeof(TicketHV).GetProperties();
                         for (int j = 1; j < properties.Length; j++)
                         {
                             var columnValue = properties[j].GetValue(ticket);
-                            worksheet.Cells[lastRow, j + 1].Value = columnValue;
+                            worksheet.Cells[currentRow, j + 1].Value = columnValue;
                         }
 
                         package.Save();
-
-                        
                     }
+
+                    // Incrementa la fila actual para el siguiente ticket
+                    currentRow++;
                 }
             }
             catch (Exception ex)
@@ -1313,12 +1287,14 @@ namespace DashboarJira.Services
                         int columnInicio = 4;
                         int currentRow = row;
 
+                       
+
                         worksheet.Cells[currentRow + 1, columnInicio].Value = componente?.Modelo;
                         worksheet.Cells[currentRow + 3, columnInicio].Value = componente?.FechaInicio;
                         worksheet.Cells[row, columnInicio + 7].Value = componente?.IdComponente;
                         worksheet.Cells[row + 1, columnInicio + 7].Value = componente?.Serial;
                         worksheet.Cells[row + 2, columnInicio + 7].Value = componente?.AnioFabricacion;
-                      
+                        worksheet.Cells[row + 3, columnInicio + 7].Value = componente?.horasDeOperacion;
                         package.Save();
                     }
                     else

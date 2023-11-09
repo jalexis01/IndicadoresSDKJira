@@ -15,6 +15,7 @@ namespace DashboarJira.Model
         public DateTime FechaInicio { get; set; }
         public Double horasDeOperacion { get; set; }
 
+
         public string GetTemplateFileName(string marca)
         {
             // Implementa un switch para asignar el nombre de la plantilla según el modelo
