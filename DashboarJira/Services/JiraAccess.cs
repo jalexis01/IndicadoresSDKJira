@@ -1180,7 +1180,31 @@ namespace DashboarJira.Services
                             }
                         }
 
-                        // Resto del código...
+                        int attachmentColumn = 2; // Columna para los adjuntos
+                        int fileCounter = 1;
+                        string attachmentFolder = Path.Combine(ticketFolder, "Adjuntos");
+
+                        Directory.CreateDirectory(attachmentFolder);
+                        foreach (var attachment in ticket.Attachments)
+                        {
+                            string attachmentFilePath = Path.Combine(attachmentFolder, $"{ticket.id_ticket}_{fileCounter}");
+                            Directory.CreateDirectory(attachmentFilePath);
+
+                            Console.WriteLine("Iterando en el archivo adjunto: " + attachment.FileName);
+                            Console.WriteLine("-----");
+                            await DownloadAttachmentAsync(attachment, attachmentFilePath);
+
+                            Console.WriteLine($"Bytes del archivo adjunto '{attachment.FileName}': {attachment.DownloadData().Length}");
+                            // Ruta relativa al archivo dentro de la carpeta de adjuntos del ticket actual
+                            string attachmentRelativePath = Path.Combine("Adjuntos", $"{ticket.id_ticket}_{fileCounter}");
+
+                            // Establecer la ruta de archivo relativa como hipervínculo
+                            worksheet.Cells[currentRow, attachmentColumn].Hyperlink = new Uri(attachmentRelativePath, UriKind.Relative);
+                            worksheet.Cells[currentRow, attachmentColumn].Style.Font.Color.SetColor(System.Drawing.Color.Blue);
+
+                            attachmentColumn++;
+                            fileCounter++;
+                        }
 
                         // Datos del ticket (excluyendo Attachments)
                         var properties = typeof(TicketHV).GetProperties();
