@@ -1199,7 +1199,7 @@ namespace DashboarJira.Services
 
                             Console.WriteLine($"Bytes del archivo adjunto '{attachment.FileName}': {attachment.DownloadData().Length} bytes");
                             // Ruta relativa al archivo dentro de la carpeta de adjuntos del ticket actual
-                            string attachmentRelativePath = Path.Combine("Adjuntos", ticket.id_ticket,  attachment.FileName);
+                            string attachmentRelativePath = Path.Combine("Adjuntos", ticket.id_ticket);
 
                             // Establecer la ruta de archivo relativa como hipervínculo
                             worksheet.Cells[lastRow, attachmentColumn].Hyperlink = new Uri(attachmentRelativePath, UriKind.Relative);
