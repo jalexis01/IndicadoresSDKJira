@@ -12,12 +12,12 @@ namespace DashboarJira.Services
 {
     public class JiraAccess
     {
-        //string jiraUrl = "https://manateecc.atlassian.net/";
-        //string username = "desarrollocc@manateeingenieria.com";
-        //string password = "ATATT3xFfGF0ZRHIEZTEJVRnhNKviH0CGed6QXqCDMj5bCmKSEbO00UUjHUb3yDcaA4YD1SHohyDr4qnwRx2x4Tu_S_QW_xlGIcIUDvL7CFKEg47_Jcy4Dmq6YzO0dvqB3qeT-EVWfwJ2jJ-9vEUfsqXavD0IIGA7DAZHGCtIWhxgwKIbAWsmeA=038B810D";
-        string jiraUrl = "https://assaabloymda.atlassian.net/";
+        string jiraUrl = "https://manateecc.atlassian.net/";
         string username = "desarrollocc@manateeingenieria.com";
         string password = "ATATT3xFfGF0ZRHIEZTEJVRnhNKviH0CGed6QXqCDMj5bCmKSEbO00UUjHUb3yDcaA4YD1SHohyDr4qnwRx2x4Tu_S_QW_xlGIcIUDvL7CFKEg47_Jcy4Dmq6YzO0dvqB3qeT-EVWfwJ2jJ-9vEUfsqXavD0IIGA7DAZHGCtIWhxgwKIbAWsmeA=038B810D";
+        //string jiraUrl = "https://assaabloymda.atlassian.net/";
+        //string username = "desarrollocc@manateeingenieria.com";
+        //string password = "ATATT3xFfGF0ZRHIEZTEJVRnhNKviH0CGed6QXqCDMj5bCmKSEbO00UUjHUb3yDcaA4YD1SHohyDr4qnwRx2x4Tu_S_QW_xlGIcIUDvL7CFKEg47_Jcy4Dmq6YzO0dvqB3qeT-EVWfwJ2jJ-9vEUfsqXavD0IIGA7DAZHGCtIWhxgwKIbAWsmeA=038B810D";
 
         Jira jira;
         private DbConnector connector;
@@ -32,13 +32,24 @@ namespace DashboarJira.Services
         //const string proytect = "(project = 'Mesa de Ayuda' OR project = 'Mtto Preventivo')";
         const string proyectManatee = "project = 'Centro de Control'";
 
-        const string proyectManateeMTO = "(project = 'TICKETMP' OR project = 'TICKETDRV')";
+        const string proyectManateeMTO = "(project = 'TICKETMP')";
+        const string proyectManateeDRV = "(project = 'TICKETDRV')";
         /*TODO*/
         public List<Ticket> GetTikets(int start, int max, string startDate, string endDate, string idComponente)
         {
-            List<Ticket> result = GetTiketsCC(start, max, startDate, endDate, idComponente);
-            result = result.Concat(GetTiketsMTO(start, max, startDate, endDate, idComponente)).ToList().OrderByDescending(issue => issue.fecha_apertura).ToList();
-            return result;
+            try
+            {
+                List<Ticket> result = GetTiketsCC(start, max, startDate, endDate, idComponente) ?? new List<Ticket>();
+                result = result.Concat(GetTiketsMTO(start, max, startDate, endDate, idComponente) ?? new List<Ticket>()).ToList().OrderByDescending(issue => issue.fecha_apertura).ToList();
+                if (jiraUrl == "https://manateecc.atlassian.net/")
+                {
+                    result = result.Concat(GetTiketsDRV(start, max, startDate, endDate, idComponente) ?? new List<Ticket>()).ToList().OrderByDescending(issue => issue.fecha_apertura).ToList();
+                }
+                result = result.OrderByDescending(issue => issue.fecha_apertura).ToList();
+
+                return result;
+            }
+            catch (Exception ex) { return new List<Ticket>(); }
 
         }
         public List<Ticket> GetTiketsCC(int start, int max, string startDate, string endDate, string idComponente)
@@ -58,7 +69,7 @@ namespace DashboarJira.Services
 
                 if (startDate != null && endDate != null)
                 {
-                    jql += " AND " + "created >= " + startDate + " AND " + "created <= " + endDate;
+                    jql += " AND " + "created >= '" + startDate + "' AND " + "created <= '" + endDate + "'";
                 }
                 if (idComponente != null)
                 {
@@ -111,7 +122,7 @@ namespace DashboarJira.Services
 
                 if (startDate != null && endDate != null)
                 {
-                    jql += " AND " + "'Fecha de creacion' >= " + startDate + " AND " + "'Fecha de creacion' <= " + endDate;
+                    jql += " AND " + "'Fecha de creacion' >= '" + startDate + "' AND " + "'Fecha de creacion' <= '" + endDate + "'";
                 }
                 if (idComponente != null)
                 {
@@ -137,6 +148,60 @@ namespace DashboarJira.Services
                 if (total > max + start)
                 {
                     result = result.Concat(GetTiketsMTO(start + max, max, startDate, endDate, idComponente)).ToList();
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+
+            }
+            return null;
+        }
+
+        public List<Ticket> GetTiketsDRV(int start, int max, string startDate, string endDate, string idComponente)
+        {
+            try
+            {
+                var jql = "";
+                //created >= 2023-04-04 AND created <= 2023-04-13 AND issuetype = "Solicitud de Mantenimiento" AND resolution = Unresolved AND "Clase de fallo" = AIO AND "Identificacion componente" ~ 9119-WA-OR-1 ORDER BY key DESC, "Time to resolution" ASC
+                if (jiraUrl == "https://assaabloymda.atlassian.net/")
+                {
+                    jql = $"{proyectAssaMTO} and issuetype = 'Solicitud de Mantenimiento' and status = cerrado";
+                }
+                else
+                {
+                    jql = $"{proyectManateeDRV} and issuetype = 'Solicitud de Mantenimiento'";
+                }
+
+                if (startDate != null && endDate != null)
+                {
+                    jql += " AND " + "'Fecha de creacion' >= '" + startDate + "' AND " + "'Fecha de creacion' <= '" + endDate + "'";
+                }
+                if (idComponente != null)
+                {
+
+                    jql += " AND " + "'Identificacion componente' ~ " + idComponente;
+                }
+                //jql += " AND 'Tipo de servicio' is not empty ";
+                jql += " ORDER BY key DESC, 'Time to resolution' ASC";
+
+                Task<IPagedQueryResult<Issue>> issues = null;
+
+                if (max != 0)
+                {
+                    issues = jira.Issues.GetIssuesFromJqlAsync(jql, max, start);
+                }
+                else if (max == 0)
+                {
+                    max = 100;
+                    issues = jira.Issues.GetIssuesFromJqlAsync(jql, max, start);
+                }
+                int total = totalITem(issues);
+                List<Ticket> result = ConvertIssusInTicketsMTO(issues);
+                if (total > max + start)
+                {
+                    result = result.Concat(GetTiketsDRV(start + max, max, startDate, endDate, idComponente)).ToList();
                 }
                 return result;
             }
@@ -578,13 +643,9 @@ namespace DashboarJira.Services
             List<byte[]> imageList = new List<byte[]>();
 
             var imageExtensions = new List<string>
-{
-    ".jpg", ".jpeg", ".png", ".gif", ".bmp", ".webp", ".tiff", ".svg", ".ico", ".raw", ".psd", ".ai", ".eps", ".pdf",
-    ".tga", ".exif", ".jfif", ".heif", ".bat", ".indd", ".indt", ".indb", ".pct", ".dng", ".arw", ".cr2", ".nef", ".orf",
-    ".rw2", ".rw1", ".dcr", ".mrw", ".raf", ".x3f", ".erf", ".sr2", ".srw", ".pef", ".mef", ".xpm", ".emf", ".wmf",
-
-};
-
+    {
+        ".jpg", ".jpeg", ".png", ".gif", ".bmp", ".webp", ".tiff", // ... (add more as needed)
+    };
 
             using (HttpClient client = new HttpClient())
             {
@@ -613,11 +674,9 @@ namespace DashboarJira.Services
             List<byte[]> videoList = new List<byte[]>();
 
             var videoExtensions = new List<string>
-{
-    ".mp4", ".webm", ".avi", ".mov", ".mkv", ".flv", ".wmv", ".m4v", ".3gp", ".ogg", ".ogv", ".mpg", ".mpeg", ".mp3", ".wav", ".ogg", ".wma",
-  
-};
-
+    {
+        ".mp4", ".webm", ".avi", ".mov", // ... (add more as needed)
+    };
 
             using (HttpClient client = new HttpClient())
             {
