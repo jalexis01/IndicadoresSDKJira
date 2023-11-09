@@ -1311,15 +1311,19 @@ namespace DashboarJira.Services
                         int row = 7; // La fila en la que quieres comenzar a escribir datos en la hoja de trabajo
                         int columnInicio = 4;
                         int currentRow = row;
+                        DateTime fechaActual = DateTime.Now;
+                        TimeSpan diferencia = fechaActual - componente.FechaInicio;
+                        double horasDeOperacion = diferencia.TotalHours;
+                        horasDeOperacion = Math.Round(horasDeOperacion);
 
-                       
+
 
                         worksheet.Cells[currentRow + 1, columnInicio].Value = componente?.Modelo;
                         worksheet.Cells[currentRow + 3, columnInicio].Value = componente?.FechaInicio;
                         worksheet.Cells[row, columnInicio + 7].Value = componente?.IdComponente;
                         worksheet.Cells[row + 1, columnInicio + 7].Value = componente?.Serial;
                         worksheet.Cells[row + 2, columnInicio + 7].Value = componente?.AnioFabricacion;
-                        worksheet.Cells[row + 3, columnInicio + 7].Value = componente?.horasDeOperacion;
+                        worksheet.Cells[row + 3, columnInicio + 7].Value = horasDeOperacion;
                         package.Save();
                     }
                     else
