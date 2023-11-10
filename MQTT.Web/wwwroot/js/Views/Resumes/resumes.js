@@ -172,31 +172,31 @@ function ServiceGetMessages() {
             } else {
 
                 // Datos quemados para cada celda
-                var datosQuemados = [
-                    { Marca: 'xxxxxxxxxxxxxxxxxx', Modelo: 'xxxx', Fabricante: 'xxxx', IDComponente: 'xxxx', NumeroInterno: 'xxxx', AnioFabricacion: 'xxxx', InicioOperacion: 'xxxx', HorasOperacion: 'xxxx' },
+                var listaComponentes = [
+                    { Marca: 'Manatee', Modelo: 'MTE-TEL-22', Fabricante: 'Manatee', IDPuerta: '9115-WA-OR-1', NumeroInterno: 'N1T-0001', AnioFabricacion: '1/02/2023', InicioOperacion:'2022',  HorasOperacion: '25890' },
                 ];
 
                 // Construir el contenido de la tabla HTML
                 var columnContent = '<table class="result-box-table">';
 
                 columnContent += '<tr>';
-                columnContent += '<th>MARCA</th><td>' + datosQuemados[0].Marca + '</td>';
-                columnContent += '<th>IDPUERTA</th><td>' + datosQuemados[0].IDComponente + '</td>';
+                columnContent += '<th>MARCA</th><td>' + listaComponentes[0].Marca + '</td>';
+                columnContent += '<th>IDPUERTA</th><td>' + listaComponentes[0].IDPuerta + '</td>';
                 columnContent += '</tr>';
 
                 columnContent += '<tr>';
-                columnContent += '<th>MODELO</th><td>' + datosQuemados[0].Modelo + '</td>';
-                columnContent += '<th>N° INTERNO</th><td>' + datosQuemados[0].NumeroInterno + '</td>';
+                columnContent += '<th>MODELO</th><td>' + listaComponentes[0].Modelo + '</td>';
+                columnContent += '<th>N° INTERNO</th><td>' + listaComponentes[0].NumeroInterno + '</td>';
                 columnContent += '</tr>';
 
                 columnContent += '<tr>';
-                columnContent += '<th>FABRICANTE</th><td>' + datosQuemados[0].Fabricante + '</td>';
-                columnContent += '<th>AÑO DE FABRICACION</th><td>' + datosQuemados[0].AnioFabricacion + '</td>';
+                columnContent += '<th>FABRICANTE</th><td>' + listaComponentes[0].Fabricante + '</td>';
+                columnContent += '<th>AÑO DE FABRICACION</th><td>' + listaComponentes[0].AnioFabricacion + '</td>';
                 columnContent += '</tr>';
 
                 columnContent += '<tr>';
-                columnContent += '<th>FECHA INICIO OPERACIÓN</th><td>' + datosQuemados[0].InicioOperacion + '</td>';
-                columnContent += '<th>HORAS DE OPERACIÓN</th><td>' + datosQuemados[0].HorasOperacion + '</td>';
+                columnContent += '<th>FECHA INICIO OPERACIÓN</th><td>' + listaComponentes[0].InicioOperacion + '</td>';
+                columnContent += '<th>HORAS DE OPERACIÓN</th><td>' + listaComponentes[0].HorasOperacion + '</td>';
                 columnContent += '</tr>';
 
                 columnContent += '</table>';
@@ -246,10 +246,10 @@ var detailsData = function (args) {
 }
 
 function openImage() {
-    var datosQuemados = [
+    var listaComponentes = [
         { Marca: 'xxxx', Modelo: 'ss-nautilus', Fabricante: 'xxxx', IDComponente: 'xxxx', NumeroInterno: 'xxxx', AnioFabricacion: 'xxxx', InicioOperacion: 'xxxx', HorasOperacion: 'xxxx' },
     ];
-    var modelo = datosQuemados[0].Modelo;
+    var modelo = listaComponentes[0].Modelo;
     // Puedes cambiar la URL de la imagen según tus necesidades
     var imageUrl = "../../img/" + modelo + ".jpg";
 
