@@ -173,30 +173,34 @@ function ServiceGetMessages() {
 
                 // Datos quemados para cada celda
                 var listaComponentes = [
-                    { Marca: 'Manatee', Modelo: 'MTE-TEL-22', Fabricante: 'Manatee', IDPuerta: '9115-WA-OR-1', NumeroInterno: 'N1T-0001', AnioFabricacion: '1/02/2023', InicioOperacion:'2022',  HorasOperacion: '25890' },
+                    { FichaTecnica:'FICHA TECNICA', Marca: 'Manatee', Modelo: 'MTE-TEL-22', Fabricante: 'Manatee', IDPuerta: '9115-WA-OR-1', NumeroInterno: 'N1T-0001', AnioFabricacion: '1/02/2023', InicioOperacion:'2022',  HorasOperacion: '25890' },
                 ];
 
-                // Construir el contenido de la tabla HTML
                 var columnContent = '<table class="result-box-table">';
 
                 columnContent += '<tr>';
-                columnContent += '<th>MARCA</th><td>' + listaComponentes[0].Marca + '</td>';
-                columnContent += '<th>IDPUERTA</th><td>' + listaComponentes[0].IDPuerta + '</td>';
+                columnContent += '<th class="header-cell1" colspan="4" style="text-align: center;">' + listaComponentes[0].FichaTecnica + '</th>';
+
                 columnContent += '</tr>';
 
                 columnContent += '<tr>';
-                columnContent += '<th>MODELO</th><td>' + listaComponentes[0].Modelo + '</td>';
-                columnContent += '<th>N° INTERNO</th><td>' + listaComponentes[0].NumeroInterno + '</td>';
+                columnContent += '<th class="header-cell">MARCA</th><td>' + listaComponentes[0].Marca + '</td>';
+                columnContent += '<th class="header-cell">IDPUERTA</th><td>' + listaComponentes[0].IDPuerta + '</td>';
                 columnContent += '</tr>';
 
                 columnContent += '<tr>';
-                columnContent += '<th>FABRICANTE</th><td>' + listaComponentes[0].Fabricante + '</td>';
-                columnContent += '<th>AÑO DE FABRICACION</th><td>' + listaComponentes[0].AnioFabricacion + '</td>';
+                columnContent += '<th class="header-cell">MODELO</th><td>' + listaComponentes[0].Modelo + '</td>';
+                columnContent += '<th class="header-cell">N° INTERNO</th><td>' + listaComponentes[0].NumeroInterno + '</td>';
                 columnContent += '</tr>';
 
                 columnContent += '<tr>';
-                columnContent += '<th>FECHA INICIO OPERACIÓN</th><td>' + listaComponentes[0].InicioOperacion + '</td>';
-                columnContent += '<th>HORAS DE OPERACIÓN</th><td>' + listaComponentes[0].HorasOperacion + '</td>';
+                columnContent += '<th class="header-cell">FABRICANTE</th><td>' + listaComponentes[0].Fabricante + '</td>';
+                columnContent += '<th class="header-cell">AÑO DE FABRICACION</th><td>' + listaComponentes[0].AnioFabricacion + '</td>';
+                columnContent += '</tr>';
+
+                columnContent += '<tr>';
+                columnContent += '<th class="header-cell">FECHA INICIO OPERACIÓN</th><td>' + listaComponentes[0].InicioOperacion + '</td>';
+                columnContent += '<th class="header-cell">HORAS DE OPERACIÓN</th><td>' + listaComponentes[0].HorasOperacion + '</td>';
                 columnContent += '</tr>';
 
                 columnContent += '</table>';
@@ -247,14 +251,16 @@ var detailsData = function (args) {
 
 function openImage() {
     var listaComponentes = [
-        { Marca: 'xxxx', Modelo: 'ss-nautilus', Fabricante: 'xxxx', IDComponente: 'xxxx', NumeroInterno: 'xxxx', AnioFabricacion: 'xxxx', InicioOperacion: 'xxxx', HorasOperacion: 'xxxx' },
+        { Marca: 'Manatee', Modelo: 'ss-nautilus', Fabricante: 'Manatee', IDComponente: '9115-WA-OR-1', NumeroInterno: 'N1T-0004', AnioFabricacion: '2022', InicioOperacion: '2/02/2023', HorasOperacion: '6736' },
     ];
     var modelo = listaComponentes[0].Modelo;
     // Puedes cambiar la URL de la imagen según tus necesidades
     var imageUrl = "../../img/" + modelo + ".jpg";
+   
 
     // Muestra la imagen en un modal usando SweetAlert2
     Swal.fire({
+      
         imageUrl: imageUrl,
         imageAlt: 'Imagen de ' + modelo,
         confirmButtonText: 'Cerrar',
