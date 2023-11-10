@@ -11,9 +11,12 @@ function validateDates() {
     console.log("Fecha inicial: " + startDate);
     console.log("Fecha final: " + endDate);
 
-    if (startDate === "" || endDate === "") {
+    var componente = $('#componente').val();
+    console.log("idComponente: " + componente);
+
+    if (componente.trim() === "") {
         Swal.fire({
-            title: 'Debe seleccionar la fecha',
+            title: 'Debe ingresar el idComponente',
         });
     } else {
         ServiceGetMessages();
@@ -167,6 +170,41 @@ function ServiceGetMessages() {
                 noData();
                 return;
             } else {
+
+                // Datos quemados para cada celda
+                var datosQuemados = [
+                    { Marca: 'xxxxxxxxxxxxxxxxxx', Modelo: 'xxxx', Fabricante: 'xxxx', IDComponente: 'xxxx', NumeroInterno: 'xxxx', AnioFabricacion: 'xxxx', InicioOperacion: 'xxxx', HorasOperacion: 'xxxx' },
+                ];
+
+                // Construir el contenido de la tabla HTML
+                var columnContent = '<table class="result-box-table">';
+
+                columnContent += '<tr>';
+                columnContent += '<th>MARCA</th><td>' + datosQuemados[0].Marca + '</td>';
+                columnContent += '<th>IDPUERTA</th><td>' + datosQuemados[0].IDComponente + '</td>';
+                columnContent += '</tr>';
+
+                columnContent += '<tr>';
+                columnContent += '<th>MODELO</th><td>' + datosQuemados[0].Modelo + '</td>';
+                columnContent += '<th>N° INTERNO</th><td>' + datosQuemados[0].NumeroInterno + '</td>';
+                columnContent += '</tr>';
+
+                columnContent += '<tr>';
+                columnContent += '<th>FABRICANTE</th><td>' + datosQuemados[0].Fabricante + '</td>';
+                columnContent += '<th>AÑO DE FABRICACION</th><td>' + datosQuemados[0].AnioFabricacion + '</td>';
+                columnContent += '</tr>';
+
+                columnContent += '<tr>';
+                columnContent += '<th>FECHA INICIO OPERACIÓN</th><td>' + datosQuemados[0].InicioOperacion + '</td>';
+                columnContent += '<th>HORAS DE OPERACIÓN</th><td>' + datosQuemados[0].HorasOperacion + '</td>';
+                columnContent += '</tr>';
+
+                columnContent += '</table>';
+
+                // Mostrar la tabla en el cuadro de texto
+                $('#resultBox').html(columnContent);
+                $('#resultBoxContainer').show();
+
                 let dataColumns = setColums(data, null);
                 let exportFunctions = addFnctionsGrid(['Excel']);
 
@@ -205,4 +243,26 @@ const options = {
 
 var detailsData = function (args) {
     //alert(JSON.stringify(args.rowData));
+}
+
+function openImage() {
+    var datosQuemados = [
+        { Marca: 'xxxx', Modelo: 'ss-nautilus', Fabricante: 'xxxx', IDComponente: 'xxxx', NumeroInterno: 'xxxx', AnioFabricacion: 'xxxx', InicioOperacion: 'xxxx', HorasOperacion: 'xxxx' },
+    ];
+    var modelo = datosQuemados[0].Modelo;
+    // Puedes cambiar la URL de la imagen según tus necesidades
+    var imageUrl = "../../img/" + modelo + ".jpg";
+
+    // Muestra la imagen en un modal usando SweetAlert2
+    Swal.fire({
+        imageUrl: imageUrl,
+        imageAlt: 'Imagen de ' + modelo,
+        confirmButtonText: 'Cerrar',
+        showCloseButton: true,
+        customClass: {
+            popup: 'custom-modal-class',
+            closeButton: 'custom-close-button-class',
+            image: 'custom-image-class'
+        }
+    });
 }

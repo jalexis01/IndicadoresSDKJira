@@ -1,59 +1,59 @@
-﻿.container-grid {
-    overflow: auto;
-    /*justify-content: center;*/
-    max-height: 500px; /* Ajusta la altura máxima según tus necesidades */
-}
-
-.table-row {
+﻿#resultBox {
+    
     padding: 10px;
-}
-
-
-.flex-add {
-    display: flex;
-}
-
-.container-inputs {
-    display: flex;
-}
-
-.organitation-menu {
-    position: absolute;
-    right: 10%;
-}
-
-.e-ddl.e-input-group {
-    display: flex;
-}
-
-.styled-table {
-    border-collapse: collapse;
+    margin-top: 10px;
     width: 100%;
-    max-width: 800px;
+    overflow-x: auto;
+    color: #808080;
 }
 
-    .styled-table th,
-    .styled-table td {
-        border: 1px solid #ddd;
-        padding: 0px;
-    }
+#resultBox table {
+    width: 100%;
+    border-collapse: collapse;
+}
 
-    .styled-table th {
-        background-color: #f2f2f2;
-        text-align: center;
-        width: 10000px;
-    }
+#resultBox th, #resultBox td {
+    border: 1px solid #ddd;
+    padding: 8px;
 
-    .styled-table td {
-        padding: 9px;
-        text-align: left;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        width: 1000px;
-    }
+}
 
-        .styled-table th.columna-3,
-        .styled-table td.columna-3 {
-            width: 200px;
-        }
+/* Estilo personalizado para el modal */
+.custom-modal-class {
+    max-width: 90%;
+    width: auto;
+}
+
+/* Estilo personalizado para la imagen dentro del modal */
+.custom-image-class {
+    max-width: 90%;
+    height: auto;
+}
+
+.result-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+
+.custom-close-button-class::before {
+    font-size: 20px;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+}
+
+#resultBox th,
+#resultBox td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    color: #808080; /* Cambia el color del texto a gris (#808080) o al color que desees */
+}
+
+/* Opcional: Cambia el color del texto de los encabezados (th) */
+#resultBox th {
+    background-color: #f2f2f2; /* Color de fondo para los encabezados */
+    color: #808080; /* Cambia el color del texto a gris (#808080) o al color que desees */
+}
