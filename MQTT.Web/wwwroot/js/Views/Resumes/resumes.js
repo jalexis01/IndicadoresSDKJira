@@ -173,7 +173,7 @@ function ServiceGetMessages() {
 
                 // Datos quemados para cada celda
                 var listaComponentes = [
-                    { Marca: 'Manatee', Modelo: 'MTE-TEL-22', Fabricante: 'Manatee', IDPuerta: '9115-WA-OR-1', NumeroInterno: 'N1T-0001', AnioFabricacion: '1/02/2023', InicioOperacion:'2022',  HorasOperacion: '25890' },
+                    { Marca: 'Manatee', Modelo: 'MTE-TEL-22', Fabricante: 'Manatee', IDPuerta: '9115-WA-OR-1', NumeroInterno: 'N1T-0001', AnioFabricacion: '2022', InicioOperacion:'1/02/2023',  HorasOperacion: '25890' },
                 ];
 
                 // Construir el contenido de la tabla HTML
@@ -181,7 +181,7 @@ function ServiceGetMessages() {
 
                 columnContent += '<tr>';
                 columnContent += '<th>MARCA</th><td>' + listaComponentes[0].Marca + '</td>';
-                columnContent += '<th>IDPUERTA</th><td>' + listaComponentes[0].IDPuerta + '</td>';
+                columnContent += '<th>ID PUERTA</th><td>' + listaComponentes[0].IDPuerta + '</td>';
                 columnContent += '</tr>';
 
                 columnContent += '<tr>';
@@ -191,7 +191,7 @@ function ServiceGetMessages() {
 
                 columnContent += '<tr>';
                 columnContent += '<th>FABRICANTE</th><td>' + listaComponentes[0].Fabricante + '</td>';
-                columnContent += '<th>AÑO DE FABRICACION</th><td>' + listaComponentes[0].AnioFabricacion + '</td>';
+                columnContent += '<th>AÑO DE FABRICACIÓN</th><td>' + listaComponentes[0].AnioFabricacion + '</td>';
                 columnContent += '</tr>';
 
                 columnContent += '<tr>';

@@ -1,10 +1,12 @@
-﻿#resultBox {
-    
-    padding: 10px;
+﻿#resultBoxContainer {
+    margin-bottom: 10px;
+    display: none;
+}
+#resultBox {    
+    padding: 0px;
     margin-top: 10px;
     width: 100%;
     overflow-x: auto;
-    color: #808080;
 }
 
 #resultBox table {
@@ -12,11 +14,13 @@
     border-collapse: collapse;
 }
 
-#resultBox th, #resultBox td {
-    border: 1px solid #ddd;
-    padding: 8px;
-
-}
+    #resultBox th, #resultBox td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        font-size: 12px;
+        font-weight: normal;
+        color: black;
+    }
 
 /* Estilo personalizado para el modal */
 .custom-modal-class {
@@ -49,11 +53,17 @@
 #resultBox td {
     border: 1px solid #ddd;
     padding: 8px;
-    color: #808080; /* Cambia el color del texto a gris (#808080) o al color que desees */
+    color: black;
 }
 
 /* Opcional: Cambia el color del texto de los encabezados (th) */
 #resultBox th {
-    background-color: #f2f2f2; /* Color de fondo para los encabezados */
-    color: #808080; /* Cambia el color del texto a gris (#808080) o al color que desees */
+    background-color: #f9f9f9;
+    color: black;
+    text-align: left;
+}
+
+#button-primary {
+    /* Ajusta el estilo del botón según tus necesidades */
+    margin-right: 10px; /* Espacio a la derecha del botón */
 }
