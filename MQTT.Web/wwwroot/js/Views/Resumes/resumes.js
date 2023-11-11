@@ -173,13 +173,13 @@ function ServiceGetMessages() {
 
                 // Datos quemados para cada celda
                 var listaComponentes = [
-                    { FichaTecnica:'FICHA TECNICA', Marca: 'Manatee', Modelo: 'MTE-TEL-22', Fabricante: 'Manatee', IDPuerta: '9115-WA-OR-1', NumeroInterno: 'N1T-0001', AnioFabricacion: '1/02/2023', InicioOperacion:'2022',  HorasOperacion: '25890' },
+                    {Marca: 'Manatee', Modelo: 'MTE-TEL-22', Fabricante: 'Manatee', IDPuerta: '9115-WA-OR-1', NumeroInterno: 'N1T-0001', AnioFabricacion: '2022', InicioOperacion:'1/02/2023',  HorasOperacion: '25890' },
                 ];
 
                 var columnContent = '<table class="result-box-table">';
 
                 columnContent += '<tr>';
-                columnContent += '<th class="header-cell1" colspan="4" style="text-align: center;">' + listaComponentes[0].FichaTecnica + '</th>';
+                columnContent += '<th class="header-cell1" colspan="4" style="text-align: center;">INFORMACIÓN COMPONENTE</th>';
 
                 columnContent += '</tr>';
 
@@ -195,7 +195,7 @@ function ServiceGetMessages() {
 
                 columnContent += '<tr>';
                 columnContent += '<th class="header-cell">FABRICANTE</th><td>' + listaComponentes[0].Fabricante + '</td>';
-                columnContent += '<th class="header-cell">AÑO DE FABRICACION</th><td>' + listaComponentes[0].AnioFabricacion + '</td>';
+                columnContent += '<th class="header-cell">AÑO DE FABRICACIÓN</th><td>' + listaComponentes[0].AnioFabricacion + '</td>';
                 columnContent += '</tr>';
 
                 columnContent += '<tr>';

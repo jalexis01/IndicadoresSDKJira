@@ -1,5 +1,5 @@
 ﻿#resultBox {
-    padding: 10px;
+    padding: 0px;
     margin-top: 10px;
     width: 100%;
     overflow-x: auto;
@@ -16,6 +16,7 @@
         border: 1px solid #dddddd;
         text-align: left;
         padding: 8px;
+        font-size: 12px;
     }
 
     .result-box-table th {
@@ -66,12 +67,13 @@
 #resultBox td {
     border: 1px solid #ddd;
     padding: 8px;
-    color: #808080; /* Cambia el color del texto a gris (#808080) o al color que desees */
+    color: black; /* Cambia el color del texto a gris (#808080) o al color que desees */
+    font-weight: normal;
 }
 
 /* Opcional: Cambia el color del texto de los encabezados (th) */
 #resultBox th {
-    background-color: #fcf7f7; /* Color de fondo para los encabezados */
+    background-color: #f9f9f9; /* Color de fondo para los encabezados */
     border-radius: 1px #ddd;
     padding: 8px;
     color: #252429;
