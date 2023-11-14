@@ -150,15 +150,7 @@ function ServiceGetMessages() {
 
     console.log("idComponente: " + componente);
     console.log("Max: " + max);
-    Swal.fire({
-        title: 'Cargando...',
-        allowOutsideClick: false,
-        showConfirmButton: false,
-        onBeforeOpen: (modal) => {
-            modal.showLoading();
-            modal.disableCloseButton();
-        }
-    });
+    
 
     $.ajax({
         type: "GET",
@@ -166,6 +158,16 @@ function ServiceGetMessages() {
         data: { idComponente: componente },
     })
         .then(componenteData => {
+
+            Swal.fire({
+                title: 'Cargando...',
+                allowOutsideClick: false,
+                showConfirmButton: false,
+                onBeforeOpen: (modal) => {
+                    modal.showLoading();
+                    modal.disableCloseButton();
+                }
+            });
             // Verifica si se obtuvieron datos del componente
             if (componenteData) {
                 // Crea la nueva lista de componentes con los datos obtenidos
@@ -242,9 +244,7 @@ function ServiceGetMessages() {
         .catch(error => {
             if (error.status && error.status === 404) {
                 Swal.fire({
-                    icon: 'error',
-                    title: 'Error...',
-                    text: 'Componente no encontrado'
+                    title: 'ID Componente no encontrado',
                 });
             } else {
                 Swal.fire({
