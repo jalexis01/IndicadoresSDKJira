@@ -95,8 +95,8 @@ namespace DashboarJira.Services
                 {
                     connection.Open();
 
-                    string query = "SELECT  [IdComponente], [Serial],[aniodefabricacion] ,[Modelo] ,[fechaInicio]FROM[dbo].[registroHV] " +
-                                   "WHERE [IdComponente] = @IdComponente";
+                    string query = "SELECT  [IdComponente], [Serial],[aniodefabricacion], [tipoComponente] ,[Modelo] ,[fechaInicio]FROM[dbo].[registroHV] " +
+                                   "WHERE [IdComponente] = @IdComponente AND [tipoComponente] = 'puerta' ";
 
                     using (SqlCommand command = new SqlCommand(query, connection))
                     {
@@ -113,7 +113,8 @@ namespace DashboarJira.Services
                                     Serial = reader.GetString(reader.GetOrdinal("Serial")),
                                     AnioFabricacion = reader.GetInt32(reader.GetOrdinal("aniodefabricacion")),
                                     Modelo = reader.GetString(reader.GetOrdinal("Modelo")),
-                                    FechaInicio = reader.GetDateTime(reader.GetOrdinal("fechaInicio"))
+                                    FechaInicio = reader.GetDateTime(reader.GetOrdinal("fechaInicio")),
+                                    tipoComponente = reader.GetString(reader.GetOrdinal("tipoComponente"))
                                 };
 
                             }
