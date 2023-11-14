@@ -68,7 +68,7 @@ namespace DashboarJira.Services
                 }
                 if (!string.IsNullOrWhiteSpace(tipoMantenimiento))
                 {
-                    jql += $" and 'Tipo de servicio[Dropdown]' = '{tipoMantenimiento}'";
+                    jql += $" and 'Tipo de servicio[Dropdown]' in ({tipoMantenimiento})";
                 }
                 if (startDate != null && endDate != null)
                 {
@@ -125,7 +125,7 @@ namespace DashboarJira.Services
                 }
                 if (!string.IsNullOrWhiteSpace(tipoMantenimiento))
                 {
-                    jql += $" and 'Tipo de servicio[Dropdown]' = '{tipoMantenimiento}'";
+                    jql += $" and 'Tipo de servicio[Dropdown]' in ({tipoMantenimiento})";
                 }
                 if (startDate != null && endDate != null)
                 {
@@ -182,7 +182,7 @@ namespace DashboarJira.Services
                 }
                 if (!string.IsNullOrWhiteSpace(tipoMantenimiento))
                 {
-                    jql += $"and 'Tipo de servicio[Dropdown]' = '{tipoMantenimiento}'";
+                    jql += $" and 'Tipo de servicio[Dropdown]' in ({tipoMantenimiento})";
                 }
                 if (startDate != null && endDate != null)
                 {
