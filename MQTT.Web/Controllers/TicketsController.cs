@@ -45,7 +45,7 @@ namespace MQTT.Web.Controllers
 
         int start = 0;
 
-        public List<Ticket> getTickets(string startDate, string endDate, int max, string componente)
+        public List<Ticket> getTickets(string startDate, string endDate, int max, string componente, string tipoMantenimiento)
         {
             try
             {
@@ -69,7 +69,7 @@ namespace MQTT.Web.Controllers
 
                 JiraAccess jiraAccess = new JiraAccess();
                 max = 0;
-                List<Ticket> tickets = jiraAccess.GetTikets(start, max, formattedStartDate, formattedEndDate, componente);
+                List<Ticket> tickets = jiraAccess.GetTikets(start, max, formattedStartDate, formattedEndDate, componente, tipoMantenimiento);
                 return tickets;
             }
             catch (Exception ex)
