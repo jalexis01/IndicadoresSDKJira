@@ -35,15 +35,15 @@ namespace DashboarJira.Services
         const string proyectManateeMTO = "(project = 'TICKETMP')";
         const string proyectManateeDRV = "(project = 'TICKETDRV')";
         /*TODO*/
-        public List<Ticket> GetTikets(int start, int max, string startDate, string endDate, string idComponente)
+        public List<Ticket> GetTikets(int start, int max, string startDate, string endDate, string idComponente, string tipoMantenimiento)
         {
             try
             {
-                List<Ticket> result = GetTiketsCC(start, max, startDate, endDate, idComponente) ?? new List<Ticket>();
-                result = result.Concat(GetTiketsMTO(start, max, startDate, endDate, idComponente) ?? new List<Ticket>()).ToList().OrderByDescending(issue => issue.fecha_apertura).ToList();
+                List<Ticket> result = GetTiketsCC(start, max, startDate, endDate, idComponente, tipoMantenimiento) ?? new List<Ticket>();
+                result = result.Concat(GetTiketsMTO(start, max, startDate, endDate, idComponente, tipoMantenimiento) ?? new List<Ticket>()).ToList().OrderByDescending(issue => issue.fecha_apertura).ToList();
                 if (jiraUrl == "https://manateecc.atlassian.net/")
                 {
-                    result = result.Concat(GetTiketsDRV(start, max, startDate, endDate, idComponente) ?? new List<Ticket>()).ToList().OrderByDescending(issue => issue.fecha_apertura).ToList();
+                    result = result.Concat(GetTiketsDRV(start, max, startDate, endDate, idComponente, tipoMantenimiento) ?? new List<Ticket>()).ToList().OrderByDescending(issue => issue.fecha_apertura).ToList();
                 }
                 result = result.OrderByDescending(issue => issue.fecha_apertura).ToList();
 
@@ -52,7 +52,7 @@ namespace DashboarJira.Services
             catch (Exception ex) { return new List<Ticket>(); }
 
         }
-        public List<Ticket> GetTiketsCC(int start, int max, string startDate, string endDate, string idComponente)
+        public List<Ticket> GetTiketsCC(int start, int max, string startDate, string endDate, string idComponente, string tipoMantenimiento)
         {
             try
             {
@@ -66,7 +66,10 @@ namespace DashboarJira.Services
                 {
                     jql = $"{proyectManatee} and issuetype = 'Solicitud de Mantenimiento'";
                 }
-
+                if (!string.IsNullOrWhiteSpace(tipoMantenimiento))
+                {
+                    jql = $"and 'Tipo de servicio[Dropdown]' = '{tipoMantenimiento}'";
+                }
                 if (startDate != null && endDate != null)
                 {
                     jql += " AND " + "created >= '" + startDate + "' AND " + "created <= '" + endDate + "'";
@@ -94,7 +97,7 @@ namespace DashboarJira.Services
                 List<Ticket> result = ConvertIssusInTickets(issues);
                 if (total > max + start)
                 {
-                    result = result.Concat(GetTiketsCC(start + max, max, startDate, endDate, idComponente)).ToList();
+                    result = result.Concat(GetTiketsCC(start + max, max, startDate, endDate, idComponente, tipoMantenimiento)).ToList();
                 }
                 return result;
             }
@@ -105,7 +108,7 @@ namespace DashboarJira.Services
             }
             return null;
         }
-        public List<Ticket> GetTiketsMTO(int start, int max, string startDate, string endDate, string idComponente)
+        public List<Ticket> GetTiketsMTO(int start, int max, string startDate, string endDate, string idComponente, string tipoMantenimiento)
         {
             try
             {
@@ -114,6 +117,9 @@ namespace DashboarJira.Services
                 if (jiraUrl == "https://assaabloymda.atlassian.net/")
                 {
                     jql = $"{proyectAssaMTO} and issuetype = 'Solicitud de Mantenimiento' and status = cerrado";
+                }
+                if (!string.IsNullOrWhiteSpace(tipoMantenimiento)) { 
+                    jql = $"and 'Tipo de servicio[Dropdown]' = '{tipoMantenimiento}'";
                 }
                 else
                 {
@@ -147,7 +153,7 @@ namespace DashboarJira.Services
                 List<Ticket> result = ConvertIssusInTicketsMTO(issues);
                 if (total > max + start)
                 {
-                    result = result.Concat(GetTiketsMTO(start + max, max, startDate, endDate, idComponente)).ToList();
+                    result = result.Concat(GetTiketsMTO(start + max, max, startDate, endDate, idComponente, tipoMantenimiento)).ToList();
                 }
                 return result;
             }
@@ -159,7 +165,7 @@ namespace DashboarJira.Services
             return null;
         }
 
-        public List<Ticket> GetTiketsDRV(int start, int max, string startDate, string endDate, string idComponente)
+        public List<Ticket> GetTiketsDRV(int start, int max, string startDate, string endDate, string idComponente, string tipoMantenimiento)
         {
             try
             {
@@ -173,7 +179,10 @@ namespace DashboarJira.Services
                 {
                     jql = $"{proyectManateeDRV} and issuetype = 'Solicitud de Mantenimiento'";
                 }
-
+                if (!string.IsNullOrWhiteSpace(tipoMantenimiento))
+                {
+                    jql = $"and 'Tipo de servicio[Dropdown]' = '{tipoMantenimiento}'";
+                }
                 if (startDate != null && endDate != null)
                 {
                     jql += " AND " + "'Fecha de creacion' >= '" + startDate + "' AND " + "'Fecha de creacion' <= '" + endDate + "'";
@@ -201,7 +210,7 @@ namespace DashboarJira.Services
                 List<Ticket> result = ConvertIssusInTicketsMTO(issues);
                 if (total > max + start)
                 {
-                    result = result.Concat(GetTiketsDRV(start + max, max, startDate, endDate, idComponente)).ToList();
+                    result = result.Concat(GetTiketsDRV(start + max, max, startDate, endDate, idComponente, tipoMantenimiento)).ToList();
                 }
                 return result;
             }
