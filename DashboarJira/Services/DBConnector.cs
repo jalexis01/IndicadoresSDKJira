@@ -14,13 +14,14 @@ namespace DashboarJira.Services
 
         private string connectionString;
 
+
         public DbConnector()
         {
             // Set the connection string Manatee
-            connectionString = "Server=manatee.database.windows.net;Database=PuertasTransmilenioDB;User Id=administrador;Password=2022/M4n4t334zur3";
+            //connectionString = "Server=manatee.database.windows.net;Database=PuertasTransmilenioDB;User Id=administrador;Password=2022/M4n4t334zur3";
 
             // Set the connection string Assabloy
-            //connectionString = "Server=manatee.database.windows.net;Database=PuertasTransmilenioDBAssaabloy;User Id=administrador;Password=2022/M4n4t334zur3";
+            connectionString = "Server=manatee.database.windows.net;Database=PuertasTransmilenioDBAssaabloy;User Id=administrador;Password=2022/M4n4t334zur3";
         }
 
         public DataTable GetMessages()
@@ -83,6 +84,95 @@ namespace DashboarJira.Services
 
             return messagesTable;
         }
+
+        public ComponenteHV GetComponenteHV(string idComponente)
+        {
+            ComponenteHV componente = null;
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                try
+                {
+                    connection.Open();
+
+                    string query = "SELECT  [IdComponente], [Serial],[aniodefabricacion] ,[Modelo] ,[fechaInicio]FROM[dbo].[registroHV] " +
+                                   "WHERE [IdComponente] = @IdComponente";
+
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@IdComponente", idComponente);
+
+                        // ExecuteScalar devuelve la primera columna de la primera fila del conjunto de resultados
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                componente = new ComponenteHV
+                                {
+                                    IdComponente = reader.GetString(reader.GetOrdinal("IdComponente")),
+                                    Serial = reader.GetString(reader.GetOrdinal("Serial")),
+                                    AnioFabricacion = reader.GetInt32(reader.GetOrdinal("aniodefabricacion")),
+                                    Modelo = reader.GetString(reader.GetOrdinal("Modelo")),
+                                    FechaInicio = reader.GetDateTime(reader.GetOrdinal("fechaInicio"))
+                                };
+
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("An error occurred: " + ex.Message);
+                }
+            }
+
+            return componente;
+        }
+
+        public List<ComponenteHV> GetComponentesHV()
+        {
+            List<ComponenteHV> componentes = new List<ComponenteHV>();
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                try
+                {
+                    connection.Open();
+
+                    string query = "SELECT [IdComponente], [Serial], [aniodefabricacion], [Modelo], [fechaInicio] FROM [dbo].[registroHV] ";
+
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        // ExecuteReader para obtener un conjunto de resultados
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                ComponenteHV componente = new ComponenteHV
+                                {
+                                    IdComponente = reader.GetString(reader.GetOrdinal("IdComponente")),
+                                    Serial = reader.GetString(reader.GetOrdinal("Serial")),
+                                    AnioFabricacion = reader.GetInt32(reader.GetOrdinal("aniodefabricacion")),
+                                    Modelo = reader.GetString(reader.GetOrdinal("Modelo")),
+                                    FechaInicio = reader.GetDateTime(reader.GetOrdinal("fechaInicio"))
+                                };
+
+                                componentes.Add(componente);
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // Manejo de excepciones
+                    Console.WriteLine("An error occurred: " + ex.Message);
+                    throw; // Puedes lanzar la excepción nuevamente para propagarla hacia arriba.
+                }
+            }
+
+            return componentes;
+        }
+
 
         public List<Evento> GetEventos(string peticion)
         {

@@ -4,6 +4,9 @@ using Microsoft.Data.SqlClient;
 using System.Text;
 using System.Linq;
 using System.Data;
+using OfficeOpenXml;
+using Microsoft.EntityFrameworkCore.Metadata;
+using System.Net.Sockets;
 
 namespace DashboarJira.Services
 {
@@ -807,5 +810,650 @@ namespace DashboarJira.Services
             return connector.GetEstaciones();
 
         }
+        //Implementacion de la hoja de vida
+        public List<TicketHV> GetTicketHVs(int start, int max, string idComponente)
+        {
+            List<TicketHV> result = GetTiketsHVCC(start, max, idComponente);
+            result = result.Concat(GetTiketsHVMTO(start, max, idComponente)).ToList().OrderByDescending(issue => issue.fecha_apertura).ToList();
+            if (jiraUrl == "https://manateecc.atlassian.net/")
+            {
+                result = result.Concat(GetTiketsHVDRV(start, max, idComponente)).ToList().OrderByDescending(issue => issue.fecha_apertura).ToList();
+            }
+                return result;
+        }
+        public List<TicketHV> GetTiketsHVCC(int start, int max, string idComponente)
+        {
+            try
+            {
+                var jql = "";
+                //created >= 2023-04-04 AND created <= 2023-04-13 AND issuetype = "Solicitud de Mantenimiento" AND resolution = Unresolved AND "Clase de fallo" = AIO AND "Identificacion componente" ~ 9119-WA-OR-1 ORDER BY key DESC, "Time to resolution" ASC
+                if (jiraUrl == "https://assaabloymda.atlassian.net/")
+                {
+                    jql = $"{proyectAssa} and issuetype = 'Solicitud de Mantenimiento'";
+                }
+                else
+                {
+                    jql = $"{proyectManatee} and issuetype = 'Solicitud de Mantenimiento'";
+                }
+                if (idComponente != null)
+                {
+
+                    jql += " AND " + "'Identificacion componente' ~ " + idComponente;
+                }
+                //jql += " AND 'Tipo de servicio' is not empty ";
+                jql += " ORDER BY key DESC, 'Time to resolution' ASC";
+
+                Task<IPagedQueryResult<Issue>> issues = null;
+
+                if (max != 0)
+                {
+                    issues = jira.Issues.GetIssuesFromJqlAsync(jql, max, start);
+                }
+                else if (max == 0)
+                {
+                    max = 100;
+                    issues = jira.Issues.GetIssuesFromJqlAsync(jql, max, start);
+                }
+                int total = totalITem(issues);
+                List<TicketHV> result = ConvertIssusInTicketshv(issues);
+                if (total > max + start)
+                {
+                    result = result.Concat(GetTiketsHVCC(start + max, max, idComponente)).ToList();
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+
+            }
+            return null;
+        }
+        public List<TicketHV> GetTiketsHVMTO(int start, int max, string idComponente)
+        {
+            try
+            {
+                var jql = "";
+                //created >= 2023-04-04 AND created <= 2023-04-13 AND issuetype = "Solicitud de Mantenimiento" AND resolution = Unresolved AND "Clase de fallo" = AIO AND "Identificacion componente" ~ 9119-WA-OR-1 ORDER BY key DESC, "Time to resolution" ASC
+                if (jiraUrl == "https://assaabloymda.atlassian.net/")
+                {
+                    jql = $"{proyectAssaMTO} and issuetype = 'Solicitud de Mantenimiento' and status = cerrado";
+                }
+                else
+                {
+                    jql = $"{proyectManateeMTO} and issuetype = 'Solicitud de Mantenimiento' and status = cerrado";
+                }
+
+
+                if (idComponente != null)
+                {
+
+                    jql += " AND " + "'Identificacion componente' ~ " + idComponente;
+                }
+                //jql += " AND 'Tipo de servicio' is not empty ";
+                jql += " ORDER BY key DESC, 'Time to resolution' ASC";
+
+                Task<IPagedQueryResult<Issue>> issues = null;
+
+                if (max != 0)
+                {
+                    issues = jira.Issues.GetIssuesFromJqlAsync(jql, max, start);
+                }
+                else if (max == 0)
+                {
+                    max = 100;
+                    issues = jira.Issues.GetIssuesFromJqlAsync(jql, max, start);
+                }
+                int total = totalITem(issues);
+                List<TicketHV> result = ConvertIssusInTicketsHVMTO(issues);
+                if (total > max + start)
+                {
+                    result = result.Concat(GetTiketsHVMTO(start + max, max, idComponente)).ToList();
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+
+            }
+            return null;
+        }
+        public List<TicketHV> GetTiketsHVDRV(int start, int max, string idComponente)
+        {
+            try
+            {
+                var jql = "";
+                //created >= 2023-04-04 AND created <= 2023-04-13 AND issuetype = "Solicitud de Mantenimiento" AND resolution = Unresolved AND "Clase de fallo" = AIO AND "Identificacion componente" ~ 9119-WA-OR-1 ORDER BY key DESC, "Time to resolution" ASC
+                if (jiraUrl == "https://assaabloymda.atlassian.net/")
+                {
+                    jql = $"{proyectAssaMTO} and issuetype = 'Solicitud de Mantenimiento' and status = cerrado";
+                }
+                else
+                {
+                    jql = $"{proyectManateeDRV} and issuetype = 'Solicitud de Mantenimiento' and status = cerrado";
+                }
+
+
+                if (idComponente != null)
+                {
+
+                    jql += " AND " + "'Identificacion componente' ~ " + idComponente;
+                }
+                //jql += " AND 'Tipo de servicio' is not empty ";
+                jql += " ORDER BY key DESC, 'Time to resolution' ASC";
+
+                Task<IPagedQueryResult<Issue>> issues = null;
+
+                if (max != 0)
+                {
+                    issues = jira.Issues.GetIssuesFromJqlAsync(jql, max, start);
+                }
+                else if (max == 0)
+                {
+                    max = 100;
+                    issues = jira.Issues.GetIssuesFromJqlAsync(jql, max, start);
+                }
+                int total = totalITem(issues);
+                List<TicketHV> result = ConvertIssusInTicketsHVMTO(issues);
+                if (total > max + start)
+                {
+                    result = result.Concat(GetTiketsHVDRV(start + max, max, idComponente)).ToList();
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+
+            }
+            return null;
+        }
+        public TicketHV converIssueInTicketHV(Issue issue, Dictionary<string, string> estacionMap)
+        {
+            TicketHV temp = new TicketHV();
+
+            temp.id_ticket = issue.Key.Value;
+
+            temp.id_estacion = (issue.CustomFields["Estacion"] != null ? issue.CustomFields["Estacion"].Values[0] : "");
+
+            string estacionValue = (issue.CustomFields["Estacion"] != null ? issue.CustomFields["Estacion"].Values[0] : "");
+
+            if (estacionMap.ContainsKey(estacionValue))
+            {
+                temp.nombre_estacion = estacionMap[estacionValue];
+            }
+            else
+            {
+                temp.nombre_estacion = "Estación sin configurar";
+            }
+
+            temp.id_vagon = (issue.CustomFields["Vagon"] != null ? issue.CustomFields["Vagon"].Values[0] : "");
+
+
+            temp.tipoComponente = (issue.CustomFields["Tipo de componente"] != null ? issue.CustomFields["Tipo de componente"].Values[0] : "");
+
+
+            temp.id_puerta = (temp.tipoComponente == "Puerta" && temp.tipoComponente != "null" && issue.CustomFields["Identificacion componente"] != null && issue.CustomFields["Identificacion componente"].Values[0] != null ? issue.CustomFields["Identificacion componente"].Values[0] : "");
+
+
+            temp.id_componente = (issue.CustomFields["Identificacion componente"] != null ? issue.CustomFields["Identificacion componente"].Values[0] : "");
+
+
+            temp.identificacion = (issue.CustomFields["Identificacion (serial)"] != null ? issue.CustomFields["Identificacion (serial)"].Values[0] : "");
+
+
+            temp.tipo_mantenimiento = (issue.CustomFields["Tipo de servicio"] != null ? (issue.CustomFields["Tipo de servicio"].Values[0] == "Mantenimiento Preventivo" ? "Preventivo" : "Correctivo") : "");
+
+
+            temp.nivel_falla = (issue.CustomFields["Clase de fallo"] != null ? issue.CustomFields["Clase de fallo"].Values[0] : "");
+
+
+            temp.codigo_falla = (issue.CustomFields["Descripcion de fallo"] != null ? issue.CustomFields["Descripcion de fallo"].Values[0] : "");
+
+            //if (jiraUrl == "https://assaabloymda.atlassian.net/")
+            //{                
+            //    //temp.fecha_apertura = (issue.Created != null ? DateTime.Parse(issue.CustomFields["Fecha de creacion"].Values[0]) : null);
+            //}
+            //else
+            //{
+            //    temp.fecha_apertura = issue.Created == null ? null : DateTime.Parse(issue.Created.Value.ToString());
+            //}
+
+
+            temp.fecha_apertura = issue.Created == null ? null : DateTime.Parse(issue.Created.Value.ToString());
+
+            temp.fecha_arribo_locacion = (issue.CustomFields["Fecha y Hora de Llegada a Estacion"] != null ? DateTime.Parse(issue.CustomFields["Fecha y Hora de Llegada a Estacion"].Values[0]) : null);
+
+            temp.fecha_cierre = (issue.CustomFields["Fecha de solucion"] != null ? DateTime.Parse(issue.CustomFields["Fecha de solucion"].Values[0]) : null);
+
+            temp.cantidad_repuesto_utilizado = (issue.CustomFields["Cantidad(es) repuesto(s) utilizado(s)"] != null ? issue.CustomFields["Cantidad(es) repuesto(s) utilizado(s)"].Values[0] : "");
+
+            temp.componente_Parte = (issue.CustomFields["Descripcion de repuesto"] != null ? issue.CustomFields["Descripcion de repuesto"].Values[0] : "");
+
+
+            temp.tipo_reparacion = (issue.CustomFields["Tipo de reparacion"] != null ? issue.CustomFields["Tipo de reparacion"].Values[0] : "");
+
+
+            temp.tipo_ajuste_configuracion = (issue.CustomFields["Listado de ajustes ITS"] != null ? issue.CustomFields["Listado de ajustes ITS"].Values[0] + "\n" : "");
+
+
+            temp.tipo_ajuste_configuracion += (issue.CustomFields["Listado de configuracion ITS"] != null ? issue.CustomFields["Listado de configuracion ITS"].Values[0] + "\n" : "");
+
+
+            temp.tipo_ajuste_configuracion += (issue.CustomFields["Listado de ajustes Puerta"] != null ? issue.CustomFields["Listado de ajustes Puerta"].Values[0] + "\n" : "");
+
+
+            temp.tipo_ajuste_configuracion += (issue.CustomFields["Listado de configuracion Puerta"] != null ? issue.CustomFields["Listado de configuracion Puerta"].Values[0] + "\n" : "");
+
+
+            temp.tipo_ajuste_configuracion += (issue.CustomFields["Listado de ajustes RFID"] != null ? issue.CustomFields["Listado de ajustes RFID"].Values[0] + "\n" : "");
+
+
+            temp.tipo_ajuste_configuracion += (issue.CustomFields["Listado de configuracion RFID"] != null ? issue.CustomFields["Listado de configuracion RFID"].Values[0] + "\n" : "");
+
+
+            temp.descripcion_reparacion = (issue.CustomFields["Descripcion de la reparacion"] != null ? issue.CustomFields["Descripcion de la reparacion"].Values[0] : "");
+
+
+            temp.diagnostico_causa = (issue.CustomFields["Diagnostico de la causa"] != null ? issue.CustomFields["Diagnostico de la causa"].Values[0] : "");
+
+
+            temp.tipo_causa = (issue.CustomFields["Tipo de causa"] != null ? issue.CustomFields["Tipo de causa"].Values[0] : "");
+
+
+            //temp.estado_ticket = issue.Status.Name;
+
+            if (issue.Status.Name == "Cerrado" || issue.Status.Name == "DESCARTADO")
+            {
+                temp.estado_ticket = issue.Status.Name;
+            }
+            else
+            {
+                temp.estado_ticket = "Abierto";
+            }
+            if (issue.Status == null)
+                temp.estado_ticket = (issue.Status != null ? issue.Status.Name : "");
+
+            temp.descripcion = (issue.Description != null ? issue.Description : "");
+
+            //Se adciona nuevos campos
+
+            temp.canal_comunicacion = (issue.CustomFields["Canal comunicacion"] != null ? issue.CustomFields["Canal comunicacion"].Values[0] : "");
+            temp.quien_requiere_servicio = (issue.CustomFields["¿Quien requiere el servicio?"] != null ? issue.CustomFields["¿Quien requiere el servicio?"].Values[0] : "");
+            //temp.operador_ma = (issue.CustomFields["Operador MA"] != null ? issue.CustomFields["Operador MA"].Values[0] : "");
+            temp.codigo_plan_mantenimiento = (issue.CustomFields["Codigo plan de mantenimiento"] != null ? issue.CustomFields["Codigo plan de mantenimiento"].Values[0] : "");
+            temp.descripcion_actividad_mantenimiento = (issue.CustomFields["Descripcion de la actividad de mantenimiento"] != null ? issue.CustomFields["Descripcion de la actividad de mantenimiento"].Values[0] : "");
+            temp.tecnico_asignado = (issue.CustomFields["Tecnico Asignado"] != null ? issue.CustomFields["Tecnico Asignado"].Values[0] : "");
+            temp.motivo_atraso = (issue.CustomFields["Motivo de atraso"] != null ? issue.CustomFields["Motivo de atraso"].Values[0] : "");
+            temp.otro_motivo_atraso = (issue.CustomFields["Otro motivo de atraso"] != null ? issue.CustomFields["Otro motivo de atraso"].Values[0] : "");
+            temp.Attachments = issue.GetAttachmentsAsync().Result.ToList();
+            return temp;
+
+        }
+        public TicketHV converIssueInTicketHVMTO(Issue issue, Dictionary<string, string> estacionMap)
+        {
+            TicketHV temp = new TicketHV();
+
+            temp.id_ticket = issue.Key.Value;
+
+            temp.id_estacion = (issue.CustomFields["Estacion"] != null ? issue.CustomFields["Estacion"].Values[0] : "");
+
+            string estacionValue = (issue.CustomFields["Estacion"] != null ? issue.CustomFields["Estacion"].Values[0] : "");
+
+            if (estacionMap.ContainsKey(estacionValue))
+            {
+                temp.nombre_estacion = estacionMap[estacionValue];
+            }
+            else
+            {
+                temp.nombre_estacion = "Estación sin configurar";
+            }
+
+            temp.id_vagon = (issue.CustomFields["Vagon"] != null ? issue.CustomFields["Vagon"].Values[0] : "");
+
+
+            temp.tipoComponente = (issue.CustomFields["Tipo de componente"] != null ? issue.CustomFields["Tipo de componente"].Values[0] : "");
+
+
+            temp.id_puerta = (temp.tipoComponente == "Puerta" && temp.tipoComponente != "null" && issue.CustomFields["Identificacion componente"] != null && issue.CustomFields["Identificacion componente"].Values[0] != null ? issue.CustomFields["Identificacion componente"].Values[0] : "");
+
+
+            temp.id_componente = (issue.CustomFields["Identificacion componente"] != null ? issue.CustomFields["Identificacion componente"].Values[0] : "");
+
+
+            temp.identificacion = (issue.CustomFields["Identificacion (serial)"] != null ? issue.CustomFields["Identificacion (serial)"].Values[0] : "");
+
+
+            temp.tipo_mantenimiento = (issue.CustomFields["Tipo de servicio"] != null ? (issue.CustomFields["Tipo de servicio"].Values[0] == "Mantenimiento Preventivo" ? "Preventivo" : "Correctivo") : "");
+
+
+            temp.nivel_falla = (issue.CustomFields["Clase de fallo"] != null ? issue.CustomFields["Clase de fallo"].Values[0] : "");
+
+
+            temp.codigo_falla = (issue.CustomFields["Descripcion de fallo"] != null ? issue.CustomFields["Descripcion de fallo"].Values[0] : "");
+
+            //if (jiraUrl == "https://assaabloymda.atlassian.net/")
+            //{                
+            //    //temp.fecha_apertura = (issue.Created != null ? DateTime.Parse(issue.CustomFields["Fecha de creacion"].Values[0]) : null);
+            //}
+            //else
+            //{
+            //    temp.fecha_apertura = issue.Created == null ? null : DateTime.Parse(issue.Created.Value.ToString());
+            //}
+
+
+            temp.fecha_apertura = issue.CustomFields["Fecha de creacion"] == null ? null : DateTime.Parse(issue.CustomFields["Fecha de creacion"].Values[0].ToString());
+
+            temp.fecha_arribo_locacion = (issue.CustomFields["Fecha y Hora de Llegada a Estacion"] != null ? DateTime.Parse(issue.CustomFields["Fecha y Hora de Llegada a Estacion"].Values[0]) : null);
+
+            temp.fecha_cierre = (issue.CustomFields["Fecha de solucion"] != null ? DateTime.Parse(issue.CustomFields["Fecha de solucion"].Values[0]) : null);
+
+            temp.cantidad_repuesto_utilizado = (issue.CustomFields["Cantidad(es) repuesto(s) utilizado(s)"] != null ? issue.CustomFields["Cantidad(es) repuesto(s) utilizado(s)"].Values[0] : "");
+
+            temp.componente_Parte = (issue.CustomFields["Descripcion de repuesto"] != null ? issue.CustomFields["Descripcion de repuesto"].Values[0] : "");
+
+
+            temp.tipo_reparacion = (issue.CustomFields["Tipo de reparacion"] != null ? issue.CustomFields["Tipo de reparacion"].Values[0] : "");
+
+
+            temp.tipo_ajuste_configuracion = (issue.CustomFields["Listado de ajustes ITS"] != null ? issue.CustomFields["Listado de ajustes ITS"].Values[0] + "\n" : "");
+
+
+            temp.tipo_ajuste_configuracion += (issue.CustomFields["Listado de configuracion ITS"] != null ? issue.CustomFields["Listado de configuracion ITS"].Values[0] + "\n" : "");
+
+
+            temp.tipo_ajuste_configuracion += (issue.CustomFields["Listado de ajustes Puerta"] != null ? issue.CustomFields["Listado de ajustes Puerta"].Values[0] + "\n" : "");
+
+
+            temp.tipo_ajuste_configuracion += (issue.CustomFields["Listado de configuracion Puerta"] != null ? issue.CustomFields["Listado de configuracion Puerta"].Values[0] + "\n" : "");
+
+
+            temp.tipo_ajuste_configuracion += (issue.CustomFields["Listado de ajustes RFID"] != null ? issue.CustomFields["Listado de ajustes RFID"].Values[0] + "\n" : "");
+
+
+            temp.tipo_ajuste_configuracion += (issue.CustomFields["Listado de configuracion RFID"] != null ? issue.CustomFields["Listado de configuracion RFID"].Values[0] + "\n" : "");
+
+
+            temp.descripcion_reparacion = (issue.CustomFields["Descripcion de la reparacion"] != null ? issue.CustomFields["Descripcion de la reparacion"].Values[0] : "");
+
+
+            temp.diagnostico_causa = (issue.CustomFields["Diagnostico de la causa"] != null ? issue.CustomFields["Diagnostico de la causa"].Values[0] : "");
+
+
+            temp.tipo_causa = (issue.CustomFields["Tipo de causa"] != null ? issue.CustomFields["Tipo de causa"].Values[0] : "");
+
+
+            //temp.estado_ticket = issue.Status.Name;
+
+            if (issue.Status.Name == "Cerrado" || issue.Status.Name == "DESCARTADO")
+            {
+                temp.estado_ticket = issue.Status.Name;
+            }
+            else
+            {
+                temp.estado_ticket = "Abierto";
+            }
+            if (issue.Status == null)
+                temp.estado_ticket = (issue.Status != null ? issue.Status.Name : "");
+
+            temp.descripcion = (issue.Description != null ? issue.Description : "");
+
+            //Se adciona nuevos campos
+
+            temp.canal_comunicacion = (issue.CustomFields["Canal comunicacion"] != null ? issue.CustomFields["Canal comunicacion"].Values[0] : "");
+            temp.quien_requiere_servicio = (issue.CustomFields["¿Quien requiere el servicio?"] != null ? issue.CustomFields["¿Quien requiere el servicio?"].Values[0] : "");
+            //temp.operador_ma = (issue.CustomFields["Operador MA"] != null ? issue.CustomFields["Operador MA"].Values[0] : "");
+            temp.codigo_plan_mantenimiento = (issue.CustomFields["Codigo plan de mantenimiento"] != null ? issue.CustomFields["Codigo plan de mantenimiento"].Values[0] : "");
+            temp.descripcion_actividad_mantenimiento = (issue.CustomFields["Descripcion de la actividad de mantenimiento"] != null ? issue.CustomFields["Descripcion de la actividad de mantenimiento"].Values[0] : "");
+            temp.tecnico_asignado = (issue.CustomFields["Tecnico Asignado"] != null ? issue.CustomFields["Tecnico Asignado"].Values[0] : "");
+            temp.motivo_atraso = (issue.CustomFields["Motivo de atraso"] != null ? issue.CustomFields["Motivo de atraso"].Values[0] : "");
+            temp.otro_motivo_atraso = (issue.CustomFields["Otro motivo de atraso"] != null ? issue.CustomFields["Otro motivo de atraso"].Values[0] : "");
+            temp.Attachments = issue.GetAttachmentsAsync().Result.ToList();
+            return temp;
+
+        }
+        public List<TicketHV> ConvertIssusInTicketshv(Task<IPagedQueryResult<Issue>> issues)
+        {
+
+            var result = new List<TicketHV>();
+            var estacionMap = getEstaciones().AsEnumerable()
+                .ToDictionary(row => row[1].ToString(), row => row[2].ToString());
+
+            foreach (var issue in issues.Result)
+            {
+                result.Add(converIssueInTicketHV(issue, estacionMap));
+            }
+
+            return result;
+
+        }
+        public List<TicketHV> ConvertIssusInTicketsHVMTO(Task<IPagedQueryResult<Issue>> issues)
+        {
+
+            var result = new List<TicketHV>();
+            var estacionMap = getEstaciones().AsEnumerable()
+                .ToDictionary(row => row[1].ToString(), row => row[2].ToString());
+
+            foreach (var issue in issues.Result)
+            {
+                result.Add(converIssueInTicketHVMTO(issue, estacionMap));
+            }
+
+            return result;
+
+        }
+
+
+
+
+
+
+
+
+
+        //------------------------------------DESCARGAR EL EXCEL------------------------------
+        public async Task ExportTicketsToExcel(List<TicketHV> tickets)
+        {
+            try
+            {
+                string downloadsFolder = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+                downloadsFolder = Path.Combine(downloadsFolder, "Downloads");
+
+                ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+
+                int currentRow = 2; // Inicializa fuera del bucle foreach
+
+                foreach (var ticket in tickets)
+                {
+                    string ticketFolder = Path.Combine(downloadsFolder, ticket.id_componente);
+                    Directory.CreateDirectory(ticketFolder);
+
+                    var excelFilePath = Path.Combine(ticketFolder, "TicketsHV.xlsx");
+
+                    var templateDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "PlantillasExcel");
+                    var templateFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "PlantillasExcel", "HVTICKET.xlsx");
+
+                    if (!File.Exists(excelFilePath))
+                    {
+                        File.Copy(templateFilePath, excelFilePath, true);
+                    }
+
+                    using (var package = new ExcelPackage(new FileInfo(excelFilePath)))
+                    {
+                        var worksheet = package.Workbook.Worksheets[0];
+
+                        // Headers (solo si es la primera vez)
+                        if (currentRow == 2)
+                        {
+                            var properties1 = typeof(TicketHV).GetProperties();
+                            for (int i = 1; i < properties1.Length; i++)
+                            {
+                                worksheet.Cells[1, i + 1].Value = properties1[i].Name;
+                            }
+                        }
+
+                        int attachmentColumn = 2; // Columna para los adjuntos
+                        int fileCounter = 1;
+                        string attachmentFolder = Path.Combine(ticketFolder, "Adjuntos");
+
+                        Directory.CreateDirectory(attachmentFolder);
+                        foreach (var attachment in ticket.Attachments)
+                        {
+                            string attachmentFilePath = Path.Combine(attachmentFolder, $"{ticket.id_ticket}");
+                            Directory.CreateDirectory(attachmentFilePath);
+
+                            Console.WriteLine("Iterando en el archivo adjunto: " + attachment.FileName);
+                            Console.WriteLine("-----");
+                            await DownloadAttachmentAsync(attachment, attachmentFilePath);
+
+                            Console.WriteLine($"Bytes del archivo adjunto '{attachment.FileName}': {attachment.DownloadData().Length}");
+                            // Ruta relativa al archivo dentro de la carpeta de adjuntos del ticket actual
+                            string attachmentRelativePath = Path.Combine("Adjuntos", ticket.id_ticket);
+
+                            // Establecer la ruta de archivo relativa como hipervínculo
+                            worksheet.Cells[currentRow, attachmentColumn].Hyperlink = new Uri(attachmentRelativePath, UriKind.Relative);
+                            worksheet.Cells[currentRow, attachmentColumn].Style.Font.Color.SetColor(System.Drawing.Color.Blue);
+
+                            attachmentColumn++;
+                            fileCounter++;
+                        }
+
+
+                        // Datos del ticket (excluyendo Attachments)
+                        var properties = typeof(TicketHV).GetProperties();
+                        for (int j = 1; j < properties.Length; j++)
+                        {
+                            var columnValue = properties[j].GetValue(ticket);
+                            worksheet.Cells[currentRow, j + 1].Value = columnValue;
+                        }
+
+                        package.Save();
+                    }
+
+                    // Incrementa la fila actual para el siguiente ticket
+                    currentRow++;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+            }
+        }
+
+
+
+
+        private async Task DownloadAttachmentAsync(Attachment attachment, string folderPath)
+        {
+            
+            List<byte[]> videoList = new List<byte[]>();
+
+            var videoExtensions = new List<string>
+                {
+                    ".mp4", ".webm", ".avi", ".mov", ".mkv", ".flv", ".wmv", ".m4v", ".3gp", ".ogg", ".ogv", ".mpg", ".mpeg", ".mp3", ".wav", ".ogg", ".wma",
+
+                };
+            var imageExtensions = new List<string>
+                {
+                    ".jpg", ".jpeg", ".png", ".gif", ".bmp", ".webp", ".tiff", ".svg", ".ico", ".raw", ".psd", ".ai", ".eps", ".pdf",
+                    ".tga", ".exif", ".jfif", ".heif", ".bat", ".indd", ".indt", ".indb", ".pct", ".dng", ".arw", ".cr2", ".nef", ".orf",
+                    ".rw2", ".rw1", ".dcr", ".mrw", ".raf", ".x3f", ".erf", ".sr2", ".srw", ".pef", ".mef", ".xpm", ".emf", ".wmf",
+
+                };
+
+
+
+            using (HttpClient client = new HttpClient())
+            {
+                string credentials = Convert.ToBase64String(Encoding.ASCII.GetBytes($"{username}:{password}"));
+                client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", credentials);
+
+
+                if (IsExtensionSupported(attachment.FileName, videoExtensions))
+                {
+                    string videoUrl = $"{jiraUrl}/rest/api/2/attachment/content/{attachment.Id}";
+
+                    byte[] videoBytes = client.GetByteArrayAsync(videoUrl).Result;
+                    string filePath = Path.Combine(folderPath, attachment.FileName);
+                    File.WriteAllBytes(filePath, videoBytes);
+                }
+                else if (IsExtensionSupported(attachment.FileName, imageExtensions)) {
+                    string imageUrl = $"{jiraUrl}/rest/api/2/attachment/content/{attachment.Id}";
+                    string filePath = Path.Combine(folderPath, attachment.FileName);
+                    byte[] imageBytes = client.GetByteArrayAsync(imageUrl).Result;
+                    File.WriteAllBytes(filePath, imageBytes);
+                }
+
+            }
+
+        }
+
+
+        public async Task ExportComponenteToExcel(string idComponente)
+        {
+            try
+            {
+
+                string downloadsFolder = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+                downloadsFolder = Path.Combine(downloadsFolder, "Downloads");
+                ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+
+                // Obtén los datos del componente utilizando el método GetComponenteHV
+                ComponenteHV componente = connector.GetComponenteHV(idComponente);
+
+
+                if (componente  != null)
+                {
+                    string ticketFolder = Path.Combine(downloadsFolder, idComponente); // Cambiado a idComponente en lugar de componente.Serial
+                    Directory.CreateDirectory(ticketFolder);
+                    var excelFilePath = Path.Combine(ticketFolder, "ComponenteHV.xlsx");
+                    var plantilla = componente.GetTemplateFileName(jiraUrl);
+                    var templateDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "PlantillasExcel");
+                    var templateFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "PlantillasExcel", plantilla);
+
+                    if (!File.Exists(excelFilePath))
+                    {
+                        File.Copy(templateFilePath, excelFilePath, true);
+                    }
+                    if (componente != null)
+                    {
+                        var package = new ExcelPackage(new FileInfo(excelFilePath));
+                        var worksheet = package.Workbook.Worksheets[0];
+
+                        int row = 7; // La fila en la que quieres comenzar a escribir datos en la hoja de trabajo
+                        int columnInicio = 4;
+                        int currentRow = row;
+                        DateTime fechaActual = DateTime.Now;
+                        TimeSpan diferencia = fechaActual - componente.FechaInicio;
+                        double horasDeOperacion = diferencia.TotalHours;
+                        horasDeOperacion = Math.Round(horasDeOperacion);
+
+
+
+                        worksheet.Cells[currentRow + 1, columnInicio].Value = componente?.Modelo;
+                        worksheet.Cells[currentRow + 3, columnInicio].Value = componente?.FechaInicio;
+                        worksheet.Cells[row, columnInicio + 7].Value = componente?.IdComponente;
+                        worksheet.Cells[row + 1, columnInicio + 7].Value = componente?.Serial;
+                        worksheet.Cells[row + 2, columnInicio + 7].Value = componente?.AnioFabricacion;
+                        worksheet.Cells[row + 3, columnInicio + 7].Value = horasDeOperacion;
+                        package.Save();
+                    }
+                    else
+                    {
+                        Console.WriteLine("El componente no se encontró en la base de datos.");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+            }
+        }
+        
+
+
+
+
     }
 }
