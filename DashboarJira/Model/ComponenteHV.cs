@@ -15,6 +15,8 @@ namespace DashboarJira.Model
         public DateTime FechaInicio { get; set; }
         public Double horasDeOperacion { get; set; }
 
+        public string tipoComponente { get; set; }  
+
 
         public string GetTemplateFileName(string marca)
         {
