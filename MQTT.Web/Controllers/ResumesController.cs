@@ -105,5 +105,24 @@ namespace MQTT.Web.Controllers
             }
         }
 
+        public IActionResult GetComponenteHV(string idComponente)
+        {
+            try
+            {
+                DbConnector dbConnector = new DbConnector();
+                var componente = dbConnector.GetComponenteHV(idComponente);
+                if (componente == null)
+                {
+                    return NotFound($"Componente con IdComponente '{idComponente}' no encontrado");
+                }
+                return Json(componente);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+
     }
 }

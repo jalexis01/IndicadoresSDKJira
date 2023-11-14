@@ -140,11 +140,14 @@ function showMoreInformationTickets(idTicket) {
 
 
 /********************************* */
+
+
 function ServiceGetMessages() {
     var startDate = $('#dtpStart').val();
     var endDate = $('#dtpEnd').val();
     var max = 0;
     var componente = $('#componente').val();
+
     console.log("idComponente: " + componente);
     console.log("Max: " + max);
     Swal.fire({
@@ -156,26 +159,46 @@ function ServiceGetMessages() {
             modal.disableCloseButton();
         }
     });
+
     $.ajax({
         type: "GET",
-        url: "/Tickets/GetTickets",
-        data: { startDate: startDate, endDate: endDate, max: max, componente: componente },
+        url: "/Resumes/GetComponenteHV",
+        data: { idComponente: componente },
+    })
+        .then(componenteData => {
+            // Verifica si se obtuvieron datos del componente
+            if (componenteData) {
+                // Crea la nueva lista de componentes con los datos obtenidos
+                listaComponentes = [
+                    {
+                        Marca: 'Manatee',
+                        Modelo: componenteData.modelo,
+                        Fabricante: 'Manatee',
+                        IDPuerta: componenteData.idComponente,
+                        NumeroInterno: componenteData.serial,
+                        AnioFabricacion: componenteData.anioFabricacion,
+                        InicioOperacion: componenteData.fechaInicio,
+                        HorasOperacion: 'N/A'
+                    }
+                ];
 
-    }).then(response => JSON.parse(JSON.stringify(response)))
+                return $.ajax({
+                    type: "GET",
+                    url: "/Tickets/GetTickets",
+                    data: { startDate: startDate, endDate: endDate, max: max, componente: componente },
+                });
+            } else {
+                // Si no se obtuvieron datos del componente
+                throw new Error('No se encontraron datos del componente.');
+            }
+        })
         .then(data => {
-
             Swal.close();
-            console.log(data)
+            console.log(data);
             if (data.length == 0) {
                 noData();
                 return;
             } else {
-
-                // Datos quemados para cada celda
-                var listaComponentes = [
-                    {Marca: 'Manatee', Modelo: 'MTE-TEL-22', Fabricante: 'Manatee', IDPuerta: '9115-WA-OR-1', NumeroInterno: 'N1T-0001', AnioFabricacion: '2022', InicioOperacion:'1/02/2023',  HorasOperacion: '25890' },
-                ];
-
                 var columnContent = '<table class="result-box-table">';
 
                 columnContent += '<tr>';
@@ -201,7 +224,6 @@ function ServiceGetMessages() {
                 columnContent += '<tr>';
                 columnContent += '<th class="header-cell">FECHA INICIO OPERACIÓN</th><td>' + listaComponentes[0].InicioOperacion + '</td>';
                 columnContent += '<th class="header-cell">HORAS DE OPERACIÓN</th><td>' + listaComponentes[0].HorasOperacion + '</td>';
-                columnContent += '</tr>';
 
                 columnContent += '</table>';
 
@@ -218,14 +240,24 @@ function ServiceGetMessages() {
             }
         })
         .catch(error => {
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: error.name + ': ' + error.message
-            });
-        })
-        .then(response => console.log('Success:', response));
+            if (error.status && error.status === 404) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error...',
+                    text: 'Componente no encontrado'
+                });
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error...',
+                    text: error.message
+                });
+            }
+
+            //Swal.close();
+        });
 }
+
 
 
 
