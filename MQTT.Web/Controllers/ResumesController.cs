@@ -132,6 +132,21 @@ namespace MQTT.Web.Controllers
             }
         }
 
+        public IActionResult DownloadExcelAjax(string idComponente)
+        {
+            try
+            {
+                JiraAccess jira = new JiraAccess();
+                jira.DownloadExcel(idComponente);
+
+                return Json(new { success = true, message = "Descarga exitosa" });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message });
+            }
+        }
+
 
     }
 }

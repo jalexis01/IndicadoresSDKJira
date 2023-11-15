@@ -544,3 +544,28 @@ function openImage() {
         }
     });
 }
+
+function descargarHv() {
+    Swal.fire({
+        icon: 'info',
+        title: 'Descarga hoja de vida',
+        text: 'Descarga en proceso...',
+    });
+    var componente = $('#componente').val();
+    $.ajax({
+        url: '/Resumes/DownloadExcelAjax',
+        type: 'POST',
+        data: { idComponente: componente },
+        success: function (result) {
+            if (result.success) {
+                Swal.close();
+                console.log(result.message);
+            } else {
+                console.error(result.message);
+            }
+        },
+        error: function (xhr, status, error) {
+            console.error(error);
+        }
+    });
+}

@@ -1470,9 +1470,5 @@ namespace DashboarJira.Services
             List<TicketHV> tickets = GetTicketHVs(0, 0, idComponente);
             ExportTicketsToExcel(tickets);
         }
-
-
-
-
     }
 }
