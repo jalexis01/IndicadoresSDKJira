@@ -27,29 +27,29 @@ List<ComponenteHV> listaIdComponentes = dbConnector.GetComponentesHV();
 string projectDirectory = Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory).Parent.FullName;
 string logFilePath = Path.Combine(projectDirectory, "ErroresLog.txt");
 
-foreach (var componente in listaIdComponentes)
-{
-    // Puedes hacer algo con el componente obtenido, por ejemplo, imprimir sus propiedades
-    if (componente.IdComponente != null)
-    {
-        try
-        {
-            jira.ExportComponenteToExcel(componente.IdComponente);
-            List<TicketHV> tickets = jira.GetTicketHVs(0, 0, componente.IdComponente);
+//foreach (var componente in listaIdComponentes)
+//{
+//    // Puedes hacer algo con el componente obtenido, por ejemplo, imprimir sus propiedades
+//    if (componente.IdComponente != null)
+//    {
+//        try
+//        {
+            jira.ExportComponenteToExcel("9117-WA-OC-5");
+            List<TicketHV> tickets = jira.GetTicketHVs(0, 0, "9117-WA-OC-5");
             jira.ExportTicketsToExcel(tickets);
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine($"Error al exportar el componente {componente.IdComponente}: {e.Message}");
+    //    }
+    //    catch (Exception e)
+    //    {
+    //        Console.WriteLine($"Error al exportar el componente {componente.IdComponente}: {e.Message}");
 
             
-        }
-    }
-    else
-    {
-        Console.WriteLine($"No se encontró el componente con ID: {componente.IdComponente}");
-    }
-}
+    //    }
+    //}
+    //else
+    //{
+    //    Console.WriteLine($"No se encontró el componente con ID: {componente.IdComponente}");
+    //}
+//}
 
 //// ...
 

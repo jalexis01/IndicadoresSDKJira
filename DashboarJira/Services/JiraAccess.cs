@@ -1279,7 +1279,8 @@ namespace DashboarJira.Services
                     string ticketFolder = Path.Combine(downloadsFolder, ticket.id_componente);
                     Directory.CreateDirectory(ticketFolder);
 
-                    var excelFilePath = Path.Combine(ticketFolder, "TicketsHV.xlsx");
+                    var excelFilePath = Path.Combine(ticketFolder, $"{ticket.id_componente} Tickets.xlsx");
+
 
                     var templateDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "PlantillasExcel");
                     var templateFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "PlantillasExcel", "HVTICKET.xlsx");
@@ -1305,7 +1306,8 @@ namespace DashboarJira.Services
 
                         int attachmentColumn = 2; // Columna para los adjuntos
                         int fileCounter = 1;
-                        string attachmentFolder = Path.Combine(ticketFolder, "Adjuntos");
+                        string attachmentFolder = Path.Combine(ticketFolder, $"{ticket.id_componente} Adjuntos");
+
 
                         Directory.CreateDirectory(attachmentFolder);
                         foreach (var attachment in ticket.Attachments)
@@ -1319,7 +1321,8 @@ namespace DashboarJira.Services
 
                             Console.WriteLine($"Bytes del archivo adjunto '{attachment.FileName}': {attachment.DownloadData().Length}");
                             // Ruta relativa al archivo dentro de la carpeta de adjuntos del ticket actual
-                            string attachmentRelativePath = Path.Combine("Adjuntos", ticket.id_ticket);
+                            string attachmentRelativePath = Path.Combine($"{ticket.id_componente} Adjuntos", $"{ticket.id_ticket}");
+
 
                             // Establecer la ruta de archivo relativa como hipervínculo
                             worksheet.Cells[currentRow, attachmentColumn].Hyperlink = new Uri(attachmentRelativePath, UriKind.Relative);
@@ -1417,7 +1420,7 @@ namespace DashboarJira.Services
                 {
                     string ticketFolder = Path.Combine(downloadsFolder, idComponente); // Cambiado a idComponente en lugar de componente.Serial
                     Directory.CreateDirectory(ticketFolder);
-                    var excelFilePath = Path.Combine(ticketFolder, "ComponenteHV.xlsx");
+                    var excelFilePath = Path.Combine(ticketFolder, $"{idComponente} Ficha Tecnica.xlsx");
                     var plantilla = componente.GetTemplateFileName(jiraUrl);
                     var templateDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "PlantillasExcel");
                     var templateFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "PlantillasExcel", plantilla);
