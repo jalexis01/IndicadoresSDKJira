@@ -467,6 +467,15 @@ async function ServiceGetMessages() {
     var componente = $('#componente').val();
     console.log("idComponente: " + componente);
     var tipoMantenimiento = $('#tipoMantenimiento').val();
+
+    if (tipoMantenimiento === "opcion1") {
+        tipoMantenimiento = "'Falla Puerta', 'Falla ITS', 'Falla RFID'";
+    } else if (tipoMantenimiento === "opcion2") {
+        tipoMantenimiento = "Mantenimiento Preventivo";
+    } else{
+        tipoMantenimiento = "";
+    }
+
     console.log("tipoMantenimiento: " + tipoMantenimiento);
     console.log("Max: " + max);
 
@@ -512,21 +521,15 @@ async function ServiceGetMessages() {
             text: `${progressPercentage.toFixed(0)}%`
         });
 
-        //$("#cargando").html("Cargando... " + progressPercentage.toFixed(0) + "%");
-
-        //$("#cargando").html("Cargando..." + fechaFormateada);
         try {
-            //const respuesta = await realizarSolicitudAjax(fechaFormateada, tipoMantenimiento);
             const respuesta = await realizarSolicitudAjax(fechaFormateada, 0, null, tipoMantenimiento);
             totalDatos.push(respuesta);
 
         } catch (error) {
             console.error("Error en la solicitud:", error);
         }
-        // Incrementa la fecha en 1 día
         fechaInicio.setDate(fechaInicio.getDate() + 1);
     }
-    //$("#cargando").html("");
 
     if (totalDatos.length == 0) {
         noData();
@@ -536,7 +539,6 @@ async function ServiceGetMessages() {
             return acumulador.concat(arreglo);
         }, []);
 
-        // Ordena los tickets por fecha de creación o inicio de forma descendente
         arregloSimple.sort((a, b) => new Date(b.fecha_apertura) - new Date(a.fecha_apertura));
 
         console.log(arregloSimple);
@@ -555,10 +557,10 @@ function realizarSolicitudAjax(fecha, max, componente, tipoMantenimiento) {
             url: "/Tickets/GetTickets",
             data: { startDate: fecha, endDate: fecha, max: max, componente: componente, tipoMantenimiento: tipoMantenimiento },
             success: function (data) {
-                resolve(JSON.parse(JSON.stringify(data))); // Resuelve la promesa con la respuesta de la solicitud
+                resolve(JSON.parse(JSON.stringify(data)));
             },
             error: function (xhr, status, error) {
-                reject(error); // Rechaza la promesa en caso de error
+                reject(error);
             }
         });
     });

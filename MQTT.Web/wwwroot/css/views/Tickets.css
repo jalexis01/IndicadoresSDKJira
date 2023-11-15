@@ -57,3 +57,24 @@
         .styled-table td.columna-3 {
             width: 200px;
         }
+
+.inputs-container {
+    margin-bottom: 15px;
+}
+
+.wrapperFI {
+    padding: 5px;
+    display: inline-block; /* Para que todos tengan el mismo tamaño */
+}
+
+select.e-input {
+    width: 100%; /* Para que el select ocupe todo el ancho del wrapper */
+    border: 1px solid #ccc;
+    padding: 3px;
+    font-weight: normal;
+    color: #636161;
+}
+
+    select.e-input option:checked {
+        font-weight: normal;
+    }
