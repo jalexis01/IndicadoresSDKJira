@@ -11,8 +11,6 @@ $(document).ready(function () {
 function validateDates() {
     var startDate = $('#dtpStart').val();
     var endDate = $('#dtpEnd').val();
-    console.log("Fecha inicial: " + startDate);
-    console.log("Fecha final: " + endDate);
 
     if (startDate === "" || endDate === "") {
         Swal.fire({
