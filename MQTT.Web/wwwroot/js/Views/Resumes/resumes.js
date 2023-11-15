@@ -518,15 +518,19 @@ var detailsData = function (args) {
 }
 
 function openImage() {
-    var listaComponentes = [
-        { Marca: 'Manatee', Modelo: 'ss-nautilus', Fabricante: 'Manatee', IDComponente: '9115-WA-OR-1', NumeroInterno: 'N1T-0004', AnioFabricacion: '2022', InicioOperacion: '2/02/2023', HorasOperacion: '6736' },
-    ];
+    
     var modelo = listaComponentes[0].Modelo;
-    // Puedes cambiar la URL de la imagen según tus necesidades
-    var imageUrl = "../../img/" + modelo + ".jpg";
 
+    //var environmentType = '@ViewBag.EnvironmentType';
 
-    // Muestra la imagen en un modal usando SweetAlert2
+    var imageUrl = "";
+
+    if (environmentType ==='Manatee') {
+        imageUrl = "../../img/plantillasNautilus/" + modelo + ".jpg";
+    } else {
+        imageUrl = "../../img/plantillasAssa/" + modelo + ".jpg";
+    }
+    
     Swal.fire({
 
         imageUrl: imageUrl,

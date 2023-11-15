@@ -1,4 +1,5 @@
 ﻿@{
+    var environmentType = ViewBag.EnvironmentType;
     ViewData["Title"] = "Hoja de vida";
 }
 @using DashboarJira.Model
@@ -32,10 +33,6 @@
     <p>&nbsp;</p>
 </div>
 
-@*<div style="margin-bottom: 40px; display: none;" id="resultBoxContainer">
-    <div id="resultBox"></div>
-    <button onclick="openImage()" type="button" id="button-primary"class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Ver especificaciones</button>
-</div>*@
 <div class="form-container" style="margin-bottom: 40px; display: none;" id="resultBoxContainer">
     <div class="TextComponente" id="resultBox"></div>
     <button onclick="openImage()" type="button" id="button-primary" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Ver especificaciones</button>
@@ -44,11 +41,13 @@
     <div id="Grid"></div>
 </div>
 
-
 <script type="text/javascript">
     var columnsSearch = @(Html.Raw(ViewBag.columnsSearch));
     var columnsToHide = @(Html.Raw(ViewBag.columnsToHide));
 </script>
-
+<!-- Agrega una variable JavaScript global para acceder a environmentType -->
+<script>
+    var environmentType = '@environmentType';
+</script>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/js/Views/Resumes/resumes.js"></script>

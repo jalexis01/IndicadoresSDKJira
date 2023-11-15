@@ -4,12 +4,18 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Configuration;
 
 namespace MQTT.Web.Controllers
 {
     [Authorize]
     public class ResumesController : Controller
     {
+        private readonly IConfiguration _configuration;
+        public ResumesController(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
         public IActionResult Index(int max, string componente)
         {
             // Obtiene la identidad del usuario actual
@@ -24,6 +30,9 @@ namespace MQTT.Web.Controllers
             {
                 ViewBag.Menu = "user";
             }
+
+            // Obtener el valor de EnvironmentType desde appsettings
+            ViewBag.EnvironmentType = _configuration["EnvironmentType"];
             return View();
         }
 
