@@ -12,12 +12,12 @@ namespace DashboarJira.Services
 {
     public class JiraAccess
     {
-        //string jiraUrl = "https://manateecc.atlassian.net/";
-        //string username = "desarrollocc@manateeingenieria.com";
-        //string password = "ATATT3xFfGF0ZRHIEZTEJVRnhNKviH0CGed6QXqCDMj5bCmKSEbO00UUjHUb3yDcaA4YD1SHohyDr4qnwRx2x4Tu_S_QW_xlGIcIUDvL7CFKEg47_Jcy4Dmq6YzO0dvqB3qeT-EVWfwJ2jJ-9vEUfsqXavD0IIGA7DAZHGCtIWhxgwKIbAWsmeA=038B810D";
-        string jiraUrl = "https://assaabloymda.atlassian.net/";
+        string jiraUrl = "https://manateecc.atlassian.net/";
         string username = "desarrollocc@manateeingenieria.com";
         string password = "ATATT3xFfGF0ZRHIEZTEJVRnhNKviH0CGed6QXqCDMj5bCmKSEbO00UUjHUb3yDcaA4YD1SHohyDr4qnwRx2x4Tu_S_QW_xlGIcIUDvL7CFKEg47_Jcy4Dmq6YzO0dvqB3qeT-EVWfwJ2jJ-9vEUfsqXavD0IIGA7DAZHGCtIWhxgwKIbAWsmeA=038B810D";
+        //string jiraUrl = "https://assaabloymda.atlassian.net/";
+        //string username = "desarrollocc@manateeingenieria.com";
+        //string password = "ATATT3xFfGF0ZRHIEZTEJVRnhNKviH0CGed6QXqCDMj5bCmKSEbO00UUjHUb3yDcaA4YD1SHohyDr4qnwRx2x4Tu_S_QW_xlGIcIUDvL7CFKEg47_Jcy4Dmq6YzO0dvqB3qeT-EVWfwJ2jJ-9vEUfsqXavD0IIGA7DAZHGCtIWhxgwKIbAWsmeA=038B810D";
 
         Jira jira;
         private DbConnector connector;
@@ -891,7 +891,7 @@ namespace DashboarJira.Services
                 }
                 else
                 {
-                    jql = $"{proyectManateeMTO} and issuetype = 'Solicitud de Mantenimiento' and status = cerrado";
+                    jql = $"{proyectManateeDRV} and issuetype = 'Solicitud de Mantenimiento' and status = cerrado";
                 }
 
 
