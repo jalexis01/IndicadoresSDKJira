@@ -469,7 +469,7 @@ async function ServiceGetMessages() {
     if (tipoMantenimiento === "opcion1") {
         tipoMantenimiento = "'Falla Puerta', 'Falla ITS', 'Falla RFID'";
     } else if (tipoMantenimiento === "opcion2") {
-        tipoMantenimiento = "Mantenimiento Preventivo";
+        tipoMantenimiento = "'Mantenimiento Preventivo'";
     } else{
         tipoMantenimiento = "";
     }

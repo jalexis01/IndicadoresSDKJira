@@ -388,233 +388,115 @@ function showMoreInformationTickets(idTicket) {
 /********************************* */
 
 
-//function ServiceGetMessages() {
-//    var startDate = $('#dtpStart').val();
-//    var endDate = $('#dtpEnd').val();
-//    var max = 0;
-//    var componente = $('#componente').val();
-
-//    console.log("idComponente: " + componente);
-//    console.log("Max: " + max);
-    
-
-//    $.ajax({
-//        type: "GET",
-//        url: "/Resumes/GetComponenteHV",
-//        data: { idComponente: componente },
-//    })
-//        .then(componenteData => {
-
-//            Swal.fire({
-//                title: 'Cargando...',
-//                allowOutsideClick: false,
-//                showConfirmButton: false,
-//                onBeforeOpen: (modal) => {
-//                    modal.showLoading();
-//                    modal.disableCloseButton();
-//                }
-//            });
-//            // Verifica si se obtuvieron datos del componente
-//            if (componenteData) {
-//                // Crea la nueva lista de componentes con los datos obtenidos
-//                listaComponentes = [
-//                    {
-//                        Marca: 'Manatee',
-//                        Modelo: componenteData.modelo,
-//                        Fabricante: 'Manatee',
-//                        IDPuerta: componenteData.idComponente,
-//                        NumeroInterno: componenteData.serial,
-//                        AnioFabricacion: componenteData.anioFabricacion,
-//                        InicioOperacion: componenteData.fechaInicio,
-//                        HorasOperacion: 'N/A'
-//                    }
-//                ];
-
-//                return $.ajax({
-//                    type: "GET",
-//                    url: "/Tickets/GetTickets",
-//                    data: { startDate: startDate, endDate: endDate, max: max, componente: componente },
-//                });
-//            } else {
-//                // Si no se obtuvieron datos del componente
-//                throw new Error('No se encontraron datos del componente.');
-//            }
-//        })
-//        .then(data => {
-//            Swal.close();
-//            console.log(data);
-//            if (data.length == 0) {
-//                noData();
-//                return;
-//            } else {
-//                var columnContent = '<table class="result-box-table">';
-
-//                columnContent += '<tr>';
-//                columnContent += '<th class="header-cell1" colspan="4" style="text-align: center;">INFORMACIÓN COMPONENTE</th>';
-
-//                columnContent += '</tr>';
-
-//                columnContent += '<tr>';
-//                columnContent += '<th class="header-cell">MARCA</th><td>' + listaComponentes[0].Marca + '</td>';
-//                columnContent += '<th class="header-cell">IDPUERTA</th><td>' + listaComponentes[0].IDPuerta + '</td>';
-//                columnContent += '</tr>';
-
-//                columnContent += '<tr>';
-//                columnContent += '<th class="header-cell">MODELO</th><td>' + listaComponentes[0].Modelo + '</td>';
-//                columnContent += '<th class="header-cell">N° INTERNO</th><td>' + listaComponentes[0].NumeroInterno + '</td>';
-//                columnContent += '</tr>';
-
-//                columnContent += '<tr>';
-//                columnContent += '<th class="header-cell">FABRICANTE</th><td>' + listaComponentes[0].Fabricante + '</td>';
-//                columnContent += '<th class="header-cell">AÑO DE FABRICACIÓN</th><td>' + listaComponentes[0].AnioFabricacion + '</td>';
-//                columnContent += '</tr>';
-
-//                columnContent += '<tr>';
-//                columnContent += '<th class="header-cell">FECHA INICIO OPERACIÓN</th><td>' + listaComponentes[0].InicioOperacion + '</td>';
-//                columnContent += '<th class="header-cell">HORAS DE OPERACIÓN</th><td>' + listaComponentes[0].HorasOperacion + '</td>';
-
-//                columnContent += '</table>';
-
-//                // Mostrar la tabla en el cuadro de texto
-//                $('#resultBox').html(columnContent);
-//                $('#resultBoxContainer').show();
-
-//                let dataColumns = setColums(data, null);
-//                let exportFunctions = addFnctionsGrid(['Excel']);
-
-//                dataColumns = addCommandsGridDetails(dataColumns);
-//                dataGridSave = data;
-//                setGrid(data, dataColumns, exportFunctions);
-//            }
-//        })
-//        .catch(error => {
-//            if (error.status && error.status === 404) {
-//                Swal.fire({
-//                    title: 'ID Componente no encontrado',
-//                });
-//            } else {
-//                Swal.fire({
-//                    icon: 'error',
-//                    title: 'Error...',
-//                    text: error.message
-//                });
-//            }
-
-//            //Swal.close();
-//        });
-//}
-
-async function ServiceGetMessages() {
+function ServiceGetMessages() {
     var startDate = $('#dtpStart').val();
-    console.log("Hora inicial seleccionada: " + startDate);
     var endDate = $('#dtpEnd').val();
-    console.log("Hora final seleccionada: " + endDate);
     var max = 0;
-    var fechaInicial = new Date(startDate);
-    console.log("Fecha inicial: " + fechaInicial);
-    var fechaFinal = new Date(endDate);
-    console.log("Fecha final: " + fechaFinal);
-    var totalDatos = [];
     var componente = $('#componente').val();
     console.log("idComponente: " + componente);
-    var tipoMantenimiento = $('#tipoMantenimiento').val();
 
-    if (tipoMantenimiento === "opcion1") {
-        tipoMantenimiento = "'Falla Puerta', 'Falla ITS', 'Falla RFID'";
-    } else if (tipoMantenimiento === "opcion2") {
-        tipoMantenimiento = "Mantenimiento Preventivo";
-    } else {
-        tipoMantenimiento = "";
-    }
+    $.ajax({
+        type: "GET",
+        url: "/Resumes/GetComponenteHV",
+        data: { idComponente: componente },
+    })
+        .then(componenteData => {
 
-    console.log("tipoMantenimiento: " + tipoMantenimiento);
-    console.log("Max: " + max);
+            Swal.fire({
+                title: 'Cargando...',
+                allowOutsideClick: false,
+                showConfirmButton: false,
+                onBeforeOpen: (modal) => {
+                    modal.showLoading();
+                    modal.disableCloseButton();
+                }
+            });
+            // Verifica si se obtuvieron datos del componente
+            if (componenteData) {
+                // Crea la nueva lista de componentes con los datos obtenidos
+                listaComponentes = [
+                    {
+                        Marca: 'Manatee',
+                        Modelo: componenteData.modelo,
+                        Fabricante: 'Manatee',
+                        IDPuerta: componenteData.idComponente,
+                        NumeroInterno: componenteData.serial,
+                        AnioFabricacion: componenteData.anioFabricacion,
+                        InicioOperacion: componenteData.fechaInicio,
+                        HorasOperacion: 'N/A'
+                    }
+                ];
 
-    const dynamicText = "%";
-
-    Swal.fire({
-        title: 'Cargando...',
-        allowOutsideClick: false,
-        showConfirmButton: false,
-        onBeforeOpen: (modal) => {
-            modal.showLoading();
-            modal.disableCloseButton();
-        }, text: dynamicText
-    });
-    var fechaInicio = new Date(fechaInicial);
-    var fechaFin = new Date(fechaFinal);
-
-    var totalDays = Math.ceil((fechaFinal - fechaInicial) / (1000 * 60 * 60 * 24));
-    var currentDay = -1;
-
-    var progressPercentage = "";
-
-    //$("#cargando").html("Cargando...");
-    while (fechaInicio <= fechaFin) {
-
-        // Imprime la fecha actual
-        console.log(fechaInicio.toUTCString());
-        const año = fechaInicio.getUTCFullYear();
-        const mes = String(fechaInicio.getUTCMonth() + 1).padStart(2, '0'); // El mes es 0-indexado, por lo que sumamos 1
-        const dia = String(fechaInicio.getUTCDate()).padStart(2, '0');
-        const fechaFormateada = `${año}-${mes}-${dia}`;
-        console.log(fechaFormateada);
-
-        currentDay++;
-        if (totalDays === 0) {
-            progressPercentage = 0;
-        } else {
-            progressPercentage = (currentDay / totalDays) * 100;
-        }
-
-
-        Swal.update({
-            text: `${progressPercentage.toFixed(0)}%`
-        });
-
-        try {
-            const respuesta = await realizarSolicitudAjax(fechaFormateada, 0, null, tipoMantenimiento);
-            totalDatos.push(respuesta);
-
-        } catch (error) {
-            console.error("Error en la solicitud:", error);
-        }
-        fechaInicio.setDate(fechaInicio.getDate() + 1);
-    }
-
-    if (totalDatos.length == 0) {
-        noData();
-        return;
-    } else {
-        const arregloSimple = totalDatos.reduce((acumulador, arreglo) => {
-            return acumulador.concat(arreglo);
-        }, []);
-
-        arregloSimple.sort((a, b) => new Date(b.fecha_apertura) - new Date(a.fecha_apertura));
-
-        console.log(arregloSimple);
-        let dataColumns = setColums(arregloSimple, null);
-        let exportFunctions = addFnctionsGrid(['Excel']);
-        dataColumns = addCommandsGridDetails(dataColumns);
-        dataGridSave = arregloSimple;
-        setGrid(arregloSimple, dataColumns, exportFunctions);
-    }
-    Swal.close();
-}
-function realizarSolicitudAjax(componente) {
-    return new Promise((resolve, reject) => {
-        $.ajax({
-            type: "GET",
-            url: "/Resumes/GetComponenteHV",
-            data: {componente: componente},
-            success: function (data) {
-                resolve(JSON.parse(JSON.stringify(data)));
-            },
-            error: function (xhr, status, error) {
-                reject(error);
+                return $.ajax({
+                    type: "GET",
+                    url: "/Tickets/GetTickets",
+                    data: { startDate: startDate, endDate: endDate, max: max, componente: componente },
+                });
+            } else {
+                throw new Error('No se encontraron datos del componente.');
             }
+        })
+        .then(data => {
+            Swal.close();
+            console.log(data);
+            if (data.length == 0) {
+                noData();
+                return;
+            } else {
+                var columnContent = '<table class="result-box-table">';
+
+                columnContent += '<tr>';
+                columnContent += '<th class="header-cell1" colspan="4" style="text-align: center;">INFORMACIÓN COMPONENTE</th>';
+
+                columnContent += '</tr>';
+
+                columnContent += '<tr>';
+                columnContent += '<th class="header-cell">MARCA</th><td>' + listaComponentes[0].Marca + '</td>';
+                columnContent += '<th class="header-cell">IDPUERTA</th><td>' + listaComponentes[0].IDPuerta + '</td>';
+                columnContent += '</tr>';
+
+                columnContent += '<tr>';
+                columnContent += '<th class="header-cell">MODELO</th><td>' + listaComponentes[0].Modelo + '</td>';
+                columnContent += '<th class="header-cell">N° INTERNO</th><td>' + listaComponentes[0].NumeroInterno + '</td>';
+                columnContent += '</tr>';
+
+                columnContent += '<tr>';
+                columnContent += '<th class="header-cell">FABRICANTE</th><td>' + listaComponentes[0].Fabricante + '</td>';
+                columnContent += '<th class="header-cell">AÑO DE FABRICACIÓN</th><td>' + listaComponentes[0].AnioFabricacion + '</td>';
+                columnContent += '</tr>';
+
+                columnContent += '<tr>';
+                columnContent += '<th class="header-cell">FECHA INICIO OPERACIÓN</th><td>' + listaComponentes[0].InicioOperacion + '</td>';
+                columnContent += '<th class="header-cell">HORAS DE OPERACIÓN</th><td>' + listaComponentes[0].HorasOperacion + '</td>';
+
+                columnContent += '</table>';
+
+                // Mostrar la tabla en el cuadro de texto
+                $('#resultBox').html(columnContent);
+                $('#resultBoxContainer').show();
+
+                let dataColumns = setColums(data, null);
+                let exportFunctions = addFnctionsGrid(['Excel']);
+
+                dataColumns = addCommandsGridDetails(dataColumns);
+                dataGridSave = data;
+                setGrid(data, dataColumns, exportFunctions);
+            }
+        })
+        .catch(error => {
+            if (error.status && error.status === 404) {
+                Swal.fire({
+                    title: 'ID Componente no encontrado',
+                });
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error...',
+                    text: error.message
+                });
+            }
+            //Swal.close();
         });
-    });
 }
 
 const targetEl = document.getElementById('dropdownInformation');
@@ -633,4 +515,28 @@ const options = {
 
 var detailsData = function (args) {
     //alert(JSON.stringify(args.rowData));
+}
+
+function openImage() {
+    var listaComponentes = [
+        { Marca: 'Manatee', Modelo: 'ss-nautilus', Fabricante: 'Manatee', IDComponente: '9115-WA-OR-1', NumeroInterno: 'N1T-0004', AnioFabricacion: '2022', InicioOperacion: '2/02/2023', HorasOperacion: '6736' },
+    ];
+    var modelo = listaComponentes[0].Modelo;
+    // Puedes cambiar la URL de la imagen según tus necesidades
+    var imageUrl = "../../img/" + modelo + ".jpg";
+
+
+    // Muestra la imagen en un modal usando SweetAlert2
+    Swal.fire({
+
+        imageUrl: imageUrl,
+        imageAlt: 'Imagen de ' + modelo,
+        confirmButtonText: 'Cerrar',
+        showCloseButton: true,
+        customClass: {
+            popup: 'custom-modal-class',
+            closeButton: 'custom-close-button-class',
+            image: 'custom-image-class'
+        }
+    });
 }
