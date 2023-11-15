@@ -68,8 +68,17 @@ namespace MQTT.Web.Controllers
                 }
 
                 JiraAccess jiraAccess = new JiraAccess();
+                List<Ticket> tickets = new List<Ticket>();
                 max = 0;
-                List<Ticket> tickets = jiraAccess.GetTikets(start, max, formattedStartDate, formattedEndDate, componente, tipoMantenimiento);
+                if (tipoMantenimiento== "'Mantenimiento Preventivo'")
+                {
+                    tickets = jiraAccess.GetTiketsMTO(start, max, formattedStartDate, formattedEndDate, componente, "");
+                }
+                else
+                {
+                    tickets = jiraAccess.GetTikets(start, max, formattedStartDate, formattedEndDate, componente, tipoMantenimiento);
+                }
+                
                 return tickets;
             }
             catch (Exception ex)
