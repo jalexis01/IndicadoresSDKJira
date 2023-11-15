@@ -174,7 +174,7 @@ namespace DashboarJira.Services
                 //created >= 2023-04-04 AND created <= 2023-04-13 AND issuetype = "Solicitud de Mantenimiento" AND resolution = Unresolved AND "Clase de fallo" = AIO AND "Identificacion componente" ~ 9119-WA-OR-1 ORDER BY key DESC, "Time to resolution" ASC
                 if (jiraUrl == "https://assaabloymda.atlassian.net/")
                 {
-                    jql = $"{proyectAssaMTO} and issuetype = 'Solicitud de Mantenimiento' and status = cerrado";
+                    jql = $"{proyectAssaMTO} and issuetype = 'Solicitud de Mantenimiento'";
                 }
                 else
                 {
@@ -891,7 +891,7 @@ namespace DashboarJira.Services
                 }
                 else
                 {
-                    jql = $"{proyectManateeMTO} and issuetype = 'Solicitud de Mantenimiento' and status = cerrado";
+                    jql = $"{proyectManateeDRV} and issuetype = 'Solicitud de Mantenimiento' and status = cerrado";
                 }
 
 

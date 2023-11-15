@@ -19,38 +19,37 @@ DbConnector dbConnector = new DbConnector();
 JiraAccess jira = new JiraAccess();
 var fechainicio = "2023-10-01";
 var fechaFinal = "2023-11-02";
-var componente = "9120-WA-OR-2";
-foreach (var ticket in jira.GetTikets(0,0,null,null,null,"Falla Puerta")) { 
-    Console.WriteLine(ticket.id_ticket);
-}
-//List<ComponenteHV> listaIdComponentes = dbConnector.GetComponentesHV();
-//string projectDirectory = Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory).Parent.FullName;
-//string logFilePath = Path.Combine(projectDirectory, "ErroresLog.txt");
-
-//foreach (var componente in listaIdComponentes)
-//{
-//    // Puedes hacer algo con el componente obtenido, por ejemplo, imprimir sus propiedades
-//    if (componente.IdComponente != null)
-//    {
-//        try
-//        {
-//            jira.ExportComponenteToExcel(componente.IdComponente);
-//            List<TicketHV> tickets = jira.GetTicketHVs(0, 0, componente.IdComponente);
-//            jira.ExportTicketsToExcel(tickets);
-//        }
-//        catch (Exception e)
-//        {
-//            Console.WriteLine($"Error al exportar el componente {componente.IdComponente}: {e.Message}");
-
-//            // Registra el error en el archivo de log
-//            LogError(logFilePath, $"Error al exportar el componente {componente.IdComponente}: {e.ToString()}");
-//        }
-//    }
-//    else
-//    {
-//        Console.WriteLine($"No se encontró el componente con ID: {componente.IdComponente}");
-//    }
+//var componente = "9120-WA-OR-2";
+//foreach (var ticket in jira.GetTikets(0,0,null,null,null,"'Falla Puerta'")) { 
+//    Console.WriteLine(ticket.id_ticket);
 //}
+List<ComponenteHV> listaIdComponentes = dbConnector.GetComponentesHV();
+string projectDirectory = Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory).Parent.FullName;
+string logFilePath = Path.Combine(projectDirectory, "ErroresLog.txt");
+
+foreach (var componente in listaIdComponentes)
+{
+    // Puedes hacer algo con el componente obtenido, por ejemplo, imprimir sus propiedades
+    if (componente.IdComponente != null)
+    {
+        try
+        {
+            jira.ExportComponenteToExcel(componente.IdComponente);
+            List<TicketHV> tickets = jira.GetTicketHVs(0, 0, componente.IdComponente);
+            jira.ExportTicketsToExcel(tickets);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"Error al exportar el componente {componente.IdComponente}: {e.Message}");
+
+            
+        }
+    }
+    else
+    {
+        Console.WriteLine($"No se encontró el componente con ID: {componente.IdComponente}");
+    }
+}
 
 //// ...
 
