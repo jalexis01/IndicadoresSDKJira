@@ -891,7 +891,7 @@ namespace DashboarJira.Services
                 }
                 else
                 {
-                    jql = $"{proyectManateeDRV} and issuetype = 'Solicitud de Mantenimiento' and status = cerrado";
+                    jql = $"{proyectManateeMTO} and issuetype = 'Solicitud de Mantenimiento' and status = cerrado";
                 }
 
 
