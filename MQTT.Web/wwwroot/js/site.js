@@ -87,7 +87,7 @@ function bodyLogin(){
             $("body").addClass("class-body-eys");
             $("#logo").attr('src','../../img/eys-logo.png')
             break;
-        case 'Assabloy':
+        case 'Assaabloy':
             $("body").addClass("class-body-assabloy");
             $("#logo").attr('src', '../../img/assabloy-logo.png')
             break;
@@ -106,7 +106,7 @@ function selectSpace(){
         case 'Eys':
             Eys();
             break;
-        case 'Assabloy':
+        case 'Assaabloy':
             Eys();
             break;
         default:
