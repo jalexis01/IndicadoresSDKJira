@@ -481,6 +481,8 @@ function ServiceGetMessages() {
                 dataColumns = addCommandsGridDetails(dataColumns);
                 dataGridSave = data;
                 setGrid(data, dataColumns, exportFunctions);
+
+                $('#button-primary-descargar').show();
             }
         })
         .catch(error => {
