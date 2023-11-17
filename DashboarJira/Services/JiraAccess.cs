@@ -1316,7 +1316,7 @@ namespace DashboarJira.Services
                             }
                         }
 
-                        int attachmentColumn = 2;
+                        int attachmentColumn = 1;
                         int fileCounter = 1;
 
                         foreach (var attachment in ticket.Attachments)
@@ -1332,10 +1332,10 @@ namespace DashboarJira.Services
 
                             string attachmentRelativePath = Path.Combine($"{ticket.id_componente}_Adjuntos", $"{ticket.id_ticket}");
 
-                            worksheet.Cells[currentRow, attachmentColumn-1].Hyperlink = new Uri(attachmentRelativePath, UriKind.Relative);
-                            worksheet.Cells[currentRow, attachmentColumn-1].Style.Font.Color.SetColor(System.Drawing.Color.Blue);
+                            worksheet.Cells[currentRow, attachmentColumn].Hyperlink = new Uri(attachmentRelativePath, UriKind.Relative);
+                            worksheet.Cells[currentRow, attachmentColumn].Style.Font.Color.SetColor(System.Drawing.Color.Blue);
 
-                            attachmentColumn++;
+
                             fileCounter++;
                         }
 
