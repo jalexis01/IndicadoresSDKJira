@@ -34,21 +34,22 @@ string logFilePath = Path.Combine(projectDirectory, "ErroresLog.txt");
 //    {
 //        try
 //        {
-            jira.ExportComponenteToExcel("9117-WA-OC-5");
+            
             List<TicketHV> tickets = jira.GetTicketHVs(0, 0, "9117-WA-OC-5");
             jira.ExportTicketsToExcel(tickets);
-    //    }
-    //    catch (Exception e)
-    //    {
-    //        Console.WriteLine($"Error al exportar el componente {componente.IdComponente}: {e.Message}");
+            jira.ExportComponenteToExcel("9117-WA-OC-5");
+//    }
+//    catch (Exception e)
+//    {
+//        Console.WriteLine($"Error al exportar el componente {componente.IdComponente}: {e.Message}");
 
-            
-    //    }
-    //}
-    //else
-    //{
-    //    Console.WriteLine($"No se encontró el componente con ID: {componente.IdComponente}");
-    //}
+
+//    }
+//}
+//else
+//{
+//    Console.WriteLine($"No se encontró el componente con ID: {componente.IdComponente}");
+//}
 //}
 
 //// ...

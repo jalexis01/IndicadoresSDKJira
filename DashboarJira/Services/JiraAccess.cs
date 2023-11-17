@@ -118,7 +118,7 @@ namespace DashboarJira.Services
                 {
                     jql = $"{proyectAssaMTO} and issuetype = 'Solicitud de Mantenimiento' and status = cerrado";
                 }
-                
+
                 else
                 {
                     jql = $"{proyectManateeMTO} and issuetype = 'Solicitud de Mantenimiento' and status = cerrado";
@@ -823,13 +823,15 @@ namespace DashboarJira.Services
         //Implementacion de la hoja de vida
         public List<TicketHV> GetTicketHVs(int start, int max, string idComponente)
         {
+            //Añadir try catch
+
             List<TicketHV> result = GetTiketsHVCC(start, max, idComponente);
             result = result.Concat(GetTiketsHVMTO(start, max, idComponente)).ToList().OrderByDescending(issue => issue.fecha_apertura).ToList();
             if (jiraUrl == "https://manateecc.atlassian.net/")
             {
                 result = result.Concat(GetTiketsHVDRV(start, max, idComponente)).ToList().OrderByDescending(issue => issue.fecha_apertura).ToList();
             }
-                return result;
+            return result;
         }
         public List<TicketHV> GetTiketsHVCC(int start, int max, string idComponente)
         {
@@ -1269,6 +1271,9 @@ namespace DashboarJira.Services
             {
                 string downloadsFolder = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
                 downloadsFolder = Path.Combine(downloadsFolder, "Downloads");
+                var templateDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "PlantillasExcel");
+                var templateFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "PlantillasExcel", "HVTICKET.xlsx");
+
 
                 ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
@@ -1279,37 +1284,41 @@ namespace DashboarJira.Services
                     string ticketFolder = Path.Combine(downloadsFolder, ticket.id_componente);
                     Directory.CreateDirectory(ticketFolder);
 
-                    var excelFilePath = Path.Combine(ticketFolder, $"{ticket.id_componente} Tickets.xlsx");
+                    // Crear el archivo Excel dentro de la carpeta con el nombre del id_componente
+                    var ticketExcelFilePath = Path.Combine(ticketFolder, $"{ticket.id_componente}_Tickets.xlsx");
 
+                    var attachmentFolder = Path.Combine(ticketFolder, $"{ticket.id_componente}_Adjuntos");
+                    Directory.CreateDirectory(attachmentFolder);
 
-                    var templateDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "PlantillasExcel");
-                    var templateFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "PlantillasExcel", "HVTICKET.xlsx");
-
-                    if (!File.Exists(excelFilePath))
+                    // Crear el archivo Excel si no existe
+                    if (!File.Exists(ticketExcelFilePath))
                     {
-                        File.Copy(templateFilePath, excelFilePath, true);
+                        File.Copy(templateFilePath, ticketExcelFilePath, true);
+
+                        using (var package = new ExcelPackage())
+                        {
+                            var worksheet = package.Workbook.Worksheets.Add("Sheet1");
+
+                            package.SaveAs(new FileInfo(ticketExcelFilePath));
+                        }
                     }
 
-                    using (var package = new ExcelPackage(new FileInfo(excelFilePath)))
+                    using (var package = new ExcelPackage(new FileInfo(ticketExcelFilePath)))
                     {
                         var worksheet = package.Workbook.Worksheets[0];
 
-                        // Headers (solo si es la primera vez)
                         if (currentRow == 2)
                         {
                             var properties1 = typeof(TicketHV).GetProperties();
                             for (int i = 1; i < properties1.Length; i++)
                             {
-                                worksheet.Cells[1, i + 1].Value = properties1[i].Name;
+                                worksheet.Cells[1, i].Value = properties1[i].Name;
                             }
                         }
 
-                        int attachmentColumn = 2; // Columna para los adjuntos
+                        int attachmentColumn = 2;
                         int fileCounter = 1;
-                        string attachmentFolder = Path.Combine(ticketFolder, $"{ticket.id_componente} Adjuntos");
 
-
-                        Directory.CreateDirectory(attachmentFolder);
                         foreach (var attachment in ticket.Attachments)
                         {
                             string attachmentFilePath = Path.Combine(attachmentFolder, $"{ticket.id_ticket}");
@@ -1320,32 +1329,35 @@ namespace DashboarJira.Services
                             await DownloadAttachmentAsync(attachment, attachmentFilePath);
 
                             Console.WriteLine($"Bytes del archivo adjunto '{attachment.FileName}': {attachment.DownloadData().Length}");
-                            // Ruta relativa al archivo dentro de la carpeta de adjuntos del ticket actual
-                            string attachmentRelativePath = Path.Combine($"{ticket.id_componente} Adjuntos", $"{ticket.id_ticket}");
 
+                            string attachmentRelativePath = Path.Combine($"{ticket.id_componente}_Adjuntos", $"{ticket.id_ticket}");
 
-                            // Establecer la ruta de archivo relativa como hipervínculo
-                            worksheet.Cells[currentRow, attachmentColumn].Hyperlink = new Uri(attachmentRelativePath, UriKind.Relative);
-                            worksheet.Cells[currentRow, attachmentColumn].Style.Font.Color.SetColor(System.Drawing.Color.Blue);
+                            worksheet.Cells[currentRow, attachmentColumn-1].Hyperlink = new Uri(attachmentRelativePath, UriKind.Relative);
+                            worksheet.Cells[currentRow, attachmentColumn-1].Style.Font.Color.SetColor(System.Drawing.Color.Blue);
 
                             attachmentColumn++;
                             fileCounter++;
                         }
 
-
-                        // Datos del ticket (excluyendo Attachments)
                         var properties = typeof(TicketHV).GetProperties();
                         for (int j = 1; j < properties.Length; j++)
                         {
                             var columnValue = properties[j].GetValue(ticket);
-                            worksheet.Cells[currentRow, j + 1].Value = columnValue;
+
+                            // Ajustar la forma en que se manejan las fechas
+                            if (properties[j].PropertyType == typeof(DateTime?))
+                            {
+                                worksheet.Cells[currentRow, j].Value = ((DateTime?)columnValue)?.ToString("yyyy-MM-ddTHH:mm:ss");
+                            }
+                            else
+                            {
+                                worksheet.Cells[currentRow, j].Value = columnValue;
+                            }
                         }
 
+                        currentRow++;
                         package.Save();
                     }
-
-                    // Incrementa la fila actual para el siguiente ticket
-                    currentRow++;
                 }
             }
             catch (Exception ex)
@@ -1357,9 +1369,17 @@ namespace DashboarJira.Services
 
 
 
+
+
+
+
+
+
+
+
         private async Task DownloadAttachmentAsync(Attachment attachment, string folderPath)
         {
-            
+
             List<byte[]> videoList = new List<byte[]>();
 
             var videoExtensions = new List<string>
@@ -1391,7 +1411,8 @@ namespace DashboarJira.Services
                     string filePath = Path.Combine(folderPath, attachment.FileName);
                     File.WriteAllBytes(filePath, videoBytes);
                 }
-                else if (IsExtensionSupported(attachment.FileName, imageExtensions)) {
+                else if (IsExtensionSupported(attachment.FileName, imageExtensions))
+                {
                     string imageUrl = $"{jiraUrl}/rest/api/2/attachment/content/{attachment.Id}";
                     string filePath = Path.Combine(folderPath, attachment.FileName);
                     byte[] imageBytes = client.GetByteArrayAsync(imageUrl).Result;
@@ -1416,7 +1437,7 @@ namespace DashboarJira.Services
                 ComponenteHV componente = connector.GetComponenteHV(idComponente);
 
 
-                if (componente  != null)
+                if (componente != null)
                 {
                     string ticketFolder = Path.Combine(downloadsFolder, idComponente); // Cambiado a idComponente en lugar de componente.Serial
                     Directory.CreateDirectory(ticketFolder);
@@ -1463,7 +1484,14 @@ namespace DashboarJira.Services
                 Console.WriteLine($"Error: {ex.Message}");
             }
         }
-        
+
+        public void DownloadExcel(string idComponente)
+        {
+            //Añadir try catch
+            ExportComponenteToExcel(idComponente);
+            List<TicketHV> tickets = GetTicketHVs(0, 0, idComponente);
+            ExportTicketsToExcel(tickets);
+        }
 
 
 
