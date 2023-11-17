@@ -1463,13 +1463,7 @@ namespace DashboarJira.Services
                 Console.WriteLine($"Error: {ex.Message}");
             }
         }
-
-        public void DownloadExcel(string idComponente) {
-
-            ExportComponenteToExcel(idComponente);
-            List<TicketHV> tickets = GetTicketHVs(0, 0, idComponente);
-            ExportTicketsToExcel(tickets);
-        }
+        
 
 
 
