@@ -423,7 +423,7 @@ function ServiceGetMessages() {
                         NumeroInterno: componenteData.serial,
                         AnioFabricacion: componenteData.anioFabricacion,
                         InicioOperacion: componenteData.fechaInicio,
-                        HorasOperacion: 'N/A'
+                        HorasOperacion: componenteData.horasDeOperacion
                     }
                 ];
 
@@ -443,7 +443,7 @@ function ServiceGetMessages() {
                 noData();
                 return;
             } else {
-                var columnContent = '<table class="result-box-table">';
+                var columnContent = '<table class="result-box-table">';                
 
                 columnContent += '<tr>';
                 columnContent += '<th class="header-cell1" colspan="4" style="text-align: center;">INFORMACIÓN COMPONENTE</th>';
@@ -465,8 +465,11 @@ function ServiceGetMessages() {
                 columnContent += '<th class="header-cell">AÑO DE FABRICACIÓN</th><td>' + listaComponentes[0].AnioFabricacion + '</td>';
                 columnContent += '</tr>';
 
+                var fechaInicioOperacion = new Date(listaComponentes[0].InicioOperacion);
+                var fechaInicioOperacionFormateada = fechaInicioOperacion.toISOString().substring(0, 10);               
+
                 columnContent += '<tr>';
-                columnContent += '<th class="header-cell">FECHA INICIO OPERACIÓN</th><td>' + listaComponentes[0].InicioOperacion + '</td>';
+                columnContent += '<th class="header-cell">FECHA INICIO OPERACIÓN</th><td>' + fechaInicioOperacionFormateada + '</td>';
                 columnContent += '<th class="header-cell">HORAS DE OPERACIÓN</th><td>' + listaComponentes[0].HorasOperacion + '</td>';
 
                 columnContent += '</table>';

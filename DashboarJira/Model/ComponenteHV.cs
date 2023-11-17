@@ -15,9 +15,22 @@ namespace DashboarJira.Model
         public DateTime FechaInicio { get; set; }
         public Double horasDeOperacion { get; set; }
 
-        public string tipoComponente { get; set; }  
+        public string tipoComponente { get; set; }
 
+        public void CalcularHorasDeOperacion()
+        {
+            DateTime fechaActual = DateTime.Now;
 
+            // Establecer las horas, minutos y segundos a cero para ambas fechas
+            DateTime fechaInicioSinHoras = this.FechaInicio.Date;
+            DateTime fechaActualSinHoras = fechaActual.Date;
+
+            // Calcular la diferencia sin las horas
+            TimeSpan diferencia = fechaActualSinHoras - fechaInicioSinHoras;
+
+            // Asignar el resultado a la propiedad horasDeOperacion
+            this.horasDeOperacion = diferencia.TotalHours;
+        }
         public string GetTemplateFileName(string marca)
         {
             // Implementa un switch para asignar el nombre de la plantilla según el modelo

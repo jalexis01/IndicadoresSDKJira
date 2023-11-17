@@ -114,8 +114,10 @@ namespace DashboarJira.Services
                                     AnioFabricacion = reader.GetInt32(reader.GetOrdinal("aniodefabricacion")),
                                     Modelo = reader.GetString(reader.GetOrdinal("Modelo")),
                                     FechaInicio = reader.GetDateTime(reader.GetOrdinal("fechaInicio")),
-                                    tipoComponente = reader.GetString(reader.GetOrdinal("tipoComponente"))
+                                    tipoComponente = reader.GetString(reader.GetOrdinal("tipoComponente")),
+                                    horasDeOperacion = 0
                                 };
+                                componente.CalcularHorasDeOperacion();
 
                             }
                         }
