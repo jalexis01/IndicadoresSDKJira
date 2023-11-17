@@ -5,12 +5,18 @@ using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
 using System.Linq;
+using Microsoft.Extensions.Configuration;
 
 namespace MQTT.Web.Controllers
 {
     [Authorize]
     public class TicketsController : Controller
     {
+        private readonly IConfiguration _configuration;
+        public TicketsController(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
         public IActionResult Index(int max, string componente)
         {
             // Obtiene la identidad del usuario actual
@@ -35,11 +41,14 @@ namespace MQTT.Web.Controllers
             DateTime startDateTime = currentDateTime.AddMonths(-1);
 
             // Formatear las fechas en el formato deseado
-           /* string startDate = startDateTime.ToString("yyyy-MM-dd");
-            string endDate = currentDateTime.ToString("yyyy-MM-dd");
-            max = 0;
-            List<Ticket> tickets = getTickets(startDate, endDate, max, componente);
-            */return View();
+            /* string startDate = startDateTime.ToString("yyyy-MM-dd");
+             string endDate = currentDateTime.ToString("yyyy-MM-dd");
+             max = 0;
+             List<Ticket> tickets = getTickets(startDate, endDate, max, componente);
+             */
+            // Obtener el valor de EnvironmentType desde appsettings
+            ViewBag.EnvironmentType = _configuration["EnvironmentType"];
+            return View();
         }
 
 

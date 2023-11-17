@@ -1,7 +1,8 @@
 ﻿@{
-    
+    var environmentType = ViewBag.EnvironmentType;
+    ViewData["Empresa"] = environmentType;
   //ViewData["Empresa"] = "Manatee";
-  ViewData["Empresa"] = "Assaabloy";
+  //ViewData["Empresa"] = "Assaabloy";
   //ViewData["Empresa"] = "Eys";
   //ViewData["Empresa"] = "Prueba";
   
@@ -46,7 +47,7 @@
         }
     </script>
     }
-    @if (@ViewBag.Empresa == "Assabloy")
+    @if (@ViewBag.Empresa == "Assaabloy")
     {
         <script>
             var dataExcel = {
