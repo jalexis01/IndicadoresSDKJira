@@ -1458,10 +1458,8 @@ namespace DashboarJira.Services
                         int row = 7; // La fila en la que quieres comenzar a escribir datos en la hoja de trabajo
                         int columnInicio = 4;
                         int currentRow = row;
-                        DateTime fechaActual = DateTime.Now;
-                        TimeSpan diferencia = fechaActual - componente.FechaInicio;
-                        double horasDeOperacion = diferencia.TotalHours;
-                        horasDeOperacion = Math.Round(horasDeOperacion);
+                        componente.CalcularHorasDeOperacion();
+                        var horasDeOperacion = componente.horasDeOperacion;
 
 
 
