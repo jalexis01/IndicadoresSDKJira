@@ -23,34 +23,64 @@ var fechaFinal = "2023-11-02";
 //foreach (var ticket in jira.GetTikets(0,0,null,null,null,"'Falla Puerta'")) { 
 //    Console.WriteLine(ticket.id_ticket);
 //}
-List<ComponenteHV> listaIdComponentes = dbConnector.GetComponentesHV();
+
 string projectDirectory = Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory).Parent.FullName;
 string logFilePath = Path.Combine(projectDirectory, "ErroresLog.txt");
 
-foreach (var componente in listaIdComponentes)
+try
 {
-    if (componente.IdComponente != null)
+
+    while (true)
     {
-        try
+        List<ComponenteHV> listaIdComponentes = dbConnector.GetComponentesHV();
+
+        
+        if (listaIdComponentes != null && listaIdComponentes.Any())
         {
+            foreach (var componente in listaIdComponentes)
+            {
+                if (componente.IdComponente != null)
+                {
+                    try
+                    {
+                        
+                        List<TicketHV> tickets = jira.GetTicketHVs(0, 0, componente.IdComponente);
+                        jira.ExportTicketsToExcel(tickets);
+                        jira.ExportComponenteToExcel(componente.IdComponente);
 
-            List<TicketHV> tickets = jira.GetTicketHVs(0, 0, componente.IdComponente);
-            jira.ExportTicketsToExcel(tickets);
-            jira.ExportComponenteToExcel(componente.IdComponente);
+                        
+                        dbConnector.MarcarComoDescargado(componente.IdComponente);
+                    }
+                    catch (Exception e)
+                    {
+                        
+                        string errorMessage = $"Error al exportar el componente {componente.IdComponente}: {e.Message}";
+                        Console.WriteLine(errorMessage);
+
+                        
+                        File.AppendAllText(logFilePath, errorMessage + Environment.NewLine);
+                    }
+                }
+                else
+                {
+                    Console.WriteLine($"No se encontró el componente con ID: {componente.IdComponente}");
+                }
+            }
         }
-        catch (Exception e)
+        else
         {
-            Console.WriteLine($"Error al exportar el componente {componente.IdComponente}: {e.Message}");
-
-
+            
+            break;
         }
-    }
-    else
-    {
-        Console.WriteLine($"No se encontró el componente con ID: {componente.IdComponente}");
     }
 }
-
+catch (Exception ex)
+{
+    // Manejar errores generales al obtener la lista de componentes
+    Console.WriteLine($"Error al obtener la lista de componentes: {ex.Message}");
+    // Registrar el error en el archivo de registro
+    File.AppendAllText(logFilePath, $"Error al obtener la lista de componentes: {ex.Message}" + Environment.NewLine);
+}
 //// ...
 
 //static void LogError(string filePath, string errorMessage)

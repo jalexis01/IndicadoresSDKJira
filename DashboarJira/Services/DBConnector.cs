@@ -95,6 +95,7 @@ namespace DashboarJira.Services
                 {
                     connection.Open();
 
+                    
                     string query = "SELECT  [IdComponente], [Serial],[aniodefabricacion], [tipoComponente] ,[Modelo] ,[fechaInicio]FROM[dbo].[registroHV] " +
                                    "WHERE [IdComponente] = @IdComponente AND [tipoComponente] = 'puerta' ";
 
@@ -114,7 +115,8 @@ namespace DashboarJira.Services
                                     AnioFabricacion = reader.GetInt32(reader.GetOrdinal("aniodefabricacion")),
                                     Modelo = reader.GetString(reader.GetOrdinal("Modelo")),
                                     FechaInicio = reader.GetDateTime(reader.GetOrdinal("fechaInicio")),
-                                    tipoComponente = reader.GetString(reader.GetOrdinal("tipoComponente"))
+                                    tipoComponente = reader.GetString(reader.GetOrdinal("tipoComponente")),
+                                    descargado = reader.GetBoolean(reader.GetOrdinal("descargado"))
                                 };
 
                             }
@@ -129,6 +131,66 @@ namespace DashboarJira.Services
 
             return componente;
         }
+        public void MarcarComoDescargado(string idComponente)
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                try
+                {
+                    connection.Open();
+
+                    // Actualizar el estado de descargado a verdadero
+                    string updateQuery = "UPDATE [dbo].[registroHV] SET [descargado] = 1 WHERE [IdComponente] = @IdComponente";
+
+                    using (SqlCommand updateCommand = new SqlCommand(updateQuery, connection))
+                    {
+                        updateCommand.Parameters.AddWithValue("@IdComponente", idComponente);
+
+                        // Ejecutar la consulta de actualización
+                        int rowsAffected = updateCommand.ExecuteNonQuery();
+
+                        if (rowsAffected > 0)
+                        {
+                            Console.WriteLine("El componente con IdComponente {0} ha sido marcado como descargado.", idComponente);
+                        }
+                        else
+                        {
+                            Console.WriteLine("No se encontró ningún componente con IdComponente {0}.", idComponente);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("An error occurred: " + ex.Message);
+                }
+            }
+        }
+        public void MarcarTodosComoNoDescargados()
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                try
+                {
+                    connection.Open();
+
+                    // Actualizar el estado de descargado a falso para todos los registros
+                    string updateQuery = "UPDATE [dbo].[registroHV] SET [descargado] = 0";
+
+                    using (SqlCommand updateCommand = new SqlCommand(updateQuery, connection))
+                    {
+                        // Ejecutar la consulta de actualización
+                        int rowsAffected = updateCommand.ExecuteNonQuery();
+
+                        Console.WriteLine("{0} componentes han sido marcados como no descargados.", rowsAffected);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("An error occurred: " + ex.Message);
+                }
+            }
+        }
+
 
         public List<ComponenteHV> GetComponentesHV()
         {
@@ -140,7 +202,8 @@ namespace DashboarJira.Services
                 {
                     connection.Open();
 
-                    string query = "SELECT [IdComponente], [Serial], [aniodefabricacion], [Modelo], [fechaInicio] FROM [dbo].[registroHV] ";
+                    string query = "SELECT TOP 100 [IdComponente], [Serial], [aniodefabricacion], [tipoComponente], [descargado], [Modelo], [fechaInicio] FROM [dbo].[registroHV] " +
+                           "WHERE [tipoComponente] = 'puerta' AND [descargado] = 0 ";
 
                     using (SqlCommand command = new SqlCommand(query, connection))
                     {
