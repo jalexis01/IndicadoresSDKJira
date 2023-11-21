@@ -14,7 +14,7 @@ namespace DashboarJira.Model
         public string Modelo { get; set; }
         public DateTime FechaInicio { get; set; }
         public Double horasDeOperacion { get; set; }
-        public bool descargado { get; set; }
+        public int descargado { get; set; }
         public string tipoComponente { get; set; }
 
         public void CalcularHorasDeOperacion()

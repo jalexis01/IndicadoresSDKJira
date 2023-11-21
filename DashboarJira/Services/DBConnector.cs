@@ -96,7 +96,7 @@ namespace DashboarJira.Services
                     connection.Open();
 
                     
-                    string query = "SELECT  [IdComponente], [Serial],[aniodefabricacion], [tipoComponente] ,[Modelo] ,[fechaInicio]FROM[dbo].[registroHV] " +
+                    string query = "SELECT  [IdComponente], [Serial],[aniodefabricacion],[descargado] ,[tipoComponente] ,[Modelo] ,[fechaInicio]FROM[dbo].[registroHV] " +
                                    "WHERE [IdComponente] = @IdComponente AND [tipoComponente] = 'puerta' ";
 
                     using (SqlCommand command = new SqlCommand(query, connection))
@@ -116,7 +116,7 @@ namespace DashboarJira.Services
                                     Modelo = reader.GetString(reader.GetOrdinal("Modelo")),
                                     FechaInicio = reader.GetDateTime(reader.GetOrdinal("fechaInicio")),
                                     tipoComponente = reader.GetString(reader.GetOrdinal("tipoComponente")),
-                                    descargado = reader.GetBoolean(reader.GetOrdinal("descargado"))
+                                    descargado = reader.GetInt32(reader.GetOrdinal("descargado"))
                                 };
 
                             }
@@ -218,7 +218,8 @@ namespace DashboarJira.Services
                                     Serial = reader.GetString(reader.GetOrdinal("Serial")),
                                     AnioFabricacion = reader.GetInt32(reader.GetOrdinal("aniodefabricacion")),
                                     Modelo = reader.GetString(reader.GetOrdinal("Modelo")),
-                                    FechaInicio = reader.GetDateTime(reader.GetOrdinal("fechaInicio"))
+                                    FechaInicio = reader.GetDateTime(reader.GetOrdinal("fechaInicio")),
+                                    descargado = reader.GetInt32(reader.GetOrdinal("descargado"))
                                 };
 
                                 componentes.Add(componente);
