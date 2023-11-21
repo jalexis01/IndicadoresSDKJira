@@ -398,6 +398,41 @@ namespace DashboarJira.Services
 
             return tableString;
         }
+
+        internal void CambiarDescargado(string idComponente, int v)
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                try
+                {
+                    connection.Open();
+
+                    // Actualizar el estado de descargado a verdadero
+                    string updateQuery = "UPDATE [dbo].[registroHV] SET [descargado] = "+ v +" WHERE [IdComponente] = @IdComponente";
+
+                    using (SqlCommand updateCommand = new SqlCommand(updateQuery, connection))
+                    {
+                        updateCommand.Parameters.AddWithValue("@IdComponente", idComponente);
+
+                        // Ejecutar la consulta de actualización
+                        int rowsAffected = updateCommand.ExecuteNonQuery();
+
+                        if (rowsAffected > 0)
+                        {
+                            Console.WriteLine("El componente con IdComponente {0} ha sido marcado como 3.", idComponente);
+                        }
+                        else
+                        {
+                            Console.WriteLine("No se encontró ningún componente con IdComponente {0}.", idComponente);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("An error occurred: " + ex.Message);
+                }
+            }
+        }
     }
 
 
