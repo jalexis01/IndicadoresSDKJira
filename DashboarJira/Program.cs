@@ -29,30 +29,41 @@ try
             {
                 if (componente.IdComponente != null)
                 {
-                    try
+                    int intentos = 0;
+
+                    while (intentos < 3)
                     {
-                        WriteToLog($"Procesando componente {componente.IdComponente}",logFilePath);
+                        try
+                        {
+                            WriteToLog($"Procesando componente {componente.IdComponente}", logFilePath);
 
-                        List<TicketHV> tickets = jira.GetTicketHVs(0, 0, componente.IdComponente);
-                        jira.ExportTicketsToExcel(tickets);
+                            List<TicketHV> tickets = jira.GetTicketHVs(0, 0, componente.IdComponente);
+                            jira.ExportTicketsToExcel(tickets);
 
-                        WriteToLog($"Tickets del componente {componente.IdComponente} exportados correctamente.", logFilePath);
+                            WriteToLog($"Tickets del componente {componente.IdComponente} exportados correctamente.", logFilePath);
 
-                        jira.ExportComponenteToExcel(componente.IdComponente);
+                            jira.ExportComponenteToExcel(componente.IdComponente);
 
-                        WriteToLog($"Componente {componente.IdComponente} exportado correctamente.", logFilePath);
+                            WriteToLog($"Componente {componente.IdComponente} exportado correctamente.", logFilePath);
 
-                        dbConnector.MarcarComoDescargado(componente.IdComponente);
-                        WriteToLog($"Marcado como descargado en la base de datos para componente {componente.IdComponente}", logFilePath);
-                    }
-                    catch (Exception e)
-                    {
-                        string errorMessage = $"Error al exportar el componente {componente.IdComponente}: {e.Message}";
-                        Console.WriteLine(errorMessage);
+                            dbConnector.MarcarComoDescargado(componente.IdComponente);
+                            WriteToLog($"Marcado como descargado en la base de datos para componente {componente.IdComponente}", logFilePath);
 
-                        WriteToLog($"Error al exportar el componente {componente.IdComponente}: {e.Message}", logFilePath);
+                            // Si llegamos aquí sin lanzar una excepción, salimos del bucle de intentos
+                            break;
+                        }
+                        catch (Exception e)
+                        {
+                            intentos++;
+                            string errorMessage = $"Error al exportar el componente {componente.IdComponente}, intento {intentos}: {e.Message}";
+                            Console.WriteLine(errorMessage);
 
-                        File.AppendAllText(logFilePath, errorMessage + Environment.NewLine);
+                            WriteToLog($"Error al exportar el componente {componente.IdComponente}, intento {intentos}: {e.Message}", logFilePath);
+
+                            File.AppendAllText(logFilePath, errorMessage + Environment.NewLine);
+
+                            // Puedes añadir algún tipo de pausa o espera entre intentos si es necesario
+                        }
                     }
                 }
                 else
@@ -77,6 +88,9 @@ catch (Exception ex)
     // Registrar el error en el archivo de registro
     File.AppendAllText(logFilePath, $"Error al obtener la lista de componentes: {ex.Message}" + Environment.NewLine);
 }
+
+        // Más código aquí si es necesario...
+    
 
 static void WriteToLog(string message, string logFilePath)
 {
