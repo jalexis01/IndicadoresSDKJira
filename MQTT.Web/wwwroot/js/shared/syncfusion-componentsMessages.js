@@ -1,11 +1,6 @@
 var grid = null, multiSelectInput,columns, dataArgs, treeGridObj = null, dropdowns = null, idDrag, dropdownsModal = null, isDrag =false, datepicker=null, datepickerEnd=null, datepickerModal=null, 
 datepickerEndModal=null, dateDocuments =  new Date(Date.now()).toUTCString(), valueFild,beginUpdate, beginCreate;
-var listFunctionalitiesExportGrid = ['ExcelExport','PdfExport', 'CsvExport'];
-
-
-
-
-
+var listFunctionalitiesExportGrid = ['ExcelExport', 'PdfExport', 'CsvExport'];
 
 $(document).ready(function(){
     var indicatortypes = [

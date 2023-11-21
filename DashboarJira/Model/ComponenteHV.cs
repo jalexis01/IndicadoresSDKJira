@@ -19,17 +19,26 @@ namespace DashboarJira.Model
 
         public void CalcularHorasDeOperacion()
         {
-            DateTime fechaActual = DateTime.Now;
+            try
+            {
+                DateTime fechaActual = DateTime.Now;
 
-            // Establecer las horas, minutos y segundos a cero para ambas fechas
-            DateTime fechaInicioSinHoras = this.FechaInicio.Date;
-            DateTime fechaActualSinHoras = fechaActual.Date;
+                // Establecer las horas, minutos y segundos a cero para ambas fechas
+                DateTime fechaInicioSinHoras = this.FechaInicio.Date;
+                DateTime fechaActualSinHoras = fechaActual.Date;
 
-            // Calcular la diferencia sin las horas
-            TimeSpan diferencia = fechaActualSinHoras - fechaInicioSinHoras;
+                // Calcular la diferencia sin las horas
+                TimeSpan diferencia = fechaActualSinHoras - fechaInicioSinHoras;
 
-            // Asignar el resultado a la propiedad horasDeOperacion
-            this.horasDeOperacion = diferencia.TotalHours;
+                // Asignar el resultado a la propiedad horasDeOperacion
+                this.horasDeOperacion = diferencia.TotalHours;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            
         }
         public string GetTemplateFileName(string marca)
         {
