@@ -14,7 +14,7 @@ var fechainicio = "2023-10-01";
 var fechaFinal = "2023-11-02";
 while (true)
 {
-    Console.WriteLine("Bienvenido a la aplicación de consola");
+    Console.WriteLine("Bienvenido a la aplicación de consola de MANATEE");
     Console.WriteLine("Seleccione una opción:");
     Console.WriteLine("1. Descargar información de todos los componentes");
     Console.WriteLine("2. Descargar información de un componente");
