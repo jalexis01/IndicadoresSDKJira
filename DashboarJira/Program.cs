@@ -12,6 +12,7 @@ DbConnector dbConnector = new DbConnector();
 JiraAccess jira = new JiraAccess();
 var fechainicio = "2023-10-01";
 var fechaFinal = "2023-11-02";
+WriteToLog($"Inicio de operación: {DateTime.Now:yyyy-MM-dd HH:mm:ss}", logFilePath);
 while (true)
 {
     Console.WriteLine("Bienvenido a la aplicación de consola de MANATEE");
@@ -47,17 +48,25 @@ while (true)
             Console.Write("Estados cambiados");
             break;
         case "4":
+            // Agregar línea para registrar la hora de fin antes de salir del programa
+            WriteToLog($"Fin de operación: {DateTime.Now:yyyy-MM-dd HH:mm:ss}", logFilePath);
             Console.WriteLine("Saliendo de la aplicación.");
+
+         
             break;
+
         default:
             Console.WriteLine("Opción no válida. Saliendo de la aplicación.");
+            // Terminar la aplicación
+            Environment.Exit(0);
             break;
     }
 }
 
  void DescargarInformacionTodosComponentes(JiraAccess jira, DbConnector dbConnector)
 {
-    
+
+    WriteToLog($"Inicio de descarga de componentes: {DateTime.Now:yyyy-MM-dd HH:mm:ss}", logFilePath);
 
     try
     {
@@ -97,6 +106,7 @@ while (true)
 
                                 // Puedes añadir algún tipo de pausa o espera entre intentos si es necesario
                             }
+                            WriteToLog($"Fin de descarga de componentes: {DateTime.Now:yyyy-MM-dd HH:mm:ss}", logFilePath);
                         }
                     }
                     else
