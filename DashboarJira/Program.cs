@@ -12,9 +12,12 @@ DbConnector dbConnector = new DbConnector();
 JiraAccess jira = new JiraAccess();
 var fechainicio = "2023-10-01";
 var fechaFinal = "2023-11-02";
-WriteToLog($"Inicio de operación: {DateTime.Now:yyyy-MM-dd HH:mm:ss}", logFilePath);
+WriteToLog($"Inicio de descarga de componentes: {DateTime.Now:yyyy-MM-dd HH:mm:ss}", logFilePath);
+
 while (true)
 {
+   
+
     Console.WriteLine("Bienvenido a la aplicación de consola de MANATEE");
     Console.WriteLine("Seleccione una opción:");
     Console.WriteLine("1. Descargar información de todos los componentes");
@@ -48,11 +51,26 @@ while (true)
             Console.Write("Estados cambiados");
             break;
         case "4":
-            // Agregar línea para registrar la hora de fin antes de salir del programa
-            WriteToLog($"Fin de operación: {DateTime.Now:yyyy-MM-dd HH:mm:ss}", logFilePath);
-            Console.WriteLine("Saliendo de la aplicación.");
+            Console.Write("¿Está seguro que desea salir del aplicativo? (S/N): ");
+            string respuesta = Console.ReadLine();
 
-         
+            if (respuesta.ToLower() == "s")
+            {
+                // Agregar línea para registrar la hora de fin antes de salir del programa
+                WriteToLog($"Fin de operación: {DateTime.Now:yyyy-MM-dd HH:mm:ss}", logFilePath);
+                Console.WriteLine("Saliendo de la aplicación.");
+
+                // Terminar la aplicación
+                Environment.Exit(0);
+            }
+            else if (respuesta.ToLower() == "n")
+            {
+                // No hace nada y vuelve al menú anterior
+            }
+            else
+            {
+                Console.WriteLine("Opción no válida. Volviendo al menú anterior.");
+            }
             break;
 
         default:
