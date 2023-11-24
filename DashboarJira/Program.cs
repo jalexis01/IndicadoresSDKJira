@@ -27,10 +27,10 @@ string opcion = Console.ReadLine();
 JsonElement connectionElement;
 if (document.RootElement.TryGetProperty(opcion, out connectionElement))
 {
-    if (connectionElement.TryGetProperty("Url", out JsonElement urlElement) &&
-        connectionElement.TryGetProperty("User", out JsonElement userElement) &&
-        connectionElement.TryGetProperty("Token", out JsonElement tokenElement) &&
-        connectionElement.TryGetProperty("ConnectionString", out JsonElement connectionStringElement))
+    if (connectionElement.TryGetProperty("url", out JsonElement urlElement) &&
+        connectionElement.TryGetProperty("user", out JsonElement userElement) &&
+        connectionElement.TryGetProperty("token", out JsonElement tokenElement) &&
+        connectionElement.TryGetProperty("connectionString", out JsonElement connectionStringElement))
     {
         url = urlElement.GetString();
         user = userElement.GetString();
