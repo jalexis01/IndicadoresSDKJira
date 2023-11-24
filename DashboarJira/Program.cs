@@ -24,25 +24,30 @@ Console.WriteLine("Elige una conexión (manatee/assabloy):");
 string opcion = Console.ReadLine();
 
 // Accede directamente a las propiedades del JSON según la opción elegida
-JsonElement connectionElement = document.RootElement.GetProperty(opcion);
-
-if (connectionElement.TryGetProperty("Url", out JsonElement urlElement) &&
-    connectionElement.TryGetProperty("User", out JsonElement userElement) &&
-    connectionElement.TryGetProperty("Token", out JsonElement tokenElement) &&
-    connectionElement.TryGetProperty("ConnectionString", out JsonElement connectionStringElement))
+JsonElement connectionElement;
+if (document.RootElement.TryGetProperty(opcion, out connectionElement))
 {
-     url = urlElement.GetString();
-     user = userElement.GetString();
-     token = tokenElement.GetString();
-     connectionString = connectionStringElement.GetString();
+    if (connectionElement.TryGetProperty("Url", out JsonElement urlElement) &&
+        connectionElement.TryGetProperty("User", out JsonElement userElement) &&
+        connectionElement.TryGetProperty("Token", out JsonElement tokenElement) &&
+        connectionElement.TryGetProperty("ConnectionString", out JsonElement connectionStringElement))
+    {
+        url = urlElement.GetString();
+        user = userElement.GetString();
+        token = tokenElement.GetString();
+        connectionString = connectionStringElement.GetString();
 
-    // Crea la instancia de JiraAccess
-    
-  
+        // Crea la instancia de JiraAccess
+        jiraAccess = new JiraAccess(url, user, token, connectionString);
+    }
+    else
+    {
+        Console.WriteLine("Propiedades faltantes en el JSON");
+    }
 }
 else
 {
-    Console.WriteLine("Opción no válida o propiedades faltantes en el JSON");
+    Console.WriteLine("Opción no válida");
 }
 jiraAccess = new JiraAccess(url, user, token, connectionString);
 var fechainicio = "2023-10-01";
