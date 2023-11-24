@@ -59,13 +59,14 @@ WriteToLog($"Inicio de descarga de componentes: {DateTime.Now:yyyy-MM-dd HH:mm:s
 
 DbConnector dbConnector = new DbConnector(connectionString);
 
-
-
 while (true)
 {
-   
-
-    Console.WriteLine("Bienvenido a la aplicación de consola de MANATEE");
+    // Pregunta al usuario por la cadena de conexión
+ 
+    // Crea la instancia de JiraAccess
+    jiraAccess = new JiraAccess(url, user, token, connectionString);
+    
+    Console.WriteLine("Bienvenido a la aplicación de consola");
     Console.WriteLine("Seleccione una opción:");
     Console.WriteLine("1. Descargar información de todos los componentes");
     Console.WriteLine("2. Descargar información de un componente");
@@ -127,8 +128,7 @@ while (true)
             break;
     }
 }
-
- void DescargarInformacionTodosComponentes(JiraAccess jiraAccess, DbConnector dbConnector)
+void DescargarInformacionTodosComponentes(JiraAccess jiraAccess, DbConnector dbConnector)
 {
 
     WriteToLog($"Inicio de descarga de componentes: {DateTime.Now:yyyy-MM-dd HH:mm:ss}", logFilePath);
