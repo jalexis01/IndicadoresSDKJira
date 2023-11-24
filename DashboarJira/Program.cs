@@ -12,11 +12,13 @@ string logFilePath = Path.Combine(projectDirectory, "ProgramLog.txt"); // Cambia
 
 string jsonFilePath = "jsconfig1.json";
 string json = File.ReadAllText(jsonFilePath);
-
-
+JiraAccess jiraAccess;
+string url = "";
+string user = "";
+string token = "";
+string connectionString = "";
 // Deserializa el JSON en un objeto JsonDocument
 JsonDocument document = JsonDocument.Parse(json);
-
 // Aquí puedes preguntar al usuario qué conexión desea utilizar (manatee o assabloy)
 Console.WriteLine("Elige una conexión (manatee/assabloy):");
 string opcion = Console.ReadLine();
@@ -29,19 +31,20 @@ if (connectionElement.TryGetProperty("Url", out JsonElement urlElement) &&
     connectionElement.TryGetProperty("Token", out JsonElement tokenElement) &&
     connectionElement.TryGetProperty("ConnectionString", out JsonElement connectionStringElement))
 {
-    string url = urlElement.GetString();
-    string user = userElement.GetString();
-    string token = tokenElement.GetString();
-    string connectionString = connectionStringElement.GetString();
+     url = urlElement.GetString();
+     user = userElement.GetString();
+     token = tokenElement.GetString();
+     connectionString = connectionStringElement.GetString();
 
     // Crea la instancia de JiraAccess
-    JiraAccess jiraAccess = new JiraAccess(url, user, token, connectionString);
+    
   
 }
 else
 {
     Console.WriteLine("Opción no válida o propiedades faltantes en el JSON");
 }
+jiraAccess = new JiraAccess(url, user, token, connectionString);
 var fechainicio = "2023-10-01";
 var fechaFinal = "2023-11-02";
 WriteToLog($"Inicio de descarga de componentes: {DateTime.Now:yyyy-MM-dd HH:mm:ss}", logFilePath);
@@ -84,7 +87,7 @@ while (true)
     switch (input)
     {
         case "1":
-            DescargarInformacionTodosComponentes(jira,dbConnector);
+            DescargarInformacionTodosComponentes(jiraAccess, dbConnector);
             break;
         case "2":
             Console.Write("Ingrese el ID del componente: ");
@@ -135,7 +138,7 @@ while (true)
     }
 }
 
- void DescargarInformacionTodosComponentes(JiraAccess jira, DbConnector dbConnector)
+ void DescargarInformacionTodosComponentes(JiraAccess jiraAccess, DbConnector dbConnector)
 {
 
     WriteToLog($"Inicio de descarga de componentes: {DateTime.Now:yyyy-MM-dd HH:mm:ss}", logFilePath);
@@ -212,12 +215,12 @@ void DescargarInformacionComponente(ComponenteHV componente, string logFilePath)
 
     WriteToLog($"Procesando componente {componente.IdComponente}", logFilePath);
 
-    List<TicketHV> tickets = jira.GetTicketHVs(0, 0, componente.IdComponente);
-    jira.ExportTicketsToExcel(tickets);
+    List<TicketHV> tickets = jiraAccess.GetTicketHVs(0, 0, componente.IdComponente);
+    jiraAccess.ExportTicketsToExcel(tickets);
 
     WriteToLog($"Tickets del componente {componente.IdComponente} exportados correctamente.", logFilePath);
 
-    jira.ExportComponenteToExcel(componente.IdComponente);
+    jiraAccess.ExportComponenteToExcel(componente.IdComponente);
 
     WriteToLog($"Componente {componente.IdComponente} exportado correctamente.", logFilePath);
 
