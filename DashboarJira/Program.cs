@@ -50,25 +50,10 @@ var fechaFinal = "2023-11-02";
 WriteToLog($"Inicio de descarga de componentes: {DateTime.Now:yyyy-MM-dd HH:mm:ss}", logFilePath);
 
 
-Console.WriteLine("Seleccione la base de datos a la que desea conectar:");
-Console.WriteLine("1. Manatee");
-Console.WriteLine("2. Assaabloy");
-string databaseOption = Console.ReadLine();
 
-DbConnector dbConnector;
 
-switch (databaseOption)
-{
-    case "1":
-        dbConnector = new DbConnector("Server=manatee.database.windows.net;Database=PuertasTransmilenioDB;User Id=administrador;Password=2022/M4n4t334zur3");
-        break;
-    case "2":
-        dbConnector = new DbConnector("Server=manatee.database.windows.net;Database=PuertasTransmilenioDBAssaabloy;User Id=administrador;Password=2022/M4n4t334zur3");
-        break;
-    default:
-        Console.WriteLine("Opción no válida. Saliendo de la aplicación.");
-        return; // Terminar la aplicación
-}
+DbConnector dbConnector = new DbConnector(connectionString);
+
 
 
 while (true)
