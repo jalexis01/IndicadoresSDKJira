@@ -1,6 +1,7 @@
 ﻿using DashboarJira.Model;
 using Microsoft.Data.SqlClient;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System.Data;
 
 namespace DashboarJira.Services
@@ -15,14 +16,23 @@ namespace DashboarJira.Services
         private string connectionString;
 
 
-        public DbConnector(string connectionString)
+        public DbConnector(string jsonPath, string connectionName)
         {
-            this.connectionString = connectionString;
-            // Set the connection string Manatee
-            //connectionString = "Server=manatee.database.windows.net;Database=PuertasTransmilenioDB;User Id=administrador;Password=2022/M4n4t334zur3";
+            // Leer el JSON desde el archivo
+            string json = System.IO.File.ReadAllText(jsonPath);
 
-            // Set the connection string Assabloy
-            //connectionString = "Server=manatee.database.windows.net;Database=PuertasTransmilenioDBAssaabloy;User Id=administrador;Password=2022/M4n4t334zur3";
+            // Convertir el JSON a un objeto JObject
+            JObject jsonObj = JObject.Parse(json);
+
+            // Obtener la cadena de conexión según el nombre proporcionado
+            connectionString = jsonObj[connectionName]?["connectionString"]?.ToString();
+
+            if (connectionString == null)
+            {
+                throw new ArgumentException($"No se encontró una cadena de conexión para el nombre '{connectionName}' en el archivo JSON.");
+            }
+
+            // Resto del código para inicializar la conexión...
         }
 
         public DataTable GetMessages()

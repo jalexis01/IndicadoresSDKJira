@@ -8,11 +8,43 @@ using System.Data;
 
 string projectDirectory = Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory).Parent.FullName;
 string logFilePath = Path.Combine(projectDirectory, "ProgramLog.txt"); // Cambiado a ProgramLog.txt
-DbConnector dbConnector = new DbConnector();
+
+// Ruta al archivo JSON que contiene las cadenas de conexión
+string jsonPath = "C:\\Users\\juana\\OneDrive\\Documentos\\GitHub\\IndicadoresSDKJira\\DashboarJira\\jsconfig1.json";
+
+// Nombre de la conexión que deseas utilizar (puedes cambiar esto según tus necesidades)
+string connectionName = "manatee";
+string connectionName1 = "assaabloy";
+
+// Crear una instancia de DbConnector proporcionando la ruta del JSON y el nombre de la conexión
+DbConnector dbConnector = new DbConnector(jsonPath, connectionName);
+
 JiraAccess jira = new JiraAccess();
 var fechainicio = "2023-10-01";
 var fechaFinal = "2023-11-02";
 WriteToLog($"Inicio de descarga de componentes: {DateTime.Now:yyyy-MM-dd HH:mm:ss}", logFilePath);
+
+
+Console.WriteLine("Seleccione la base de datos a la que desea conectar:");
+Console.WriteLine("1. Manatee");
+Console.WriteLine("2. Assaabloy");
+string databaseOption = Console.ReadLine();
+
+DbConnector dbConnector;
+
+switch (databaseOption)
+{
+    case "1":
+        dbConnector = new DbConnector("Server=manatee.database.windows.net;Database=PuertasTransmilenioDB;User Id=administrador;Password=2022/M4n4t334zur3");
+        break;
+    case "2":
+        dbConnector = new DbConnector("Server=manatee.database.windows.net;Database=PuertasTransmilenioDBAssaabloy;User Id=administrador;Password=2022/M4n4t334zur3");
+        break;
+    default:
+        Console.WriteLine("Opción no válida. Saliendo de la aplicación.");
+        return; // Terminar la aplicación
+}
+
 
 while (true)
 {
