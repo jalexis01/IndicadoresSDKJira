@@ -5,21 +5,43 @@ using DashboarJira.Model;
 using DashboarJira.Services;
 using Microsoft.Extensions.Logging;
 using System.Data;
+using System.Text.Json;
 
 string projectDirectory = Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory).Parent.FullName;
 string logFilePath = Path.Combine(projectDirectory, "ProgramLog.txt"); // Cambiado a ProgramLog.txt
 
-// Ruta al archivo JSON que contiene las cadenas de conexión
-string jsonPath = "C:\\Users\\juana\\OneDrive\\Documentos\\GitHub\\IndicadoresSDKJira\\DashboarJira\\jsconfig1.json";
+string jsonFilePath = "jsconfig1.json";
+string json = File.ReadAllText(jsonFilePath);
 
-// Nombre de la conexión que deseas utilizar (puedes cambiar esto según tus necesidades)
-string connectionName = "manatee";
-string connectionName1 = "assaabloy";
 
-// Crear una instancia de DbConnector proporcionando la ruta del JSON y el nombre de la conexión
-DbConnector dbConnector = new DbConnector( connectionName);
+// Deserializa el JSON en un objeto JsonDocument
+JsonDocument document = JsonDocument.Parse(json);
 
-JiraAccess jira = new JiraAccess();
+// Aquí puedes preguntar al usuario qué conexión desea utilizar (manatee o assabloy)
+Console.WriteLine("Elige una conexión (manatee/assabloy):");
+string opcion = Console.ReadLine();
+
+// Accede directamente a las propiedades del JSON según la opción elegida
+JsonElement connectionElement = document.RootElement.GetProperty(opcion);
+
+if (connectionElement.TryGetProperty("Url", out JsonElement urlElement) &&
+    connectionElement.TryGetProperty("User", out JsonElement userElement) &&
+    connectionElement.TryGetProperty("Token", out JsonElement tokenElement) &&
+    connectionElement.TryGetProperty("ConnectionString", out JsonElement connectionStringElement))
+{
+    string url = urlElement.GetString();
+    string user = userElement.GetString();
+    string token = tokenElement.GetString();
+    string connectionString = connectionStringElement.GetString();
+
+    // Crea la instancia de JiraAccess
+    JiraAccess jiraAccess = new JiraAccess(url, user, token, connectionString);
+  
+}
+else
+{
+    Console.WriteLine("Opción no válida o propiedades faltantes en el JSON");
+}
 var fechainicio = "2023-10-01";
 var fechaFinal = "2023-11-02";
 WriteToLog($"Inicio de descarga de componentes: {DateTime.Now:yyyy-MM-dd HH:mm:ss}", logFilePath);
