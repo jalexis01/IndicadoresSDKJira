@@ -22,9 +22,12 @@ namespace DashboarJira.Services
         Jira jira;
         private DbConnector connector;
 
-        public JiraAccess()
+        public JiraAccess(string jiraUrl, string username, string password, string connectionString)
         {
-            connector = new DbConnector();
+            this.jiraUrl = jiraUrl;
+            this.username = username;
+            this.password = password;
+            connector = new DbConnector(connectionString);
             jira = Jira.CreateRestClient(jiraUrl, username, password);
         }
         const string proyectAssa = "project = 'Mesa de Ayuda'";
