@@ -126,13 +126,13 @@ while (true)
                 Console.Write("Estados cambiados");
                 break;
             case "4":
-                Console.Write("¿Está seguro que desea salir del aplicativo? (S/N): ");
+                Console.Write("¿Está seguro que desea cambiar la conexion? (S/N): ");
                 string respuesta = Console.ReadLine();
 
                 if (respuesta.ToLower() == "s")
                 {
                     // Agregar línea para registrar la hora de fin antes de salir del programa
-                    WriteToLog($"Fin de operación: {DateTime.Now:yyyy-MM-dd HH:mm:ss}", logFilePath);
+                    WriteToLog($"Cambio de conexion: {DateTime.Now:yyyy-MM-dd HH:mm:ss}", logFilePath);
                     Console.WriteLine("Saliendo de la aplicación.");
 
                     // Terminar la aplicación
@@ -149,9 +149,26 @@ while (true)
                 break;
             case "5":
                 // User chose to exit the program
-                WriteToLog($"Fin de operación: {DateTime.Now:yyyy-MM-dd HH:mm:ss}", logFilePath);
-                Console.WriteLine("Saliendo de la aplicación.");
-                Environment.Exit(0);
+                Console.Write("¿Está seguro que desea salir de la aplicacion? (S/N): ");
+                respuesta = Console.ReadLine();
+
+                if (respuesta.ToLower() == "s")
+                {
+                    // Agregar línea para registrar la hora de fin antes de salir del programa
+                    WriteToLog($"Salida de la aplicacion: {DateTime.Now:yyyy-MM-dd HH:mm:ss}", logFilePath);
+                    Console.WriteLine("Saliendo de la aplicación.");
+
+                    // Terminar la aplicación
+                    Environment.Exit(0);
+                }
+                else if (respuesta.ToLower() == "n")
+                {
+                    // No hace nada y vuelve al menú anterior
+                }
+                else
+                {
+                    Console.WriteLine("Opción no válida. Volviendo al menú anterior.");
+                }
                 break;
             default:
                 Console.WriteLine("Opción no válida. Saliendo de la aplicación.");
