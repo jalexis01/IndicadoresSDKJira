@@ -16,23 +16,9 @@ namespace DashboarJira.Services
         private string connectionString;
 
 
-        public DbConnector(string jsonPath, string connectionName)
+        public DbConnector( string connectionName)
         {
-            // Leer el JSON desde el archivo
-            string json = System.IO.File.ReadAllText(jsonPath);
-
-            // Convertir el JSON a un objeto JObject
-            JObject jsonObj = JObject.Parse(json);
-
-            // Obtener la cadena de conexión según el nombre proporcionado
-            connectionString = jsonObj[connectionName]?["connectionString"]?.ToString();
-
-            if (connectionString == null)
-            {
-                throw new ArgumentException($"No se encontró una cadena de conexión para el nombre '{connectionName}' en el archivo JSON.");
-            }
-
-            // Resto del código para inicializar la conexión...
+            connectionString = connectionName;
         }
 
         public DataTable GetMessages()

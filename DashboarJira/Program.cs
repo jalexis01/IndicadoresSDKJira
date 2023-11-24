@@ -17,7 +17,7 @@ string connectionName = "manatee";
 string connectionName1 = "assaabloy";
 
 // Crear una instancia de DbConnector proporcionando la ruta del JSON y el nombre de la conexión
-DbConnector dbConnector = new DbConnector(jsonPath, connectionName);
+DbConnector dbConnector = new DbConnector( connectionName);
 
 JiraAccess jira = new JiraAccess();
 var fechainicio = "2023-10-01";
