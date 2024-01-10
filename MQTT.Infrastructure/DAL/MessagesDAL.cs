@@ -287,7 +287,7 @@ namespace MQTT.Infrastructure.DAL
 
                 using (var DBContext = objContext.DBConnection())
                 {
-                    DBContext.Database.ExecuteSqlCommand(sentence);
+                    DBContext.Database.ExecuteSqlRaw(sentence);
                 }
             }
             catch (Exception ex)
@@ -428,7 +428,7 @@ namespace MQTT.Infrastructure.DAL
 
                 using (var DBContext = objContext.DBConnection())
                 {
-                    totalRows = DBContext.Database.ExecuteSqlCommand(sentence);
+                    totalRows = DBContext.Database.ExecuteSqlRaw(sentence);
                 }
                 return totalRows;
             }
