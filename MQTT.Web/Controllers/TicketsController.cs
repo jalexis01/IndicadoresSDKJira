@@ -54,7 +54,7 @@ namespace MQTT.Web.Controllers
 
         int start = 0;
 
-        public List<Ticket> getTickets(string startDate, string endDate, int max, string componente, string tipoMantenimiento)
+        public List<Ticket> getTickets(string startDate, string endDate, int max, string componente, string tipoMantenimiento, bool cerrados)
         {
             try
             {
@@ -85,7 +85,7 @@ namespace MQTT.Web.Controllers
                 }
                 else
                 {
-                    tickets = jiraAccess.GetTikets(start, max, formattedStartDate, formattedEndDate, componente, tipoMantenimiento);
+                    tickets = jiraAccess.GetTikets(start, max, formattedStartDate, formattedEndDate, componente, tipoMantenimiento, cerrados);
                 }
                 
                 return tickets;

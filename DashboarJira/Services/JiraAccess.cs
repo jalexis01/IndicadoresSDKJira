@@ -35,15 +35,15 @@ namespace DashboarJira.Services
         const string proyectManateeMTO = "(project = 'TICKETMP')";
         const string proyectManateeDRV = "(project = 'TICKETDRV')";
         /*TODO*/
-        public List<Ticket> GetTikets(int start, int max, string startDate, string endDate, string idComponente, string tipoMantenimiento)
+        public List<Ticket> GetTikets(int start, int max, string startDate, string endDate, string idComponente, string tipoMantenimiento, bool cerrados)
         {
             try
             {
-                List<Ticket> result = GetTiketsCC(start, max, startDate, endDate, idComponente, tipoMantenimiento) ?? new List<Ticket>();
+                List<Ticket> result = GetTiketsCC(start, max, startDate, endDate, idComponente, tipoMantenimiento, cerrados) ?? new List<Ticket>();
                 result = result.Concat(GetTiketsMTO(start, max, startDate, endDate, idComponente, tipoMantenimiento) ?? new List<Ticket>()).ToList().OrderByDescending(issue => issue.fecha_apertura).ToList();
                 if (jiraUrl == "https://manateecc.atlassian.net/")
                 {
-                    result = result.Concat(GetTiketsDRV(start, max, startDate, endDate, idComponente, tipoMantenimiento) ?? new List<Ticket>()).ToList().OrderByDescending(issue => issue.fecha_apertura).ToList();
+                    result = result.Concat(GetTiketsDRV(start, max, startDate, endDate, idComponente, tipoMantenimiento, cerrados) ?? new List<Ticket>()).ToList().OrderByDescending(issue => issue.fecha_apertura).ToList();
                 }
                 result = result.OrderByDescending(issue => issue.fecha_apertura).ToList();
 
@@ -52,7 +52,7 @@ namespace DashboarJira.Services
             catch (Exception ex) { return new List<Ticket>(); }
 
         }
-        public List<Ticket> GetTiketsCC(int start, int max, string startDate, string endDate, string idComponente, string tipoMantenimiento)
+        public List<Ticket> GetTiketsCC(int start, int max, string startDate, string endDate, string idComponente, string tipoMantenimiento, bool cerrados)
         {
             try
             {
@@ -65,6 +65,9 @@ namespace DashboarJira.Services
                 else
                 {
                     jql = $"{proyectManatee} and issuetype = 'Solicitud de Mantenimiento'";
+                }
+                if (cerrados) {
+                    jql += " AND status = cerrado";
                 }
                 if (!string.IsNullOrWhiteSpace(tipoMantenimiento))
                 {
@@ -97,7 +100,7 @@ namespace DashboarJira.Services
                 List<Ticket> result = ConvertIssusInTickets(issues);
                 if (total > max + start)
                 {
-                    result = result.Concat(GetTiketsCC(start + max, max, startDate, endDate, idComponente, tipoMantenimiento)).ToList();
+                    result = result.Concat(GetTiketsCC(start + max, max, startDate, endDate, idComponente, tipoMantenimiento, cerrados)).ToList();
                 }
                 return result;
             }
@@ -166,7 +169,7 @@ namespace DashboarJira.Services
             return null;
         }
 
-        public List<Ticket> GetTiketsDRV(int start, int max, string startDate, string endDate, string idComponente, string tipoMantenimiento)
+        public List<Ticket> GetTiketsDRV(int start, int max, string startDate, string endDate, string idComponente, string tipoMantenimiento, bool cerrados)
         {
             try
             {
@@ -179,6 +182,10 @@ namespace DashboarJira.Services
                 else
                 {
                     jql = $"{proyectManateeDRV} and issuetype = 'Solicitud de Mantenimiento'";
+                }
+                if (cerrados)
+                {
+                    jql += " AND status = cerrado";
                 }
                 if (!string.IsNullOrWhiteSpace(tipoMantenimiento))
                 {
@@ -211,7 +218,7 @@ namespace DashboarJira.Services
                 List<Ticket> result = ConvertIssusInTicketsMTO(issues);
                 if (total > max + start)
                 {
-                    result = result.Concat(GetTiketsDRV(start + max, max, startDate, endDate, idComponente, tipoMantenimiento)).ToList();
+                    result = result.Concat(GetTiketsDRV(start + max, max, startDate, endDate, idComponente, tipoMantenimiento,cerrados)).ToList();
                 }
                 return result;
             }
@@ -839,11 +846,11 @@ namespace DashboarJira.Services
                 //created >= 2023-04-04 AND created <= 2023-04-13 AND issuetype = "Solicitud de Mantenimiento" AND resolution = Unresolved AND "Clase de fallo" = AIO AND "Identificacion componente" ~ 9119-WA-OR-1 ORDER BY key DESC, "Time to resolution" ASC
                 if (jiraUrl == "https://assaabloymda.atlassian.net/")
                 {
-                    jql = $"{proyectAssa} and issuetype = 'Solicitud de Mantenimiento' and status = cerrado";
+                    jql = $"{proyectAssa} and issuetype = 'Solicitud de Mantenimiento' and status = Cerrado";
                 }
                 else
                 {
-                    jql = $"{proyectManatee} and issuetype = 'Solicitud de Mantenimiento' and status = cerrado";
+                    jql = $"{proyectManatee} and issuetype = 'Solicitud de Mantenimiento' and status = Cerrado";
                 }
                 if (idComponente != null)
                 {
@@ -887,11 +894,11 @@ namespace DashboarJira.Services
                 //created >= 2023-04-04 AND created <= 2023-04-13 AND issuetype = "Solicitud de Mantenimiento" AND resolution = Unresolved AND "Clase de fallo" = AIO AND "Identificacion componente" ~ 9119-WA-OR-1 ORDER BY key DESC, "Time to resolution" ASC
                 if (jiraUrl == "https://assaabloymda.atlassian.net/")
                 {
-                    jql = $"{proyectAssaMTO} and issuetype = 'Solicitud de Mantenimiento' and status = cerrado";
+                    jql = $"{proyectAssaMTO} and issuetype = 'Solicitud de Mantenimiento' and status = Cerrado";
                 }
                 else
                 {
-                    jql = $"{proyectManateeMTO} and issuetype = 'Solicitud de Mantenimiento' and status = cerrado";
+                    jql = $"{proyectManateeMTO} and issuetype = 'Solicitud de Mantenimiento' and status = Cerrado";
                 }
 
 
@@ -937,11 +944,11 @@ namespace DashboarJira.Services
                 //created >= 2023-04-04 AND created <= 2023-04-13 AND issuetype = "Solicitud de Mantenimiento" AND resolution = Unresolved AND "Clase de fallo" = AIO AND "Identificacion componente" ~ 9119-WA-OR-1 ORDER BY key DESC, "Time to resolution" ASC
                 if (jiraUrl == "https://assaabloymda.atlassian.net/")
                 {
-                    jql = $"{proyectAssaMTO} and issuetype = 'Solicitud de Mantenimiento' and status = cerrado";
+                    jql = $"{proyectAssaMTO} and issuetype = 'Solicitud de Mantenimiento' and status = Cerrado";
                 }
                 else
                 {
-                    jql = $"{proyectManateeDRV} and issuetype = 'Solicitud de Mantenimiento' and status = cerrado";
+                    jql = $"{proyectManateeDRV} and issuetype = 'Solicitud de Mantenimiento' and status = Cerrado";
                 }
 
 

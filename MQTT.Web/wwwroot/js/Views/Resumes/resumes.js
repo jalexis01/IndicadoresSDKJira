@@ -429,8 +429,8 @@ function ServiceGetMessages() {
 
                 return $.ajax({
                     type: "GET",
-                    url: "/Tickets/GetTickets",
-                    data: { startDate: startDate, endDate: endDate, max: max, componente: componente },
+                    url: "/Resumes/GetTickets",
+                    data: { startDate: startDate, endDate: endDate, max: max, componente: componente, cerrados: true },
                 });
             } else {
                 throw new Error('No se encontraron datos del componente.');
