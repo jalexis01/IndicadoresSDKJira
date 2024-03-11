@@ -1273,10 +1273,14 @@ namespace DashboarJira.Services
             try
             {
                 string downloadsFolder = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
-                downloadsFolder = Path.Combine(downloadsFolder, "Downloads");
+                string carpeta = jiraUrl == "https://manateecc.atlassian.net/" ? "Manatee" : "assabloy";
+                downloadsFolder = Path.Combine(downloadsFolder, "Downloads", carpeta);
                 var templateDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "PlantillasExcel");
                 var templateFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "PlantillasExcel", "HVTICKET.xlsx");
-
+                if (!Directory.Exists(downloadsFolder))
+                {
+                    Directory.CreateDirectory(downloadsFolder);
+                }
 
                 ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
@@ -1433,9 +1437,13 @@ namespace DashboarJira.Services
             {
 
                 string downloadsFolder = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
-                downloadsFolder = Path.Combine(downloadsFolder, "Downloads");
+                string carpeta = jiraUrl == "https://manateecc.atlassian.net/" ? "Manatee" : "assabloy";
+                downloadsFolder = Path.Combine(downloadsFolder, "Downloads", carpeta);
                 ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
-
+                if (!Directory.Exists(downloadsFolder))
+                {
+                    Directory.CreateDirectory(downloadsFolder);
+                }
                 // Obtén los datos del componente utilizando el método GetComponenteHV
                 ComponenteHV componente = connector.GetComponenteHV(idComponente);
 
