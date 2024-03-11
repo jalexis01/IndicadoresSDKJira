@@ -58,6 +58,12 @@ namespace DashboarJira.Model
                         return "Plantilla MTE-TEL-22 Assa.xlsx";
                     }
                     return "Plantilla MTE-TEL-22 Nautilus.xlsx";
+                case "ITS":
+                    if (marca == "https://assaabloymda.atlassian.net/")
+                    {
+                        return "Plantilla MTE-TEL-22 Assa.xlsx";
+                    }
+                    return "Plantilla MTE-TEL-22 Nautilus.xlsx";
 
                 default:
                     // Si el modelo no coincide con ninguno de los casos anteriores, usa una plantilla predeterminada

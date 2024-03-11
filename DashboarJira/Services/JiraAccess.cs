@@ -12,12 +12,12 @@ namespace DashboarJira.Services
 {
     public class JiraAccess
     {
-        string jiraUrl = "https://manateecc.atlassian.net/";
-        string username = "desarrollocc@manateeingenieria.com";
-        string password = "ATATT3xFfGF0ZRHIEZTEJVRnhNKviH0CGed6QXqCDMj5bCmKSEbO00UUjHUb3yDcaA4YD1SHohyDr4qnwRx2x4Tu_S_QW_xlGIcIUDvL7CFKEg47_Jcy4Dmq6YzO0dvqB3qeT-EVWfwJ2jJ-9vEUfsqXavD0IIGA7DAZHGCtIWhxgwKIbAWsmeA=038B810D";
-        //string jiraUrl = "https://assaabloymda.atlassian.net/";
+        //string jiraUrl = "https://manateecc.atlassian.net/";
         //string username = "desarrollocc@manateeingenieria.com";
         //string password = "ATATT3xFfGF0ZRHIEZTEJVRnhNKviH0CGed6QXqCDMj5bCmKSEbO00UUjHUb3yDcaA4YD1SHohyDr4qnwRx2x4Tu_S_QW_xlGIcIUDvL7CFKEg47_Jcy4Dmq6YzO0dvqB3qeT-EVWfwJ2jJ-9vEUfsqXavD0IIGA7DAZHGCtIWhxgwKIbAWsmeA=038B810D";
+        string jiraUrl = "https://assaabloymda.atlassian.net/";
+        string username = "desarrollocc@manateeingenieria.com";
+        string password = "ATATT3xFfGF0ZRHIEZTEJVRnhNKviH0CGed6QXqCDMj5bCmKSEbO00UUjHUb3yDcaA4YD1SHohyDr4qnwRx2x4Tu_S_QW_xlGIcIUDvL7CFKEg47_Jcy4Dmq6YzO0dvqB3qeT-EVWfwJ2jJ-9vEUfsqXavD0IIGA7DAZHGCtIWhxgwKIbAWsmeA=038B810D";
 
         Jira jira;
         private DbConnector connector;
@@ -1275,11 +1275,16 @@ namespace DashboarJira.Services
             try
             {
                 string downloadsFolder = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
-                downloadsFolder = Path.Combine(downloadsFolder, "Downloads");
+                string carpeta = jiraUrl == "https://manateecc.atlassian.net/"?"Manatee":"assabloy";
+                downloadsFolder = Path.Combine(downloadsFolder, "Downloads", carpeta);
 
                 ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
                 int currentRow = 2; // Inicializa fuera del bucle foreach
+                if (!Directory.Exists(downloadsFolder))
+                {
+                    Directory.CreateDirectory(downloadsFolder);
+                }
 
                 foreach (var ticket in tickets)
                 {
@@ -1416,7 +1421,12 @@ namespace DashboarJira.Services
             {
 
                 string downloadsFolder = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
-                downloadsFolder = Path.Combine(downloadsFolder, "Downloads");
+                string carpeta = jiraUrl == "https://manateecc.atlassian.net/" ? "Manatee" : "assabloy";
+                downloadsFolder = Path.Combine(downloadsFolder, "Downloads", carpeta);
+                if (!Directory.Exists(downloadsFolder))
+                {
+                    Directory.CreateDirectory(downloadsFolder);
+                }
                 ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
                 // Obtén los datos del componente utilizando el método GetComponenteHV

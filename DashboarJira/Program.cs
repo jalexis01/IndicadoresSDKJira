@@ -34,9 +34,10 @@ string logFilePath = Path.Combine(projectDirectory, "ErroresLog.txt");
 //    {
 //        try
 //        {
-            jira.ExportComponenteToExcel("2304-WC-OR-1");
-            List<TicketHV> tickets = jira.GetTicketHVs(0, 0, "2304-WC-OR-1");
+            jira.ExportComponenteToExcel("14003-WA-SR-5");
+            List<TicketHV> tickets = jira.GetTicketHVs(0, 0, "14003-WA-SR-5");
             jira.ExportTicketsToExcel(tickets);
+            
     //    }
     //    catch (Exception e)
     //    {
