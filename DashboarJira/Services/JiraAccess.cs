@@ -1275,7 +1275,7 @@ namespace DashboarJira.Services
             try
             {
                 string downloadsFolder = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
-                string carpeta = jiraUrl == "https://manateecc.atlassian.net/"?"Manatee":"assabloy";
+                string carpeta = jiraUrl == "https://manateecc.atlassian.net/"?"ManateeHV":"assabloyHV";
                 downloadsFolder = Path.Combine(downloadsFolder, "Downloads", carpeta);
 
                 ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
@@ -1421,7 +1421,7 @@ namespace DashboarJira.Services
             {
 
                 string downloadsFolder = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
-                string carpeta = jiraUrl == "https://manateecc.atlassian.net/" ? "Manatee" : "assabloy";
+                string carpeta = jiraUrl == "https://manateecc.atlassian.net/" ? "ManateeHV" : "assabloyHV";
                 downloadsFolder = Path.Combine(downloadsFolder, "Downloads", carpeta);
                 if (!Directory.Exists(downloadsFolder))
                 {
