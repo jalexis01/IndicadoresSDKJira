@@ -34,21 +34,13 @@ namespace DashboarJira.Model
         public string GetTemplateFileName(string marca)
         {
             // Implementa un switch para asignar el nombre de la plantilla según el modelo
-            switch (this.Modelo)
+            switch (marca)
             {
-                case "MTE-MT-22":
-                    return "Plantilla MTE-MT-22 Assa.xlsx"; 
-                case "MTE-SS-22":
-                    if (marca == "https://assaabloymda.atlassian.net/") {
-                        return "Plantilla MTE-SS-22 Assa.xlsx";
-                    }
-                    return "Plantilla MTE-SS-22 Nautilus.xlsx";
-                case "MTE-TEL-22":
-                    if (marca == "https://assaabloymda.atlassian.net/")
-                    {
-                        return "Plantilla MTE-TEL-22 Assa.xlsx";
-                    }
-                    return "Plantilla MTE-TEL-22 Nautilus.xlsx";
+                case "https://assaabloymda.atlassian.net/":
+                    return "Plantilla " + this.Modelo + " Assa.xlsx"; 
+                case "https://manateecc.atlassian.net/":
+                   
+                    return "Plantilla "+ this.Modelo + " Nautilus.xlsx";
 
                 default:
                     // Si el modelo no coincide con ninguno de los casos anteriores, usa una plantilla predeterminada
