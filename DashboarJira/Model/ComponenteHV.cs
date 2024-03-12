@@ -21,15 +21,24 @@ namespace DashboarJira.Model
         {
             DateTime fechaActual = DateTime.Now;
 
-            // Establecer las horas, minutos y segundos a cero para ambas fechas
-            DateTime fechaInicioSinHoras = this.FechaInicio.Date;
-            DateTime fechaActualSinHoras = fechaActual.Date;
+            // Verificar si FechaInicio es la fecha por defecto (1 de enero de 1900)
+            if (this.FechaInicio.Year == 1900)
+            {
+                // Si FechaInicio es la fecha por defecto, establecer horasDeOperacion como -1
+                this.horasDeOperacion = -1;
+            }
+            else
+            {
+                // Establecer las horas, minutos y segundos a cero para ambas fechas
+                DateTime fechaInicioSinHoras = this.FechaInicio.Date;
+                DateTime fechaActualSinHoras = fechaActual.Date;
 
-            // Calcular la diferencia sin las horas
-            TimeSpan diferencia = fechaActualSinHoras - fechaInicioSinHoras;
+                // Calcular la diferencia sin las horas
+                TimeSpan diferencia = fechaActualSinHoras - fechaInicioSinHoras;
 
-            // Asignar el resultado a la propiedad horasDeOperacion
-            this.horasDeOperacion = diferencia.TotalHours;
+                // Asignar el resultado a la propiedad horasDeOperacion
+                this.horasDeOperacion = diferencia.TotalHours;
+            }
         }
         public string GetTemplateFileName(string marca)
         {

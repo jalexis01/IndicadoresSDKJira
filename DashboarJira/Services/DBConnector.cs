@@ -94,7 +94,7 @@ namespace DashboarJira.Services
 
                     
                     string query = "SELECT  [IdComponente], [Serial],[aniodefabricacion],[descargado] ,[tipoComponente] ,[Modelo] ,[fechaInicio]FROM[dbo].[registroHV] " +
-                                   "WHERE [IdComponente] = @IdComponente AND [tipoComponente] = 'puerta' ";
+                                   "WHERE [IdComponente] = @IdComponente  ";
 
                     using (SqlCommand command = new SqlCommand(query, connection))
                     {
