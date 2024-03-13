@@ -462,15 +462,30 @@ function ServiceGetMessages() {
 
                 columnContent += '<tr>';
                 columnContent += '<th class="header-cell">FABRICANTE</th><td>' + listaComponentes[0].Fabricante + '</td>';
-                columnContent += '<th class="header-cell">AÑO DE FABRICACIÓN</th><td>' + listaComponentes[0].AnioFabricacion + '</td>';
+
+                var anio = '';
+                anio = listaComponentes[0].AnioFabricacion == 1900 ? '' : listaComponentes[0].AnioFabricacion;
+                columnContent += '<th class="header-cell">AÑO DE FABRICACIÓN</th><td>' + anio + '</td>';
                 columnContent += '</tr>';
 
+                //var fechaInicioOperacion = new Date(listaComponentes[0].InicioOperacion);
+                //var fechaInicioOperacionFormateada = fechaInicioOperacion.toISOString().substring(0, 10);
+
+                //columnContent += '<tr>';
+                //columnContent += '<th class="header-cell">FECHA INICIO OPERACIÓN</th><td>' + fechaInicioOperacionFormateada + '</td>';
+
+                var fechaInicioOperacionFormateada = '';
                 var fechaInicioOperacion = new Date(listaComponentes[0].InicioOperacion);
-                var fechaInicioOperacionFormateada = fechaInicioOperacion.toISOString().substring(0, 10);               
+                if (fechaInicioOperacion.toISOString().substring(0, 10) !== '1900-01-01') {
+                    fechaInicioOperacionFormateada = fechaInicioOperacion.toISOString().substring(0, 10);
+                }
 
                 columnContent += '<tr>';
                 columnContent += '<th class="header-cell">FECHA INICIO OPERACIÓN</th><td>' + fechaInicioOperacionFormateada + '</td>';
-                columnContent += '<th class="header-cell">HORAS DE OPERACIÓN</th><td>' + listaComponentes[0].HorasOperacion + '</td>';
+
+                var horas = '';
+                horas = listaComponentes[0].HorasOperacion == -1 ? '' : listaComponentes[0].HorasOperacion;
+                columnContent += '<th class="header-cell">HORAS DE OPERACIÓN</th><td>' + horas + '</td>';
 
                 columnContent += '</table>';
 

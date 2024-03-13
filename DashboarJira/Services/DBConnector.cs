@@ -96,7 +96,7 @@ namespace DashboarJira.Services
                     connection.Open();
 
                     string query = "SELECT  [IdComponente], [Serial],[aniodefabricacion], [tipoComponente] ,[Modelo] ,[fechaInicio]FROM[dbo].[registroHV] " +
-                                   "WHERE [IdComponente] = @IdComponente AND [tipoComponente] = 'puerta' ";
+                                   "WHERE [IdComponente] = @IdComponente AND [tipoComponente] = 'Puerta' ";
 
                     using (SqlCommand command = new SqlCommand(query, connection))
                     {
@@ -109,12 +109,12 @@ namespace DashboarJira.Services
                             {
                                 componente = new ComponenteHV
                                 {
-                                    IdComponente = reader.GetString(reader.GetOrdinal("IdComponente")),
-                                    Serial = reader.GetString(reader.GetOrdinal("Serial")),
-                                    AnioFabricacion = reader.GetInt32(reader.GetOrdinal("aniodefabricacion")),
-                                    Modelo = reader.GetString(reader.GetOrdinal("Modelo")),
-                                    FechaInicio = reader.GetDateTime(reader.GetOrdinal("fechaInicio")),
-                                    tipoComponente = reader.GetString(reader.GetOrdinal("tipoComponente")),
+                                    IdComponente = !reader.IsDBNull(reader.GetOrdinal("IdComponente")) ? reader.GetString(reader.GetOrdinal("IdComponente")) : string.Empty,
+                                    Serial = !reader.IsDBNull(reader.GetOrdinal("Serial")) ? reader.GetString(reader.GetOrdinal("Serial")) : string.Empty,
+                                    AnioFabricacion = !reader.IsDBNull(reader.GetOrdinal("aniodefabricacion")) ? reader.GetInt32(reader.GetOrdinal("aniodefabricacion")) : 1900,
+                                    Modelo = !reader.IsDBNull(reader.GetOrdinal("Modelo")) ? reader.GetString(reader.GetOrdinal("Modelo")) : string.Empty,
+                                    FechaInicio = !reader.IsDBNull(reader.GetOrdinal("fechaInicio")) ? reader.GetDateTime(reader.GetOrdinal("fechaInicio")) : new DateTime(1900, 1, 1),
+                                    tipoComponente = !reader.IsDBNull(reader.GetOrdinal("tipoComponente")) ? reader.GetString(reader.GetOrdinal("tipoComponente")) : string.Empty,
                                     horasDeOperacion = 0
                                 };
                                 componente.CalcularHorasDeOperacion();
