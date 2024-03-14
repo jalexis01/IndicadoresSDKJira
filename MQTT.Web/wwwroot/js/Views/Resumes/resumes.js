@@ -439,10 +439,11 @@ function ServiceGetMessages() {
         .then(data => {
             Swal.close();
             console.log(data);
-            if (data.length == 0) {
-                noData();
-                return;
-            } else {
+            //if (data.length == 0) {
+            //    noData();
+            //    return;
+
+            //} else {
                 var columnContent = '<table class="result-box-table">';                
 
                 columnContent += '<tr>';
@@ -502,7 +503,7 @@ function ServiceGetMessages() {
                 setGrid(data, dataColumns, exportFunctions);
 
                 $('#button-primary-descargar').show();
-            }
+            //}
         })
         .catch(error => {
             if (error.status && error.status === 404) {
