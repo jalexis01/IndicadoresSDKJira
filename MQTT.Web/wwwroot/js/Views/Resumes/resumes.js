@@ -483,6 +483,7 @@ function ServiceGetMessages() {
                 columnContent += '<tr>';
                 columnContent += '<th class="header-cell">FECHA INICIO OPERACIÓN</th><td>' + fechaInicioOperacionFormateada + '</td>';
 
+                //Se cambia en la vista las horas de operacion
                 var horas = '';
                 horas = listaComponentes[0].HorasOperacion == -1 ? '' : listaComponentes[0].HorasOperacion;
                 columnContent += '<th class="header-cell">HORAS DE OPERACIÓN</th><td>' + horas + '</td>';
