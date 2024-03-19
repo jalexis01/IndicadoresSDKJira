@@ -8,21 +8,22 @@ namespace DashboarJira.Model
 {
     public class ComponenteHV
     {
-        public string IdComponente { get; set; }
-        public string Serial { get; set; }
-        public int AnioFabricacion { get; set; }
-        public string Modelo { get; set; }
-        public DateTime FechaInicio { get; set; }
-        public Double horasDeOperacion { get; set; }
-        public int descargado { get; set; }
-        public string tipoComponente { get; set; }
+        public string? IdComponente { get; set; }
+        public string? Serial { get; set; }
+        public int? AnioFabricacion { get; set; }
+        public string? Modelo { get; set; }
+        public DateTime? FechaInicio { get; set; }
+        public double? horasDeOperacion { get; set; }
+        public int? descargado { get; set; }
+        public string? tipoComponente { get; set; }
+
 
         public void CalcularHorasDeOperacion()
         {
             DateTime fechaActual = DateTime.Now;
 
             // Verificar si FechaInicio es la fecha por defecto (1 de enero de 1900)
-            if (this.FechaInicio.Year == 1900)
+            if (this.FechaInicio.Value.Year == 1900)
             {
                 // Si FechaInicio es la fecha por defecto, establecer horasDeOperacion como -1
                 this.horasDeOperacion = -1;
@@ -30,7 +31,7 @@ namespace DashboarJira.Model
             else
             {
                 // Establecer las horas, minutos y segundos a cero para ambas fechas
-                DateTime fechaInicioSinHoras = this.FechaInicio.Date;
+                DateTime fechaInicioSinHoras = this.FechaInicio.Value.Date;
                 DateTime fechaActualSinHoras = fechaActual.Date;
 
                 // Calcular la diferencia sin las horas

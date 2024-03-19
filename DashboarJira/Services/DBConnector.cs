@@ -211,13 +211,14 @@ namespace DashboarJira.Services
                             {
                                 ComponenteHV componente = new ComponenteHV
                                 {
-                                    IdComponente = reader.GetString(reader.GetOrdinal("IdComponente")),
-                                    Serial = reader.GetString(reader.GetOrdinal("Serial")),
-                                    AnioFabricacion = reader.GetInt32(reader.GetOrdinal("aniodefabricacion")),
-                                    Modelo = reader.GetString(reader.GetOrdinal("Modelo")),
-                                    FechaInicio = reader.GetDateTime(reader.GetOrdinal("fechaInicio")),
-                                    descargado = reader.GetInt32(reader.GetOrdinal("descargado"))
+                                    IdComponente = reader.IsDBNull(reader.GetOrdinal("IdComponente")) ? null : reader.GetString(reader.GetOrdinal("IdComponente")),
+                                    Serial = reader.IsDBNull(reader.GetOrdinal("Serial")) ? null : reader.GetString(reader.GetOrdinal("Serial")),
+                                    AnioFabricacion = reader.IsDBNull(reader.GetOrdinal("aniodefabricacion")) ? (int?)null : reader.GetInt32(reader.GetOrdinal("aniodefabricacion")),
+                                    Modelo = reader.IsDBNull(reader.GetOrdinal("Modelo")) ? null : reader.GetString(reader.GetOrdinal("Modelo")),
+                                    FechaInicio = reader.IsDBNull(reader.GetOrdinal("fechaInicio")) ? (DateTime?)null : reader.GetDateTime(reader.GetOrdinal("fechaInicio")),
+                                    descargado = reader.IsDBNull(reader.GetOrdinal("descargado")) ? (int?)null : reader.GetInt32(reader.GetOrdinal("descargado"))
                                 };
+
 
                                 componentes.Add(componente);
                             }
@@ -256,13 +257,14 @@ namespace DashboarJira.Services
                             {
                                 ComponenteHV componente = new ComponenteHV
                                 {
-                                    IdComponente = reader.GetString(reader.GetOrdinal("IdComponente")),
-                                    Serial = reader.GetString(reader.GetOrdinal("Serial")),
-                                    AnioFabricacion = reader.GetInt32(reader.GetOrdinal("aniodefabricacion")),
-                                    Modelo = reader.GetString(reader.GetOrdinal("Modelo")),
-                                    FechaInicio = reader.GetDateTime(reader.GetOrdinal("fechaInicio")),
-                                    descargado = reader.GetInt32(reader.GetOrdinal("descargado"))
+                                    IdComponente = reader.IsDBNull(reader.GetOrdinal("IdComponente")) ? null : reader.GetString(reader.GetOrdinal("IdComponente")),
+                                    Serial = reader.IsDBNull(reader.GetOrdinal("Serial")) ? null : reader.GetString(reader.GetOrdinal("Serial")),
+                                    AnioFabricacion = reader.IsDBNull(reader.GetOrdinal("aniodefabricacion")) ? (int?)null : reader.GetInt32(reader.GetOrdinal("aniodefabricacion")),
+                                    Modelo = reader.IsDBNull(reader.GetOrdinal("Modelo")) ? null : reader.GetString(reader.GetOrdinal("Modelo")),
+                                    FechaInicio = reader.IsDBNull(reader.GetOrdinal("fechaInicio")) ? (DateTime?)null : reader.GetDateTime(reader.GetOrdinal("fechaInicio")),
+                                    descargado = reader.IsDBNull(reader.GetOrdinal("descargado")) ? (int?)null : reader.GetInt32(reader.GetOrdinal("descargado"))
                                 };
+
 
                                 componentes.Add(componente);
                             }
