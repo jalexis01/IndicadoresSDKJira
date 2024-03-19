@@ -8,7 +8,7 @@ namespace DashboarJira.Model
 {
     public class ComponenteHV
     {
-        public String IdComponente { get; set; }
+        public string IdComponente { get; set; }
         public string Serial { get; set; }
         public int AnioFabricacion { get; set; }
         public string Modelo { get; set; }

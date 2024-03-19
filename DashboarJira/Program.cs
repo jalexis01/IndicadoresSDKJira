@@ -4,7 +4,10 @@ using DashboarJira.Controller;
 using DashboarJira.Model;
 using DashboarJira.Services;
 using Microsoft.Extensions.Logging;
-using System.Data;
+using RestSharp.Extensions;
+using System;
+using System.IO;
+using System.Linq;
 using System.Text.Json;
 
 string projectDirectory = Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory).Parent.FullName;
@@ -12,8 +15,6 @@ string logFilePath = Path.Combine(projectDirectory, "ProgramLog.txt"); // Cambia
 
 string jsonFilePath = "jsconfig1.json";
 string json = File.ReadAllText(jsonFilePath);
-
-
 
 JsonDocument document = JsonDocument.Parse(json);
 string url = "";
@@ -99,6 +100,7 @@ while (true)
         Console.WriteLine("3. Cambiar el estado de todos los componentes a noDescargado");
         Console.WriteLine("4. Cambiar la conexión");
         Console.WriteLine("5. Salir");
+        Console.WriteLine("6. Otra opción");
 
         string input = Console.ReadLine();
 
@@ -114,7 +116,7 @@ while (true)
                 if (componente != null)
                 {
                     Console.Write("Descargando componente: " + componenteId);
-                    DescargarInformacionComponente(jiraAccess, componente, logFilePath,dbConnector);
+                    DescargarInformacionComponente(jiraAccess, componente, logFilePath, dbConnector);
                 }
                 else
                 {
@@ -170,17 +172,39 @@ while (true)
                     Console.WriteLine("Opción no válida. Volviendo al menú anterior.");
                 }
                 break;
-            default:
-                Console.WriteLine("Opción no válida. Saliendo de la aplicación.");
-                Environment.Exit(0);
+            case "6":
+                Console.WriteLine("Seleccione el tipo de componente a descargar:");
+                Console.WriteLine("1. ITS");
+                Console.WriteLine("2. MTE");
+                Console.WriteLine("3. RFID");
+                string tipoSeleccionado = Console.ReadLine();
+                switch (tipoSeleccionado)
+                {
+                    case "1":
+                        DescargarInformacionComponentesTipo(jiraAccess, dbConnector, "ITS");
+                        break;
+                    case "2":
+                        DescargarInformacionComponentesTipo(jiraAccess, dbConnector, "MTE");
+                        break;
+                    case "3":
+                        DescargarInformacionComponentesTipo(jiraAccess, dbConnector, "RFID");
+                        break;
+                    default:
+                        Console.WriteLine("Opción no válida");
+                        break;
+                }
                 break;
+
+
+
+
         }
     }
 }
 
+
 void DescargarInformacionTodosComponentes(JiraAccess jira, DbConnector db)
 {
-
     WriteToLog($"Inicio de descarga de componentes: {DateTime.Now:yyyy-MM-dd HH:mm:ss}", logFilePath);
 
     try
@@ -221,7 +245,6 @@ void DescargarInformacionTodosComponentes(JiraAccess jira, DbConnector db)
 
                                 // Puedes añadir algún tipo de pausa o espera entre intentos si es necesario
                             }
-                            WriteToLog($"Fin de descarga de componentes: {DateTime.Now:yyyy-MM-dd HH:mm:ss}", logFilePath);
                         }
                     }
                     else
@@ -248,8 +271,8 @@ void DescargarInformacionTodosComponentes(JiraAccess jira, DbConnector db)
     }
 
     // Más código aquí si es necesario...
-
 }
+
 void DescargarInformacionComponente(JiraAccess jira, ComponenteHV componente, string logFilePath, DbConnector db)
 {
 
@@ -282,6 +305,79 @@ void WriteToLog(string message, string logFilePath)
         // Manejar cualquier error al escribir en el archivo de log
     }
 }
+
+
+void DescargarInformacionComponentesTipo(JiraAccess jira, DbConnector db, string tipo)
+{
+    WriteToLog($"Inicio de descarga de componentes: {DateTime.Now:yyyy-MM-dd HH:mm:ss}", logFilePath);
+
+    try
+    {
+        while (true)
+        {
+            List<ComponenteHV> listaIdComponentes = db.GetComponentesHV(tipo);
+            
+            if (listaIdComponentes != null && listaIdComponentes.Any())
+            {
+                foreach (var componente in listaIdComponentes)
+                {
+                    if (componente.IdComponente != null)
+                    {
+                        int intentos = 0;
+
+                        while (intentos < 3)
+                        {
+                            try
+                            {
+                                Console.Write("Descargando id componente: " + componente.IdComponente);
+                                DescargarInformacionComponente(jiraAccess, componente, logFilePath, db);
+                                break;
+                            }
+                            catch (Exception e)
+                            {
+                                intentos++;
+                                if (intentos == 3)
+                                {
+                                    db.CambiarDescargado(componente.IdComponente, 3);
+                                }
+                                string errorMessage = $"Error al exportar el componente {componente.IdComponente}, intento {intentos}: {e.Message}";
+                                Console.WriteLine(errorMessage);
+
+                                WriteToLog($"Error al exportar el componente {componente.IdComponente}, intento {intentos}: {e.Message}", logFilePath);
+
+                                File.AppendAllText(logFilePath, errorMessage + Environment.NewLine);
+
+                                // Puedes añadir algún tipo de pausa o espera entre intentos si es necesario
+                            }
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine($"No se encontró el componente con ID: {componente.IdComponente}");
+                        WriteToLog($"No se encontró el componente con ID: {componente.IdComponente}", logFilePath);
+                    }
+                }
+            }
+            else
+            {
+                
+            }
+        }
+    }
+    catch (Exception ex)
+    {
+        // Manejar errores generales al obtener la lista de componentes
+        Console.WriteLine($"Error al obtener la lista de componentes: {ex.Message}");
+        WriteToLog($"Error al obtener la lista de componentes: {ex.Message}", logFilePath);
+
+        // Registrar el error en el archivo de registro
+        File.AppendAllText(logFilePath, $"Error al obtener la lista de componentes: {ex.Message}" + Environment.NewLine);
+    }
+
+    // Más código aquí si es necesario...
+}
+
+
 void CambiarEstadoTodosComponentes(DbConnector db)
 {
     db.MarcarTodosComoNoDescargados();
