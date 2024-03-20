@@ -107,13 +107,13 @@ namespace DashboarJira.Services
                             {
                                 componente = new ComponenteHV
                                 {
-                                    IdComponente = reader.GetString(reader.GetOrdinal("IdComponente")),
-                                    Serial = reader.GetString(reader.GetOrdinal("Serial")),
-                                    AnioFabricacion = reader.GetInt32(reader.GetOrdinal("aniodefabricacion")),
-                                    Modelo = reader.GetString(reader.GetOrdinal("Modelo")),
-                                    FechaInicio = reader.GetDateTime(reader.GetOrdinal("fechaInicio")),
-                                    tipoComponente = reader.GetString(reader.GetOrdinal("tipoComponente")),
-                                    descargado = reader.GetInt32(reader.GetOrdinal("descargado"))
+                                    IdComponente = !reader.IsDBNull(reader.GetOrdinal("IdComponente")) ? reader.GetString(reader.GetOrdinal("IdComponente")) : null,
+                                    Serial = !reader.IsDBNull(reader.GetOrdinal("Serial")) ? reader.GetString(reader.GetOrdinal("Serial")) : null,
+                                    AnioFabricacion = !reader.IsDBNull(reader.GetOrdinal("aniodefabricacion")) ? reader.GetInt32(reader.GetOrdinal("aniodefabricacion")) : (int?)null,
+                                    Modelo = !reader.IsDBNull(reader.GetOrdinal("Modelo")) ? reader.GetString(reader.GetOrdinal("Modelo")) : null,
+                                    FechaInicio = !reader.IsDBNull(reader.GetOrdinal("fechaInicio")) ? reader.GetDateTime(reader.GetOrdinal("fechaInicio")) : (DateTime?)null,
+                                    tipoComponente = !reader.IsDBNull(reader.GetOrdinal("tipoComponente")) ? reader.GetString(reader.GetOrdinal("tipoComponente")) : null,
+                                    descargado = !reader.IsDBNull(reader.GetOrdinal("descargado")) ? reader.GetInt32(reader.GetOrdinal("descargado")) : (int?)null
                                 };
 
                             }
