@@ -23,7 +23,7 @@ namespace DashboarJira.Model
             DateTime fechaActual = DateTime.Now;
 
             // Verificar si FechaInicio es la fecha por defecto (1 de enero de 1900)
-            if (this.FechaInicio.Value.Year == 1900)
+            if (!this.FechaInicio.HasValue || this.FechaInicio.Value.Year == 1900)
             {
                 // Si FechaInicio es la fecha por defecto, establecer horasDeOperacion como -1
                 this.horasDeOperacion = -1;
