@@ -7,6 +7,7 @@ using System.Data;
 using OfficeOpenXml;
 using Microsoft.EntityFrameworkCore.Metadata;
 using System.Net.Sockets;
+using RestSharp.Extensions;
 
 namespace DashboarJira.Services
 {
@@ -1474,10 +1475,10 @@ namespace DashboarJira.Services
 
 
 
-                        worksheet.Cells[currentRow + 1, columnInicio].Value = componente?.Modelo;
+                        worksheet.Cells[currentRow + 1, columnInicio].Value = componente != null && componente.Modelo != null ? componente?.Modelo: " ";
                         worksheet.Cells[currentRow + 3, columnInicio].Value = componente != null && componente.FechaInicio.HasValue ?(componente.FechaInicio.Value.Year == 1900 ? " " : componente.FechaInicio.ToString()) : " ";
-                        worksheet.Cells[row, columnInicio + 7].Value = componente?.IdComponente;
-                        worksheet.Cells[row + 1, columnInicio + 7].Value = componente?.Serial;
+                        worksheet.Cells[row, columnInicio + 7].Value = componente != null && componente.IdComponente != null ? componente.IdComponente : " ";
+                        worksheet.Cells[row + 1, columnInicio + 7].Value = componente != null && componente.Serial != null ? componente?.Serial: " ";
                         worksheet.Cells[row + 2, columnInicio + 7].Value = (componente?.AnioFabricacion == 1900|| componente?.AnioFabricacion == null ? " ": componente?.AnioFabricacion);
                         worksheet.Cells[row + 3, columnInicio + 7].Value = horasDeOperacion == -1 ? "":horasDeOperacion;
                         package.Save();
