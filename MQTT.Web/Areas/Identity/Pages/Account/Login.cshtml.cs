@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using MQTT.Infrastructure.Models;
 
 namespace MQTT.Web.Areas.Identity.Pages.Account
 {
@@ -19,14 +20,17 @@ namespace MQTT.Web.Areas.Identity.Pages.Account
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
+        private readonly EYSIntegrationContext _context; // Usar EYSIntegrationContext
 
         public LoginModel(SignInManager<ApplicationUser> signInManager,
             ILogger<LoginModel> logger,
-            UserManager<ApplicationUser> userManager)
+            UserManager<ApplicationUser> userManager,
+            EYSIntegrationContext context)  // Inyectar el EYSIntegrationContext
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
+            _context = context;  // Asignar el contexto a la variable
         }
 
         [BindProperty]
@@ -81,10 +85,24 @@ namespace MQTT.Web.Areas.Identity.Pages.Account
             {
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
-                var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
+                var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);                
+
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");
+
+                    // Crear un nuevo registro de la acción del usuario
+                    var logAction = new LogActions
+                    {
+                        Usuario = Input.Email,
+                        Accion = "Inicio de sesión exitoso",
+                        FechaAccion = DateTime.UtcNow
+                    };
+
+                    // Guardar el registro en la base de datos
+                    _context.LogActions.Add(logAction);
+                    await _context.SaveChangesAsync();
+
                     return LocalRedirect(returnUrl);
                 }
                 if (result.IsLockedOut)

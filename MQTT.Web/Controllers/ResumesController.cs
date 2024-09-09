@@ -5,6 +5,9 @@ using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
+using MQTT.Infrastructure.Models;
+using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 
 namespace MQTT.Web.Controllers
 {
@@ -12,9 +15,26 @@ namespace MQTT.Web.Controllers
     public class ResumesController : Controller
     {
         private readonly IConfiguration _configuration;
-        public ResumesController(IConfiguration configuration)
+        private readonly EYSIntegrationContext _context; // Inyección del contexto
+        public ResumesController(IConfiguration configuration, EYSIntegrationContext context)
         {
             _configuration = configuration;
+            _context = context;
+        }
+
+        public async Task<IActionResult> TestDatabase()
+        {
+            try
+            {
+                // Realizar una consulta de prueba para verificar la existencia de la tabla
+                var logActions = await _context.LogActions.ToListAsync();
+                return Json(logActions);
+            }
+            catch (Exception ex)
+            {
+                // Registrar el error y devolver una respuesta adecuada
+                return StatusCode(500, $"Error al consultar la base de datos: {ex.Message}");
+            }
         }
         public IActionResult Index(int max, string componente)
         {

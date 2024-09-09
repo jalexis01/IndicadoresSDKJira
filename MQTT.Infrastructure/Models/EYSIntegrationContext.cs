@@ -34,6 +34,8 @@ namespace MQTT.Infrastructure.Models
         public virtual DbSet<TbHeaderFields> TbHeaderFields { get; set; }
         public virtual DbSet<TbHeaderMessage> TbHeaderMessage { get; set; }
         public virtual DbSet<TbLogElements> TbLogElements { get; set; }
+        
+        public virtual DbSet<LogActions> LogActions { get; set; }
         public virtual DbSet<TbLogExecutionProcessor> TbLogExecutionProcessor { get; set; }
         public virtual DbSet<TbLogExecutions> TbLogExecutions { get; set; }
         public virtual DbSet<TbLogMessageIn> TbLogMessageIn { get; set; }
@@ -96,6 +98,28 @@ namespace MQTT.Infrastructure.Models
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.AspNetUserClaims)
                     .HasForeignKey(d => d.UserId);
+            });
+
+            base.OnModelCreating(modelBuilder);
+            // Configuración para TbLogActions
+            // Configuración para LogActions
+            modelBuilder.Entity<LogActions>(entity =>
+            {
+                entity.HasKey(e => e.Id); // Configura 'Id' como la clave primaria
+
+                entity.Property(e => e.Id)
+                    .ValueGeneratedOnAdd(); // Configura 'Id' para autoincremento
+
+                entity.Property(e => e.Usuario)
+                    .IsRequired()
+                    .HasMaxLength(256);
+
+                entity.Property(e => e.Accion)
+                    .IsRequired()
+                    .HasMaxLength(512);
+
+                entity.Property(e => e.FechaAccion)
+                    .IsRequired();
             });
 
             modelBuilder.Entity<AspNetUserLogins>(entity =>
