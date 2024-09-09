@@ -95,7 +95,7 @@ namespace MQTT.Web.Areas.Identity.Pages.Account
                     var logAction = new LogActions
                     {
                         Usuario = Input.Email,
-                        Accion = "Inicio de sesión exitoso",
+                        Accion = "Inicio de sesión",
                         FechaAccion = DateTime.UtcNow
                     };
 
