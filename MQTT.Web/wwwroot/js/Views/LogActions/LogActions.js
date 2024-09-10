@@ -7,18 +7,18 @@ $(document).ready(function () {
 function fetchLogs() {
     var startDate = document.getElementById('dtpStartLog').value;
     var endDate = document.getElementById('dtpEndLog').value;
-    var searchParam = document.getElementById('searchParam').value;
 
     $.ajax({
         url: '/LogActions/GetLogActions',
         type: 'GET',
         data: {
             startDate: startDate,
-            endDate: endDate,
-            searchUser: searchParam
+            endDate: endDate
         },
         success: function (data) {
-            $('#logsTable tbody').empty(); // Limpiar tabla
+            $('#logsTable tbody').empty(); // Limpiar la tabla antes de añadir los nuevos resultados
+
+            // Añadir las nuevas filas a la tabla
             $.each(data, function (index, log) {
                 $('#logsTable tbody').append(
                     `<tr>
@@ -31,6 +31,7 @@ function fetchLogs() {
         },
         error: function (xhr, status, error) {
             console.error('Error al obtener los logs:', error);
+            Swal.fire('Error', 'Hubo un problema al obtener los logs.', 'error');
         }
     });
 }

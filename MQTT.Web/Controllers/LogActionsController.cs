@@ -23,13 +23,11 @@ namespace MQTT.Web.Controllers
             {
                 // Cargar los datos de la base de datos
                 var logActions = await _context.LogActions.ToListAsync();
-
-                // Pasar los datos a la vista
+                
                 return View(logActions);
             }
             catch (Exception ex)
             {
-                // Captura el error y devuélvelo a la vista para que puedas verlo
                 return StatusCode(500, $"Error en el servidor: {ex.Message}");
             }
         }
@@ -37,29 +35,36 @@ namespace MQTT.Web.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> GetLogActions(DateTime? startDate, DateTime? endDate, string searchUser)
+        public async Task<IActionResult> GetLogActions(DateTime? startDate, DateTime? endDate)
         {
-            var query = _context.LogActions.AsQueryable();
-
-            if (startDate.HasValue)
+            try
             {
-                query = query.Where(x => x.FechaAccion >= startDate.Value);
-            }
+                var query = _context.LogActions.AsQueryable();
 
-            if (endDate.HasValue)
+                if (startDate.HasValue)
+                {
+                    query = query.Where(x => x.FechaAccion >= startDate.Value);
+                }
+
+                if (endDate.HasValue)
+                {
+                    endDate = endDate.Value.Date.AddDays(1).AddTicks(-1); // Esto establece la hora en 23:59:59.9999999
+                    query = query.Where(x => x.FechaAccion <= endDate.Value);
+                }
+
+                var logActions = await query.Select(log => new
+                {
+                    Usuario = log.Usuario,
+                    Accion = log.Accion,
+                    FechaAccion = log.FechaAccion.ToString("yyyy-MM-dd HH:mm:ss") // Formateamos la fecha
+                }).ToListAsync();
+
+                return Json(logActions); // Devolvemos los resultados como JSON
+            }
+            catch (Exception ex)
             {
-                query = query.Where(x => x.FechaAccion <= endDate.Value);
+                return StatusCode(500, $"Error en el servidor: {ex.Message}");
             }
-
-            if (!string.IsNullOrEmpty(searchUser))
-            {
-                query = query.Where(x => x.Usuario.Contains(searchUser));
-            }
-
-            var logActions = await query.ToListAsync();
-
-            // Devuelve la vista parcial o el HTML para el Grid
-            return PartialView("_LogActionsGrid", logActions); // Puedes cambiar "_LogActionsGrid" por una vista parcial
         }
     }
 }
