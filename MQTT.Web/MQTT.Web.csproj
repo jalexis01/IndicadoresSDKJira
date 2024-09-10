@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot\js\views\logactions\LogActions.js" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.30" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.30" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.31" />
@@ -19,6 +23,14 @@
   <ItemGroup>
     <ProjectReference Include="..\DashboarJira\DashboarJira.csproj" />
     <ProjectReference Include="..\MQTT.Infrastructure\MQTT.Infrastructure.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\js\Views\LogActions\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\js\views\logactions\LogActions.js" />
   </ItemGroup>
 
 </Project>
