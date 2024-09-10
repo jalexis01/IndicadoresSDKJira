@@ -4,9 +4,22 @@ $(document).ready(function () {
     multiSelect();
     drodownDataSearch(columnsSearch, 'CustomName', 'searchParam');
 });
+
+function validateDates() {
+    var startDate = $('#dtpStart').val();
+    var endDate = $('#dtpEnd').val();
+
+    if (startDate === "" || endDate === "") {
+        Swal.fire({
+            title: 'Debe seleccionar la fecha',
+        });
+    } else {
+        fetchLogs();
+    }
+}
 function fetchLogs() {
-    var startDate = document.getElementById('dtpStartLog').value;
-    var endDate = document.getElementById('dtpEndLog').value;
+    var startDate = document.getElementById('dtpStart').value;
+    var endDate = document.getElementById('dtpEnd').value;
 
     $.ajax({
         url: '/LogActions/GetLogActions',
