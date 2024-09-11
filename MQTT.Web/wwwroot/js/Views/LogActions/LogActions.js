@@ -48,6 +48,9 @@ function fetchLogs() {
                 allowTextWrap: true,
                 filterSettings: { type: 'Menu' },
                 pageSettings: { pageSize: 10 },
+                sortSettings: { // Configuración para ordenar por fecha de forma descendente
+                    columns: [{ field: 'fechaAccion', direction: 'Descending' }]
+                },
                 columns: [
                     { field: 'usuario', headerText: 'Usuario', width: 180, textAlign: 'Center' },
                     { field: 'accion', headerText: 'Accion', width: 180, textAlign: 'Center' },

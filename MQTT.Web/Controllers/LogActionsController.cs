@@ -54,7 +54,8 @@ namespace MQTT.Web.Controllers
                 {
                     Usuario = log.Usuario,
                     Accion = log.Accion,
-                    FechaAccion = log.FechaAccion.ToString("yyyy-MM-dd HH:mm:ss") // Formateamos la fecha
+                    //FechaAccion = log.FechaAccion.ToString("yyyy-MM-dd HH:mm:ss")
+                    FechaAccion = log.FechaAccion.AddHours(-5).ToString("yyyy-MM-dd HH:mm:ss")
                 }).ToListAsync();
 
                 return Json(logActions); // Devolvemos los resultados como JSON
