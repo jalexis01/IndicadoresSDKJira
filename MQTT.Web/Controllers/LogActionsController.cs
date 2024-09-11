@@ -32,8 +32,6 @@ namespace MQTT.Web.Controllers
             }
         }
 
-
-
         [HttpGet]
         public async Task<IActionResult> GetLogActions(DateTime? startDate, DateTime? endDate)
         {

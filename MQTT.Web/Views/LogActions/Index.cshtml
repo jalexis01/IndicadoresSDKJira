@@ -1,4 +1,5 @@
 ﻿@{    
+    var environmentType = ViewBag.EnvironmentType;
     ViewData["Title"] = "Historial de Acciones de Usuario";
 }
 
@@ -9,18 +10,6 @@
 </div>
 
 <div class="form-container">
-    @* <div class="inputs-container">
-        <label class="TextFecha">Fecha Inicial</label>
-        <div class="wrapperFI">
-            <input id="dtpStartLog" type="date">
-        </div>
-    </div>
-    <div class="inputs-container">
-        <label class="TextFecha">Fecha Final</label>
-        <div class="wrapperFI">
-            <input id="dtpEndLog" type="date">
-        </div>
-    </div> *@
     <div class="inputs-container">
         <label class="TextFecha">Fecha Inicial</label>
         <div class="wrapperFI">
@@ -34,7 +23,7 @@
         </div>
     </div>
     <div class="inputs-container">
-        <button onclick="validateDates()" type="button" id="button-primary"
+        <button onclick="validarDatos()" type="button" id="button-primary"
                 class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
             Buscar
         </button>
@@ -42,31 +31,12 @@
 </div>
 
 <div class="container-grid">
-    <table id="logsTable" class="table-auto w-full border-collapse border border-gray-200">
-        <thead>
-            <tr>
-                <th class="border border-gray-300 p-2">Usuario</th>
-                <th class="border border-gray-300 p-2">Accion</th>
-                <th class="border border-gray-300 p-2">Fecha Accion</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var log in Model)
-            {
-                <tr>
-                    <td class="border border-gray-300 p-2">@log.Usuario</td>
-                    <td class="border border-gray-300 p-2">@log.Accion</td>
-                    <td class="border border-gray-300 p-2">@log.FechaAccion.ToString("yyyy-MM-dd HH:mm:ss")</td>
-                </tr>
-            }
-        </tbody>
-    </table>
+    <div id="Grid"></div>
 </div>
 
-
 <script type="text/javascript">
-    var columnsSearch = @(Html.Raw(ViewBag.columnsSearch));
-    var columnsToHide = @(Html.Raw(ViewBag.columnsToHide));
+    var columnsSearch = null;
+    var columnsToHide = null;
 </script>
 
 <script src="~/lib/jquery/dist/jquery.min.js"></script>

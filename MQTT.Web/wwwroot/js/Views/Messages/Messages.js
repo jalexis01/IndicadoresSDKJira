@@ -6,9 +6,6 @@ $(document).ready(function(){
   drodownDataSearch(columnsSearch, 'CustomName', 'searchParam');
 });
 
-
-
-
 function ServiceGetMessages() {
     // Display loading modal
     Swal.fire({

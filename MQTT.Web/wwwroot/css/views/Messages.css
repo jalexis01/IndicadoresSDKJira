@@ -2,10 +2,6 @@
     justify-content: center;
 }
 
-
-
-
-
 .flex-add{
     display: flex;
 }
@@ -13,8 +9,6 @@
 .container-inputs{
  display: flex;
 }
-
-
 
 .organitation-menu{
     position: absolute;
