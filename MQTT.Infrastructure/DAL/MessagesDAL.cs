@@ -444,7 +444,7 @@ namespace MQTT.Infrastructure.DAL
                 throw ex;
             }
         }
-        public static DataTable SearchMessages(General objContext, DateTime dtInit, DateTime dtEnd)
+        public static DataTable SearchMessages(General objContext, DateTime dtInit, DateTime dtEnd, List<string> idEstacion = null)
         {
             try
             {
@@ -459,6 +459,13 @@ namespace MQTT.Infrastructure.DAL
                     "M.modoOperacion, M.codigoAlarma, M.codigoNivelAlarma, M.tiempoApertura, M.IdHeaderMessage, HM.IdMessageType, M.idRegistro, M.idOperador, M.Id " +
                     "FROM [Operation].[tbMessages] M INNER JOIN [Operation].tbHeaderMessage HM ON M.IdHeaderMessage = HM.IdHeaderMessage";
                 string where = $" WHERE M.fechaHoraLecturaDato BETWEEN '{formattedDtInit}' AND '{formattedDtEnd}' ";
+
+                if (idEstacion != null && idEstacion.Count > 0)
+                {
+                    // Convierte la lista de idEstacion a una cadena separada por comas, rodeada por comillas simples
+                    string estaciones = string.Join(", ", idEstacion.Select(id => $"'{id}'"));
+                    where += $"AND M.idEstacion IN ({estaciones}) ";
+                }
 
                 if (string.IsNullOrEmpty(formattedDtInit) || string.IsNullOrEmpty(formattedDtEnd))
                 {

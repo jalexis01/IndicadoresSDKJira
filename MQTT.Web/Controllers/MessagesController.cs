@@ -61,13 +61,13 @@ namespace MQTT.Web.Controllers
             return View();
         }
 
-        public IActionResult Search(DateTime startDate, DateTime endDate)
+        public IActionResult Search(DateTime startDate, DateTime endDate, List<string> idEstacion = null)
         {
             try
             {
-               // startDate = startDate.ToUniversalTime();
-              //  endDate = endDate.ToUniversalTime();
-                var result = SearchMessage(startDate, endDate);
+                // startDate = startDate.ToUniversalTime();
+                //  endDate = endDate.ToUniversalTime();
+                var result = SearchMessage(startDate, endDate, idEstacion);
                 List<FilterViewModel> fields = new List<FilterViewModel>();
 
                 foreach (var item in _columnsSearch)
@@ -133,12 +133,12 @@ namespace MQTT.Web.Controllers
                 );
             return json;
         }
-        public DataTable SearchMessage(DateTime startDate, DateTime endDate)
+        public DataTable SearchMessage(DateTime startDate, DateTime endDate, List<string> idEstacion = null)
         {
             try
             {
                 DBAccess = new General(_connectionString);
-                DataTable dtResult = MessagesDAL.SearchMessages(DBAccess, startDate, endDate);
+                DataTable dtResult = MessagesDAL.SearchMessages(DBAccess, startDate, endDate, idEstacion);
                 return dtResult;
             }
             catch (Exception ex)

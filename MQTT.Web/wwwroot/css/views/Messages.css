@@ -1,20 +1,50 @@
-.container-grid{
+.container-grid {
     justify-content: center;
 }
 
-.flex-add{
+.flex-add {
     display: flex;
 }
 
-.container-inputs{
- display: flex;
+.container-inputs {
+    display: flex;
 }
 
-.organitation-menu{
+.organitation-menu {
     position: absolute;
     right: 10%;
 }
 
-.e-ddl.e-input-group{
+.e-ddl.e-input-group {
     display: flex;
+}
+
+/* Estilos para el select de estaciones */
+#station-select {
+    border: 1px solid #d1d5db; /* Borde gris */
+    font-weight: normal; /* Quitar negrita en el texto */
+    width: 200px; /* Ajustar el ancho */
+    padding: 5px; /* Ajustar el padding */
+    border-radius: 4px; /* Opcional: radio del borde para un aspecto más redondeado */
+    background-color: #ffffff; /* Color de fondo blanco */
+    color: #333333; /* Color del texto */
+}
+
+    #station-select option {
+        font-weight: normal; /* Quitar negrita en las opciones */
+    }
+
+        #station-select option.selected-option {
+            background-color: #cce5ff; /* Color de fondo para las opciones seleccionadas */
+        }
+
+#multiSelect2 {
+    border: 1px solid #d1d5db; /* Borde gris */
+    font-weight: normal; /* Quitar negrita en el texto */
+    width: 200px; /* Ajustar el ancho */
+    padding: 5px; /* Ajustar el padding */
+    border-radius: 4px; /* Opcional: radio del borde para un aspecto más redondeado */
+    background-color: #ffffff; /* Color de fondo blanco */
+    color: #333333; /* Color del texto */
+    box-sizing: border-box; /* Asegura que el padding y el borde se incluyan en el ancho total */
 }

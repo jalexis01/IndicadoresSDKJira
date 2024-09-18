@@ -12,7 +12,7 @@
     <div class="inputs-container">
         <label class="TextFecha">Fecha Inicial</label>
         <div class="wrapperFI">
-            <input id="dtpStartMessage"  required>
+            <input id="dtpStartMessage" required>
         </div>
     </div>
     <div class="inputs-container">
@@ -21,20 +21,39 @@
             <input id="dtpEndMessage" required>
         </div>
     </div>
+
     <div class="inputs-container">
-        <button onclick="ServiceGetMessages()" type="button" id="button-primary"
-            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"">Buscar</button>
+        <label for="station-select">Seleccione una estación</label>
+        <div class="wrapperFI">
+            <select id="station-select" class="form-control">
+                <option value="" selected disabled>Seleccione...</option>
+                <!-- Opciones serán llenadas dinámicamente -->
+            </select>
+        </div>
+    </div>
+
+    <div class="inputs-container">
+        <label for="station-select">Estaciones seleccionadas</label>
+        <div class="wrapperFI">
+            <input type="text" id="multiSelect2" readonly />
+        </div>
     </div>
     <div class="inputs-container">
+        <button onclick="validarDates()" type="button" id="button-primary"
+                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" ">
+            Buscar
+        </button>
+    </div>
+    <div class="inputs-container" style="display: none;">
         <label for="">Parametro a buscar</label>
-            <input type="text" id='searchParam' required/>
+        <input type="text" id='searchParam' required />
     </div>
-    <div class="inputs-container">
+    <div class="inputs-container" style="display: none;">
         <div class="control-styles">
             <input type="text" id='multiSelect' />
         </div>
     </div>
-    <div class="inputs-container" >
+    <div class="inputs-container" style="display: none;">
         <button type="button" id="button-filter" class="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700" id="data-filter" onclick="aplicFilter()" disabled>
             Aplicar filtro
         </button>
