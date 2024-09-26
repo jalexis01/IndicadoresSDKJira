@@ -26,6 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="wwwroot\js\Views\Doors\" />
     <Folder Include="wwwroot\js\Views\LogActions\" />
   </ItemGroup>
 

@@ -1,0 +1,124 @@
+﻿@{
+    ViewData["Title"] = "Puertas por Estación";
+    var estaciones = new[]
+    {
+        new { Id = 7107, Nombre = "Univ Nacional", Estado = 1 },
+        new { Id = 9106, Nombre = "Nariño", Estado = 2 },
+        new { Id = 7109, Nombre = "CAD", Estado = 3 },
+        new { Id = 9001, Nombre = "Molinos", Estado = 4 }
+    };
+
+    var puertas = new[]
+    {
+        new { IdEstacion = 7107, IdPuerta = 1, vagon="WA", Nombre = "7109-WA-OR-1", Estado = 1 },
+        new { IdEstacion = 7107, IdPuerta = 1, vagon="WA", Nombre = "7109-WA-OR-2", Estado = 1 },
+        new { IdEstacion = 7107, IdPuerta = 1, vagon="WA", Nombre = "7109-WA-OR-3", Estado = 1 },
+        new { IdEstacion = 7107, IdPuerta = 1, vagon="WA", Nombre = "7109-WA-OR-4", Estado = 1 },
+        new { IdEstacion = 7107, IdPuerta = 1, vagon="WA", Nombre = "7109-WA-OR-5", Estado = 1 },
+        new { IdEstacion = 7107, IdPuerta = 1, vagon="WA", Nombre = "7109-WA-OC-1", Estado = 1 },
+        new { IdEstacion = 7107, IdPuerta = 1, vagon="WA", Nombre = "7109-WA-OC-2", Estado = 1 },
+        new { IdEstacion = 7107, IdPuerta = 1, vagon="WA", Nombre = "7109-WA-OC-3", Estado = 1 },
+        new { IdEstacion = 7107, IdPuerta = 1, vagon="WA", Nombre = "7109-WA-OC-4", Estado = 1 },
+        new { IdEstacion = 7107, IdPuerta = 1, vagon="WA", Nombre = "7109-WA-OC-5", Estado = 1 },
+        new { IdEstacion = 7109, IdPuerta = 1, vagon="WA", Nombre = "7109-WA-OR-1", Estado = 1 },
+        new { IdEstacion = 7109, IdPuerta = 1, vagon="WA", Nombre = "7109-WA-OR-2", Estado = 1 },
+        new { IdEstacion = 7109, IdPuerta = 1, vagon="WA", Nombre = "7109-WA-OR-3", Estado = 1 },
+        new { IdEstacion = 7109, IdPuerta = 1, vagon="WA", Nombre = "7109-WA-OR-4", Estado = 1 },
+        new { IdEstacion = 7109, IdPuerta = 1, vagon="WA", Nombre = "7109-WA-OR-5", Estado = 1 },
+        new { IdEstacion = 7109, IdPuerta = 1, vagon="WA", Nombre = "7109-WA-OC-1", Estado = 1 },
+        new { IdEstacion = 7109, IdPuerta = 1, vagon="WA", Nombre = "7109-WA-OC-2", Estado = 1 },
+        new { IdEstacion = 7109, IdPuerta = 1, vagon="WA", Nombre = "7109-WA-OC-3", Estado = 1 },
+        new { IdEstacion = 7109, IdPuerta = 1, vagon="WA", Nombre = "7109-WA-OC-4", Estado = 1 },
+        new { IdEstacion = 7109, IdPuerta = 1, vagon="WA", Nombre = "7109-WA-OC-5", Estado = 1 },
+        new { IdEstacion = 9001, IdPuerta = 1, vagon="WA", Nombre = "7109-WA-OR-1", Estado = 1 },
+        new { IdEstacion = 9001, IdPuerta = 1, vagon="WA", Nombre = "7109-WA-OR-2", Estado = 1 },
+        new { IdEstacion = 9001, IdPuerta = 1, vagon="WA", Nombre = "7109-WA-OR-3", Estado = 1 },
+        new { IdEstacion = 9001, IdPuerta = 1, vagon="WA", Nombre = "7109-WA-OR-4", Estado = 1 },
+        new { IdEstacion = 9001, IdPuerta = 1, vagon="WA", Nombre = "7109-WA-OR-5", Estado = 1 },
+        new { IdEstacion = 9001, IdPuerta = 1, vagon="WA", Nombre = "7109-WA-OC-1", Estado = 1 },
+        new { IdEstacion = 9001, IdPuerta = 1, vagon="WA", Nombre = "7109-WA-OC-2", Estado = 1 },
+        new { IdEstacion = 9001, IdPuerta = 1, vagon="WA", Nombre = "7109-WA-OC-3", Estado = 1 },
+        new { IdEstacion = 9001, IdPuerta = 1, vagon="WA", Nombre = "7109-WA-OC-4", Estado = 1 },
+        new { IdEstacion = 9001, IdPuerta = 1, vagon="WA", Nombre = "7109-WA-OC-5", Estado = 1 },
+        new { IdEstacion = 9001, IdPuerta = 1, vagon="WA", Nombre = "7109-WA-OR-1", Estado = 1 },
+        new { IdEstacion = 9001, IdPuerta = 1, vagon="WA", Nombre = "7109-WA-OR-2", Estado = 1 },
+        new { IdEstacion = 9001, IdPuerta = 1, vagon="WA", Nombre = "7109-WA-OR-3", Estado = 1 },
+        new { IdEstacion = 9001, IdPuerta = 1, vagon="WA", Nombre = "7109-WA-OR-4", Estado = 1 },
+        new { IdEstacion = 9001, IdPuerta = 1, vagon="WA", Nombre = "7109-WA-OR-5", Estado = 1 },
+        new { IdEstacion = 9001, IdPuerta = 1, vagon="WA", Nombre = "7109-WA-OC-1", Estado = 1 },
+        new { IdEstacion = 9001, IdPuerta = 1, vagon="WA", Nombre = "7109-WA-OC-2", Estado = 1 },
+        new { IdEstacion = 9001, IdPuerta = 1, vagon="WA", Nombre = "7109-WA-OC-3", Estado = 1 },
+        new { IdEstacion = 9001, IdPuerta = 1, vagon="WA", Nombre = "7109-WA-OC-4", Estado = 1 },
+        new { IdEstacion = 9001, IdPuerta = 1, vagon="WA", Nombre = "7109-WA-OC-5", Estado = 1 }
+    };
+}
+
+<link rel="stylesheet" href="~/css/views/Doors.css">
+
+<div class="header-view">
+    <h1 class="text-2xl font-bold dark:text-white title-view-text">@ViewData["Title"]</h1>
+</div>
+
+<!-- Contenedor principal -->
+<div class="stations-grid" style="display: flex; flex-wrap: wrap; gap: 20px;">
+
+    @foreach (var estacion in estaciones)
+    {
+        // Asignar bgColorClass fuera del ciclo for
+        string bgColorClass;
+
+        if (estacion.Estado == 1)
+        {
+            bgColorClass = "bg-orange";
+        }
+        else if (estacion.Estado == 2)
+        {
+            bgColorClass = "bg-green";
+        }
+        else if (estacion.Estado == 3)
+        {
+            bgColorClass = "bg-lightblue";
+        }
+        else
+        {
+            bgColorClass = "bg-transparent";
+        }
+
+        <div class="station">
+            <h2 class="text-lg font-semibold">@estacion.Id - @estacion.Nombre</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>WA</th>
+                        <th></th>
+                        <th>WB</th>
+                        <th></th>
+                        <th>WC</th>
+                        <th></th>
+                    </tr>
+                    <tr>
+                        <th>OR</th>
+                        <th>OC</th>
+                        <th>OR</th>
+                        <th>OC</th>
+                        <th>OR</th>
+                        <th>OC</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (int i = 1; i <= 5; i++)
+                    {
+                        <tr class="@bgColorClass">
+                            <td>@i</td>
+                            <td>@i</td>
+                            <td>@i</td>
+                            <td>@i</td>
+                            <td>@i</td>
+                            <td>@i</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
