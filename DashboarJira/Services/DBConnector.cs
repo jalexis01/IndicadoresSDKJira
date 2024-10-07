@@ -58,7 +58,7 @@ namespace DashboarJira.Services
 
         private void UpdateRegistroHV(SqlConnection connection, ConexionEstacionUpdater updater)
         {
-            string query = @"UPDATE [dbo].[registroHV]
+            string query = @"UPDATE [dbo].[Componentes]
                      SET [UltimaConexion] = @UltimaConexion,
                          [EstadoApertura] = CASE WHEN @EstadoApertura IS NOT NULL THEN @EstadoApertura ELSE [EstadoApertura] END,
                          [EstadoErrorCritico] = CASE WHEN @EstadoErrorCritico IS NOT NULL THEN @EstadoErrorCritico ELSE [EstadoErrorCritico] END
@@ -199,7 +199,7 @@ namespace DashboarJira.Services
                     // SQL query to retrieve components where idComponente contains the estacionId and tipoComponente is 'Puerta'
                     string query = @"SELECT [IdComponente], [Serial],[aniodefabricacion],[descargado] ,[tipoComponente] ,[Modelo] ,[fechaInicio], [Estado], [FechaFin],
                                     [Vagon], [Canal], [EstadoErrorCritico], [EstadoApertura]
-                             FROM [dbo].[registroHV] 
+                             FROM [dbo].[Componentes] 
                              WHERE [IdComponente] LIKE @EstacionIdPattern
                              AND [tipoComponente] = 'Puerta'";
 
