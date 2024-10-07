@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using MQTT.Infrastructure.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace MQTT.Web.Controllers
 {
@@ -16,12 +17,38 @@ namespace MQTT.Web.Controllers
     {
         private readonly IConfiguration _configuration;
         private readonly EYSIntegrationContext _context; // Inyección del contexto
+        private JiraAccess jiraAccess;
+        private DbConnector dbConnector;
         public ResumesController(IConfiguration configuration, EYSIntegrationContext context)
         {
             _configuration = configuration;
             _context = context;
+            init();
         }
+        public void init()
+        {
+            string url = "https://manateecc.atlassian.net/";
+            string connectionString = "Server=manatee.database.windows.net;Database=PuertasTransmilenioDB;User Id=administrador;Password=2022/M4n4t334zur3";
+            string user = "desarrollocc@manateeingenieria.com";
+            string token = "ATATT3xFfGF0ZRHIEZTEJVRnhNKviH0CGed6QXqCDMj5bCmKSEbO00UUjHUb3yDcaA4YD1SHohyDr4qnwRx2x4Tu_S_QW_xlGIcIUDvL7CFKEg47_Jcy4Dmq6YzO0dvqB3qeT-EVWfwJ2jJ-9vEUfsqXavD0IIGA7DAZHGCtIWhxgwKIbAWsmeA=038B810D";
 
+
+            //string url = "https://assaabloymda.atlassian.net/";
+            //string connectionString = "Server=manatee.database.windows.net;Database=PuertasTransmilenioDBAssaabloy;User Id=administrador;Password=2022/M4n4t334zur3";          
+            //string user = "desarrollocc@manateeingenieria.com";
+            //string token = "ATATT3xFfGF0ZRHIEZTEJVRnhNKviH0CGed6QXqCDMj5bCmKSEbO00UUjHUb3yDcaA4YD1SHohyDr4qnwRx2x4Tu_S_QW_xlGIcIUDvL7CFKEg47_Jcy4Dmq6YzO0dvqB3qeT-EVWfwJ2jJ-9vEUfsqXavD0IIGA7DAZHGCtIWhxgwKIbAWsmeA=038B810D";
+
+
+            // Aquí puedes usar las variables como desees
+            jiraAccess = new JiraAccess
+            (
+                url,
+                user,
+                token,
+                connectionString
+            );
+            dbConnector = new DbConnector(connectionString);
+        }
         public async Task<IActionResult> TestDatabase()
         {
             try
@@ -58,7 +85,7 @@ namespace MQTT.Web.Controllers
 
         int start = 0;
 
-        public List<Ticket> getTickets(string startDate, string endDate, int max, string componente, string tipoMantenimiento, bool cerrados)
+        public List<Ticket> getTickets(string startDate, string endDate, int max, string serial, string tipoMantenimiento, bool cerrados, bool estado)
         {
             try
             {
@@ -79,17 +106,16 @@ namespace MQTT.Web.Controllers
                     formattedStartDate = startDate;
                     formattedEndDate = endDate;
                 }
-
-                JiraAccess jiraAccess = new JiraAccess();
+                string projectDirectory = Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory).Parent.FullName;
                 List<Ticket> tickets = new List<Ticket>();
                 max = 0;
                 if (tipoMantenimiento == "'Mantenimiento Preventivo'")
                 {
-                    tickets = jiraAccess.GetTiketsMTO(start, max, formattedStartDate, formattedEndDate, componente, "");
+                    tickets = jiraAccess.GetTiketsMTO(start, max, formattedStartDate, formattedEndDate, serial, "", estado);
                 }
                 else
                 {
-                    tickets = jiraAccess.GetTikets(start, max, formattedStartDate, formattedEndDate, componente, tipoMantenimiento, cerrados);
+                    tickets = jiraAccess.GetTikets(start, max, formattedStartDate, formattedEndDate, serial, tipoMantenimiento, cerrados, estado);
                 }
 
                 return tickets;
@@ -105,8 +131,7 @@ namespace MQTT.Web.Controllers
         {
             try
             {
-                JiraAccess jira = new JiraAccess();
-                IssueJira ticket = jira.getIssueJira(idTicket);
+                IssueJira ticket = jiraAccess.getIssueJira(idTicket);
                 return Ok(ticket);
             }
             catch (Exception ex)
@@ -118,8 +143,7 @@ namespace MQTT.Web.Controllers
         {
             try
             {
-                JiraAccess jira = new JiraAccess();
-                List<byte[]> images = jira.GetAttachmentImages(idTicket);
+                List<byte[]> images = jiraAccess.GetAttachmentImages(idTicket);
 
                 if (images.Count > 0)
                 {
@@ -148,7 +172,6 @@ namespace MQTT.Web.Controllers
         {
             try
             {
-                DbConnector dbConnector = new DbConnector();
                 var componente = dbConnector.GetComponenteHV(idComponente);
                 if (componente == null)
                 {
@@ -166,8 +189,7 @@ namespace MQTT.Web.Controllers
         {
             try
             {
-                JiraAccess jira = new JiraAccess();
-                jira.DownloadExcel(idComponente);
+                jiraAccess.DownloadExcel(idComponente);
 
                 return Json(new { success = true, message = "Descarga exitosa" });
             }

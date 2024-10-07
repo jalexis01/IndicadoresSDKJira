@@ -1,27 +1,84 @@
 ﻿using DashboarJira.Model;
 using Microsoft.Data.SqlClient;
+using MQTT.FunctionApp.Models;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System.Data;
 
 namespace DashboarJira.Services
 {
-
-
-
     public class DbConnector
     {
         const string PETICIONEVENTOS = "SELECT [Id], [versionTrama], [idRegistro], [idOperador], [idEstacion], [idVagon], [idPuerta], [codigoPuerta], [fechaHoraLecturaDato], [fechaHoraEnvioDato], [tipoTrama], [tramaRetransmitida], [codigoEvento], [estadoAperturaCierrePuertas], [usoBotonManual],[estadoBotonManual], [estadoErrorCritico], [porcentajeCargaBaterias], [ciclosApertura], [horasServicio], [tipoEnergizacion], [velocidaMotor], [fuerzaMotor], [modoOperacion], [numeroEventoBusEstacion], [idVehiculo], [placaVehiculo], [tipologiaVehiculo], [numeroParada], [nombreEstacion], [nombreVagon], [tipoTramaBusEstacion], [codigoAlarma], [codigoNivelAlarma], [tiempoApertura] FROM [Operation].[tbMessages] ";
 
         private string connectionString;
 
-
-        public DbConnector()
+        public DbConnector(string connectionName)
         {
-            // Set the connection string Manatee
-            //connectionString = "Server=manatee.database.windows.net;Database=PuertasTransmilenioDB;User Id=administrador;Password=2022/M4n4t334zur3";
+            connectionString = connectionName;
+        }
+        public void UpdateEstacionYRegistroHV(ConexionEstacionUpdater updater)
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                try
+                {
+                    connection.Open();
 
-            // Set the connection string Assabloy
-            connectionString = "Server=manatee.database.windows.net;Database=PuertasTransmilenioDBAssaabloy;User Id=administrador;Password=2022/M4n4t334zur3";
+                    // Actualizar la tabla Estaciones
+                    UpdateEstacion(connection, updater);
+
+                    // Actualizar la tabla registroHV (Puertas)
+                    UpdateRegistroHV(connection, updater);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("An error occurred: " + ex.Message);
+                }
+            }
+        }
+
+        private void UpdateEstacion(SqlConnection connection, ConexionEstacionUpdater updater)
+        {
+            string query = @"UPDATE [dbo].[Estaciones]
+                     SET [UltimaConexion] = @UltimaConexion,
+                         [InicioOperacion] = CASE WHEN @Evento = 'EVP8' THEN @UltimaConexion ELSE [InicioOperacion] END,
+                         [FinOperacion] = CASE WHEN @Evento = 'EVP9' THEN @UltimaConexion ELSE [FinOperacion] END
+                     WHERE [IdEstacion] = @IdEstacion";
+
+            using (SqlCommand command = new SqlCommand(query, connection))
+            {
+                command.Parameters.AddWithValue("@UltimaConexion", updater.UltimaConexion);
+                command.Parameters.AddWithValue("@Evento", updater.Evento);
+                command.Parameters.AddWithValue("@IdEstacion", updater.IdEstacion);
+
+                command.ExecuteNonQuery();
+            }
+        }
+
+        private void UpdateRegistroHV(SqlConnection connection, ConexionEstacionUpdater updater)
+        {
+            string query = @"UPDATE [dbo].[registroHV]
+                     SET [UltimaConexion] = @UltimaConexion,
+                         [EstadoApertura] = CASE WHEN @EstadoApertura IS NOT NULL THEN @EstadoApertura ELSE [EstadoApertura] END,
+                         [EstadoErrorCritico] = CASE WHEN @EstadoErrorCritico IS NOT NULL THEN @EstadoErrorCritico ELSE [EstadoErrorCritico] END
+                     WHERE [Serial] = @Serial";
+
+            using (SqlCommand command = new SqlCommand(query, connection))
+            {
+                command.Parameters.AddWithValue("@UltimaConexion", updater.UltimaConexion);
+                command.Parameters.AddWithValue("@EstadoApertura", (object)updater.EstadoApertura ?? DBNull.Value);
+                command.Parameters.AddWithValue("@EstadoErrorCritico", (object)updater.EstadoErrorCritico ?? DBNull.Value);
+                command.Parameters.AddWithValue("@Serial", updater.Serial);
+
+                int rowsAffected = command.ExecuteNonQuery();
+
+                // Si no se encuentra la puerta (ninguna fila actualizada), solo se actualiza la estación
+                if (rowsAffected == 0)
+                {
+                    Console.WriteLine($"No se encontró la puerta con el serial: {updater.Serial}. Solo se actualizó la estación.");
+                }
+            }
         }
 
         public DataTable GetMessages()
@@ -84,6 +141,111 @@ namespace DashboarJira.Services
 
             return messagesTable;
         }
+        public List<Estacion> GetEstacionesV()
+        {
+            List<Estacion> estaciones = new List<Estacion>();
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                try
+                {
+                    connection.Open();
+
+                    // SQL query to retrieve all the columns from the Estaciones table
+                    string query = "SELECT [Id], [idEstacion], [nombreEstacion], [Vagones], [InicioOperacion], [FinOperacion], [UltimaConexion] FROM [dbo].[Estaciones]";
+
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                // Create a new Estacion object and map the fields
+                                Estacion estacion = new Estacion
+                                {
+                                    Id = reader.GetInt32(reader.GetOrdinal("Id")),
+                                    idEstacion = reader.GetInt32(reader.GetOrdinal("idEstacion")),
+                                    nombreEstacion = reader.GetString(reader.GetOrdinal("nombreEstacion")),
+                                    Vagones = reader.IsDBNull(reader.GetOrdinal("Vagones")) ? null : reader.GetString(reader.GetOrdinal("Vagones")),
+                                    InicioOperacion = reader.IsDBNull(reader.GetOrdinal("InicioOperacion")) ? (DateTime?)null : reader.GetDateTime(reader.GetOrdinal("InicioOperacion")),
+                                    FinOperacion = reader.IsDBNull(reader.GetOrdinal("FinOperacion")) ? (DateTime?)null : reader.GetDateTime(reader.GetOrdinal("FinOperacion")),
+                                    UltimaConexion = reader.IsDBNull(reader.GetOrdinal("UltimaConexion")) ? (DateTime?)null : reader.GetDateTime(reader.GetOrdinal("UltimaConexion"))
+                                };
+
+                                // Add the Estacion object to the list
+                                estaciones.Add(estacion);
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("An error occurred: " + ex.Message);
+                }
+            }
+
+            return estaciones;
+        }
+        public List<ComponenteHV> GetPuertasByEstacionId(int estacionId)
+        {
+            List<ComponenteHV> componentes = new List<ComponenteHV>();
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                try
+                {
+                    connection.Open();
+
+                    // SQL query to retrieve components where idComponente contains the estacionId and tipoComponente is 'Puerta'
+                    string query = @"SELECT [IdComponente], [Serial],[aniodefabricacion],[descargado] ,[tipoComponente] ,[Modelo] ,[fechaInicio], [Estado], [FechaFin],
+                                    [Vagon], [Canal], [EstadoErrorCritico], [EstadoApertura]
+                             FROM [dbo].[registroHV] 
+                             WHERE [IdComponente] LIKE @EstacionIdPattern
+                             AND [tipoComponente] = 'Puerta'";
+
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        // Add the parameter for estacionId with wildcard (%) for LIKE
+                        command.Parameters.AddWithValue("@EstacionIdPattern", estacionId + "-%");
+
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                // Mapear los resultados a un objeto ComponenteHV
+                                ComponenteHV componente = new ComponenteHV
+                                {
+                                    IdComponente = reader.IsDBNull(reader.GetOrdinal("IdComponente")) ? null : reader.GetString(reader.GetOrdinal("IdComponente")),
+                                    Serial = reader.IsDBNull(reader.GetOrdinal("Serial")) ? null : reader.GetString(reader.GetOrdinal("Serial")),
+                                    AnioFabricacion = reader.IsDBNull(reader.GetOrdinal("aniodefabricacion")) ? (int?)null : reader.GetInt32(reader.GetOrdinal("aniodefabricacion")),
+                                    Modelo = reader.IsDBNull(reader.GetOrdinal("Modelo")) ? null : reader.GetString(reader.GetOrdinal("Modelo")),
+                                    FechaInicio = reader.IsDBNull(reader.GetOrdinal("fechaInicio")) ? (DateTime?)null : reader.GetDateTime(reader.GetOrdinal("fechaInicio")),
+                                    descargado = reader.IsDBNull(reader.GetOrdinal("descargado")) ? (int?)null : reader.GetInt32(reader.GetOrdinal("descargado")),
+                                    Estado = reader.IsDBNull(reader.GetOrdinal("Estado")) ? (bool?)null : reader.GetBoolean(reader.GetOrdinal("Estado")), // Aquí mapeamos el campo bit
+                                    FechaFin = reader.IsDBNull(reader.GetOrdinal("FechaFin")) ? (DateTime?)null : reader.GetDateTime(reader.GetOrdinal("FechaFin")), // Aquí mapeamos el campo DateTime
+
+                                    Vagon = reader.IsDBNull(reader.GetOrdinal("Vagon")) ? (int?)null : reader.GetInt32(reader.GetOrdinal("Vagon")),
+                                    Canal = reader.IsDBNull(reader.GetOrdinal("Canal")) ? (int?)null : reader.GetInt32(reader.GetOrdinal("Canal")),
+                                    EstadoErrorCritico = reader.IsDBNull(reader.GetOrdinal("EstadoErrorCritico")) ? (bool?)null : reader.GetBoolean(reader.GetOrdinal("EstadoErrorCritico")),
+                                    EstadoApertura = reader.IsDBNull(reader.GetOrdinal("EstadoApertura")) ? (bool?)null : reader.GetBoolean(reader.GetOrdinal("EstadoApertura"))
+                                };
+
+                                // Add the ComponenteHV object to the list
+                                componentes.Add(componente);
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("An error occurred: " + ex.Message);
+                }
+            }
+
+            return componentes;
+        }
+
+
 
         public ComponenteHV GetComponenteHV(string idComponente)
         {
@@ -95,8 +257,9 @@ namespace DashboarJira.Services
                 {
                     connection.Open();
 
-                    string query = "SELECT  [IdComponente], [Serial],[aniodefabricacion], [tipoComponente] ,[Modelo] ,[fechaInicio]FROM[dbo].[registroHV] " +
-                                   "WHERE [IdComponente] = @IdComponente AND [tipoComponente] = 'Puerta' ";
+
+                    string query = "SELECT  [IdComponente], [Serial],[aniodefabricacion],[descargado] ,[tipoComponente] ,[Modelo] ,[fechaInicio], [Estado], [FechaFin] FROM[dbo].[registroHV] " +
+                                   "WHERE [IdComponente] = @IdComponente  ";
 
                     using (SqlCommand command = new SqlCommand(query, connection))
                     {
@@ -109,16 +272,18 @@ namespace DashboarJira.Services
                             {
                                 componente = new ComponenteHV
                                 {
-                                    IdComponente = !reader.IsDBNull(reader.GetOrdinal("IdComponente")) ? reader.GetString(reader.GetOrdinal("IdComponente")) : string.Empty,
-                                    Serial = !reader.IsDBNull(reader.GetOrdinal("Serial")) ? reader.GetString(reader.GetOrdinal("Serial")) : string.Empty,
-                                    AnioFabricacion = !reader.IsDBNull(reader.GetOrdinal("aniodefabricacion")) ? reader.GetInt32(reader.GetOrdinal("aniodefabricacion")) : 1900,
-                                    Modelo = !reader.IsDBNull(reader.GetOrdinal("Modelo")) ? reader.GetString(reader.GetOrdinal("Modelo")) : string.Empty,
-                                    FechaInicio = !reader.IsDBNull(reader.GetOrdinal("fechaInicio")) ? reader.GetDateTime(reader.GetOrdinal("fechaInicio")) : new DateTime(1900, 1, 1),
-                                    tipoComponente = !reader.IsDBNull(reader.GetOrdinal("tipoComponente")) ? reader.GetString(reader.GetOrdinal("tipoComponente")) : string.Empty,
-                                    horasDeOperacion = 0
+                                    IdComponente = !reader.IsDBNull(reader.GetOrdinal("IdComponente")) ? reader.GetString(reader.GetOrdinal("IdComponente")) : null,
+                                    Serial = !reader.IsDBNull(reader.GetOrdinal("Serial")) ? reader.GetString(reader.GetOrdinal("Serial")) : null,
+                                    AnioFabricacion = !reader.IsDBNull(reader.GetOrdinal("aniodefabricacion")) ? reader.GetInt32(reader.GetOrdinal("aniodefabricacion")) : (int?)null,
+                                    Modelo = !reader.IsDBNull(reader.GetOrdinal("Modelo")) ? reader.GetString(reader.GetOrdinal("Modelo")) : null,
+                                    FechaInicio = !reader.IsDBNull(reader.GetOrdinal("fechaInicio")) ? reader.GetDateTime(reader.GetOrdinal("fechaInicio")) : (DateTime?)null,
+                                    tipoComponente = !reader.IsDBNull(reader.GetOrdinal("tipoComponente")) ? reader.GetString(reader.GetOrdinal("tipoComponente")) : null,
+                                    descargado = !reader.IsDBNull(reader.GetOrdinal("descargado")) ? reader.GetInt32(reader.GetOrdinal("descargado")) : (int?)null,
+                                    horasDeOperacion = "0",
+                                    Estado = reader.IsDBNull(reader.GetOrdinal("Estado")) ? (bool?)null : reader.GetBoolean(reader.GetOrdinal("Estado")), // Aquí mapeamos el campo bit
+                                    FechaFin = reader.IsDBNull(reader.GetOrdinal("FechaFin")) ? (DateTime?)null : reader.GetDateTime(reader.GetOrdinal("FechaFin")) // Aquí mapeamos el campo DateTime
                                 };
                                 componente.CalcularHorasDeOperacion();
-
                             }
                         }
                     }
@@ -131,6 +296,66 @@ namespace DashboarJira.Services
 
             return componente;
         }
+        public void MarcarComoDescargado(string idComponente)
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                try
+                {
+                    connection.Open();
+
+                    // Actualizar el estado de descargado a verdadero
+                    string updateQuery = "UPDATE [dbo].[registroHV] SET [descargado] = 1 WHERE [IdComponente] = @IdComponente";
+
+                    using (SqlCommand updateCommand = new SqlCommand(updateQuery, connection))
+                    {
+                        updateCommand.Parameters.AddWithValue("@IdComponente", idComponente);
+
+                        // Ejecutar la consulta de actualización
+                        int rowsAffected = updateCommand.ExecuteNonQuery();
+
+                        if (rowsAffected > 0)
+                        {
+                            Console.WriteLine("El componente con IdComponente {0} ha sido marcado como descargado.", idComponente);
+                        }
+                        else
+                        {
+                            Console.WriteLine("No se encontró ningún componente con IdComponente {0}.", idComponente);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("An error occurred: " + ex.Message);
+                }
+            }
+        }
+        public void MarcarTodosComoNoDescargados()
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                try
+                {
+                    connection.Open();
+
+                    // Actualizar el estado de descargado a falso para todos los registros
+                    string updateQuery = "UPDATE [dbo].[registroHV] SET [descargado] = 0";
+
+                    using (SqlCommand updateCommand = new SqlCommand(updateQuery, connection))
+                    {
+                        // Ejecutar la consulta de actualización
+                        int rowsAffected = updateCommand.ExecuteNonQuery();
+
+                        Console.WriteLine("{0} componentes han sido marcados como no descargados.", rowsAffected);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("An error occurred: " + ex.Message);
+                }
+            }
+        }
+
 
         public List<ComponenteHV> GetComponentesHV()
         {
@@ -142,7 +367,8 @@ namespace DashboarJira.Services
                 {
                     connection.Open();
 
-                    string query = "SELECT [IdComponente], [Serial], [aniodefabricacion], [Modelo], [fechaInicio] FROM [dbo].[registroHV] ";
+                    string query = "SELECT TOP 100 [IdComponente], [Serial], [aniodefabricacion], [tipoComponente], [descargado], [Modelo], [fechaInicio], [Estado], [FechaFin] FROM [dbo].[registroHV] " +
+                           "WHERE [tipoComponente] = 'puerta' AND [descargado] = 0 ";
 
                     using (SqlCommand command = new SqlCommand(query, connection))
                     {
@@ -153,12 +379,62 @@ namespace DashboarJira.Services
                             {
                                 ComponenteHV componente = new ComponenteHV
                                 {
-                                    IdComponente = reader.GetString(reader.GetOrdinal("IdComponente")),
-                                    Serial = reader.GetString(reader.GetOrdinal("Serial")),
-                                    AnioFabricacion = reader.GetInt32(reader.GetOrdinal("aniodefabricacion")),
-                                    Modelo = reader.GetString(reader.GetOrdinal("Modelo")),
-                                    FechaInicio = reader.GetDateTime(reader.GetOrdinal("fechaInicio"))
+                                    IdComponente = reader.IsDBNull(reader.GetOrdinal("IdComponente")) ? null : reader.GetString(reader.GetOrdinal("IdComponente")),
+                                    Serial = reader.IsDBNull(reader.GetOrdinal("Serial")) ? null : reader.GetString(reader.GetOrdinal("Serial")),
+                                    AnioFabricacion = reader.IsDBNull(reader.GetOrdinal("aniodefabricacion")) ? (int?)null : reader.GetInt32(reader.GetOrdinal("aniodefabricacion")),
+                                    Modelo = reader.IsDBNull(reader.GetOrdinal("Modelo")) ? null : reader.GetString(reader.GetOrdinal("Modelo")),
+                                    FechaInicio = reader.IsDBNull(reader.GetOrdinal("fechaInicio")) ? (DateTime?)null : reader.GetDateTime(reader.GetOrdinal("fechaInicio")),
+                                    descargado = reader.IsDBNull(reader.GetOrdinal("descargado")) ? (int?)null : reader.GetInt32(reader.GetOrdinal("descargado")),
+                                    Estado = reader.IsDBNull(reader.GetOrdinal("Estado")) ? (bool?)null : reader.GetBoolean(reader.GetOrdinal("Estado")), // Aquí mapeamos el campo bit
+                                    FechaFin = reader.IsDBNull(reader.GetOrdinal("FechaFin")) ? (DateTime?)null : reader.GetDateTime(reader.GetOrdinal("FechaFin")) // Aquí mapeamos el campo DateTime
                                 };
+
+
+                                componentes.Add(componente);
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // Manejo de excepciones
+                    Console.WriteLine("An error occurred: " + ex.Message);
+                    throw; // Puedes lanzar la excepción nuevamente para propagarla hacia arriba.
+                }
+            }
+
+            return componentes;
+        }
+        public List<ComponenteHV> GetComponentesHV(string modelo)
+        {
+            List<ComponenteHV> componentes = new List<ComponenteHV>();
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                try
+                {
+                    connection.Open();
+
+                    string query = "SELECT TOP 100 [IdComponente], [Serial], [aniodefabricacion], [tipoComponente], [descargado], [Modelo], [fechaInicio] FROM [dbo].[registroHV] " +
+                   "WHERE [tipoComponente] = 'puerta' AND [descargado] = 0 AND [Modelo] LIKE '%" + modelo + "%'";
+
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        // ExecuteReader para obtener un conjunto de resultados
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                ComponenteHV componente = new ComponenteHV
+                                {
+                                    IdComponente = reader.IsDBNull(reader.GetOrdinal("IdComponente")) ? null : reader.GetString(reader.GetOrdinal("IdComponente")),
+                                    Serial = reader.IsDBNull(reader.GetOrdinal("Serial")) ? null : reader.GetString(reader.GetOrdinal("Serial")),
+                                    AnioFabricacion = reader.IsDBNull(reader.GetOrdinal("aniodefabricacion")) ? (int?)null : reader.GetInt32(reader.GetOrdinal("aniodefabricacion")),
+                                    Modelo = reader.IsDBNull(reader.GetOrdinal("Modelo")) ? null : reader.GetString(reader.GetOrdinal("Modelo")),
+                                    FechaInicio = reader.IsDBNull(reader.GetOrdinal("fechaInicio")) ? (DateTime?)null : reader.GetDateTime(reader.GetOrdinal("fechaInicio")),
+                                    descargado = reader.IsDBNull(reader.GetOrdinal("descargado")) ? (int?)null : reader.GetInt32(reader.GetOrdinal("descargado"))
+                                };
+
 
                                 componentes.Add(componente);
                             }
@@ -191,7 +467,7 @@ namespace DashboarJira.Services
                 {
                     connection.Open();
 
- 
+
                     using (SqlCommand command = new SqlCommand(query, connection))
                     {
                         using (SqlDataReader reader = command.ExecuteReader())
@@ -258,7 +534,7 @@ namespace DashboarJira.Services
         }
 
 
-        
+
 
 
 
@@ -336,11 +612,40 @@ namespace DashboarJira.Services
 
             return tableString;
         }
+
+        internal void CambiarDescargado(string idComponente, int v)
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                try
+                {
+                    connection.Open();
+
+                    // Actualizar el estado de descargado a verdadero
+                    string updateQuery = "UPDATE [dbo].[registroHV] SET [descargado] = " + v + " WHERE [IdComponente] = @IdComponente";
+
+                    using (SqlCommand updateCommand = new SqlCommand(updateQuery, connection))
+                    {
+                        updateCommand.Parameters.AddWithValue("@IdComponente", idComponente);
+
+                        // Ejecutar la consulta de actualización
+                        int rowsAffected = updateCommand.ExecuteNonQuery();
+
+                        if (rowsAffected > 0)
+                        {
+                            Console.WriteLine("El componente con IdComponente {0} ha sido marcado como 3.", idComponente);
+                        }
+                        else
+                        {
+                            Console.WriteLine("No se encontró ningún componente con IdComponente {0}.", idComponente);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("An error occurred: " + ex.Message);
+                }
+            }
+        }
     }
-
-
-
-
-
-
 }

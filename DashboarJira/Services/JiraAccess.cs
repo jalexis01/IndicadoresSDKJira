@@ -7,28 +7,32 @@ using System.Data;
 using OfficeOpenXml;
 using Microsoft.EntityFrameworkCore.Metadata;
 using System.Net.Sockets;
+using RestSharp.Extensions;
+using System.ComponentModel;
 
 namespace DashboarJira.Services
 {
     public class JiraAccess
     {
-        //string jiraUrl = "https://manateecc.atlassian.net/";
-        //string username = "desarrollocc@manateeingenieria.com";
-        //string password = "ATATT3xFfGF0ZRHIEZTEJVRnhNKviH0CGed6QXqCDMj5bCmKSEbO00UUjHUb3yDcaA4YD1SHohyDr4qnwRx2x4Tu_S_QW_xlGIcIUDvL7CFKEg47_Jcy4Dmq6YzO0dvqB3qeT-EVWfwJ2jJ-9vEUfsqXavD0IIGA7DAZHGCtIWhxgwKIbAWsmeA=038B810D";
-        string jiraUrl = "https://assaabloymda.atlassian.net/";
+        string jiraUrl = "https://manateecc.atlassian.net/";
         string username = "desarrollocc@manateeingenieria.com";
         string password = "ATATT3xFfGF0ZRHIEZTEJVRnhNKviH0CGed6QXqCDMj5bCmKSEbO00UUjHUb3yDcaA4YD1SHohyDr4qnwRx2x4Tu_S_QW_xlGIcIUDvL7CFKEg47_Jcy4Dmq6YzO0dvqB3qeT-EVWfwJ2jJ-9vEUfsqXavD0IIGA7DAZHGCtIWhxgwKIbAWsmeA=038B810D";
+        //string jiraUrl = "https://assaabloymda.atlassian.net/";
+        //string username = "desarrollocc@manateeingenieria.com";
+        //string password = "ATATT3xFfGF0ZRHIEZTEJVRnhNKviH0CGed6QXqCDMj5bCmKSEbO00UUjHUb3yDcaA4YD1SHohyDr4qnwRx2x4Tu_S_QW_xlGIcIUDvL7CFKEg47_Jcy4Dmq6YzO0dvqB3qeT-EVWfwJ2jJ-9vEUfsqXavD0IIGA7DAZHGCtIWhxgwKIbAWsmeA=038B810D";
 
         Jira jira;
         private DbConnector connector;
 
-        public JiraAccess()
+        public JiraAccess(string jiraUrl, string username, string password, string connectionString)
         {
-            connector = new DbConnector();
+            this.jiraUrl = jiraUrl;
+            this.username = username;
+            this.password = password;
+            connector = new DbConnector(connectionString);
             jira = Jira.CreateRestClient(jiraUrl, username, password);
         }
         const string proyectAssa = "project = 'Mesa de Ayuda'";
-        //const string proyectAssaMTO = "project = 'MP'";
         const string proyectAssaMTO = "project = 'Mesa de Ayuda-MP'";
         //const string proytect = "(project = 'Mesa de Ayuda' OR project = 'Mtto Preventivo')";
         const string proyectManatee = "project = 'Centro de Control'";
@@ -36,15 +40,16 @@ namespace DashboarJira.Services
         const string proyectManateeMTO = "(project = 'TICKETMP')";
         const string proyectManateeDRV = "(project = 'TICKETDRV')";
         /*TODO*/
-        public List<Ticket> GetTikets(int start, int max, string startDate, string endDate, string idComponente, string tipoMantenimiento, bool cerrados)
+        //Se incluye solo cerrados
+        public List<Ticket> GetTikets(int start, int max, string startDate, string endDate, string serial, string tipoMantenimiento, bool cerrados, bool estado)
         {
             try
             {
-                List<Ticket> result = GetTiketsCC(start, max, startDate, endDate, idComponente, tipoMantenimiento, cerrados) ?? new List<Ticket>();
-                result = result.Concat(GetTiketsMTO(start, max, startDate, endDate, idComponente, tipoMantenimiento) ?? new List<Ticket>()).ToList().OrderByDescending(issue => issue.fecha_apertura).ToList();
+                List<Ticket> result = GetTiketsCC(start, max, startDate, endDate, serial, tipoMantenimiento, cerrados, estado) ?? new List<Ticket>();
+                result = result.Concat(GetTiketsMTO(start, max, startDate, endDate, serial, tipoMantenimiento, estado) ?? new List<Ticket>()).ToList().OrderByDescending(issue => issue.fecha_apertura).ToList();
                 if (jiraUrl == "https://manateecc.atlassian.net/")
                 {
-                    result = result.Concat(GetTiketsDRV(start, max, startDate, endDate, idComponente, tipoMantenimiento, cerrados) ?? new List<Ticket>()).ToList().OrderByDescending(issue => issue.fecha_apertura).ToList();
+                    result = result.Concat(GetTiketsDRV(start, max, startDate, endDate, serial, tipoMantenimiento, cerrados, estado) ?? new List<Ticket>()).ToList().OrderByDescending(issue => issue.fecha_apertura).ToList();
                 }
                 result = result.OrderByDescending(issue => issue.fecha_apertura).ToList();
 
@@ -53,7 +58,7 @@ namespace DashboarJira.Services
             catch (Exception ex) { return new List<Ticket>(); }
 
         }
-        public List<Ticket> GetTiketsCC(int start, int max, string startDate, string endDate, string idComponente, string tipoMantenimiento, bool cerrados)
+        public List<Ticket> GetTiketsCC(int start, int max, string startDate, string endDate, string serial, string tipoMantenimiento, bool cerrados, bool estado)
         {
             try
             {
@@ -67,7 +72,8 @@ namespace DashboarJira.Services
                 {
                     jql = $"{proyectManatee} and issuetype = 'Solicitud de Mantenimiento'";
                 }
-                if (cerrados) {
+                if (cerrados)
+                {
                     jql += " AND status = cerrado";
                 }
                 if (!string.IsNullOrWhiteSpace(tipoMantenimiento))
@@ -78,10 +84,18 @@ namespace DashboarJira.Services
                 {
                     jql += " AND " + "created >= '" + startDate + "' AND " + "created <= '" + endDate + "'";
                 }
-                if (idComponente != null)
+                if (serial != null)
                 {
+                    if (estado)
+                    {
 
-                    jql += " AND " + "'Identificacion componente' ~ " + idComponente;
+                        jql += " AND " + "'Identificacion (serial)' ~ " + serial;
+                    }
+                    else
+                    {
+                        jql += " AND " + "'Identificacion componente' ~ " + serial;
+
+                    }
                 }
                 //jql += " AND 'Tipo de servicio' is not empty ";
                 jql += " ORDER BY key DESC, 'Time to resolution' ASC";
@@ -101,7 +115,7 @@ namespace DashboarJira.Services
                 List<Ticket> result = ConvertIssusInTickets(issues);
                 if (total > max + start)
                 {
-                    result = result.Concat(GetTiketsCC(start + max, max, startDate, endDate, idComponente, tipoMantenimiento, cerrados)).ToList();
+                    result = result.Concat(GetTiketsCC(start + max, max, startDate, endDate, serial, tipoMantenimiento, cerrados, estado)).ToList();
                 }
                 return result;
             }
@@ -112,7 +126,7 @@ namespace DashboarJira.Services
             }
             return null;
         }
-        public List<Ticket> GetTiketsMTO(int start, int max, string startDate, string endDate, string idComponente, string tipoMantenimiento)
+        public List<Ticket> GetTiketsMTO(int start, int max, string startDate, string endDate, string serial, string tipoMantenimiento, bool estado)
         {
             try
             {
@@ -122,7 +136,7 @@ namespace DashboarJira.Services
                 {
                     jql = $"{proyectAssaMTO} and issuetype = 'Solicitud de Mantenimiento' and status = cerrado";
                 }
-                
+
                 else
                 {
                     jql = $"{proyectManateeMTO} and issuetype = 'Solicitud de Mantenimiento' and status = cerrado";
@@ -135,11 +149,20 @@ namespace DashboarJira.Services
                 {
                     jql += " AND " + "'Fecha de creacion' >= '" + startDate + "' AND " + "'Fecha de creacion' <= '" + endDate + "'";
                 }
-                if (idComponente != null)
+                if (serial != null)
                 {
+                    if (estado)
+                    {
 
-                    jql += " AND " + "'Identificacion componente' ~ " + idComponente;
+                        jql += " AND " + "'Identificacion (serial)' ~ " + serial;
+                    }
+                    else
+                    {
+                        jql += " AND " + "'Identificacion componente' ~ " + serial;
+
+                    }
                 }
+
                 //jql += " AND 'Tipo de servicio' is not empty ";
                 jql += " ORDER BY key DESC, 'Time to resolution' ASC";
 
@@ -158,7 +181,7 @@ namespace DashboarJira.Services
                 List<Ticket> result = ConvertIssusInTicketsMTO(issues);
                 if (total > max + start)
                 {
-                    result = result.Concat(GetTiketsMTO(start + max, max, startDate, endDate, idComponente, tipoMantenimiento)).ToList();
+                    result = result.Concat(GetTiketsMTO(start + max, max, startDate, endDate, serial, tipoMantenimiento, estado)).ToList();
                 }
                 return result;
             }
@@ -170,7 +193,7 @@ namespace DashboarJira.Services
             return null;
         }
 
-        public List<Ticket> GetTiketsDRV(int start, int max, string startDate, string endDate, string idComponente, string tipoMantenimiento, bool cerrados)
+        public List<Ticket> GetTiketsDRV(int start, int max, string startDate, string endDate, string serial, string tipoMantenimiento, bool cerrados, bool estado)
         {
             try
             {
@@ -196,10 +219,18 @@ namespace DashboarJira.Services
                 {
                     jql += " AND " + "'Fecha de creacion' >= '" + startDate + "' AND " + "'Fecha de creacion' <= '" + endDate + "'";
                 }
-                if (idComponente != null)
+                if (serial != null)
                 {
+                    if (estado)
+                    {
 
-                    jql += " AND " + "'Identificacion componente' ~ " + idComponente;
+                        jql += " AND " + "'Identificacion (serial)' ~ " + serial;
+                    }
+                    else
+                    {
+                        jql += " AND " + "'Identificacion componente' ~ " + serial;
+
+                    }
                 }
                 //jql += " AND 'Tipo de servicio' is not empty ";
                 jql += " ORDER BY key DESC, 'Time to resolution' ASC";
@@ -219,7 +250,7 @@ namespace DashboarJira.Services
                 List<Ticket> result = ConvertIssusInTicketsMTO(issues);
                 if (total > max + start)
                 {
-                    result = result.Concat(GetTiketsDRV(start + max, max, startDate, endDate, idComponente, tipoMantenimiento,cerrados)).ToList();
+                    result = result.Concat(GetTiketsDRV(start + max, max, startDate, endDate, serial, tipoMantenimiento, cerrados, estado)).ToList();
                 }
                 return result;
             }
@@ -384,8 +415,8 @@ namespace DashboarJira.Services
             temp.identificacion = (issue.CustomFields["Identificacion (serial)"] != null ? issue.CustomFields["Identificacion (serial)"].Values[0] : "");
 
 
-            //temp.tipo_mantenimiento = (issue.CustomFields["Tipo de servicio"] != null ? (issue.CustomFields["Tipo de servicio"].Values[0] == "Mantenimiento Preventivo" ? "Preventivo" : "Correctivo") : "");
-            temp.tipo_mantenimiento = (issue.CustomFields["Tipo de servicio"] != null ? (issue.CustomFields["Tipo de servicio"].Values[0] == "Mantenimiento Preventivo" ? "Preventivo" : (issue.CustomFields["Tipo de servicio"].Values[0] == "Mantenimiento predictivo"? "Predictivo" : "Correctivo")) : "");
+            temp.tipo_mantenimiento = (issue.CustomFields["Tipo de servicio"] != null ? (issue.CustomFields["Tipo de servicio"].Values[0] == "Mantenimiento Preventivo" ? "Preventivo" : "Correctivo") : "");
+
 
             temp.nivel_falla = (issue.CustomFields["Clase de fallo"] != null ? issue.CustomFields["Clase de fallo"].Values[0] : "");
 
@@ -506,9 +537,8 @@ namespace DashboarJira.Services
             temp.identificacion = (issue.CustomFields["Identificacion (serial)"] != null ? issue.CustomFields["Identificacion (serial)"].Values[0] : "");
 
 
-            //temp.tipo_mantenimiento = (issue.CustomFields["Tipo de servicio"] != null ? (issue.CustomFields["Tipo de servicio"].Values[0] == "Mantenimiento Preventivo" ? "Preventivo" : "Correctivo") : "");
+            //temp.tipo_mantenimiento = (issue.CustomFields["Tipo de servicio"] != null ? (issue.CustomFields["Tipo de servicio"].Values[0] == "Mantenimiento Preventivo" ? "Preventivo" : "Predictivo") : "");
             temp.tipo_mantenimiento = (issue.CustomFields["Tipo de servicio"] != null ? (issue.CustomFields["Tipo de servicio"].Values[0] == "Mantenimiento Preventivo" ? "Preventivo" : (issue.CustomFields["Tipo de servicio"].Values[0] == "Mantenimiento predictivo" ? "Predictivo" : "Correctivo")) : "");
-
 
             temp.nivel_falla = (issue.CustomFields["Clase de fallo"] != null ? issue.CustomFields["Clase de fallo"].Values[0] : "");
 
@@ -830,17 +860,19 @@ namespace DashboarJira.Services
 
         }
         //Implementacion de la hoja de vida
-        public List<TicketHV> GetTicketHVs(int start, int max, string idComponente)
+        public List<TicketHV> GetTicketHVs(int start, int max, string serial, bool estado)
         {
-            List<TicketHV> result = GetTiketsHVCC(start, max, idComponente);
-            result = result.Concat(GetTiketsHVMTO(start, max, idComponente)).ToList().OrderByDescending(issue => issue.fecha_apertura).ToList();
+            //Añadir try catch
+
+            List<TicketHV> result = GetTiketsHVCC(start, max, serial, estado);
+            result = result.Concat(GetTiketsHVMTO(start, max, serial, estado)).ToList().OrderByDescending(issue => issue.fecha_apertura).ToList();
             if (jiraUrl == "https://manateecc.atlassian.net/")
             {
-                result = result.Concat(GetTiketsHVDRV(start, max, idComponente)).ToList().OrderByDescending(issue => issue.fecha_apertura).ToList();
+                result = result.Concat(GetTiketsHVDRV(start, max, serial)).ToList().OrderByDescending(issue => issue.fecha_apertura).ToList();
             }
-                return result;
+            return result;
         }
-        public List<TicketHV> GetTiketsHVCC(int start, int max, string idComponente)
+        public List<TicketHV> GetTiketsHVCC(int start, int max, string serial, bool estado)
         {
             try
             {
@@ -848,16 +880,24 @@ namespace DashboarJira.Services
                 //created >= 2023-04-04 AND created <= 2023-04-13 AND issuetype = "Solicitud de Mantenimiento" AND resolution = Unresolved AND "Clase de fallo" = AIO AND "Identificacion componente" ~ 9119-WA-OR-1 ORDER BY key DESC, "Time to resolution" ASC
                 if (jiraUrl == "https://assaabloymda.atlassian.net/")
                 {
-                    jql = $"{proyectAssa} and issuetype = 'Solicitud de Mantenimiento' and status = Cerrado";
+                    jql = $"{proyectAssa} and issuetype = 'Solicitud de Mantenimiento' and status = cerrado";
                 }
                 else
                 {
-                    jql = $"{proyectManatee} and issuetype = 'Solicitud de Mantenimiento' and status = Cerrado";
+                    jql = $"{proyectManatee} and issuetype = 'Solicitud de Mantenimiento' and status = cerrado";
                 }
-                if (idComponente != null)
+                if (serial != null)
                 {
+                    if (estado)
+                    {
 
-                    jql += " AND " + "'Identificacion componente' ~ " + idComponente;
+                        jql += " AND " + "'Identificacion (serial)' ~ " + serial;
+                    }
+                    else
+                    {
+                        jql += " AND " + "'Identificacion componente' ~ " + serial;
+
+                    }
                 }
                 //jql += " AND 'Tipo de servicio' is not empty ";
                 jql += " ORDER BY key DESC, 'Time to resolution' ASC";
@@ -877,7 +917,7 @@ namespace DashboarJira.Services
                 List<TicketHV> result = ConvertIssusInTicketshv(issues);
                 if (total > max + start)
                 {
-                    result = result.Concat(GetTiketsHVCC(start + max, max, idComponente)).ToList();
+                    result = result.Concat(GetTiketsHVCC(start + max, max, serial, estado)).ToList();
                 }
                 return result;
             }
@@ -888,7 +928,7 @@ namespace DashboarJira.Services
             }
             return null;
         }
-        public List<TicketHV> GetTiketsHVMTO(int start, int max, string idComponente)
+        public List<TicketHV> GetTiketsHVMTO(int start, int max, string serial, bool estado)
         {
             try
             {
@@ -896,18 +936,26 @@ namespace DashboarJira.Services
                 //created >= 2023-04-04 AND created <= 2023-04-13 AND issuetype = "Solicitud de Mantenimiento" AND resolution = Unresolved AND "Clase de fallo" = AIO AND "Identificacion componente" ~ 9119-WA-OR-1 ORDER BY key DESC, "Time to resolution" ASC
                 if (jiraUrl == "https://assaabloymda.atlassian.net/")
                 {
-                    jql = $"{proyectAssaMTO} and issuetype = 'Solicitud de Mantenimiento' and status = Cerrado";
+                    jql = $"{proyectAssaMTO} and issuetype = 'Solicitud de Mantenimiento' and status = cerrado";
                 }
                 else
                 {
-                    jql = $"{proyectManateeMTO} and issuetype = 'Solicitud de Mantenimiento' and status = Cerrado";
+                    jql = $"{proyectManateeMTO} and issuetype = 'Solicitud de Mantenimiento' and status = cerrado";
                 }
 
 
-                if (idComponente != null)
+                if (serial != null)
                 {
+                    if (estado)
+                    {
 
-                    jql += " AND " + "'Identificacion componente' ~ " + idComponente;
+                        jql += " AND " + "'Identificacion (serial)' ~ " + serial;
+                    }
+                    else
+                    {
+                        jql += " AND " + "'Identificacion componente' ~ " + serial;
+
+                    }
                 }
                 //jql += " AND 'Tipo de servicio' is not empty ";
                 jql += " ORDER BY key DESC, 'Time to resolution' ASC";
@@ -927,7 +975,7 @@ namespace DashboarJira.Services
                 List<TicketHV> result = ConvertIssusInTicketsHVMTO(issues);
                 if (total > max + start)
                 {
-                    result = result.Concat(GetTiketsHVMTO(start + max, max, idComponente)).ToList();
+                    result = result.Concat(GetTiketsHVMTO(start + max, max, serial, estado)).ToList();
                 }
                 return result;
             }
@@ -938,7 +986,7 @@ namespace DashboarJira.Services
             }
             return null;
         }
-        public List<TicketHV> GetTiketsHVDRV(int start, int max, string idComponente)
+        public List<TicketHV> GetTiketsHVDRV(int start, int max, string serial)
         {
             try
             {
@@ -946,18 +994,18 @@ namespace DashboarJira.Services
                 //created >= 2023-04-04 AND created <= 2023-04-13 AND issuetype = "Solicitud de Mantenimiento" AND resolution = Unresolved AND "Clase de fallo" = AIO AND "Identificacion componente" ~ 9119-WA-OR-1 ORDER BY key DESC, "Time to resolution" ASC
                 if (jiraUrl == "https://assaabloymda.atlassian.net/")
                 {
-                    jql = $"{proyectAssaMTO} and issuetype = 'Solicitud de Mantenimiento' and status = Cerrado";
+                    jql = $"{proyectAssaMTO} and issuetype = 'Solicitud de Mantenimiento' and status = cerrado";
                 }
                 else
                 {
-                    jql = $"{proyectManateeDRV} and issuetype = 'Solicitud de Mantenimiento' and status = Cerrado";
+                    jql = $"{proyectManateeDRV} and issuetype = 'Solicitud de Mantenimiento' and status = cerrado";
                 }
 
 
-                if (idComponente != null)
+                if (serial != null)
                 {
 
-                    jql += " AND " + "'Identificacion componente' ~ " + idComponente;
+                    jql += " AND " + "'Identificacion (serial)' ~ " + serial;
                 }
                 //jql += " AND 'Tipo de servicio' is not empty ";
                 jql += " ORDER BY key DESC, 'Time to resolution' ASC";
@@ -977,7 +1025,7 @@ namespace DashboarJira.Services
                 List<TicketHV> result = ConvertIssusInTicketsHVMTO(issues);
                 if (total > max + start)
                 {
-                    result = result.Concat(GetTiketsHVDRV(start + max, max, idComponente)).ToList();
+                    result = result.Concat(GetTiketsHVDRV(start + max, max, serial)).ToList();
                 }
                 return result;
             }
@@ -1277,9 +1325,16 @@ namespace DashboarJira.Services
             try
             {
                 string downloadsFolder = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
-                downloadsFolder = Path.Combine(downloadsFolder, "Downloads");
+                string carpeta = jiraUrl == "https://manateecc.atlassian.net/" ? "Manatee" : "assabloy";
+                downloadsFolder = Path.Combine(downloadsFolder, "Downloads", carpeta);
+                var templateDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "PlantillasExcel");
+                var templateFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "PlantillasExcel", "HVTICKET.xlsx");
+                if (!Directory.Exists(downloadsFolder))
+                {
+                    Directory.CreateDirectory(downloadsFolder);
+                }
 
-                ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+                ExcelPackage.LicenseContext = OfficeOpenXml.LicenseContext.NonCommercial;
 
                 int currentRow = 2; // Inicializa fuera del bucle foreach
 
@@ -1288,37 +1343,41 @@ namespace DashboarJira.Services
                     string ticketFolder = Path.Combine(downloadsFolder, ticket.id_componente);
                     Directory.CreateDirectory(ticketFolder);
 
-                    var excelFilePath = Path.Combine(ticketFolder, $"{ticket.id_componente} Tickets.xlsx");
+                    // Crear el archivo Excel dentro de la carpeta con el nombre del id_componente
+                    var ticketExcelFilePath = Path.Combine(ticketFolder, $"{ticket.id_componente}_Tickets.xlsx");
 
+                    var attachmentFolder = Path.Combine(ticketFolder, $"{ticket.id_componente}_Adjuntos");
+                    Directory.CreateDirectory(attachmentFolder);
 
-                    var templateDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "PlantillasExcel");
-                    var templateFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "PlantillasExcel", "HVTICKET.xlsx");
-
-                    if (!File.Exists(excelFilePath))
+                    // Crear el archivo Excel si no existe
+                    if (!File.Exists(ticketExcelFilePath))
                     {
-                        File.Copy(templateFilePath, excelFilePath, true);
+                        File.Copy(templateFilePath, ticketExcelFilePath, true);
+
+                        using (var package = new ExcelPackage())
+                        {
+                            var worksheet = package.Workbook.Worksheets.Add("Sheet1");
+
+                            package.SaveAs(new FileInfo(ticketExcelFilePath));
+                        }
                     }
 
-                    using (var package = new ExcelPackage(new FileInfo(excelFilePath)))
+                    using (var package = new ExcelPackage(new FileInfo(ticketExcelFilePath)))
                     {
                         var worksheet = package.Workbook.Worksheets[0];
 
-                        // Headers (solo si es la primera vez)
                         if (currentRow == 2)
                         {
                             var properties1 = typeof(TicketHV).GetProperties();
                             for (int i = 1; i < properties1.Length; i++)
                             {
-                                worksheet.Cells[1, i + 1].Value = properties1[i].Name;
+                                worksheet.Cells[1, i].Value = properties1[i].Name;
                             }
                         }
 
-                        int attachmentColumn = 2; // Columna para los adjuntos
+                        int attachmentColumn = 1;
                         int fileCounter = 1;
-                        string attachmentFolder = Path.Combine(ticketFolder, $"{ticket.id_componente} Adjuntos");
 
-
-                        Directory.CreateDirectory(attachmentFolder);
                         foreach (var attachment in ticket.Attachments)
                         {
                             string attachmentFilePath = Path.Combine(attachmentFolder, $"{ticket.id_ticket}");
@@ -1329,32 +1388,35 @@ namespace DashboarJira.Services
                             await DownloadAttachmentAsync(attachment, attachmentFilePath);
 
                             Console.WriteLine($"Bytes del archivo adjunto '{attachment.FileName}': {attachment.DownloadData().Length}");
-                            // Ruta relativa al archivo dentro de la carpeta de adjuntos del ticket actual
-                            string attachmentRelativePath = Path.Combine($"{ticket.id_componente} Adjuntos", $"{ticket.id_ticket}");
 
+                            string attachmentRelativePath = Path.Combine($"{ticket.id_componente}_Adjuntos", $"{ticket.id_ticket}");
 
-                            // Establecer la ruta de archivo relativa como hipervínculo
                             worksheet.Cells[currentRow, attachmentColumn].Hyperlink = new Uri(attachmentRelativePath, UriKind.Relative);
                             worksheet.Cells[currentRow, attachmentColumn].Style.Font.Color.SetColor(System.Drawing.Color.Blue);
 
-                            attachmentColumn++;
+
                             fileCounter++;
                         }
 
-
-                        // Datos del ticket (excluyendo Attachments)
                         var properties = typeof(TicketHV).GetProperties();
                         for (int j = 1; j < properties.Length; j++)
                         {
                             var columnValue = properties[j].GetValue(ticket);
-                            worksheet.Cells[currentRow, j + 1].Value = columnValue;
+
+                            // Ajustar la forma en que se manejan las fechas
+                            if (properties[j].PropertyType == typeof(DateTime?))
+                            {
+                                worksheet.Cells[currentRow, j].Value = ((DateTime?)columnValue)?.ToString("yyyy-MM-ddTHH:mm:ss");
+                            }
+                            else
+                            {
+                                worksheet.Cells[currentRow, j].Value = columnValue;
+                            }
                         }
 
+                        currentRow++;
                         package.Save();
                     }
-
-                    // Incrementa la fila actual para el siguiente ticket
-                    currentRow++;
                 }
             }
             catch (Exception ex)
@@ -1366,9 +1428,17 @@ namespace DashboarJira.Services
 
 
 
+
+
+
+
+
+
+
+
         private async Task DownloadAttachmentAsync(Attachment attachment, string folderPath)
         {
-            
+
             List<byte[]> videoList = new List<byte[]>();
 
             var videoExtensions = new List<string>
@@ -1400,7 +1470,8 @@ namespace DashboarJira.Services
                     string filePath = Path.Combine(folderPath, attachment.FileName);
                     File.WriteAllBytes(filePath, videoBytes);
                 }
-                else if (IsExtensionSupported(attachment.FileName, imageExtensions)) {
+                else if (IsExtensionSupported(attachment.FileName, imageExtensions))
+                {
                     string imageUrl = $"{jiraUrl}/rest/api/2/attachment/content/{attachment.Id}";
                     string filePath = Path.Combine(folderPath, attachment.FileName);
                     byte[] imageBytes = client.GetByteArrayAsync(imageUrl).Result;
@@ -1418,14 +1489,18 @@ namespace DashboarJira.Services
             {
 
                 string downloadsFolder = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
-                downloadsFolder = Path.Combine(downloadsFolder, "Downloads");
-                ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
-
+                string carpeta = jiraUrl == "https://manateecc.atlassian.net/" ? "Manatee" : "assabloy";
+                downloadsFolder = Path.Combine(downloadsFolder, "Downloads", carpeta);
+                ExcelPackage.LicenseContext = OfficeOpenXml.LicenseContext.NonCommercial;
+                if (!Directory.Exists(downloadsFolder))
+                {
+                    Directory.CreateDirectory(downloadsFolder);
+                }
                 // Obtén los datos del componente utilizando el método GetComponenteHV
                 ComponenteHV componente = connector.GetComponenteHV(idComponente);
 
 
-                if (componente  != null)
+                if (componente != null)
                 {
                     string ticketFolder = Path.Combine(downloadsFolder, idComponente); // Cambiado a idComponente en lugar de componente.Serial
                     Directory.CreateDirectory(ticketFolder);
@@ -1446,19 +1521,17 @@ namespace DashboarJira.Services
                         int row = 7; // La fila en la que quieres comenzar a escribir datos en la hoja de trabajo
                         int columnInicio = 4;
                         int currentRow = row;
-                        DateTime fechaActual = DateTime.Now;
-                        TimeSpan diferencia = fechaActual - componente.FechaInicio;
-                        double horasDeOperacion = diferencia.TotalHours;
-                        horasDeOperacion = Math.Round(horasDeOperacion);
+                        componente.CalcularHorasDeOperacion();
+                        var horasDeOperacion = componente.horasDeOperacion;
 
 
 
-                        worksheet.Cells[currentRow + 1, columnInicio].Value = componente?.Modelo;
-                        worksheet.Cells[currentRow + 3, columnInicio].Value = componente?.FechaInicio;
-                        worksheet.Cells[row, columnInicio + 7].Value = componente?.IdComponente;
-                        worksheet.Cells[row + 1, columnInicio + 7].Value = componente?.Serial;
-                        worksheet.Cells[row + 2, columnInicio + 7].Value = componente?.AnioFabricacion;
-                        worksheet.Cells[row + 3, columnInicio + 7].Value = horasDeOperacion;
+                        worksheet.Cells[currentRow + 1, columnInicio].Value = componente != null && componente.Modelo != null ? componente?.Modelo : " ";
+                        worksheet.Cells[currentRow + 3, columnInicio].Value = componente != null && componente.FechaInicio.HasValue ? (componente.FechaInicio.Value.Year == 1900 ? " " : componente.FechaInicio.ToString()) : " ";
+                        worksheet.Cells[row, columnInicio + 7].Value = componente != null && componente.IdComponente != null ? componente.IdComponente : " ";
+                        worksheet.Cells[row + 1, columnInicio + 7].Value = componente != null && componente.Serial != null ? componente?.Serial : " ";
+                        worksheet.Cells[row + 2, columnInicio + 7].Value = (componente?.AnioFabricacion == 1900 || componente?.AnioFabricacion == null ? " " : componente?.AnioFabricacion);
+                        worksheet.Cells[row + 3, columnInicio + 7].Value = horasDeOperacion == "-1" ? "" : horasDeOperacion;
                         package.Save();
                     }
                     else
@@ -1473,11 +1546,16 @@ namespace DashboarJira.Services
             }
         }
 
-        public void DownloadExcel(string idComponente) {
-
+        public void DownloadExcel(string idComponente)
+        {
+            //Añadir try catch
             ExportComponenteToExcel(idComponente);
-            List<TicketHV> tickets = GetTicketHVs(0, 0, idComponente);
+            List<TicketHV> tickets = GetTicketHVs(0, 0, idComponente, true);
             ExportTicketsToExcel(tickets);
         }
+
+
+
+
     }
 }

@@ -1,56 +1,9 @@
-﻿@{
-    ViewData["Title"] = "Puertas por Estación";
-    var estaciones = new[]
-    {
-        new { Id = 7107, Nombre = "Univ Nacional", Estado = 1 },
-        new { Id = 9106, Nombre = "Nariño", Estado = 2 },
-        new { Id = 7109, Nombre = "CAD", Estado = 3 },
-        new { Id = 9001, Nombre = "Molinos", Estado = 4 }
-    };
+﻿@using System.Linq
+@using DashboarJira.Model
 
-    var puertas = new[]
-    {
-        new { IdEstacion = 7107, IdPuerta = 1, vagon="WA", Nombre = "7109-WA-OR-1", Estado = 1 },
-        new { IdEstacion = 7107, IdPuerta = 1, vagon="WA", Nombre = "7109-WA-OR-2", Estado = 1 },
-        new { IdEstacion = 7107, IdPuerta = 1, vagon="WA", Nombre = "7109-WA-OR-3", Estado = 1 },
-        new { IdEstacion = 7107, IdPuerta = 1, vagon="WA", Nombre = "7109-WA-OR-4", Estado = 1 },
-        new { IdEstacion = 7107, IdPuerta = 1, vagon="WA", Nombre = "7109-WA-OR-5", Estado = 1 },
-        new { IdEstacion = 7107, IdPuerta = 1, vagon="WA", Nombre = "7109-WA-OC-1", Estado = 1 },
-        new { IdEstacion = 7107, IdPuerta = 1, vagon="WA", Nombre = "7109-WA-OC-2", Estado = 1 },
-        new { IdEstacion = 7107, IdPuerta = 1, vagon="WA", Nombre = "7109-WA-OC-3", Estado = 1 },
-        new { IdEstacion = 7107, IdPuerta = 1, vagon="WA", Nombre = "7109-WA-OC-4", Estado = 1 },
-        new { IdEstacion = 7107, IdPuerta = 1, vagon="WA", Nombre = "7109-WA-OC-5", Estado = 1 },
-        new { IdEstacion = 7109, IdPuerta = 1, vagon="WA", Nombre = "7109-WA-OR-1", Estado = 1 },
-        new { IdEstacion = 7109, IdPuerta = 1, vagon="WA", Nombre = "7109-WA-OR-2", Estado = 1 },
-        new { IdEstacion = 7109, IdPuerta = 1, vagon="WA", Nombre = "7109-WA-OR-3", Estado = 1 },
-        new { IdEstacion = 7109, IdPuerta = 1, vagon="WA", Nombre = "7109-WA-OR-4", Estado = 1 },
-        new { IdEstacion = 7109, IdPuerta = 1, vagon="WA", Nombre = "7109-WA-OR-5", Estado = 1 },
-        new { IdEstacion = 7109, IdPuerta = 1, vagon="WA", Nombre = "7109-WA-OC-1", Estado = 1 },
-        new { IdEstacion = 7109, IdPuerta = 1, vagon="WA", Nombre = "7109-WA-OC-2", Estado = 1 },
-        new { IdEstacion = 7109, IdPuerta = 1, vagon="WA", Nombre = "7109-WA-OC-3", Estado = 1 },
-        new { IdEstacion = 7109, IdPuerta = 1, vagon="WA", Nombre = "7109-WA-OC-4", Estado = 1 },
-        new { IdEstacion = 7109, IdPuerta = 1, vagon="WA", Nombre = "7109-WA-OC-5", Estado = 1 },
-        new { IdEstacion = 9001, IdPuerta = 1, vagon="WA", Nombre = "7109-WA-OR-1", Estado = 1 },
-        new { IdEstacion = 9001, IdPuerta = 1, vagon="WA", Nombre = "7109-WA-OR-2", Estado = 1 },
-        new { IdEstacion = 9001, IdPuerta = 1, vagon="WA", Nombre = "7109-WA-OR-3", Estado = 1 },
-        new { IdEstacion = 9001, IdPuerta = 1, vagon="WA", Nombre = "7109-WA-OR-4", Estado = 1 },
-        new { IdEstacion = 9001, IdPuerta = 1, vagon="WA", Nombre = "7109-WA-OR-5", Estado = 1 },
-        new { IdEstacion = 9001, IdPuerta = 1, vagon="WA", Nombre = "7109-WA-OC-1", Estado = 1 },
-        new { IdEstacion = 9001, IdPuerta = 1, vagon="WA", Nombre = "7109-WA-OC-2", Estado = 1 },
-        new { IdEstacion = 9001, IdPuerta = 1, vagon="WA", Nombre = "7109-WA-OC-3", Estado = 1 },
-        new { IdEstacion = 9001, IdPuerta = 1, vagon="WA", Nombre = "7109-WA-OC-4", Estado = 1 },
-        new { IdEstacion = 9001, IdPuerta = 1, vagon="WA", Nombre = "7109-WA-OC-5", Estado = 1 },
-        new { IdEstacion = 9001, IdPuerta = 1, vagon="WA", Nombre = "7109-WA-OR-1", Estado = 1 },
-        new { IdEstacion = 9001, IdPuerta = 1, vagon="WA", Nombre = "7109-WA-OR-2", Estado = 1 },
-        new { IdEstacion = 9001, IdPuerta = 1, vagon="WA", Nombre = "7109-WA-OR-3", Estado = 1 },
-        new { IdEstacion = 9001, IdPuerta = 1, vagon="WA", Nombre = "7109-WA-OR-4", Estado = 1 },
-        new { IdEstacion = 9001, IdPuerta = 1, vagon="WA", Nombre = "7109-WA-OR-5", Estado = 1 },
-        new { IdEstacion = 9001, IdPuerta = 1, vagon="WA", Nombre = "7109-WA-OC-1", Estado = 1 },
-        new { IdEstacion = 9001, IdPuerta = 1, vagon="WA", Nombre = "7109-WA-OC-2", Estado = 1 },
-        new { IdEstacion = 9001, IdPuerta = 1, vagon="WA", Nombre = "7109-WA-OC-3", Estado = 1 },
-        new { IdEstacion = 9001, IdPuerta = 1, vagon="WA", Nombre = "7109-WA-OC-4", Estado = 1 },
-        new { IdEstacion = 9001, IdPuerta = 1, vagon="WA", Nombre = "7109-WA-OC-5", Estado = 1 }
-    };
+@{
+    ViewData["Title"] = "Puertas por Estación";
+
 }
 
 <link rel="stylesheet" href="~/css/views/Doors.css">
@@ -59,62 +12,165 @@
     <h1 class="text-2xl font-bold dark:text-white title-view-text">@ViewData["Title"]</h1>
 </div>
 
-<!-- Contenedor principal -->
 <div class="stations-grid" style="display: flex; flex-wrap: wrap; gap: 20px;">
-
-    @foreach (var estacion in estaciones)
+    @foreach (var estacion in Model)
     {
-        // Asignar bgColorClass fuera del ciclo for
-        string bgColorClass;
-
-        if (estacion.Estado == 1)
-        {
-            bgColorClass = "bg-orange";
-        }
-        else if (estacion.Estado == 2)
-        {
-            bgColorClass = "bg-green";
-        }
-        else if (estacion.Estado == 3)
-        {
-            bgColorClass = "bg-lightblue";
-        }
-        else
-        {
-            bgColorClass = "bg-transparent";
-        }
-
         <div class="station">
-            <h2 class="text-lg font-semibold">@estacion.Id - @estacion.Nombre</h2>
+            <h2 class="text-lg font-semibold">@estacion.idEstacion - @estacion.nombreEstacion</h2>
             <table>
+                @{
+                    var componentes = estacion.Componentes as List<ComponenteHV>;
+                }
+
                 <thead>
                     <tr>
-                        <th>WA</th>
-                        <th></th>
-                        <th>WB</th>
-                        <th></th>
-                        <th>WC</th>
-                        <th></th>
+                        @if (componentes != null && componentes.Count > 0)
+                        {
+                            if (componentes.Any(c => c.IdComponente.Contains("WA")))
+                            {
+                                <th colspan="2">WA</th>
+                            }
+                            if (componentes.Any(c => c.IdComponente.Contains("WB")))
+                            {
+                                <th colspan="2">WB</th>
+                            }
+                            if (componentes.Any(c => c.IdComponente.Contains("WC")))
+                            {
+                                <th colspan="2">WC</th>
+                            }
+                        }
                     </tr>
                     <tr>
-                        <th>OR</th>
-                        <th>OC</th>
-                        <th>OR</th>
-                        <th>OC</th>
-                        <th>OR</th>
-                        <th>OC</th>
+                        @if (componentes != null && componentes.Count > 0)
+                        {
+                            if (componentes.Any(c => c.IdComponente.Contains("WA")))
+                            {
+                                <th>OR</th>
+                                <th>OC</th>
+                            }
+                            if (componentes.Any(c => c.IdComponente.Contains("WB")))
+                            {
+                                <th>OR</th>
+                                <th>OC</th>
+                            }
+                            if (componentes.Any(c => c.IdComponente.Contains("WC")))
+                            {
+                                <th>OR</th>
+                                <th>OC</th>
+                            }
+                        }
                     </tr>
                 </thead>
                 <tbody>
-                    @for (int i = 1; i <= 5; i++)
+                    @{
+                        // Crear listas para almacenar los números y los estados
+                        var waOr = new List<int>();
+                        var waOc = new List<int>();
+                        var wbOr = new List<int>();
+                        var wbOc = new List<int>();
+                        var wcOr = new List<int>();
+                        var wcOc = new List<int>();
+
+                        // Clasificar los componentes en sus respectivas listas
+                        if (componentes != null)
+                        {
+                            foreach (var componente in componentes)
+                            {
+                                var parts = componente.IdComponente.Split('-');
+                                var lastNumber = int.Parse(parts.Last()); // Obtener el último número
+
+                                // Clasificar según el tipo
+                                if (parts[1] == "WA")
+                                {
+                                    if (parts[2] == "OR")
+                                    {
+                                        waOr.Add(lastNumber);
+                                    }
+                                    else if (parts[2] == "OC")
+                                    {
+                                        waOc.Add(lastNumber);
+                                    }
+                                }
+                                else if (parts[1] == "WB")
+                                {
+                                    if (parts[2] == "OR")
+                                    {
+                                        wbOr.Add(lastNumber);
+                                    }
+                                    else if (parts[2] == "OC")
+                                    {
+                                        wbOc.Add(lastNumber);
+                                    }
+                                }
+                                else if (parts[1] == "WC")
+                                {
+                                    if (parts[2] == "OR")
+                                    {
+                                        wcOr.Add(lastNumber);
+                                    }
+                                    else if (parts[2] == "OC")
+                                    {
+                                        wcOc.Add(lastNumber);
+                                    }
+                                }
+                            }
+                        }
+
+                        // Ordenar las listas
+                        waOr = waOr.OrderBy(x => x).ToList();
+                        waOc = waOc.OrderBy(x => x).ToList();
+                        wbOr = wbOr.OrderBy(x => x).ToList();
+                        wbOc = wbOc.OrderBy(x => x).ToList();
+                        wcOr = wcOr.OrderBy(x => x).ToList();
+                        wcOc = wcOc.OrderBy(x => x).ToList();
+
+                        // Obtener el número máximo de filas a mostrar
+                        var maxRows = Math.Max(Math.Max(waOr.Count, waOc.Count), Math.Max(Math.Max(wbOr.Count, wbOc.Count), Math.Max(wcOr.Count, wcOc.Count)));
+
+                        // Renderizar las filas
+                        for (int i = 0; i < maxRows; i++)
+                        {
+                            <tr>
+                                @if (waOr.Any() || waOc.Any())
+                                {
+                                    <td class="@(componentes.FirstOrDefault(c => c.IdComponente.Contains($"WA-OR-{(i < waOr.Count ? waOr[i] : "0")}"))?.EstadoApertura == false ? "bg-green" : (componentes.FirstOrDefault(c => c.IdComponente.Contains($"WA-OR-{(i < waOr.Count ? waOr[i] : "0")}"))?.EstadoApertura == true ? "bg-lightblue" : "bg-gray"))"
+                                        style="@(componentes.FirstOrDefault(c => c.IdComponente.Contains($"WA-OR-{(i < waOr.Count ? waOr[i] : "0")}"))?.EstadoErrorCritico == true ? "border: 2px solid red;" : "border: 1px solid #555;")">
+                                        @(i < waOr.Count ? waOr[i].ToString() : "")
+                                    </td>
+                                    <td class="@(componentes.FirstOrDefault(c => c.IdComponente.Contains($"WA-OC-{(i < waOc.Count ? waOc[i] : "0")}"))?.EstadoApertura == false ? "bg-green" : (componentes.FirstOrDefault(c => c.IdComponente.Contains($"WA-OC-{(i < waOc.Count ? waOc[i] : "0")}"))?.EstadoApertura == true ? "bg-lightblue" : "bg-gray"))"
+                                        style="@(componentes.FirstOrDefault(c => c.IdComponente.Contains($"WA-OC-{(i < waOc.Count ? waOc[i] : "0")}"))?.EstadoErrorCritico == true ? "border: 2px solid red;" : "border: 1px solid #555;")">
+                                        @(i < waOc.Count ? waOc[i].ToString() : "")
+                                    </td>
+                                }
+                                @if (wbOr.Any() || wbOc.Any())
+                                {
+                                    <td class="@(componentes.FirstOrDefault(c => c.IdComponente.Contains($"WB-OR-{(i < wbOr.Count ? wbOr[i] : "0")}"))?.EstadoApertura == false ? "bg-green" : (componentes.FirstOrDefault(c => c.IdComponente.Contains($"WB-OR-{(i < wbOr.Count ? wbOr[i] : "0")}"))?.EstadoApertura == true ? "bg-lightblue" : "bg-gray"))"
+                                        style="@(componentes.FirstOrDefault(c => c.IdComponente.Contains($"WB-OR-{(i < wbOr.Count ? wbOr[i] : "0")}"))?.EstadoErrorCritico == true ? "border: 2px solid red;" : "border: 1px solid #555;")">
+                                        @(i < wbOr.Count ? wbOr[i].ToString() : "")
+                                    </td>
+                                    <td class="@(componentes.FirstOrDefault(c => c.IdComponente.Contains($"WB-OC-{(i < wbOc.Count ? wbOc[i] : "0")}"))?.EstadoApertura == false ? "bg-green" : (componentes.FirstOrDefault(c => c.IdComponente.Contains($"WB-OC-{(i < wbOc.Count ? wbOc[i] : "0")}"))?.EstadoApertura == true ? "bg-lightblue" : "bg-gray"))"
+                                        style="@(componentes.FirstOrDefault(c => c.IdComponente.Contains($"WB-OC-{(i < wbOc.Count ? wbOc[i] : "0")}"))?.EstadoErrorCritico == true ? "border: 2px solid red;" : "border: 1px solid #555;")">
+                                        @(i < wbOc.Count ? wbOc[i].ToString() : "")
+                                    </td>
+                                }
+                                @if (wcOr.Any() || wcOc.Any())
+                                {
+                                    <td class="@(componentes.FirstOrDefault(c => c.IdComponente.Contains($"WC-OR-{(i < wcOr.Count ? wcOr[i] : "0")}"))?.EstadoApertura == false ? "bg-green" : (componentes.FirstOrDefault(c => c.IdComponente.Contains($"WC-OR-{(i < wcOr.Count ? wcOr[i] : "0")}"))?.EstadoApertura == true ? "bg-lightblue" : "bg-gray"))"
+                                        style="@(componentes.FirstOrDefault(c => c.IdComponente.Contains($"WC-OR-{(i < wcOr.Count ? wcOr[i] : "0")}"))?.EstadoErrorCritico == true ? "border: 2px solid red;" : "border: 1px solid #555;")">
+                                        @(i < wcOr.Count ? wcOr[i].ToString() : "")
+                                    </td>
+                                    <td class="@(componentes.FirstOrDefault(c => c.IdComponente.Contains($"WC-OC-{(i < wcOc.Count ? wcOc[i] : "0")}"))?.EstadoApertura == false ? "bg-green" : (componentes.FirstOrDefault(c => c.IdComponente.Contains($"WC-OC-{(i < wcOc.Count ? wcOc[i] : "0")}"))?.EstadoApertura == true ? "bg-lightblue" : "bg-gray"))"
+                                        style="@(componentes.FirstOrDefault(c => c.IdComponente.Contains($"WC-OC-{(i < wcOc.Count ? wcOc[i] : "0")}"))?.EstadoErrorCritico == true ? "border: 2px solid red;" : "border: 1px solid #555;")">
+                                        @(i < wcOc.Count ? wcOc[i].ToString() : "")
+                                    </td>
+                                }
+                            </tr>
+                        }
+                    }
+                    @if (componentes == null || componentes.Count == 0)
                     {
-                        <tr class="@bgColorClass">
-                            <td>@i</td>
-                            <td>@i</td>
-                            <td>@i</td>
-                            <td>@i</td>
-                            <td>@i</td>
-                            <td>@i</td>
+                        <tr>
+                            <td colspan="6">No hay componentes disponibles para esta estación.</td>
                         </tr>
                     }
                 </tbody>
@@ -122,3 +178,6 @@
         </div>
     }
 </div>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/js/Views/Doors/doors.js"></script>

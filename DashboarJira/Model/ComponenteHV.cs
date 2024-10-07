@@ -8,65 +8,70 @@ namespace DashboarJira.Model
 {
     public class ComponenteHV
     {
-        public String IdComponente { get; set; }
-        public string Serial { get; set; }
-        public int AnioFabricacion { get; set; }
-        public string Modelo { get; set; }
-        public DateTime FechaInicio { get; set; }
-        public Double horasDeOperacion { get; set; }
-
-        public string tipoComponente { get; set; }
+        public string? IdComponente { get; set; }
+        public string? Serial { get; set; }
+        public int? AnioFabricacion { get; set; }
+        public string? Modelo { get; set; }
+        public DateTime? FechaInicio { get; set; }
+        public string? horasDeOperacion { get; set; }
+        public int? descargado { get; set; }
+        public string? tipoComponente { get; set; }
+        public bool? Estado { get; set; }
+        public DateTime? FechaFin { get; set; }
+        public int? Vagon { get; set; }
+        public int? Canal { get; set; }
+        public bool? EstadoErrorCritico { get; set; }
+        public bool? EstadoApertura { get; set; }
+        public bool Visible { get; set; }
 
         public void CalcularHorasDeOperacion()
         {
-            try
-            {
-                DateTime fechaActual = DateTime.Now;
+            DateTime fechaActual = DateTime.Now;
 
-                // Verificar si FechaInicio es la fecha por defecto (1 de enero de 1900)
-                if (this.FechaInicio.Year == 1900)
+            // Verificar si FechaInicio es la fecha por defecto (1 de enero de 1900)
+            if (!this.FechaInicio.HasValue || this.FechaInicio.Value.Year == 1900)
+            {
+                // Si FechaInicio es la fecha por defecto, establecer horasDeOperacion como -1
+                this.horasDeOperacion = "-1";
+            }
+            else
+            {
+                if (this.Estado.HasValue && !this.Estado.Value)
                 {
-                    // Si FechaInicio es la fecha por defecto, establecer horasDeOperacion como -1
-                    this.horasDeOperacion = -1;
+                    // Establecer las horas, minutos y segundos a cero para ambas fechas
+                    DateTime fechaInicioSinHoras = this.FechaInicio.Value.Date;
+                    DateTime fechaActualSinHoras = this.FechaFin.Value.Date;
+
+                    // Calcular la diferencia sin las horas
+                    TimeSpan diferencia = fechaActualSinHoras - fechaInicioSinHoras;
+
+                    // Asignar el resultado a la propiedad horasDeOperacion
+                    this.horasDeOperacion = "" + diferencia.TotalHours + " (Inactivo desde " + this.FechaFin.Value.ToString("dd-MM-yyyy") + ")";
                 }
                 else
                 {
                     // Establecer las horas, minutos y segundos a cero para ambas fechas
-                    DateTime fechaInicioSinHoras = this.FechaInicio.Date;
+                    DateTime fechaInicioSinHoras = this.FechaInicio.Value.Date;
                     DateTime fechaActualSinHoras = fechaActual.Date;
 
                     // Calcular la diferencia sin las horas
                     TimeSpan diferencia = fechaActualSinHoras - fechaInicioSinHoras;
 
                     // Asignar el resultado a la propiedad horasDeOperacion
-                    this.horasDeOperacion = diferencia.TotalHours;
+                    this.horasDeOperacion = "" + diferencia.TotalHours;
                 }
             }
-            catch (Exception)
-            {
-
-                throw;
-            }
-            
         }
         public string GetTemplateFileName(string marca)
         {
             // Implementa un switch para asignar el nombre de la plantilla según el modelo
-            switch (this.Modelo)
+            switch (marca)
             {
-                case "MTE-MT-22":
-                    return "Plantilla MTE-MT-22 Assa.xlsx"; 
-                case "MTE-SS-22":
-                    if (marca == "https://assaabloymda.atlassian.net/") {
-                        return "Plantilla MTE-SS-22 Assa.xlsx";
-                    }
-                    return "Plantilla MTE-SS-22 Nautilus.xlsx";
-                case "MTE-TEL-22":
-                    if (marca == "https://assaabloymda.atlassian.net/")
-                    {
-                        return "Plantilla MTE-TEL-22 Assa.xlsx";
-                    }
-                    return "Plantilla MTE-TEL-22 Nautilus.xlsx";
+                case "https://assaabloymda.atlassian.net/":
+                    return "Plantilla " + this.Modelo + " Assa.xlsx";
+                case "https://manateecc.atlassian.net/":
+
+                    return "Plantilla " + this.Modelo + " Nautilus.xlsx";
 
                 default:
                     // Si el modelo no coincide con ninguno de los casos anteriores, usa una plantilla predeterminada

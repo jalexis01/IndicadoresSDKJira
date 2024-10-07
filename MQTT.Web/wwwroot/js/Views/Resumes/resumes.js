@@ -414,6 +414,10 @@ function ServiceGetMessages() {
             // Verifica si se obtuvieron datos del componente
             if (componenteData) {
                 // Crea la nueva lista de componentes con los datos obtenidos
+                var serial = componenteData.estado ? componenteData.serial : componenteData.idComponente;
+
+                var estado = componenteData.estado;
+
                 listaComponentes = [
                     {
                         Marca: 'Manatee',
@@ -430,7 +434,7 @@ function ServiceGetMessages() {
                 return $.ajax({
                     type: "GET",
                     url: "/Resumes/GetTickets",
-                    data: { startDate: startDate, endDate: endDate, max: max, componente: componente, cerrados: true },
+                    data: { startDate: startDate, endDate: endDate, max: max, serial: serial, cerrados: true, estado: estado },
                 });
             } else {
                 throw new Error('No se encontraron datos del componente.');
@@ -444,65 +448,65 @@ function ServiceGetMessages() {
             //    return;
 
             //} else {
-                var columnContent = '<table class="result-box-table">';                
+            var columnContent = '<table class="result-box-table">';
 
-                columnContent += '<tr>';
-                columnContent += '<th class="header-cell1" colspan="4" style="text-align: center;">INFORMACIÓN COMPONENTE</th>';
+            columnContent += '<tr>';
+            columnContent += '<th class="header-cell1" colspan="4" style="text-align: center;">INFORMACIÓN COMPONENTE</th>';
 
-                columnContent += '</tr>';
+            columnContent += '</tr>';
 
-                columnContent += '<tr>';
-                columnContent += '<th class="header-cell">MARCA</th><td>' + listaComponentes[0].Marca + '</td>';
-                columnContent += '<th class="header-cell">IDPUERTA</th><td>' + listaComponentes[0].IDPuerta + '</td>';
-                columnContent += '</tr>';
+            columnContent += '<tr>';
+            columnContent += '<th class="header-cell">MARCA</th><td>' + listaComponentes[0].Marca + '</td>';
+            columnContent += '<th class="header-cell">IDPUERTA</th><td>' + listaComponentes[0].IDPuerta + '</td>';
+            columnContent += '</tr>';
 
-                columnContent += '<tr>';
-                columnContent += '<th class="header-cell">MODELO</th><td>' + listaComponentes[0].Modelo + '</td>';
-                columnContent += '<th class="header-cell">N° INTERNO</th><td>' + listaComponentes[0].NumeroInterno + '</td>';
-                columnContent += '</tr>';
+            columnContent += '<tr>';
+            columnContent += '<th class="header-cell">MODELO</th><td>' + listaComponentes[0].Modelo + '</td>';
+            columnContent += '<th class="header-cell">N° INTERNO</th><td>' + listaComponentes[0].NumeroInterno + '</td>';
+            columnContent += '</tr>';
 
-                columnContent += '<tr>';
-                columnContent += '<th class="header-cell">FABRICANTE</th><td>' + listaComponentes[0].Fabricante + '</td>';
+            columnContent += '<tr>';
+            columnContent += '<th class="header-cell">FABRICANTE</th><td>' + listaComponentes[0].Fabricante + '</td>';
 
-                var anio = '';
-                anio = listaComponentes[0].AnioFabricacion == 1900 ? '' : listaComponentes[0].AnioFabricacion;
-                columnContent += '<th class="header-cell">AÑO DE FABRICACIÓN</th><td>' + anio + '</td>';
-                columnContent += '</tr>';
+            var anio = '';
+            anio = listaComponentes[0].AnioFabricacion == 1900 ? '' : listaComponentes[0].AnioFabricacion;
+            columnContent += '<th class="header-cell">AÑO DE FABRICACIÓN</th><td>' + anio + '</td>';
+            columnContent += '</tr>';
 
-                //var fechaInicioOperacion = new Date(listaComponentes[0].InicioOperacion);
-                //var fechaInicioOperacionFormateada = fechaInicioOperacion.toISOString().substring(0, 10);
+            //var fechaInicioOperacion = new Date(listaComponentes[0].InicioOperacion);
+            //var fechaInicioOperacionFormateada = fechaInicioOperacion.toISOString().substring(0, 10);
 
-                //columnContent += '<tr>';
-                //columnContent += '<th class="header-cell">FECHA INICIO OPERACIÓN</th><td>' + fechaInicioOperacionFormateada + '</td>';
+            //columnContent += '<tr>';
+            //columnContent += '<th class="header-cell">FECHA INICIO OPERACIÓN</th><td>' + fechaInicioOperacionFormateada + '</td>';
 
-                var fechaInicioOperacionFormateada = '';
-                var fechaInicioOperacion = new Date(listaComponentes[0].InicioOperacion);
-                if (fechaInicioOperacion.toISOString().substring(0, 10) !== '1900-01-01') {
-                    fechaInicioOperacionFormateada = fechaInicioOperacion.toISOString().substring(0, 10);
-                }
+            var fechaInicioOperacionFormateada = '';
+            var fechaInicioOperacion = new Date(listaComponentes[0].InicioOperacion);
+            if (fechaInicioOperacion.toISOString().substring(0, 10) !== '1900-01-01') {
+                fechaInicioOperacionFormateada = fechaInicioOperacion.toISOString().substring(0, 10);
+            }
 
-                columnContent += '<tr>';
-                columnContent += '<th class="header-cell">FECHA INICIO OPERACIÓN</th><td>' + fechaInicioOperacionFormateada + '</td>';
+            columnContent += '<tr>';
+            columnContent += '<th class="header-cell">FECHA INICIO OPERACIÓN</th><td>' + fechaInicioOperacionFormateada + '</td>';
 
-                //Se cambia en la vista las horas de operacion
-                var horas = '';
-                horas = listaComponentes[0].HorasOperacion == -1 ? '' : listaComponentes[0].HorasOperacion;
-                columnContent += '<th class="header-cell">HORAS DE OPERACIÓN</th><td>' + horas + '</td>';
+            //Se cambia en la vista las horas de operacion
+            var horas = '';
+            horas = listaComponentes[0].HorasOperacion == -1 ? '' : listaComponentes[0].HorasOperacion;
+            columnContent += '<th class="header-cell">HORAS DE OPERACIÓN</th><td>' + horas + '</td>';
 
-                columnContent += '</table>';
+            columnContent += '</table>';
 
-                // Mostrar la tabla en el cuadro de texto
-                $('#resultBox').html(columnContent);
-                $('#resultBoxContainer').show();
+            // Mostrar la tabla en el cuadro de texto
+            $('#resultBox').html(columnContent);
+            $('#resultBoxContainer').show();
 
-                let dataColumns = setColums(data, null);
-                let exportFunctions = addFnctionsGrid(['Excel']);
+            let dataColumns = setColums(data, null);
+            let exportFunctions = addFnctionsGrid(['Excel']);
 
-                dataColumns = addCommandsGridDetails(dataColumns);
-                dataGridSave = data;
-                setGrid(data, dataColumns, exportFunctions);
+            dataColumns = addCommandsGridDetails(dataColumns);
+            dataGridSave = data;
+            setGrid(data, dataColumns, exportFunctions);
 
-                $('#button-primary-descargar').show();
+            $('#button-primary-descargar').show();
             //}
         })
         .catch(error => {
@@ -540,19 +544,19 @@ var detailsData = function (args) {
 }
 
 function openImage() {
-    
+
     var modelo = listaComponentes[0].Modelo;
 
     //var environmentType = '@ViewBag.EnvironmentType';
 
     var imageUrl = "";
 
-    if (environmentType ==='Manatee') {
+    if (environmentType === 'Manatee') {
         imageUrl = "../../img/plantillasNautilus/" + modelo + ".jpg";
     } else {
         imageUrl = "../../img/plantillasAssa/" + modelo + ".jpg";
     }
-    
+
     Swal.fire({
 
         imageUrl: imageUrl,

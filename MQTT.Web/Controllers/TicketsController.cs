@@ -13,9 +13,36 @@ namespace MQTT.Web.Controllers
     public class TicketsController : Controller
     {
         private readonly IConfiguration _configuration;
+        private JiraAccess jiraAccess;
+        private DbConnector dbConnector;
         public TicketsController(IConfiguration configuration)
         {
             _configuration = configuration;
+            init();
+        }
+        public void init()
+        {
+
+            string url = "https://manateecc.atlassian.net/";
+            string connectionString = "Server=manatee.database.windows.net;Database=PuertasTransmilenioDB;User Id=administrador;Password=2022/M4n4t334zur3";
+            string user = "desarrollocc@manateeingenieria.com";
+            string token = "ATATT3xFfGF0ZRHIEZTEJVRnhNKviH0CGed6QXqCDMj5bCmKSEbO00UUjHUb3yDcaA4YD1SHohyDr4qnwRx2x4Tu_S_QW_xlGIcIUDvL7CFKEg47_Jcy4Dmq6YzO0dvqB3qeT-EVWfwJ2jJ-9vEUfsqXavD0IIGA7DAZHGCtIWhxgwKIbAWsmeA=038B810D";
+
+            //string url = "https://assaabloymda.atlassian.net/";
+            //string connectionString = "Server=manatee.database.windows.net;Database=PuertasTransmilenioDBAssaabloy;User Id=administrador;Password=2022/M4n4t334zur3";
+            //string user = "desarrollocc@manateeingenieria.com";
+            //string token = "ATATT3xFfGF0ZRHIEZTEJVRnhNKviH0CGed6QXqCDMj5bCmKSEbO00UUjHUb3yDcaA4YD1SHohyDr4qnwRx2x4Tu_S_QW_xlGIcIUDvL7CFKEg47_Jcy4Dmq6YzO0dvqB3qeT-EVWfwJ2jJ-9vEUfsqXavD0IIGA7DAZHGCtIWhxgwKIbAWsmeA=038B810D";
+
+
+            // Aquí puedes usar las variables como desees
+            jiraAccess = new JiraAccess
+            (
+                url,
+                user,
+                token,
+                connectionString
+            );
+            dbConnector = new DbConnector(connectionString);
         }
         public IActionResult Index(int max, string componente)
         {
@@ -54,7 +81,7 @@ namespace MQTT.Web.Controllers
 
         int start = 0;
 
-        public List<Ticket> getTickets(string startDate, string endDate, int max, string componente, string tipoMantenimiento, bool cerrados)
+        public List<Ticket> getTickets(string startDate, string endDate, int max, string componente, string tipoMantenimiento, bool cerrados, bool estado)
         {
             try
             {
@@ -76,18 +103,17 @@ namespace MQTT.Web.Controllers
                     formattedEndDate = endDate;
                 }
 
-                JiraAccess jiraAccess = new JiraAccess();
                 List<Ticket> tickets = new List<Ticket>();
                 max = 0;
-                if (tipoMantenimiento== "'Mantenimiento Preventivo'")
+                if (tipoMantenimiento == "'Mantenimiento Preventivo'")
                 {
-                    tickets = jiraAccess.GetTiketsMTO(start, max, formattedStartDate, formattedEndDate, componente, "");
+                    tickets = jiraAccess.GetTiketsMTO(start, max, formattedStartDate, formattedEndDate, componente, "", estado);
                 }
                 else
                 {
-                    tickets = jiraAccess.GetTikets(start, max, formattedStartDate, formattedEndDate, componente, tipoMantenimiento, cerrados);
+                    tickets = jiraAccess.GetTikets(start, max, formattedStartDate, formattedEndDate, componente, tipoMantenimiento, cerrados, estado);
                 }
-                
+
                 return tickets;
             }
             catch (Exception ex)
@@ -101,8 +127,8 @@ namespace MQTT.Web.Controllers
         {
             try
             {
-                JiraAccess jira = new JiraAccess();
-                IssueJira ticket = jira.getIssueJira(idTicket);
+
+                IssueJira ticket = jiraAccess.getIssueJira(idTicket);
                 return Ok(ticket);
             }
             catch (Exception ex)
@@ -114,8 +140,8 @@ namespace MQTT.Web.Controllers
         {
             try
             {
-                JiraAccess jira = new JiraAccess();
-                List<byte[]> images = jira.GetAttachmentImages(idTicket);
+
+                List<byte[]> images = jiraAccess.GetAttachmentImages(idTicket);
                 Console.WriteLine("la cantidad de imagenes del " + idTicket + " son : " + images.Count);
                 if (images.Count > 0)
                 {
@@ -144,9 +170,9 @@ namespace MQTT.Web.Controllers
         {
             try
             {
-                JiraAccess jira = new JiraAccess();
+
                 var cantidadImagenes = 0;
-                List<byte[]> images = jira.GetAttachmentImages(idTicket);
+                List<byte[]> images = jiraAccess.GetAttachmentImages(idTicket);
                 Console.WriteLine("la cantidad de imágenes del " + idTicket + " es : " + images.Count);
                 cantidadImagenes = images.Count;
                 return Json(cantidadImagenes);
@@ -161,10 +187,10 @@ namespace MQTT.Web.Controllers
         {
             try
             {
-                JiraAccess jira = new JiraAccess();
+
                 var cantidadImagenes = 0;
                 var cantidadVideos = 0;
-                Tuple<List<byte[]>, List<byte[]>> adjuntos = jira.GetAttachmentAdjuntos(idTicket);
+                Tuple<List<byte[]>, List<byte[]>> adjuntos = jiraAccess.GetAttachmentAdjuntos(idTicket);
                 Console.WriteLine("la cantidad de imágenes del " + idTicket + " son : " + adjuntos.Item1.Count);
                 Console.WriteLine("la cantidad de Videos del " + idTicket + " son : " + adjuntos.Item2.Count);
                 cantidadImagenes = adjuntos.Item1.Count;
@@ -187,9 +213,9 @@ namespace MQTT.Web.Controllers
         {
             try
             {
-                JiraAccess jira = new JiraAccess();
+
                 var cantidadVideos = 0;
-                List<byte[]> videos = jira.GetAttachmentVideos(idTicket);
+                List<byte[]> videos = jiraAccess.GetAttachmentVideos(idTicket);
                 //Console.WriteLine("la cantidad de videos del " + idTicket + " es : " + videos.Count);
                 cantidadVideos = videos.Count;
                 return Json(cantidadVideos);
@@ -205,8 +231,7 @@ namespace MQTT.Web.Controllers
         {
             try
             {
-                JiraAccess jira = new JiraAccess();
-                List<byte[]> videos = jira.GetAttachmentVideos(idTicket);
+                List<byte[]> videos = jiraAccess.GetAttachmentVideos(idTicket);
 
                 if (videos.Count > 0)
                 {
@@ -231,7 +256,7 @@ namespace MQTT.Web.Controllers
             }
         }
 
-        
+
     }
 
 }

@@ -1,18 +1,30 @@
 ﻿.station {
-    border: 2px solid black;
-    padding: 10px;
+    border: 1px solid #555;
+    padding: 3px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 10px;
 }
 
     .station table {
-        border: 2px solid black;
+        border: 1px solid #555;
         border-collapse: collapse;
         width: 100%;
     }
 
     .station th, .station td {
-        border: 1px solid black;
-        padding: 5px;
+        border: 1px solid #555;
+        padding: 2px;
         text-align: center;
+        font-size: 10px;
+        font-weight: bold;
+    }
+
+    .station h2 {
+        margin: 0;
+        font-size: 12px;
+        font-weight: bold;
     }
 
 .bg-orange {
@@ -25,6 +37,10 @@
 
 .bg-lightblue {
     background-color: lightblue;
+}
+
+.bg-gray {
+    background-color: gray;
 }
 
 .bg-transparent {

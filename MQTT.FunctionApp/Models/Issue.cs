@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
 namespace MQTT.FunctionApp.Models
@@ -7,6 +8,7 @@ namespace MQTT.FunctionApp.Models
     {
         [JsonPropertyName("issues")]
         public List<Data> Issues { get; set; }
+        public int Total { get; internal set; }
     }
 
     public class Data

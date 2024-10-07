@@ -25,7 +25,7 @@ function getImageTicket(idTicket) {
     $.ajax({
         url: '/Tickets/getImageTicket?idTicket=' + idTicket,
         data: { idTicket: idTicket },
-        success: function (base64Images) { 
+        success: function (base64Images) {
             if (base64Images && base64Images.length > 0) {
                 var imageContainer = document.createElement('div');
                 imageContainer.style.display = 'flex';
@@ -126,8 +126,8 @@ function getImageTicket(idTicket) {
 function getContImageTicket(idTicket, callback) {
     $.ajax({
         url: '/Tickets/getContadorImagenes?idTicket=' + idTicket,
-        
-        success: function (response) {            
+
+        success: function (response) {
             cantImagenes = response;
             callback(cantImagenes);
         },
@@ -139,7 +139,7 @@ function getContImageTicket(idTicket, callback) {
 
 function getContAdjuntosTicket(idTicket, callback) {
     var adjuntos = null;
-    
+
     $.ajax({
         url: '/Tickets/getContadorAdjuntos?idTicket=' + idTicket,
         success: function (response) {
@@ -149,7 +149,7 @@ function getContAdjuntosTicket(idTicket, callback) {
                 cantImagenes,
                 cantVideos
             }
-            callback(adjuntos);          
+            callback(adjuntos);
         },
         error: function () {
             callback(0);
@@ -173,7 +173,7 @@ function getContVideoTicket(idTicket) {
 }
 
 function updateButtonLabelImagen(idTicket, cantImagenes) {
-    var verImagenButton = document.getElementById('verMasBtn');    
+    var verImagenButton = document.getElementById('verMasBtn');
     if (verImagenButton) {
         if (cantImagenes > 0) {
             verImagenButton.innerHTML = 'Ver imagen (' + cantImagenes + ')';
@@ -184,7 +184,7 @@ function updateButtonLabelImagen(idTicket, cantImagenes) {
             verImagenButton.setAttribute('title', 'No hay imágenes adjuntas');
         }
     }
-    
+
 }
 
 function updateButtonLabelVideo(idTicket, cantVideos) {
@@ -195,7 +195,7 @@ function updateButtonLabelVideo(idTicket, cantVideos) {
             verVideoButton.disabled = false;
         } else {
             verVideoButton.innerHTML = 'Ver video (0)';
-            verVideoButton.disabled = true; 
+            verVideoButton.disabled = true;
             verVideoButton.setAttribute('title', 'No hay videos adjuntos');
         }
     }
@@ -220,7 +220,7 @@ function getVideoTicket(idTicket) {
     });
 }
 
-function getAdjuntoTicket(idTicket) {    
+function getAdjuntoTicket(idTicket) {
     if (cantImagenes > 0) {
         getImageTicket(idTicket);
     }
@@ -248,13 +248,13 @@ function openVideoModal(idTicket) {
                 }
 
                 var footerHtml = verImagenButtonHtml + '<button id="cerrarBtn" style="background: linear-gradient(to bottom right, #888888, #555555); color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-weight: bold; margin-left: 5px; margin-right: 5px;" onclick="closeSwal()">Cerrar</button>';
-                
+
                 for (var i = 0; i < base64Videos.length; i++) {
                     var base64Video = base64Videos[i];
                     var videoElement = document.createElement('video');
                     videoElement.controls = true;
                     videoElement.src = 'data:video/mp4;base64,' + base64Video;
-                    videoElement.style.width = '70%'; 
+                    videoElement.style.width = '70%';
                     videoElement.style.margin = '10px';
                     videoContainer.appendChild(videoElement);
 
@@ -289,7 +289,7 @@ function openVideoModal(idTicket) {
                     customClass: {
                         container: 'swal-wide',
                     },
-                    width: '50%', 
+                    width: '50%',
                     padding: '2rem',
                     backdrop: true,
                     allowOutsideClick: true,
@@ -297,7 +297,7 @@ function openVideoModal(idTicket) {
                 });
 
                 document.getElementById('verMasBtn').addEventListener('click', async function () {
-                    
+
                     Swal.fire({
                         title: 'Cargando imágenes...',
                         html: '<div class="spinner-border text-primary" role="status"><span class="sr-only">Cargando imágenes...</span></div>',
@@ -498,9 +498,9 @@ async function ServiceGetMessages() {
     var currentDay = -1;
 
     var progressPercentage = "";
-    
+
     //$("#cargando").html("Cargando...");
-    while (fechaInicio <= fechaFin) {       
+    while (fechaInicio <= fechaFin) {
 
         // Imprime la fecha actual
         console.log(fechaInicio.toUTCString());
@@ -512,12 +512,12 @@ async function ServiceGetMessages() {
 
         currentDay++;
         if (totalDays === 0) {
-            progressPercentage =  0;
+            progressPercentage = 0;
         } else {
             progressPercentage = (currentDay / totalDays) * 100;
         }
-        
-                
+
+
         Swal.update({
             text: `${progressPercentage.toFixed(0)}%`
         });
@@ -556,7 +556,7 @@ function realizarSolicitudAjax(fecha, max, componente, tipoMantenimiento) {
         $.ajax({
             type: "GET",
             url: "/Tickets/GetTickets",
-            data: { startDate: fecha, endDate: fecha, max: max, componente: componente, tipoMantenimiento: tipoMantenimiento },
+            data: { startDate: fecha, endDate: fecha, max: max, componente: componente, tipoMantenimiento: tipoMantenimiento},
             success: function (data) {
                 resolve(JSON.parse(JSON.stringify(data)));
             },

@@ -19,8 +19,8 @@ namespace DashboarJira.Services
 
         public Indicadores()
         {
-            con = new DbConnector();
-            jira = new JiraAccess();
+            con = new DbConnector("");
+            jira = new JiraAccess("", "", "", "");
             iaio = new IAIOController(jira);
             iano = new IANOController(jira);
             icpm = new ICPMController(jira);
