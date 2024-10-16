@@ -48,3 +48,20 @@
     color: #333333; /* Color del texto */
     box-sizing: border-box; /* Asegura que el padding y el borde se incluyan en el ancho total */
 }
+
+.station-chip {
+    display: inline-block;
+    padding: 5px 10px;
+    margin: 5px;
+    background-color: #f1f1f1;
+    border-radius: 15px;
+    font-size: 14px;
+    position: relative;
+}
+
+    .station-chip .remove-chip {
+        margin-left: 10px;
+        cursor: pointer;
+        color: red;
+        font-weight: bold;
+    }

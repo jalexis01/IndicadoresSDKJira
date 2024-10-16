@@ -38,6 +38,14 @@
                             {
                                 <th colspan="2">WC</th>
                             }
+                            if (componentes.Any(c => c.IdComponente.Contains("WD")))
+                            {
+                                <th colspan="2">WD</th>
+                            }
+                            if (componentes.Any(c => c.IdComponente.Contains("WE")))
+                            {
+                                <th colspan="2">WE</th>
+                            }
                         }
                     </tr>
                     <tr>
@@ -58,6 +66,16 @@
                                 <th>OR</th>
                                 <th>OC</th>
                             }
+                            if (componentes.Any(c => c.IdComponente.Contains("WD")))
+                            {
+                                <th>OR</th>
+                                <th>OC</th>
+                            }
+                            if (componentes.Any(c => c.IdComponente.Contains("WE")))
+                            {
+                                <th>OR</th>
+                                <th>OC</th>
+                            }
                         }
                     </tr>
                 </thead>
@@ -70,6 +88,10 @@
                         var wbOc = new List<int>();
                         var wcOr = new List<int>();
                         var wcOc = new List<int>();
+                        var wdOr = new List<int>();
+                        var wdOc = new List<int>();
+                        var weOr = new List<int>();
+                        var weOc = new List<int>();
 
                         // Clasificar los componentes en sus respectivas listas
                         if (componentes != null)
@@ -113,6 +135,28 @@
                                         wcOc.Add(lastNumber);
                                     }
                                 }
+                                if (parts[1] == "WD")
+                                {
+                                    if (parts[2] == "OR")
+                                    {
+                                        wdOr.Add(lastNumber);
+                                    }
+                                    else if (parts[2] == "OC")
+                                    {
+                                        wdOc.Add(lastNumber);
+                                    }
+                                }
+                                else if (parts[1] == "WE")
+                                {
+                                    if (parts[2] == "OR")
+                                    {
+                                        weOr.Add(lastNumber);
+                                    }
+                                    else if (parts[2] == "OC")
+                                    {
+                                        weOc.Add(lastNumber);
+                                    }
+                                }
                             }
                         }
 
@@ -123,9 +167,15 @@
                         wbOc = wbOc.OrderBy(x => x).ToList();
                         wcOr = wcOr.OrderBy(x => x).ToList();
                         wcOc = wcOc.OrderBy(x => x).ToList();
+                        wdOr = wdOr.OrderBy(x => x).ToList();
+                        wdOc = wdOc.OrderBy(x => x).ToList();
+                        weOr = weOr.OrderBy(x => x).ToList();
+                        weOc = weOc.OrderBy(x => x).ToList();
 
                         // Obtener el número máximo de filas a mostrar
-                        var maxRows = Math.Max(Math.Max(waOr.Count, waOc.Count), Math.Max(Math.Max(wbOr.Count, wbOc.Count), Math.Max(wcOr.Count, wcOc.Count)));
+                        //var maxRows = Math.Max(Math.Max(waOr.Count, waOc.Count), Math.Max(Math.Max(wbOr.Count, wbOc.Count), Math.Max(wcOr.Count, wcOc.Count)));
+                        var maxRows = Math.Max(Math.Max(Math.Max(waOr.Count, waOc.Count), Math.Max(wbOr.Count, wbOc.Count)),
+                        Math.Max(Math.Max(wcOr.Count, wcOc.Count), Math.Max(wdOr.Count, wdOc.Count)));
 
                         // Renderizar las filas
                         for (int i = 0; i < maxRows; i++)
@@ -164,6 +214,26 @@
                                         @(i < wcOc.Count ? wcOc[i].ToString() : "")
                                     </td>
                                 }
+                                @if (wdOr.Any() || wdOc.Any())
+                                {
+                                    <td class="@(componentes.FirstOrDefault(c => c.IdComponente.Contains($"WD-OR-{(i < wdOr.Count ? wdOr[i] : "0")}"))?.EstadoApertura == false ? "bg-green" : (componentes.FirstOrDefault(c => c.IdComponente.Contains($"WD-OR-{(i < wdOr.Count ? wdOr[i] : "0")}"))?.EstadoApertura == true ? "bg-lightblue" : "bg-gray"))">
+                                        @(i < wdOr.Count ? wdOr[i].ToString() : "")
+                                    </td>
+                                    <td class="@(componentes.FirstOrDefault(c => c.IdComponente.Contains($"WD-OC-{(i < wdOc.Count ? wdOc[i] : "0")}"))?.EstadoApertura == false ? "bg-green" : (componentes.FirstOrDefault(c => c.IdComponente.Contains($"WD-OC-{(i < wdOc.Count ? wdOc[i] : "0")}"))?.EstadoApertura == true ? "bg-lightblue" : "bg-gray"))">
+                                        @(i < wdOc.Count ? wdOc[i].ToString() : "")
+                                    </td>
+                                }
+                                @if (wdOr.Any() || weOc.Any())
+                                {
+                                    <td class="@(componentes.FirstOrDefault(c => c.IdComponente.Contains($"WE-OR-{(i < weOr.Count ? weOr[i] : "0")}"))?.EstadoApertura == false ? "bg-green" : (componentes.FirstOrDefault(c => c.IdComponente.Contains($"WE-OR-{(i < wdOr.Count ? wdOr[i] : "0")}"))?.EstadoApertura == true ? "bg-lightblue" : "bg-gray"))">
+                                        @(i < weOr.Count ? weOr[i].ToString() : "")
+                                    </td>
+                                    <td class="@(componentes.FirstOrDefault(c => c.IdComponente.Contains($"WE-OC-{(i < weOc.Count ? weOc[i] : "0")}"))?.EstadoApertura == false ? "bg-green" : (componentes.FirstOrDefault(c => c.IdComponente.Contains($"WE-OC-{(i < wdOc.Count ? wdOc[i] : "0")}"))?.EstadoApertura == true ? "bg-lightblue" : "bg-gray"))">
+                                        @(i < weOc.Count ? weOc[i].ToString() : "")
+                                    </td>
+                                }
+
+
                             </tr>
                         }
                     }

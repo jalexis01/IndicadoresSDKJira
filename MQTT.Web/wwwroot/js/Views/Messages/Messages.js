@@ -1,62 +1,41 @@
 ﻿var dataHideColums, dataSearchColumns;
 
-function validateEstacionValue(value) {
-    // Verificar que el valor contiene solo números y comas
-    var regex = /^[0-9, ]*$/;
-    return regex.test(value);
-}
-
-function handleEstacionInput(event) {
-    var value = event.target.value;
-
-    if (!validateEstacionValue(value)) {
-        // Muestra un mensaje de error y limpia el campo si el valor es inválido
-        Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'El campo ID Estación solo debe contener números, comas y espacios.'
-        }).then(() => {
-            event.target.value = value.replace(/[^0-9, ]/g, ''); // Elimina caracteres no permitidos
-        });
-    }
-}
-
 $(document).ready(function () {
     createElemntsTimes();
     multiSelect();
     drodownDataSearch(columnsSearch, 'CustomName', 'searchParam');
     GetStations();
-
-    // Listener para el cambio en el select de estaciones
+        
     $('#station-select').on('change', function () {
         const selectedStation = $(this).val(); // Valor seleccionado
         let currentSelectedStations = $('#multiSelect2').val(); // Valor actual en multiSelect2
 
+        // Si el campo está vacío, convertir a array vacío
+        currentSelectedStations = currentSelectedStations ? currentSelectedStations.split(', ') : [];
+
         // Si se selecciona "Seleccione...", limpiar todo
         if (selectedStation === "") {
             $('#multiSelect2').val(""); // Limpiar el campo multiSelect2
-            $('#station-select option').removeClass('selected-option'); // Limpiar la clase seleccionada
-            return;
+            $('#station-select option').removeClass('selected-option'); // Limpiar las clases seleccionadas
+            return; // Detener la ejecución de la función
         }
 
+
         // Verificar si la estación ya está seleccionada
-        if ($('#station-select option[value="' + selectedStation + '"]').hasClass('selected-option')) {
+        if (currentSelectedStations.includes(selectedStation)) {
             // Si la estación ya está seleccionada, eliminarla
-            currentSelectedStations = currentSelectedStations.split(', ').filter(station => station !== selectedStation);
+            currentSelectedStations = currentSelectedStations.filter(station => station !== selectedStation);
             $('#multiSelect2').val(currentSelectedStations.join(', ')); // Actualizar el campo sin la estación deseleccionada
             $('#station-select option[value="' + selectedStation + '"]').removeClass('selected-option'); // Quitar el color
         } else {
             // Si la estación no está seleccionada, agregarla
-            if (currentSelectedStations.length > 0) {
-                // Si ya hay valores en el campo, agregar la nueva estación separada por una coma
-                currentSelectedStations += ', ' + selectedStation;
-            } else {
-                // Si no hay valores, simplemente agregar la nueva estación
-                currentSelectedStations = selectedStation;
-            }
-            $('#multiSelect2').val(currentSelectedStations); // Actualizar el campo con las estaciones seleccionadas
+            currentSelectedStations.push(selectedStation);
+            $('#multiSelect2').val(currentSelectedStations.join(', ')); // Actualizar el campo con las estaciones seleccionadas
             $('#station-select option[value="' + selectedStation + '"]').addClass('selected-option'); // Aplicar el color de selección
         }
+
+        // Resetear el valor del select para evitar problemas al seleccionar la misma opción consecutivamente
+        $(this).val(""); // Reiniciar el select
     });
 
     // Evento al hacer clic en el botón de buscar
@@ -64,6 +43,8 @@ $(document).ready(function () {
         validarDates(); // Validar las fechas antes de buscar
     });
 });
+
+
 
 function validarDates() {
     var startDate = $('#dtpStartMessage').val();
